@@ -28,7 +28,7 @@ RSpec.describe Decouplio do
         # iteration class: ProcessIterator
 
         def step_one(string_param:, **)
-          string_param
+          ctx[:result] = string_param
         end
 
         def first_validation(string_param:, integer_param:, **)
@@ -39,7 +39,7 @@ RSpec.describe Decouplio do
       end
     end
 
-    context 'validations' do
+    context '.call' do
       subject(:result) { dummy_class.(input_params) }
       let(:string_param) { '4' }
       let(:integer_param) { 4 }
@@ -85,6 +85,16 @@ RSpec.describe Decouplio do
 
         it 'fails' do
           expect(result).to be_failure
+        end
+      end
+
+      context 'steps' do
+        it 'success' do
+          expect(result).to be_success
+        end
+
+        it 'sets result' do
+          expect(result[:result]).to eq string_param
         end
       end
     end

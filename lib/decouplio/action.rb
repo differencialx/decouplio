@@ -2,11 +2,16 @@ require 'dry-schema'
 
 module Decouplio
   class Action
-    attr_reader :params, :errors
+    attr_reader :params, :errors, :ctx
 
-    def initialize(**params)
+    def initialize(ctx: {}, **params)
       @params = params
       @errors = {}
+      @ctx = ctx
+    end
+
+    def [](key)
+      self.ctx[key]
     end
 
     def success?
@@ -23,21 +28,21 @@ module Decouplio
 
     class << self
       def call(**params)
-        @params = params
-        @instance = self.new
+        @instance = self.new(params)
         process_validations
         return @instance unless @instance.success?
 
         process_steps
+        @instance
       end
 
       private
 
       def process_validations
-        validation_result = @schema.call(@params)
+        validation_result = @schema.call(@instance.params)
         @instance.errors.merge!(validation_result.errors.to_h) && return if validation_result.failure?
         @validations.each do |validation|
-          @instance.public_send(validation, @params)
+          @instance.public_send(validation, @instance.params)
         end
       end
 
@@ -62,10 +67,10 @@ module Decouplio
       def process_steps
         @steps.each do |step|
           case step
-          when Symbol then @instance.public_send(step, @params)
-          when Decouplio::Action then step.call(@params)
-          when Decouplio::Wrapper then step.call(@params)
-          when Decouplio::Iterator then step.call(@params)
+          when Symbol then @instance.public_send(step, @instance.params)
+          when Decouplio::Action then step.call(@instance.params)
+          when Decouplio::Wrapper then step.call(@instance.params)
+          when Decouplio::Iterator then step.call(@instance.params)
           else
             raise 'FUCK'
           end
