@@ -2,16 +2,22 @@ require 'dry-schema'
 
 module Decouplio
   class Action
-    attr_reader :params, :errors, :ctx
+    attr_reader :errors, :ctx, :wrapper, :parent_instance
 
-    def initialize(ctx: {}, **params)
+    def initialize(parent_instance: nil, wrapper: false, **params)
       @params = params
       @errors = {}
-      @ctx = ctx
+      @parent_instance = parent_instance
+      @ctx = @parent_instance&.ctx || {}
+      @wrapper = wrapper
     end
 
     def [](key)
       self.ctx[key]
+    end
+
+    def params
+      @params.clone
     end
 
     def success?
@@ -39,9 +45,9 @@ module Decouplio
       private
 
       def process_validations
-        validation_result = @schema.call(@instance.params)
-        @instance.errors.merge!(validation_result.errors.to_h) && return if validation_result.failure?
-        @validations.each do |validation|
+        validation_result = @schema&.call(@instance.params)
+        @instance.errors.merge!(validation_result.errors.to_h) && return if validation_result&.failure?
+        @validations&.each do |validation|
           @instance.public_send(validation, @instance.params)
         end
       end
@@ -60,17 +66,39 @@ module Decouplio
         @steps << step
       end
 
+      def rescue_for(*errors_to_handle)
+        rescue_for_eval = ''
+        errors_to_handle.each do |hash|
+          rescue_for_eval += "rescue #{hash[:error]} => error; instance.public_send(:#{hash[:handler]}, error, instance.params);"
+        end
+        rescue_for_eval.prepend('begin;block.call;')
+        rescue_for_eval.concat('end')
+        last_step = @steps.last
+        if last_step.respond_to?(:rescue_for=)
+          last_step.rescue_for = rescue_for_eval
+        end
+      end
+
       def wrap(klass:, method:, &block)
         @steps << Decouplio::Wrapper.new(klass: klass, method: method, &block)
       end
 
       def process_steps
         @steps.each do |step|
-          case step
-          when Symbol then @instance.public_send(step, @instance.params)
-          when Decouplio::Action then step.call(@instance.params)
-          when Decouplio::Wrapper then step.call(@instance.params)
-          when Decouplio::Iterator then step.call(@instance.params)
+          case
+          when step.class == Symbol
+            if @instance.wrapper
+              @instance.parent_instance.public_send(step, @instance.params)
+            else
+              @instance.public_send(step, @instance.params)
+            end
+          when step.class <= Decouplio::Wrapper
+            step.call(@instance)
+          when step <= Decouplio::Iterator
+            step.call(@instance.params)
+          when step <= Decouplio::Action
+            outcome = step.call(@instance.params.merge(parent_instance: @instance))
+            @instance.errors.merge!(outcome.errors) && break if outcome.failure?
           else
             raise 'FUCK'
           end
