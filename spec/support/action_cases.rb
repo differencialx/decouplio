@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ActionCases
   def steps
     lambda do |_klass|
@@ -56,8 +58,6 @@ module ActionCases
       end
     end
   end
-
-
 
   def wrappers
     lambda do |_klass|

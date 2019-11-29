@@ -3,7 +3,7 @@
 RSpec.describe Decouplio::Action do
   context 'steps' do
     let(:error_message) { 'Error message' }
-    subject(:action) { dummy_class.(input_params) }
+    subject(:action) { dummy_class.call(input_params) }
 
     let(:dummy_class) do
       Class.new(Decouplio::Action, &action_block)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'dry-schema'
 
 module Decouplio
@@ -13,7 +15,7 @@ module Decouplio
     end
 
     def [](key)
-      self.ctx[key]
+      ctx[key]
     end
 
     def params
@@ -34,7 +36,7 @@ module Decouplio
 
     class << self
       def call(**params)
-        @instance = self.new(params)
+        @instance = new(params)
         process_validations
         return @instance unless @instance.success?
 
@@ -85,18 +87,17 @@ module Decouplio
 
       def process_steps
         @steps.each do |step|
-          case
-          when step.class == Symbol
+          if step.class == Symbol
             if @instance.wrapper
               @instance.parent_instance.public_send(step, @instance.params)
             else
               @instance.public_send(step, @instance.params)
             end
-          when step.class <= Decouplio::Wrapper
+          elsif step.class <= Decouplio::Wrapper
             step.call(@instance)
-          when step <= Decouplio::Iterator
+          elsif step <= Decouplio::Iterator
             step.call(@instance.params)
-          when step <= Decouplio::Action
+          elsif step <= Decouplio::Action
             outcome = step.call(@instance.params.merge(parent_instance: @instance))
             @instance.errors.merge!(outcome.errors) && break if outcome.failure?
           else

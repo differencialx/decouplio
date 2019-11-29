@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Decouplio
   class Wrapper
     attr_accessor :rescue_for
