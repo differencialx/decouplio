@@ -3,6 +3,8 @@
 require 'dry-schema'
 
 module Decouplio
+  class NoStepError < StandardError; end
+  class UndefinedHandlerMethod < StandardError; end
   class Action
     attr_reader :errors, :ctx, :wrapper, :parent_instance
 
@@ -64,20 +66,29 @@ module Decouplio
       end
 
       def step(step)
-        @steps ||= []
+        init_steps
         @steps << step
       end
 
-      def rescue_for(*errors_to_handle)
-        rescue_for_eval = ''
-        errors_to_handle.each do |hash|
-          rescue_for_eval += "rescue #{hash[:error]} => error; instance.public_send(:#{hash[:handler]}, error, instance.params);"
-        end
-        rescue_for_eval.prepend('begin;block.call;')
-        rescue_for_eval.concat('end')
+      def rescue_for(**errors_to_handle)
+        init_steps
         last_step = @steps.last
-        if last_step.respond_to?(:rescue_for=)
-          last_step.rescue_for = rescue_for_eval
+        raise NoStepError, 'rescue_for should be defined after step or wrapper or iterator' unless last_step
+
+        @rescue_steps[last_step] = {
+          error_classes: errors_to_handle.values.flatten,
+          handler_hash: handler_hash(errors_to_handle)
+        }
+      end
+
+      def init_steps
+        @steps ||= []
+        @rescue_steps ||= {}
+      end
+
+      def check_handler_methods(handler_hash)
+        handler_hash.each_value do |handler_method|
+          raise UndefinedHandlerMethod, "Please define #{handler_method} method" unless @instance.respond_to?(handler_method)
         end
       end
 
@@ -91,7 +102,12 @@ module Decouplio
             if @instance.wrapper
               @instance.parent_instance.public_send(step, @instance.params)
             else
-              @instance.public_send(step, @instance.params)
+              check_handler_methods(@rescue_steps.dig(step, :handler_hash)) if @rescue_steps.dig(step, :handler_hash)
+              process_symbol_step(step) do
+                call_instance_method(step)
+              rescue *@rescue_steps[step][:error_classes] => error
+                @instance.public_send(@rescue_steps[step][:handler_hash][error.class], error, **@instance.params)
+              end
             end
           elsif step.class <= Decouplio::Wrapper
             step.call(@instance)
@@ -104,6 +120,33 @@ module Decouplio
             raise 'FUCK'
           end
         end
+      end
+
+      def process_symbol_step(step, &block)
+        if rescue_step?(step)
+          block.call
+        else
+          call_instance_method(step)
+        end
+      end
+
+      def rescue_step?(step)
+        @rescue_steps[step]
+      end
+
+      def call_instance_method(step)
+        @instance.public_send(step, @instance.params)
+      end
+
+      def handler_hash(errors_to_handle)
+        hash_case = {}
+
+        errors_to_handle.each do |handler_method, error_classes|
+          [error_classes].flatten.each do |error_class|
+            hash_case[error_class] = handler_method
+          end
+        end
+        hash_case
       end
     end
   end

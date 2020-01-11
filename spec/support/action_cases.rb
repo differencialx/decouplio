@@ -8,8 +8,87 @@ module ActionCases
       def step_one(string_param:, **)
         ctx[:result] = string_param
       end
+
+      def error_handler(error, **)
+        add_error(:step_one_error, error.message)
+      end
     end
   end
+
+  ### Rescue
+
+  def step_rescue_single_error_class
+    lambda do |_klass|
+      step :step_one
+      rescue_for error_handler: StandardError
+
+      def step_one(string_param:, **)
+        StubRaiseError.call
+      end
+
+      def error_handler(error, **)
+        add_error(:step_one_error, error.message)
+      end
+    end
+  end
+
+  def step_rescue_several_error_classes
+    lambda do |_klass|
+      step :step_one
+      rescue_for error_handler: [StandardError, ArgumentError]
+
+      def step_one(string_param:, **)
+        StubRaiseError.call
+      end
+
+      def error_handler(error, **)
+        add_error(:step_one_error, error.message)
+      end
+    end
+  end
+
+  def step_rescue_several_handler_methods
+    lambda do |_klass|
+      step :step_one
+      rescue_for error_handler: [StandardError, ArgumentError],
+                 another_error_handler: NoMethodError
+
+      def step_one(string_param:, **)
+        StubRaiseError.call
+      end
+
+      def error_handler(error, **)
+        add_error(:step_one_error, error.message)
+      end
+
+      def another_error_handler(error, **)
+        add_error(:another_error, error.message)
+      end
+    end
+  end
+
+  def step_rescue_undefined_handler_method
+    lambda do |_klass|
+      step :step_one
+      rescue_for another_error_handler: NoMethodError
+
+      def step_one(string_param:, **)
+        StubRaiseError.call
+      end
+    end
+  end
+
+  def rescue_for_without_step
+    lambda do |_klass|
+      rescue_for another_error_handler: NoMethodError
+
+      def another_error_handler(error, **)
+        add_error(:another_error, error.message)
+      end
+    end
+  end
+
+  ### Validations
 
   def validations
     lambda do |_klass|
@@ -31,6 +110,8 @@ module ActionCases
       end
     end
   end
+
+  ### Inner actions
 
   InnerAction = Class.new(Decouplio::Action) do
     validate :validate_inner_action_param
@@ -59,6 +140,8 @@ module ActionCases
     end
   end
 
+  ### Wrappers
+
   def wrappers
     lambda do |_klass|
       validate_inputs do
@@ -72,8 +155,7 @@ module ActionCases
         step :transaction_step_one
         step :transaction_step_two
       end
-      rescue_for error: ClassWithWrapperMethodError,
-                 handler: :handler_step,
+      rescue_for handler_step: ClassWithWrapperMethodError,
                  finish_him: true
 
       step :step_two

@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 RSpec.describe Decouplio::Action do
-  context 'steps' do
+  context '#call' do
     let(:error_message) { 'Error message' }
-    subject(:action) { dummy_class.call(input_params) }
+    subject(:action) { dummy_instance.call(input_params) }
 
-    let(:dummy_class) do
+    let(:dummy_instance) do
       Class.new(Decouplio::Action, &action_block)
     end
 
@@ -133,6 +133,86 @@ RSpec.describe Decouplio::Action do
         it 'sets errors' do
           expect(action.errors).not_to be_empty
           expect(action.errors).to match expected_errors
+        end
+      end
+    end
+
+    context 'rescue blocks' do
+      shared_examples 'fails with error' do
+        it 'fails' do
+          expect(action).to be_failure
+        end
+
+        it 'sets errors' do
+          expect(action.errors).not_to be_empty
+          expect(action.errors).to match expected_errors
+        end
+      end
+
+      let(:error_to_raise) { StandardError }
+      let(:expected_errors) { { step_one_error: [error_message] } }
+
+      before do
+        allow(StubRaiseError).to receive(:call)
+          .and_raise(error_to_raise, error_message)
+      end
+
+      context 'rescue for StandardError' do
+        let(:action_block) { step_rescue_single_error_class }
+
+        it_behaves_like 'fails with error'
+      end
+
+      context 'rescue for several errors' do
+        let(:action_block) { step_rescue_several_error_classes }
+
+        context 'StandardError' do
+          it_behaves_like 'fails with error'
+        end
+
+        context 'ArgumentError' do
+          let(:error_to_raise) { ArgumentError }
+
+          it_behaves_like 'fails with error'
+        end
+      end
+
+      context 'rescue for several handler methods' do
+        let(:action_block) { step_rescue_several_handler_methods }
+
+        context 'StandardError' do
+          it_behaves_like 'fails with error'
+        end
+
+        context 'ArgumentError' do
+          let(:error_to_raise) { ArgumentError }
+
+          it_behaves_like 'fails with error'
+        end
+
+        context 'NoMethodError' do
+          let(:error_to_raise) { NoMethodError }
+          let(:expected_errors) { { another_error: [error_message] } }
+
+          it_behaves_like 'fails with error'
+        end
+      end
+
+      context 'rescue for underfined handler method' do
+        let(:action_block) { step_rescue_undefined_handler_method }
+        let(:error_to_raise) { NoMethodError }
+
+        it 'raises UndefinedHandlerMethod' do
+          expect{ action }.to raise_error(Decouplio::UndefinedHandlerMethod, 'Please define another_error_handler method')
+        end
+      end
+
+      context 'rescue should be defined after step or wrapper or iterator' do
+        let(:action_block) { rescue_for_without_step }
+        context 'NoStepError' do
+          it 'raises NoStepError' do
+            expect{ action }.to raise_error(Decouplio::NoStepError, 'rescue_for should be defined after step or wrapper or iterator')
+          end
         end
       end
     end

@@ -11,12 +11,7 @@ module Decouplio
     end
 
     def call(instance)
-      block = -> { exec_wrapper(instance) }
-      if rescue_for.to_s.strip.length.zero?
-        block.call
-      else
-        eval(rescue_for)
-      end
+      exec_wrapper(instance)
     end
 
     private
