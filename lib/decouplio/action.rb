@@ -98,7 +98,7 @@ module Decouplio
 
       def process_steps
         @steps.each do |step|
-          if step.class == Symbol
+          if step.is_a?(Symbol)
             if @instance.wrapper
               @instance.parent_instance.public_send(step, @instance.params)
             else
@@ -110,7 +110,11 @@ module Decouplio
               end
             end
           elsif step.class <= Decouplio::Wrapper
-            step.call(@instance)
+            process_wrapper_step(step) do
+              step.call(@instance)
+            rescue *@rescue_steps[step][:error_classes] => error
+              @instance.public_send(@rescue_steps[step][:handler_hash][error.class], error, **@instance.params)
+            end
           elsif step <= Decouplio::Iterator
             step.call(@instance.params)
           elsif step <= Decouplio::Action
@@ -127,6 +131,14 @@ module Decouplio
           block.call
         else
           call_instance_method(step)
+        end
+      end
+
+      def process_wrapper_step(step, &block)
+        if rescue_step?(step)
+          block.call
+        else
+          step.call(@instance)
         end
       end
 
