@@ -15,3 +15,9 @@ Style/FrozenStringLiteralComment:
 
 Metrics/BlockLength:
   ExcludedMethods: ['describe','context']
+
+RSpec/DescribeClass:
+  Enabled: false
+
+RSpec/NestedGroups:
+  Max: 4
