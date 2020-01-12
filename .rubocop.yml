@@ -1,3 +1,6 @@
 AllCops:
   Exclude:
     - 'decouplio.gemspec'
+
+Metrics/BlockLength:
+  ExcludedMethods: ['describe','context']
