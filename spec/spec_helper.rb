@@ -4,7 +4,7 @@ require 'bundler/setup'
 require 'decouplio'
 require 'pry'
 
-Dir[Dir.pwd + '/spec/support/**/*.rb'].each { |f| require f }
+Dir[Dir.pwd + '/spec/support/**/*.rb'].sort.each { |f| require f }
 
 RSpec.configure do |config|
   config.include StepCases
