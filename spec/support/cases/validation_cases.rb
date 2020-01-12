@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Lint/NestedMethodDefinition
 module ValidationCases
   def validations
     lambda do |_klass|
@@ -22,3 +23,4 @@ module ValidationCases
     end
   end
 end
+# rubocop:enable Lint/NestedMethodDefinition

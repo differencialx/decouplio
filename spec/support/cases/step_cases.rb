@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Lint/NestedMethodDefinition
 module StepCases
   def steps
     lambda do |_klass|
@@ -15,3 +16,4 @@ module StepCases
     end
   end
 end
+# rubocop:enable Lint/NestedMethodDefinition

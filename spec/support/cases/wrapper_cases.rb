@@ -1,21 +1,17 @@
 # frozen_string_literal: true
 
+# rubocop:disable Lint/NestedMethodDefinition
 module WrapperCases
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def wrappers
     lambda do |_klass|
-      validate_inputs do
-        required(:string_param).filled(:str?)
-        required(:integer_param).filled(:int?)
-      end
-
       step :step_one
 
       wrap klass: ClassWithWrapperMethod, method: :transaction do
         step :transaction_step_one
         step :transaction_step_two
       end
-      rescue_for handler_step: ClassWithWrapperMethodError,
-                 finish_him: true
+      rescue_for handler_step: ClassWithWrapperMethodError
 
       step :step_two
 
@@ -40,4 +36,6 @@ module WrapperCases
       end
     end
   end
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 end
+# rubocop:enable Lint/NestedMethodDefinition

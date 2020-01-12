@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 require 'dry-schema'
+require_relative 'errors/no_step_error'
+require_relative 'errors/undefined_handler_method_error'
 
+# rubocop:disable Metrics/ClassLength
 module Decouplio
-  class NoStepError < StandardError; end
-  class UndefinedHandlerMethod < StandardError; end
   class Action
     attr_reader :errors, :ctx, :wrapper, :parent_instance
 
@@ -73,7 +74,7 @@ module Decouplio
       def rescue_for(**errors_to_handle)
         init_steps
         last_step = @steps.last
-        raise NoStepError, 'rescue_for should be defined after step or wrapper or iterator' unless last_step
+        raise Errors::NoStepError, 'rescue_for should be defined after step or wrapper or iterator' unless last_step
 
         @rescue_steps[last_step] = {
           error_classes: errors_to_handle.values.flatten,
@@ -88,7 +89,9 @@ module Decouplio
 
       def check_handler_methods(handler_hash)
         handler_hash.each_value do |handler_method|
-          raise UndefinedHandlerMethod, "Please define #{handler_method} method" unless @instance.respond_to?(handler_method)
+          next if @instance.respond_to?(handler_method)
+
+          raise Errors::UndefinedHandlerMethodError, "Please define #{handler_method} method"
         end
       end
 
@@ -163,3 +166,4 @@ module Decouplio
     end
   end
 end
+# rubocop:enable Metrics/ClassLength

@@ -2,24 +2,9 @@
 
 RSpec.describe 'Decouplio::Action steps specs' do
   describe '#call' do
-    subject(:action) { dummy_instance.call(input_params) }
+    include_context 'with basic spec setup'
 
-    let(:error_message) { 'Error message' }
-
-    let(:dummy_instance) do
-      Class.new(Decouplio::Action, &action_block)
-    end
-
-    let(:string_param) { '4' }
-    let(:integer_param) { 4 }
-    let(:input_params) do
-      {
-        string_param: string_param,
-        integer_param: integer_param
-      }
-    end
-
-    context 'steps' do
+    describe 'steps' do
       let(:action_block) { steps }
       let(:expected_result) { string_param }
 

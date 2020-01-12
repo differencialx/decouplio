@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Lint/NestedMethodDefinition
 module InnerActionCases
   InnerAction = Class.new(Decouplio::Action) do
     validate :validate_inner_action_param
@@ -28,3 +29,4 @@ module InnerActionCases
     end
   end
 end
+# rubocop:enable Lint/NestedMethodDefinition

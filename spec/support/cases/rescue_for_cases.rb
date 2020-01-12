@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
+# rubocop:disable Lint/NestedMethodDefinition
 module RescueForCases
   def step_rescue_single_error_class
     lambda do |_klass|
       step :step_one
       rescue_for error_handler: StandardError
 
-      def step_one(string_param:, **)
+      def step_one(**)
         StubRaiseError.call
       end
 
@@ -21,7 +22,7 @@ module RescueForCases
       step :step_one
       rescue_for error_handler: [StandardError, ArgumentError]
 
-      def step_one(string_param:, **)
+      def step_one(**)
         StubRaiseError.call
       end
 
@@ -31,13 +32,14 @@ module RescueForCases
     end
   end
 
+  # rubocop:disable Metrics/MethodLength
   def step_rescue_several_handler_methods
     lambda do |_klass|
       step :step_one
       rescue_for error_handler: [StandardError, ArgumentError],
                  another_error_handler: NoMethodError
 
-      def step_one(string_param:, **)
+      def step_one(**)
         StubRaiseError.call
       end
 
@@ -50,13 +52,14 @@ module RescueForCases
       end
     end
   end
+  # rubocop:enable Metrics/MethodLength
 
   def step_rescue_undefined_handler_method
     lambda do |_klass|
       step :step_one
       rescue_for another_error_handler: NoMethodError
 
-      def step_one(string_param:, **)
+      def step_one(**)
         StubRaiseError.call
       end
     end
@@ -72,3 +75,4 @@ module RescueForCases
     end
   end
 end
+# rubocop:enable Lint/NestedMethodDefinition
