@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RescueForCases
   def step_rescue_single_error_class
     lambda do |_klass|

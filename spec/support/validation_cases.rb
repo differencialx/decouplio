@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ValidationCases
   def validations
     lambda do |_klass|
@@ -19,5 +21,4 @@ module ValidationCases
       end
     end
   end
-
 end

@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 RSpec.describe 'Decouplio::Action inner action specs' do
-  context '#call' do
-    let(:error_message) { 'Error message' }
+  describe '#call' do
     subject(:action) { dummy_instance.call(input_params) }
+
+    let(:error_message) { 'Error message' }
 
     let(:dummy_instance) do
       Class.new(Decouplio::Action, &action_block)

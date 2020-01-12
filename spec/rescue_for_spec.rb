@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 RSpec.describe 'Decouplio::Action rescue_for specs' do
-  context '#call' do
-    let(:error_message) { 'Error message' }
+  describe '#call' do
     subject(:action) { dummy_instance.call(input_params) }
+
+    let(:error_message) { 'Error message' }
 
     let(:dummy_instance) do
       Class.new(Decouplio::Action, &action_block)
@@ -85,7 +86,7 @@ RSpec.describe 'Decouplio::Action rescue_for specs' do
         let(:expected_message) { 'Please define another_error_handler method' }
 
         it 'raises UndefinedHandlerMethod' do
-          expect{ action }.to raise_error(
+          expect { action }.to raise_error(
             Decouplio::UndefinedHandlerMethod, expected_message
           )
         end
@@ -98,7 +99,7 @@ RSpec.describe 'Decouplio::Action rescue_for specs' do
         end
 
         it 'raises NoStepError' do
-          expect{ action }.to raise_error(
+          expect { action }.to raise_error(
             Decouplio::NoStepError, expected_message
           )
         end

@@ -105,15 +105,15 @@ module Decouplio
               check_handler_methods(@rescue_steps.dig(step, :handler_hash)) if @rescue_steps.dig(step, :handler_hash)
               process_symbol_step(step) do
                 call_instance_method(step)
-              rescue *@rescue_steps[step][:error_classes] => error
-                @instance.public_send(@rescue_steps[step][:handler_hash][error.class], error, **@instance.params)
+              rescue *@rescue_steps[step][:error_classes] => e
+                @instance.public_send(@rescue_steps[step][:handler_hash][e.class], e, **@instance.params)
               end
             end
           elsif step.class <= Decouplio::Wrapper
             process_wrapper_step(step) do
               step.call(@instance)
-            rescue *@rescue_steps[step][:error_classes] => error
-              @instance.public_send(@rescue_steps[step][:handler_hash][error.class], error, **@instance.params)
+            rescue *@rescue_steps[step][:error_classes] => e
+              @instance.public_send(@rescue_steps[step][:handler_hash][e.class], e, **@instance.params)
             end
           elsif step <= Decouplio::Iterator
             step.call(@instance.params)

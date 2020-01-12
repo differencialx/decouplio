@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module StepCases
   def steps
     lambda do |_klass|
