@@ -66,14 +66,14 @@ module Decouplio
         @validations << validation
       end
 
-      def step(step)
+      def step(step, **options)
         init_steps
-        @steps << step
+        @steps[step] = options
       end
 
       def rescue_for(**errors_to_handle)
         init_steps
-        last_step = @steps.last
+        last_step = step_keys.last
         raise Errors::NoStepError, 'rescue_for should be defined after step or wrapper or iterator' unless last_step
 
         @rescue_steps[last_step] = {
@@ -83,7 +83,7 @@ module Decouplio
       end
 
       def init_steps
-        @steps ||= []
+        @steps ||= {}
         @rescue_steps ||= {}
       end
 
@@ -95,12 +95,13 @@ module Decouplio
         end
       end
 
-      def wrap(klass:, method:, &block)
-        @steps << Decouplio::Wrapper.new(klass: klass, method: method, &block)
+      def wrap(klass:, method:, **options, &block)
+        step = Decouplio::Wrapper.new(klass: klass, method: method, &block)
+        @steps[step] = options
       end
 
       def process_steps
-        @steps.each do |step|
+        step_keys.each do |step|
           if step.is_a?(Symbol)
             if @instance.wrapper
               @instance.parent_instance.public_send(step, @instance.params)
@@ -126,6 +127,7 @@ module Decouplio
           else
             raise 'FUCK'
           end
+          break if @steps.dig(step, :finish_him) && @instance.failure?
         end
       end
 
@@ -162,6 +164,10 @@ module Decouplio
           end
         end
         hash_case
+      end
+
+      def step_keys
+        @steps.keys
       end
     end
   end
