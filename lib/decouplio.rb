@@ -1,6 +1,9 @@
-require "decouplio/version"
+# frozen_string_literal: true
+
+require 'decouplio/version'
+require 'decouplio/action'
+require 'decouplio/wrapper'
+require 'decouplio/iterator'
 
 module Decouplio
-  class Error < StandardError; end
-  # Your code goes here...
 end

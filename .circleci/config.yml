@@ -1,0 +1,25 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/decouplio
+    docker:
+      - image: ruby:2.6.0
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - decouplio-{{ checksum "Gemfile.lock" }}
+            - decouplio-
+      - run:
+          name: Install dependencies
+          command: bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs 4 --retry 3
+
+      - save_cache:
+          key: decouplio-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+
+      - run:
+          name: Run Tests
+          command: bundle exec rspec
