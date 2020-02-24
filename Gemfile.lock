@@ -8,6 +8,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.0)
+    byebug (11.0.1)
     coderay (1.1.2)
     concurrent-ruby (1.1.5)
     diff-lcs (1.3)
@@ -49,6 +50,9 @@ GEM
     pry (0.12.2)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
+    pry-byebug (3.7.0)
+      byebug (~> 11.0)
+      pry (~> 0.10)
     rainbow (3.0.0)
     rake (10.5.0)
     rspec (3.8.0)
@@ -82,7 +86,7 @@ PLATFORMS
 DEPENDENCIES
   bundler (~> 1.17)
   decouplio!
-  pry
+  pry-byebug
   rake (~> 10.0)
   rspec (~> 3.0)
   rubocop
