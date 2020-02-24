@@ -14,7 +14,7 @@ module InnerActionCases
     def validate_inner_action_param(inner_action_param:, **)
       return if inner_action_param == 42
 
-      add_error(:invalid_inner_action_param, 'Invalid inner_action_param')
+      add_error(invalid_inner_action_param: 'Invalid inner_action_param')
     end
   end
 

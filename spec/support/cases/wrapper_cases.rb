@@ -16,7 +16,7 @@ module WrapperCases
       step :step_two
 
       def handler_step(error, **)
-        add_error(:wrapper_error, error.message)
+        add_error(wrapper_error: error.message)
       end
 
       def step_one(string_param:, **)

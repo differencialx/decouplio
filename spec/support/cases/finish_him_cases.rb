@@ -13,7 +13,7 @@ module FinishHimCases
       end
 
       def step_two(string_param:, **)
-        add_error(:something_wrong, 'Something went wrong')
+        add_error(something_wrong: 'Something went wrong')
       end
 
       def step_three(string_param:, **)

@@ -12,7 +12,7 @@ module RescueForCases
       end
 
       def error_handler(error, **)
-        add_error(:step_one_error, error.message)
+        add_error(step_one_error: error.message)
       end
     end
   end
@@ -27,7 +27,7 @@ module RescueForCases
       end
 
       def error_handler(error, **)
-        add_error(:step_one_error, error.message)
+        add_error(step_one_error: error.message)
       end
     end
   end
@@ -44,11 +44,11 @@ module RescueForCases
       end
 
       def error_handler(error, **)
-        add_error(:step_one_error, error.message)
+        add_error(step_one_error: error.message)
       end
 
       def another_error_handler(error, **)
-        add_error(:another_error, error.message)
+        add_error(another_error: error.message)
       end
     end
   end
@@ -70,7 +70,7 @@ module RescueForCases
       rescue_for another_error_handler: NoMethodError
 
       def another_error_handler(error, **)
-        add_error(:another_error, error.message)
+        add_error(another_error: error.message)
       end
     end
   end

@@ -18,7 +18,7 @@ module ValidationCases
       def first_validation(string_param:, integer_param:, **)
         return if string_param.to_i == integer_param
 
-        add_error(:invalid_string_param, 'Invalid string param')
+        add_error(invalid_string_param: 'Invalid string param')
       end
     end
   end

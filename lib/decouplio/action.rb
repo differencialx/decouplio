@@ -33,8 +33,11 @@ module Decouplio
       !success?
     end
 
-    def add_error(key, message)
-      errors.store(key, [message].flatten)
+    def add_error(errors_hash)
+      errors_hash.each_pair do |key, val|
+        errors_hash[key] = [val]
+      end
+      errors.merge!(errors_hash)
     end
 
     class << self
@@ -66,9 +69,9 @@ module Decouplio
         @validations << validation
       end
 
-      def step(step, **options)
+      def step(step, *args)
         init_steps
-        @steps[step] = options
+        @steps[step] = args_to_options(args)
       end
 
       def rescue_for(**errors_to_handle)
@@ -110,6 +113,8 @@ module Decouplio
               process_symbol_step(step) do
                 call_instance_method(step)
               rescue *@rescue_steps[step][:error_classes] => e
+                raise e unless @rescue_steps[step][:handler_hash][e.class]
+
                 @instance.public_send(@rescue_steps[step][:handler_hash][e.class], e, **@instance.params)
               end
             end
@@ -123,12 +128,24 @@ module Decouplio
             step.call(@instance.params)
           elsif step <= Decouplio::Action
             outcome = step.call(@instance.params.merge(parent_instance: @instance))
-            @instance.errors.merge!(outcome.errors) && break if outcome.failure?
+            if outcome.success?
+            else
+              @instance.errors.merge!(outcome.errors) && break
+            end
           else
             raise 'FUCK'
           end
           break if @steps.dig(step, :finish_him) && @instance.failure?
         end
+      end
+
+      def args_to_options(args)
+        args.map do |el|
+          case el.class.to_s
+          when 'Symbol' then { el => true }
+          when 'Hash' then el
+          end
+        end.reduce(&:merge)
       end
 
       def process_symbol_step(step, &block)
@@ -152,6 +169,8 @@ module Decouplio
       end
 
       def call_instance_method(step)
+        return if @steps.dig(step, :on_failure) && @instance.success?
+
         @instance.public_send(step, @instance.params)
       end
 
