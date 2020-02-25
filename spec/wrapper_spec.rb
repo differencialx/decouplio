@@ -27,5 +27,29 @@ RSpec.describe 'Decouplio::Action wrapper specs' do
 
       it_behaves_like 'fails with error'
     end
+
+    context 'simple wrapper' do
+      before do
+        allow(StubRaiseError).to receive(:call)
+          .and_raise(ArgumentError, error_message)
+      end
+      let(:action_block) { simple_wrapper }
+      let(:error_message) { 'Error messages' }
+      let(:expected_errors) { { wrapper_error: [error_message] } }
+
+      it_behaves_like 'fails with error'
+
+      it 'calls step_one' do
+        expect(action[:step_one]).to eq 'Success'
+      end
+
+      it 'calls step_two' do
+        expect(action[:step_two]).to eq 'Success'
+      end
+
+      it 'calls wrapper_step_one' do
+        expect(action[:wrapper_step_one]).to eq 'Success'
+      end
+    end
   end
 end

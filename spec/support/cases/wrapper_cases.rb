@@ -36,6 +36,72 @@ module WrapperCases
       end
     end
   end
+
+  def simple_wrapper
+    lambda do |_klass|
+      wrap do
+        step :wrapper_step_one
+        step :wrapper_step_two
+      end
+      rescue_for handler_step: ArgumentError
+
+      step :step_one
+      step :step_two
+
+      def handler_step(error, **)
+        add_error(wrapper_error: error.message)
+      end
+
+      def step_one(**)
+        ctx[:step_one] = 'Success'
+      end
+
+      def step_two(**)
+        ctx[:step_two] = 'Success'
+      end
+
+      def wrapper_step_one(**)
+        ctx[:wrapper_step_one] = 'Success'
+      end
+
+      def wrapper_step_two(**)
+        StubRaiseError.call
+      end
+    end
+  end
+
+  def simple_wrapper_finish_him
+    lambda do |_klass|
+      wrap do
+        step :wrapper_step_one, :finish_him
+        step :wrapper_step_two
+      end
+      rescue_for handler_step: ArgumentError
+
+      step :step_one
+      step :step_two
+
+      def handler_step(error, **)
+        add_error(wrapper_error: error.message)
+      end
+
+      def step_one(**)
+        ctx[:step_one] = 'Success'
+      end
+
+      def step_two(**)
+        ctx[:step_two] = 'Success'
+      end
+
+      def wrapper_step_one(**)
+        ctx[:wrapper_step_one] = 'Success'
+      end
+
+      def wrapper_step_two(**)
+        StubRaiseError.call
+      end
+    end
+  end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 end
 # rubocop:enable Lint/NestedMethodDefinition

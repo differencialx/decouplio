@@ -74,10 +74,10 @@ module Decouplio
         @steps[step] = args_to_options(args)
       end
 
-      def rescue_for(**errors_to_handle)
+      def rescue_for(**errors_to_handle, &block)
         init_steps
-        last_step = step_keys.last
-        raise Errors::NoStepError, 'rescue_for should be defined after step or wrapper or iterator' unless last_step
+        raise_no_step_error if rescue_for_not_allowed?(&block)
+        yield_self(&block) if block_given? # TODO: finish resque block
 
         @rescue_steps[last_step] = {
           error_classes: errors_to_handle.values.flatten,
@@ -98,7 +98,8 @@ module Decouplio
         end
       end
 
-      def wrap(klass:, method:, **options, &block)
+      def wrap(klass: Wrappers::SimpleWrapper, method: :wrap, **options, &block)
+        init_steps
         step = Decouplio::Wrapper.new(klass: klass, method: method, &block)
         @steps[step] = options
       end
@@ -106,32 +107,13 @@ module Decouplio
       def process_steps
         step_keys.each do |step|
           if step.is_a?(Symbol)
-            if @instance.wrapper
-              @instance.parent_instance.public_send(step, @instance.params)
-            else
-              check_handler_methods(@rescue_steps.dig(step, :handler_hash)) if @rescue_steps.dig(step, :handler_hash)
-              process_symbol_step(step) do
-                call_instance_method(step)
-              rescue *@rescue_steps[step][:error_classes] => e
-                raise e unless @rescue_steps[step][:handler_hash][e.class]
-
-                @instance.public_send(@rescue_steps[step][:handler_hash][e.class], e, **@instance.params)
-              end
-            end
+            process_method(step)
           elsif step.class <= Decouplio::Wrapper
-            process_wrapper_step(step) do
-              step.call(@instance)
-            rescue *@rescue_steps[step][:error_classes] => e
-              @instance.public_send(@rescue_steps[step][:handler_hash][e.class], e, **@instance.params)
-            end
+            process_wrapper(step)
           elsif step <= Decouplio::Iterator
-            step.call(@instance.params)
+            process_iterator(step)
           elsif step <= Decouplio::Action
-            outcome = step.call(@instance.params.merge(parent_instance: @instance))
-            if outcome.success?
-            else
-              @instance.errors.merge!(outcome.errors) && break
-            end
+            process_action(step, proc { return })
           else
             raise 'FUCK'
           end
@@ -139,13 +121,53 @@ module Decouplio
         end
       end
 
+      def process_method(step)
+        if @instance.wrapper
+          @instance.parent_instance.public_send(step, @instance.params)
+        else
+          check_handler_methods(@rescue_steps.dig(step, :handler_hash)) if @rescue_steps.dig(step, :handler_hash)
+          process_symbol_step(step) do
+            call_instance_method(step)
+          rescue *@rescue_steps[step][:error_classes] => e
+            raise e unless @rescue_steps[step][:handler_hash][e.class]
+
+            @instance.public_send(@rescue_steps[step][:handler_hash][e.class], e, **@instance.params)
+          end
+        end
+      end
+
+      def process_wrapper(step)
+        process_wrapper_step(step) do
+          step.call(@instance)
+        rescue *@rescue_steps[step][:error_classes] => e
+          @instance.public_send(@rescue_steps[step][:handler_hash][e.class], e, **@instance.params)
+        end
+      end
+
+      def process_iterator(step)
+        step.call(@instance.params)
+      end
+
+      def process_action(step, break_method)
+        outcome = step.call(@instance.params.merge(parent_instance: @instance))
+        if outcome.success?
+        else
+          @instance.errors.merge!(outcome.errors) && break_method.call
+        end
+      end
+
       def args_to_options(args)
-        args.map do |el|
+        options = args.map do |el|
           case el.class.to_s
           when 'Symbol' then { el => true }
           when 'Hash' then el
           end
-        end.reduce(&:merge)
+        end.compact.reduce(&:merge)
+        validate_options(options)
+      end
+
+      def validate_options(options)
+        options
       end
 
       def process_symbol_step(step, &block)
@@ -187,6 +209,22 @@ module Decouplio
 
       def step_keys
         @steps.keys
+      end
+
+      def rescue_for_not_allowed?(&block)
+        return false if block_given? && last_step.nil?
+
+        return true if last_step.nil?
+
+        false
+      end
+
+      def last_step
+        step_keys.last
+      end
+
+      def raise_no_step_error
+        raise Errors::NoStepError, 'rescue_for should be defined after step or wrapper or iterator or with block'
       end
     end
   end
