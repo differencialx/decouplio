@@ -42,6 +42,8 @@ module Decouplio
 
     class << self
       def call(**params)
+        raise Errors::NoStepError, 'Step or wrapper or iterator or validations should be provided' unless @steps || @schema || @validations
+
         @instance = new(params)
         process_validations
         return @instance unless @instance.success?
