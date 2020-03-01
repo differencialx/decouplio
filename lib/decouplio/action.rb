@@ -41,7 +41,7 @@ module Decouplio
     end
 
     class << self
-      def call(**params)
+      def call(**params, &block)
         raise Errors::NoStepError, 'Step or wrapper or iterator or validations should be provided' unless @steps || @schema || @validations
 
         @instance = new(params)
@@ -49,7 +49,8 @@ module Decouplio
         return @instance unless @instance.success?
 
         process_steps
-        @instance
+
+        block_given? ? block.call(@instance) : @instance
       end
 
       private
