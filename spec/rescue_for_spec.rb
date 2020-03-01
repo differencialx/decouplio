@@ -77,58 +77,5 @@ RSpec.describe 'Decouplio::Action rescue_for specs' do
         )
       end
     end
-
-    xcontext 'when block is given' do
-      context 'when StandardError was raised' do
-        let(:action_block) { resque_with_block_one }
-        let(:error_message) { 'Error one' }
-        let(:error_to_raise) { StandardError }
-        let(:expected_errors) { { error_one: [error_message] } }
-
-        it_behaves_like 'fails with error'
-        it 'calls step_two' do
-          expect(action[:step_two]).to eq 'Success'
-        end
-      end
-
-      context 'when ArgumentError was raised' do
-        let(:action_block) { resque_with_block_two }
-        let(:error_message) { 'Error two' }
-        let(:error_to_raise) { ArgumentError }
-        let(:expected_errors) { { error_two: [error_message] } }
-
-        it_behaves_like 'fails with error'
-        it 'calls step_one' do
-          expect(action[:step_one]).to eq 'Success'
-        end
-      end
-
-      context 'when finish_him was set' do
-        let(:action_block) { resque_with_block_finish_him }
-        let(:error_message) { 'Error one' }
-        let(:error_to_raise) { StandardError }
-        let(:expected_errors) { { error_two: [error_message] } }
-
-        it_behaves_like 'fails with error'
-        it 'does not call step two' do
-          expect(action[:step_two]).to be_nil
-        end
-      end
-
-      context 'when on_failue and finish_him were set' do
-        let(:action_block) { resque_with_block_on_failure_and_finish_him }
-        let(:error_message) { 'Error one' }
-        let(:error_to_raise) { StandardError }
-        let(:expected_errors) { { error_two: [error_message] } }
-
-        it_behaves_like 'fails with error'
-        it 'calls step_two' do
-          expect(action[:step_two]).to eq 'Success'
-        end
-        it 'does not call step_three' do
-          expect(action[:step_three]).to be_nil
-        end
-      end
-    end
   end
 end

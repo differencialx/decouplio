@@ -3,6 +3,7 @@
 RSpec.describe 'Decouplio::Action wrapper specs' do
   describe '#call' do
     include_context 'with basic spec setup'
+    include_context 'with input params'
 
     let(:action_block) { wrappers }
 

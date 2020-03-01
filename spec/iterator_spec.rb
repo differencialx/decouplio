@@ -3,6 +3,7 @@
 RSpec.describe 'Decouplio::Action iterator specs' do
   describe '#call' do
     include_context 'with basic spec setup'
+    include_context 'with input params'
 
     describe 'steps' do
       let(:action_block) { steps }
