@@ -9,7 +9,7 @@ module OnFailureCases
       step :on_fail_step, :on_failure
 
       def step_one(**)
-        StubRaiseError.call
+        StubDummy.call
       end
 
       def handler(error, **)

@@ -10,7 +10,7 @@ RSpec.describe 'Decouplio::Action rescue_for specs' do
 
     context 'when fail step performs' do
       before do
-        allow(StubRaiseError).to receive(:call)
+        allow(StubDummy).to receive(:call)
           .and_raise(error_to_raise, error_message)
       end
 

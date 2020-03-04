@@ -8,7 +8,7 @@ RSpec.describe 'Decouplio::Action rescue_for specs' do
     let(:expected_errors) { { step_one_error: [error_message] } }
 
     before do
-      allow(StubRaiseError).to receive(:call)
+      allow(StubDummy).to receive(:call)
         .and_raise(error_to_raise, error_message)
     end
 

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
-class StubRaiseError
+class StubDummy
   def self.call; end
 end

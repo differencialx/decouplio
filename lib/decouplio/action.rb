@@ -15,6 +15,7 @@ module Decouplio
       @parent_instance = parent_instance
       @ctx = @parent_instance&.ctx || {}
       @wrapper = wrapper
+      @tags = {}
     end
 
     def [](key)
@@ -35,9 +36,22 @@ module Decouplio
 
     def add_error(errors_hash)
       errors_hash.each_pair do |key, val|
-        errors_hash[key] = [val]
+        errors_hash[key] = [val].flatten
       end
       errors.merge!(errors_hash)
+    end
+
+    def add_tag(tag, value)
+      @tags[tag] = value
+    end
+
+    def method_missing(method_name, *args, &block)
+      name = method_name.to_s[0..-2].to_sym
+      if @tags.keys.include?(name)
+        @tags[name]
+      else
+        super
+      end
     end
 
     class << self
@@ -70,6 +84,12 @@ module Decouplio
       def validate(validation)
         @validations ||= []
         @validations << validation
+      end
+
+      def gendalf(klass, method_name, *args)
+        init_steps
+
+        @steps[Decouplio::Gendalf.new(klass)] = args_to_options(args).merge(method_name: method_name)
       end
 
       def step(step, *args)
@@ -111,6 +131,18 @@ module Decouplio
         step_keys.each do |step|
           if step.is_a?(Symbol)
             process_method(step)
+          elsif step.is_a?(Decouplio::Gendalf)
+            user_key = @steps[step].fetch(:user_key) { :user }
+            model_key = @steps[step].fetch(:model_key) { :model }
+            method_name = @steps[step].fetch(:method_name)
+            has_access = step.klass.new(@instance.params[user_key], @instance.ctx[model_key]).public_send(method_name)
+
+            unless has_access
+              @instance.add_error({ gendalf: ['You shall not pass!', "#{step.klass}##{method_name}"] })
+              @instance.add_tag(:gendalf, false)
+              break
+            end
+            @instance.add_tag(:gendalf, true)
           elsif step.class <= Decouplio::Wrapper
             process_wrapper(step)
           elsif step <= Decouplio::Iterator
@@ -166,6 +198,8 @@ module Decouplio
           when 'Hash' then el
           end
         end.compact.reduce(&:merge)
+        return {} if options.nil?
+
         validate_options(options)
       end
 

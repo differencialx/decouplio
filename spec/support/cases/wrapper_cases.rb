@@ -65,7 +65,7 @@ module WrapperCases
       end
 
       def wrapper_step_two(**)
-        StubRaiseError.call
+        StubDummy.call
       end
     end
   end
@@ -98,7 +98,7 @@ module WrapperCases
       end
 
       def wrapper_step_two(**)
-        StubRaiseError.call
+        StubDummy.call
       end
     end
   end

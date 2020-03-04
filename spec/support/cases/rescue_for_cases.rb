@@ -8,7 +8,7 @@ module RescueForCases
       rescue_for error_handler: StandardError
 
       def step_one(**)
-        StubRaiseError.call
+        StubDummy.call
       end
 
       def error_handler(error, **)
@@ -23,7 +23,7 @@ module RescueForCases
       rescue_for error_handler: [StandardError, ArgumentError]
 
       def step_one(**)
-        StubRaiseError.call
+        StubDummy.call
       end
 
       def error_handler(error, **)
@@ -40,7 +40,7 @@ module RescueForCases
                  another_error_handler: NoMethodError
 
       def step_one(**)
-        StubRaiseError.call
+        StubDummy.call
       end
 
       def error_handler(error, **)
@@ -60,7 +60,7 @@ module RescueForCases
       rescue_for another_error_handler: NoMethodError
 
       def step_one(**)
-        StubRaiseError.call
+        StubDummy.call
       end
     end
   end

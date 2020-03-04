@@ -31,7 +31,7 @@ RSpec.describe 'Decouplio::Action wrapper specs' do
 
     context 'simple wrapper' do
       before do
-        allow(StubRaiseError).to receive(:call)
+        allow(StubDummy).to receive(:call)
           .and_raise(ArgumentError, error_message)
       end
       let(:action_block) { simple_wrapper }

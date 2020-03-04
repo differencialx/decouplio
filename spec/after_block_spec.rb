@@ -26,7 +26,7 @@ RSpec.describe 'Decouplio::Action after block cases' do
 
       context 'when fails' do
         before do
-          allow(StubRaiseError).to receive(:call)
+          allow(StubDummy).to receive(:call)
             .and_raise(StandardError)
         end
 
@@ -37,7 +37,7 @@ RSpec.describe 'Decouplio::Action after block cases' do
           expect(@success).to eq 'Failure'
         end
 
-        it 'success' do
+        it 'fails' do
           expect(action).to be_failure
         end
       end

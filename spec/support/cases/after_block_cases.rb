@@ -7,7 +7,7 @@ module AfterBlockCases
       step :step_one
 
       def step_one(**)
-        StubRaiseError.call
+        StubDummy.call
       end
     end
   end
@@ -18,7 +18,7 @@ module AfterBlockCases
       rescue_for error_handler: StandardError
 
       def step_one(**)
-        StubRaiseError.call
+        StubDummy.call
       end
 
       def error_handler(error, **)
