@@ -16,6 +16,7 @@ RSpec.configure do |config|
   config.include WrapperCases
   config.include FinishHimCases
   config.include OnFailureCases
+  config.include TagsCases
   # Enable flags like --only-failures and --next-failure
   config.example_status_persistence_file_path = '.rspec_status'
 

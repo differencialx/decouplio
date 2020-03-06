@@ -16,6 +16,8 @@ module Decouplio
       @ctx = @parent_instance&.ctx || {}
       @wrapper = wrapper
       @tags = {}
+      @steps_results = {}
+      @last_added_error = false
     end
 
     def [](key)
@@ -39,10 +41,19 @@ module Decouplio
         errors_hash[key] = [val].flatten
       end
       errors.merge!(errors_hash)
+      @last_added_error = true
     end
 
     def add_tag(tag, value)
       @tags[tag] = value
+    end
+
+    def reset_last_error_added
+      @last_added_error = false
+    end
+
+    def last_step_success?
+      !@last_added_error
     end
 
     def method_missing(method_name, *args, &block)
@@ -124,6 +135,7 @@ module Decouplio
       def wrap(klass: Wrappers::SimpleWrapper, method: :wrap, **options, &block)
         init_steps
         stp = Decouplio::Wrapper.new(klass: klass, method: method, &block)
+
         @steps[stp] = options
       end
 
@@ -159,6 +171,7 @@ module Decouplio
       def process_method(stp)
         if @instance.wrapper
           @instance.parent_instance.public_send(stp, @instance.params)
+          process_wrapper_tags_for_steps(stp)
         else
           check_handler_methods(@rescue_steps.dig(stp, :handler_hash)) if @rescue_steps.dig(stp, :handler_hash)
           process_symbol_step(stp) do
@@ -169,11 +182,18 @@ module Decouplio
             @instance.public_send(@rescue_steps[stp][:handler_hash][e.class], e, **@instance.params)
           end
         end
+      rescue => error
+        if @instance.wrapper
+          process_wrapper_tags_for_steps(stp, false)
+        else
+          process_tags(stp, false)
+        end
+        raise error
       end
 
       def process_wrapper(stp)
         process_wrapper_step(stp) do
-          stp.call(@instance)
+          call_wrapper(stp)
         rescue *@rescue_steps[stp][:error_classes] => e
           @instance.public_send(@rescue_steps[stp][:handler_hash][e.class], e, **@instance.params)
         end
@@ -219,8 +239,16 @@ module Decouplio
         if rescue_step?(stp)
           block.call
         else
-          stp.call(@instance)
+          call_wrapper(stp)
         end
+
+        return unless @steps.dig(stp, :tag)
+
+        @instance.add_tag(@steps.dig(stp, :tag), @instance.last_step_success?)
+      end
+
+      def call_wrapper(stp)
+        stp.call(@instance)
       end
 
       def rescue_step?(stp)
@@ -228,15 +256,25 @@ module Decouplio
       end
 
       def call_instance_method(stp)
-        process_tags(stp)
-
         return if @steps.dig(stp, :on_failure) && @instance.success?
 
         @instance.public_send(stp, @instance.params)
+
+        process_tags(stp)
       end
 
-      def process_tags(stp)
-        # binding.pry
+      def process_tags(stp, result = @instance.last_step_success?)
+        return unless @steps.dig(stp, :tag)
+
+        @instance.add_tag(@steps.dig(stp, :tag), result)
+        @instance.reset_last_error_added
+      end
+
+      def process_wrapper_tags_for_steps(stp, result = @instance.last_step_success?)
+        return unless @steps.dig(stp, :tag)
+
+        @instance.parent_instance.add_tag(@steps.dig(stp, :tag), result)
+        @instance.reset_last_error_added
       end
 
       def handler_hash(errors_to_handle)
