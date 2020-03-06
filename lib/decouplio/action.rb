@@ -92,9 +92,9 @@ module Decouplio
         @steps[Decouplio::Gendalf.new(klass)] = args_to_options(args).merge(method_name: method_name)
       end
 
-      def step(step, *args)
+      def step(stp, *args)
         init_steps
-        @steps[step] = args_to_options(args)
+        @steps[stp] = args_to_options(args)
       end
 
       def rescue_for(**errors_to_handle, &block)
@@ -123,68 +123,68 @@ module Decouplio
 
       def wrap(klass: Wrappers::SimpleWrapper, method: :wrap, **options, &block)
         init_steps
-        step = Decouplio::Wrapper.new(klass: klass, method: method, &block)
-        @steps[step] = options
+        stp = Decouplio::Wrapper.new(klass: klass, method: method, &block)
+        @steps[stp] = options
       end
 
       def process_steps
-        step_keys.each do |step|
-          if step.is_a?(Symbol)
-            process_method(step)
-          elsif step.is_a?(Decouplio::Gendalf)
-            user_key = @steps[step].fetch(:user_key) { :user }
-            model_key = @steps[step].fetch(:model_key) { :model }
-            method_name = @steps[step].fetch(:method_name)
-            has_access = step.klass.new(@instance.params[user_key], @instance.ctx[model_key]).public_send(method_name)
+        step_keys.each do |stp|
+          if stp.is_a?(Symbol)
+            process_method(stp)
+          elsif stp.is_a?(Decouplio::Gendalf)
+            user_key = @steps[stp].fetch(:user_key) { :user }
+            model_key = @steps[stp].fetch(:model_key) { :model }
+            method_name = @steps[stp].fetch(:method_name)
+            has_access = stp.klass.new(@instance.params[user_key], @instance.ctx[model_key]).public_send(method_name)
 
             unless has_access
-              @instance.add_error({ gendalf: ['You shall not pass!', "#{step.klass}##{method_name}"] })
+              @instance.add_error({ gendalf: ['You shall not pass!', "#{stp.klass}##{method_name}"] })
               @instance.add_tag(:gendalf, false)
               break
             end
             @instance.add_tag(:gendalf, true)
-          elsif step.class <= Decouplio::Wrapper
-            process_wrapper(step)
-          elsif step <= Decouplio::Iterator
-            process_iterator(step)
-          elsif step <= Decouplio::Action
-            process_action(step, proc { return })
+          elsif stp.class <= Decouplio::Wrapper
+            process_wrapper(stp)
+          elsif stp <= Decouplio::Iterator
+            process_iterator(stp)
+          elsif stp <= Decouplio::Action
+            process_action(stp, proc { return })
           else
             raise 'FUCK'
           end
-          break if @steps.dig(step, :finish_him) && @instance.failure?
+          break if @steps.dig(stp, :finish_him) && @instance.failure?
         end
       end
 
-      def process_method(step)
+      def process_method(stp)
         if @instance.wrapper
-          @instance.parent_instance.public_send(step, @instance.params)
+          @instance.parent_instance.public_send(stp, @instance.params)
         else
-          check_handler_methods(@rescue_steps.dig(step, :handler_hash)) if @rescue_steps.dig(step, :handler_hash)
-          process_symbol_step(step) do
-            call_instance_method(step)
-          rescue *@rescue_steps[step][:error_classes] => e
-            raise e unless @rescue_steps[step][:handler_hash][e.class]
+          check_handler_methods(@rescue_steps.dig(stp, :handler_hash)) if @rescue_steps.dig(stp, :handler_hash)
+          process_symbol_step(stp) do
+            call_instance_method(stp)
+          rescue *@rescue_steps[stp][:error_classes] => e
+            raise e unless @rescue_steps[stp][:handler_hash][e.class]
 
-            @instance.public_send(@rescue_steps[step][:handler_hash][e.class], e, **@instance.params)
+            @instance.public_send(@rescue_steps[stp][:handler_hash][e.class], e, **@instance.params)
           end
         end
       end
 
-      def process_wrapper(step)
-        process_wrapper_step(step) do
-          step.call(@instance)
-        rescue *@rescue_steps[step][:error_classes] => e
-          @instance.public_send(@rescue_steps[step][:handler_hash][e.class], e, **@instance.params)
+      def process_wrapper(stp)
+        process_wrapper_step(stp) do
+          stp.call(@instance)
+        rescue *@rescue_steps[stp][:error_classes] => e
+          @instance.public_send(@rescue_steps[stp][:handler_hash][e.class], e, **@instance.params)
         end
       end
 
-      def process_iterator(step)
-        step.call(@instance.params)
+      def process_iterator(stp)
+        stp.call(@instance.params)
       end
 
-      def process_action(step, break_method)
-        outcome = step.call(@instance.params.merge(parent_instance: @instance))
+      def process_action(stp, break_method)
+        outcome = stp.call(@instance.params.merge(parent_instance: @instance))
         if outcome.success?
         else
           @instance.errors.merge!(outcome.errors) && break_method.call
@@ -207,30 +207,36 @@ module Decouplio
         options
       end
 
-      def process_symbol_step(step, &block)
-        if rescue_step?(step)
+      def process_symbol_step(stp, &block)
+        if rescue_step?(stp)
           block.call
         else
-          call_instance_method(step)
+          call_instance_method(stp)
         end
       end
 
-      def process_wrapper_step(step, &block)
-        if rescue_step?(step)
+      def process_wrapper_step(stp, &block)
+        if rescue_step?(stp)
           block.call
         else
-          step.call(@instance)
+          stp.call(@instance)
         end
       end
 
-      def rescue_step?(step)
-        @rescue_steps[step]
+      def rescue_step?(stp)
+        @rescue_steps[stp]
       end
 
-      def call_instance_method(step)
-        return if @steps.dig(step, :on_failure) && @instance.success?
+      def call_instance_method(stp)
+        process_tags(stp)
 
-        @instance.public_send(step, @instance.params)
+        return if @steps.dig(stp, :on_failure) && @instance.success?
+
+        @instance.public_send(stp, @instance.params)
+      end
+
+      def process_tags(stp)
+        # binding.pry
       end
 
       def handler_hash(errors_to_handle)
