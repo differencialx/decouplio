@@ -51,6 +51,24 @@ RSpec.describe 'Decouplio::Action wrapper specs' do
       it 'calls wrapper_step_one' do
         expect(action[:wrapper_step_one]).to eq 'Success'
       end
+
+      context 'with finish him' do
+        let(:action_block) { simple_wrapper_finish_him }
+
+        it_behaves_like 'fails with error'
+
+        it 'calls step_one' do
+          expect(action[:step_one]).to be_nil
+        end
+
+        it 'calls step_two' do
+          expect(action[:step_two]).to be_nil
+        end
+
+        it 'calls wrapper_step_one' do
+          expect(action[:wrapper_step_one]).to eq 'Success'
+        end
+      end
     end
   end
 end

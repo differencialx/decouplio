@@ -72,8 +72,8 @@ module WrapperCases
 
   def simple_wrapper_finish_him
     lambda do |_klass|
-      wrap do
-        step :wrapper_step_one, :finish_him
+      wrap finish_him: true do
+        step :wrapper_step_one
         step :wrapper_step_two
       end
       rescue_for handler_step: ArgumentError
