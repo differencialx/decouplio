@@ -3,11 +3,13 @@
 require 'dry-schema'
 require_relative 'errors/no_step_error'
 require_relative 'errors/undefined_handler_method_error'
+require_relative 'errors/prepare_params_error'
 
 # rubocop:disable Metrics/ClassLength
 module Decouplio
   class Action
     attr_reader :errors, :ctx, :wrapper, :parent_instance
+    attr_writer :params
 
     def initialize(parent_instance: nil, wrapper: false, **params)
       @params = params
@@ -71,9 +73,10 @@ module Decouplio
 
     class << self
       def call(**params, &block)
-        raise Errors::NoStepError, 'Step or wrapper or iterator or validations should be provided' unless @steps || @schema || @validations
+        raise Errors::NoStepError, 'Step or wrapper or iterator or validations or prepare_params should be provided' unless @prepare_params || @steps || @schema || @validations
 
         @instance = new(params)
+        process_prepare_params
         process_validations
         return @instance unless @instance.success?
 
@@ -83,6 +86,27 @@ module Decouplio
       end
 
       private
+
+      def process_prepare_params
+        return unless @prepare_params
+
+        stp = @prepare_params[:stp]
+        block = @prepare_params[:block]
+
+        raise Errors::PrepareParamsError, 'Method or action class or block should be provided for prepare params' if stp && block
+
+        prepared_params = if stp.is_a?(Symbol)
+          @instance.public_send(stp, @instance.params)
+        elsif stp && stp <= Decouplio::Action
+          stp.call(@instance.params).params
+        elsif block
+          block.call(@instance.params)
+        end
+
+        raise Errors::PrepareParamsError, 'Prepare params should return a Hash' unless prepared_params.is_a?(Hash)
+
+        @instance.params = prepared_params
+      end
 
       def process_validations
         validation_result = @schema&.call(@instance.params)
@@ -99,6 +123,12 @@ module Decouplio
       def validate(validation)
         @validations ||= []
         @validations << validation
+      end
+
+      def prepare_params(stp = nil, &block)
+        init_steps
+
+        @prepare_params = { stp: stp, block: block }
       end
 
       def gendalf(klass, method_name, *args)
