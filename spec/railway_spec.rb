@@ -35,7 +35,7 @@ RSpec.describe 'Decouplio::Action railway specs' do
 
       context 'with nil param2' do
         let(:param2) { nil }
-        let(:railway_flow) { %i[model check_param1 param2 param2_present? result_step action2] }
+        let(:railway_flow) { %i[model check_param1 param2 param2_present? result_step second_action] }
 
         it 'success' do
           expect(action).to be_success
