@@ -1,6 +1,6 @@
 module IteratorCases
   IterateAction = Class.new(Decouplio::Action) do
-    validate :validate_item
+    # validate :validate_item
 
     step :multiply
 

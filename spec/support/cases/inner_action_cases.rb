@@ -3,7 +3,7 @@
 # rubocop:disable Lint/NestedMethodDefinition
 module InnerActionCases
   InnerAction = Class.new(Decouplio::Action) do
-    validate :validate_inner_action_param
+    # validate :validate_inner_action_param
 
     step :multiply
 
