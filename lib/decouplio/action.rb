@@ -32,14 +32,19 @@ module Decouplio
     end
 
     class << self
+      def inherited(child_class)
+        child_class.init_steps
+      end
+
       def call(**params)
         @instance = new(params)
         process_step(@steps.keys.first)
         @instance
       end
 
+      protected
+
       def step(stp, **options)
-        init_steps
         mark_success_track(stp)
         @steps[stp] = options.merge(type: :step)
       end
@@ -47,23 +52,21 @@ module Decouplio
       def fail(stp, **options)
         # raise FailCantBeFirstStepError, "'fail' can't be a first step, please use 'step'"
 
-        init_steps
         mark_failure_track(stp)
         @steps[stp] = options.merge(type: :fail)
       end
 
       def pass(stp, **options)
-        init_steps
         @steps[stp] = options.merge(type: :pass)
       end
-
-      private
 
       def init_steps
         @steps ||= {}
         @success_track ||= []
         @failure_track ||= {}
       end
+
+      private
 
       def process_step(stp)
         if stp.is_a?(Symbol)
