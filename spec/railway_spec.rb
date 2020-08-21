@@ -8,7 +8,7 @@ RSpec.describe 'Decouplio::Action railway specs' do
       { param1: param1, param2: param2 }
     end
     let(:param1) { 'param1' }
-    let(:param2) { 'param2' }
+    let(:param2) { nil }
 
     describe 'success_way' do
       let(:action_block) { success_way }
@@ -32,7 +32,7 @@ RSpec.describe 'Decouplio::Action railway specs' do
       let(:railway_flow) { %i[model set_error] }
       let(:param1) { nil }
 
-      it 'success' do
+      it 'failure' do
         expect(action).to be_failure
       end
 
@@ -54,7 +54,7 @@ RSpec.describe 'Decouplio::Action railway specs' do
       let(:railway_flow) { %i[model fail_one fail_two fail_three] }
       let(:param1) { nil }
 
-      it 'success' do
+      it 'failure' do
         expect(action).to be_failure
       end
 
@@ -84,7 +84,7 @@ RSpec.describe 'Decouplio::Action railway specs' do
       let(:railway_flow) { %i[model fail_one fail_two] }
       let(:param1) { nil }
 
-      it 'success' do
+      it 'failure' do
         expect(action).to be_failure
       end
 
@@ -106,6 +106,53 @@ RSpec.describe 'Decouplio::Action railway specs' do
 
       it 'sets error message 3' do
         expect(action[:error3]).to be_nil
+      end
+    end
+
+    describe 'conditional_execution_for_step' do
+      let(:action_block) { conditional_execution_for_step }
+      let(:param1) { 'param1' }
+
+      context 'when assign result should be performed' do
+        let(:param2) { true }
+        let(:railway_flow) { %i[model assign_result final_step] }
+
+        it 'success' do
+          expect(action).to be_success
+        end
+
+        it 'sets final step as param1' do
+          expect(action[:final_step]).to eq param1
+        end
+
+        it 'sets result' do
+          expect(action[:result]).to eq param1
+        end
+
+        it 'sets railway flow' do
+          expect(action.railway_flow).to eq railway_flow
+        end
+      end
+
+      context 'when assign result should not be performed' do
+        let(:param2) { false }
+        let(:railway_flow) { %i[model final_step] }
+
+        it 'success' do
+          expect(action).to be_success
+        end
+
+        it 'sets final step as param1' do
+          expect(action[:final_step]).to eq param1
+        end
+
+        it 'does not set result' do
+          expect(action[:result]).to be_nil
+        end
+
+        it 'sets railway flow' do
+          expect(action.railway_flow).to eq railway_flow
+        end
       end
     end
 

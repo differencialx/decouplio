@@ -70,7 +70,18 @@ module Decouplio
           result = call_instance_method(stp)
           @instance.railway_flow << stp
           if result && @instance.success?
-            process_step(@success_track.shift)
+            next_step = @success_track.shift
+
+            if_condition_method = @steps.dig(next_step, :if)
+            if if_condition_method
+              # raise IfMethodsShouldBeImplemented, "Please define #{if_condition_method} method inside action" unless @instance.respond_to?(if_condition_method)
+
+              unless call_instance_method(if_condition_method)
+                next_step = @success_track.shift
+              end
+            end
+
+            process_step(next_step)
           else
             @instance.fail_action
             process_step(@failure_track[stp]) if can_be_processed?(stp)
