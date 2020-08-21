@@ -156,6 +156,61 @@ RSpec.describe 'Decouplio::Action railway specs' do
       end
     end
 
+    describe 'conditional_execution_for_fail' do
+      let(:action_block) { conditional_execution_for_fail }
+      let(:param1) { nil }
+
+      context 'when assign result should be performed' do
+        let(:param2) { true }
+        let(:railway_flow) { %i[model fail_one fail_two] }
+
+        it 'failure' do
+          expect(action).to be_failure
+        end
+
+        it 'sets error message 1' do
+          expect(action[:error1]).to eq 'Error message 1'
+        end
+
+        it 'sets error message 2' do
+          expect(action[:error2]).to eq 'Error message 2'
+        end
+
+        it 'does not set result' do
+          expect(action[:result]).to be_nil
+        end
+
+        it 'sets railway flow' do
+          expect(action.railway_flow).to eq railway_flow
+        end
+      end
+
+      context 'when assign result should not be performed' do
+        let(:param2) { false }
+        let(:railway_flow) { %i[model fail_two] }
+
+        it 'failure' do
+          expect(action).to be_failure
+        end
+
+        it 'sets error message 1' do
+          expect(action[:error1]).to be_nil
+        end
+
+        it 'sets error message 2' do
+          expect(action[:error2]).to eq 'Error message 2'
+        end
+
+        it 'does not set result' do
+          expect(action[:result]).to be_nil
+        end
+
+        it 'sets railway flow' do
+          expect(action.railway_flow).to eq railway_flow
+        end
+      end
+    end
+
     # describe 'railway' do
     #   let(:action_block) { success_way }
 

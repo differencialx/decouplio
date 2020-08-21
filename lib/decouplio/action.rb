@@ -87,7 +87,17 @@ module Decouplio
             process_step(next_step)
           else
             @instance.fail_action
-            process_step(@failure_track[stp]) if can_be_processed?(stp)
+
+            next_step = @failure_track[stp]
+            if_condition_method = @steps.dig(next_step, :if)
+            if if_condition_method
+              # raise IfMethodsShouldBeImplemented, "Please define #{if_condition_method} method inside action" unless @instance.respond_to?(if_condition_method)
+
+              unless call_instance_method(if_condition_method)
+                next_step = @failure_track[next_step]
+              end
+            end
+            process_step(next_step) if can_be_processed?(stp)
           end
         end
       end

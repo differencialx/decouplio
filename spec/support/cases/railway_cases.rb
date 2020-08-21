@@ -179,6 +179,32 @@ module RailwayCases
   end
 
   def conditional_execution_for_fail
+    lambda do |_klass|
+      step :model
+      step :assign_result
+      fail :fail_one, if: :fail_one?
+      fail :fail_two
+
+      def model(param1:, **)
+        ctx[:model] = param1
+      end
+
+      def fail_one?(param2:, **)
+        param2 == true
+      end
+
+      def fail_one(**)
+        ctx[:error1] = 'Error message 1'
+      end
+
+      def fail_two(**)
+        ctx[:error2] = 'Error message 2'
+      end
+
+      def assign_result(model:, **)
+        ctx[:result] = model
+      end
+    end
   end
 
   def conditional_execution_for_pass
