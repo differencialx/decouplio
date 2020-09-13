@@ -57,6 +57,7 @@ module Decouplio
       end
 
       def pass(stp, **options)
+        mark_success_track(stp)
         @steps[stp] = options.merge(type: :pass)
       end
 
@@ -70,6 +71,7 @@ module Decouplio
 
       def process_step(stp)
         if stp.is_a?(Symbol)
+          # binding.pry
           result = call_instance_method(stp)
           @instance.railway_flow << stp
           if result && @instance.success?

@@ -211,6 +211,73 @@ RSpec.describe 'Decouplio::Action railway specs' do
       end
     end
 
+    describe 'pass_way' do
+      let(:action_block) { pass_way }
+      let(:railway_flow) { %i[model pass_step assign_result] }
+      let(:param2) { 'params2' }
+
+      it 'success' do
+        expect(action).to be_success
+      end
+
+      it 'sets result as param1' do
+        expect(action[:result]).to eq param1
+      end
+
+      it 'sets railway flow' do
+        expect(action.railway_flow).to eq railway_flow
+      end
+
+      it 'sets pass_step as param2' do
+        expect(action[:pass_step]).to eq param2
+      end
+    end
+
+    describe 'conditional pass_way' do
+      let(:action_block) { conditional_execution_for_pass }
+
+      context 'when param2 present' do
+        let(:railway_flow) { %i[model pass_step assign_result] }
+        let(:param2) { 'params2' }
+
+        it 'success' do
+          expect(action).to be_success
+        end
+
+        it 'sets result as param1' do
+          expect(action[:result]).to eq param1
+        end
+
+        it 'sets railway flow' do
+          expect(action.railway_flow).to eq railway_flow
+        end
+
+        it 'sets pass_step as param2' do
+          expect(action[:pass_step]).to eq param2
+        end
+      end
+
+      context 'when param2 nil' do
+        let(:railway_flow) { %i[model assign_result] }
+
+        it 'success' do
+          expect(action).to be_success
+        end
+
+        it 'sets result as param1' do
+          expect(action[:result]).to eq param1
+        end
+
+        it 'sets railway flow' do
+          expect(action.railway_flow).to eq railway_flow
+        end
+
+        it 'sets pass_step as param2' do
+          expect(action[:pass_step]).to be_nil
+        end
+      end
+    end
+
     # describe 'railway' do
     #   let(:action_block) { success_way }
 

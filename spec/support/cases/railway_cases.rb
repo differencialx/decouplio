@@ -207,7 +207,49 @@ module RailwayCases
     end
   end
 
+  def pass_way
+    lambda do |_klass|
+      step :model
+      pass :pass_step
+      step :assign_result
+
+      def model(param1:, **)
+        ctx[:model] = param1
+      end
+
+      def pass_step(param2:, **)
+        ctx[:pass_step] = param2
+      end
+
+      def assign_result(model:, **)
+        ctx[:result] = model
+      end
+    end
+  end
+
   def conditional_execution_for_pass
+    lambda do |_klass|
+      step :model
+      pass :pass_step, if: :pass_step?
+      fail :fail_one
+      step :assign_result
+
+      def model(param1:, **)
+        ctx[:model] = param1
+      end
+
+      def pass_step?(param2:, **)
+        param2
+      end
+
+      def pass_step(param2:, **)
+        ctx[:pass_step] = param2
+      end
+
+      def assign_result(model:, **)
+        ctx[:result] = model
+      end
+    end
   end
 end
 # rubocop:enable Lint/NestedMethodDefinition
