@@ -2,21 +2,61 @@
 
 # rubocop:disable Lint/NestedMethodDefinition
 module FinishHimCases
-  def finish_him
+  def finish_him_on_success
+    lambda do |_klass|
+      step :step_one
+      step :step_two, finish_him: :on_success
+      step :step_three
+
+      def step_one(param1:, **)
+        ctx[:result] = param1
+      end
+
+      def step_two(param2:, **)
+        param2
+      end
+
+      def step_three(**)
+        ctx[:result] = 'Done'
+      end
+    end
+  end
+
+  def finish_him_on_failure
+    lambda do |_klass|
+      step :step_one
+      step :step_two, finish_him: :on_failure
+      step :step_three
+
+      def step_one(param1:, **)
+        ctx[:result] = param1
+      end
+
+      def step_two(param2:, **)
+        param2
+      end
+
+      def step_three(**)
+        ctx[:result] = 'Done'
+      end
+    end
+  end
+
+  def finish_him_anyway
     lambda do |_klass|
       step :step_one
       step :step_two, finish_him: true
       step :step_three
 
-      def step_one(string_param:, **)
-        ctx[:result] = string_param
+      def step_one(param1:, **)
+        ctx[:result] = param1
       end
 
-      def step_two(string_param:, **)
-        add_error(something_wrong: 'Something went wrong')
+      def step_two(param2:, **)
+        param2
       end
 
-      def step_three(string_param:, **)
+      def step_three(**)
         ctx[:result] = 'Done'
       end
     end

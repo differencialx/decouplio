@@ -71,7 +71,6 @@ module Decouplio
 
       def process_step(stp)
         if stp.is_a?(Symbol)
-          # binding.pry
           result = call_instance_method(stp)
           @instance.railway_flow << stp
           if result && @instance.success?
@@ -86,7 +85,7 @@ module Decouplio
               end
             end
 
-            process_step(next_step)
+            process_step(next_step) if can_be_processed_success_track?(stp)
           else
             @instance.fail_action
 
@@ -99,7 +98,7 @@ module Decouplio
                 next_step = @failure_track[next_step]
               end
             end
-            process_step(next_step) if can_be_processed?(stp)
+            process_step(next_step) if can_be_processed_failure_track?(stp)
           end
         end
       end
@@ -130,8 +129,14 @@ module Decouplio
         end
       end
 
-      def can_be_processed?(stp)
-        !@steps[stp][:finish_him]
+      def can_be_processed_success_track?(stp)
+        @steps[stp][:finish_him].nil? ||
+          ![true, :on_success].include?(@steps[stp][:finish_him])
+      end
+
+      def can_be_processed_failure_track?(stp)
+        @steps[stp][:finish_him].nil? ||
+          ![false, :on_failure].include?(@steps[stp][:finish_him])
       end
     end
   end
