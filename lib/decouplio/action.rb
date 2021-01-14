@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'errors/step_argument_error'
+
 module Decouplio
   class Action
     attr_reader :errors, :ctx, :railway_flow
@@ -45,20 +47,31 @@ module Decouplio
       protected
 
       def step(stp, **options)
+        # raise StepNameIsReservedError [finish_him]
+
+        composed_options = compose_options(options, :step)
+        validate_success_step(composed_options)
         mark_success_track(stp)
-        @steps[stp] = options.merge(type: :step)
+        @steps[stp] = composed_options
       end
 
       def fail(stp, **options)
+        # raise StepNameIsReservedError
         # raise FailCantBeFirstStepError, "'fail' can't be a first step, please use 'step'"
 
+        composed_options = compose_options(options, :fail)
+        validate_failure_step(composed_options)
         mark_failure_track(stp)
-        @steps[stp] = options.merge(type: :fail)
+        @steps[stp] = composed_options
       end
 
       def pass(stp, **options)
+        # raise StepNameIsReservedError
+
+        composed_options = compose_options(options, :step)
+        validate_success_step(composed_options)
         mark_success_track(stp)
-        @steps[stp] = options.merge(type: :pass)
+        @steps[stp] = composed_options
       end
 
       def init_steps
@@ -71,35 +84,48 @@ module Decouplio
 
       def process_step(stp)
         if stp.is_a?(Symbol)
-          result = call_instance_method(stp)
-          @instance.railway_flow << stp
-          if result && @instance.success?
-            next_step = @success_track.shift
+          process_symbol_step(stp)
+        end
+      end
 
-            if_condition_method = @steps.dig(next_step, :if)
-            if if_condition_method
-              # raise IfMethodsShouldBeImplemented, "Please define #{if_condition_method} method inside action" unless @instance.respond_to?(if_condition_method)
+      def process_symbol_step(stp)
+        result = call_instance_method(stp)
+        @instance.railway_flow << stp
+        if result && @instance.success?
+          next_step = @success_track.shift
 
-              unless call_instance_method(if_condition_method)
-                next_step = @success_track.shift
-              end
+          condition = @steps.dig(next_step, :condition)
+          if !condition.nil? && !condition.empty?
+            # raise IfMethodsShouldBeImplemented, "Please define #{if_condition_method} method inside action" unless @instance.respond_to?(if_condition_method)
+
+            condition_method_result = call_instance_method(condition[:method])
+            case condition[:type]
+            when :if
+              next_step = @success_track.shift unless condition_method_result
+            when :unless
+              next_step = @success_track.shift if condition_method_result
             end
-
-            process_step(next_step) if can_be_processed_success_track?(stp)
-          else
-            @instance.fail_action
-
-            next_step = @failure_track[stp]
-            if_condition_method = @steps.dig(next_step, :if)
-            if if_condition_method
-              # raise IfMethodsShouldBeImplemented, "Please define #{if_condition_method} method inside action" unless @instance.respond_to?(if_condition_method)
-
-              unless call_instance_method(if_condition_method)
-                next_step = @failure_track[next_step]
-              end
-            end
-            process_step(next_step) if can_be_processed_failure_track?(stp)
           end
+
+          process_step(next_step) if can_be_processed_success_track?(stp)
+        else
+          @instance.fail_action
+
+          next_step = @failure_track[stp]
+
+          condition = @steps.dig(next_step, :condition)
+          if !condition.nil? && !condition.empty?
+            # raise IfMethodsShouldBeImplemented, "Please define #{if_condition_method} method inside action" unless @instance.respond_to?(if_condition_method)
+
+            condition_method_result = call_instance_method(condition[:method])
+            case condition[:type]
+            when :if
+              next_step = @failure_track[next_step] unless condition_method_result
+            when :unless
+              next_step = @failure_track[next_step] if condition_method_result
+            end
+          end
+          process_step(next_step) if can_be_processed_failure_track?(stp)
         end
       end
 
@@ -129,14 +155,56 @@ module Decouplio
         end
       end
 
+      def validate_success_step(options)
+        # Validate if only allowed options are present
+        # options.each do |key, val|
+        #   case key
+        #   when :on_success
+        #     raise(Decouplio::Errors::StepArgumentError, 'Invalid arguments for step') unless %i[:finish_him].include?(val)
+        #   end
+        # end
+      end
+
+      def validate_failure_step(options)
+        # Validate if only allowed options are present
+      end
+
+      def compose_options(options, step_type)
+        {
+          effect: compose_effect(options.slice(:finish_him, :on_success, :on_failure)),
+          condition: compose_condition(options.slice(:if, :unless)),
+          type: step_type
+        }
+      end
+
+      def compose_effect(effect_options)
+        return effect_options if effect_options.empty?
+
+        ([[:type, :value]] + effect_options.to_a).transpose.to_h
+      end
+
+      def compose_condition(condition_options)
+        return condition_options if condition_options.empty?
+
+        ([[:method, :type]] + condition_options.invert.to_a).transpose.to_h # { method: :some_method, condition_type: : if/unless }
+      end
+
       def can_be_processed_success_track?(stp)
-        @steps[stp][:finish_him].nil? ||
-          ![true, :on_success].include?(@steps[stp][:finish_him])
+        case @steps[stp][:effect][:type]
+        when :finish_him
+          ![true, :on_success].include?(@steps[stp][:effect][:value])
+        else
+          true
+        end
       end
 
       def can_be_processed_failure_track?(stp)
-        @steps[stp][:finish_him].nil? ||
-          ![false, :on_failure].include?(@steps[stp][:finish_him])
+        case @steps[stp][:effect][:type]
+        when :finish_him
+          ![true, :on_failure].include?(@steps[stp][:effect][:value])
+        else
+          true
+        end
       end
     end
   end

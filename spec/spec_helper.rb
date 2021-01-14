@@ -15,7 +15,7 @@ RSpec.configure do |config|
   config.include ValidationCases
   config.include WrapperCases
   config.include FinishHimCases
-  config.include OnFailureCases
+  config.include OnSuccessFailureCases
   config.include TagsCases
   config.include PrepareParamsCases
   config.include RailwayCases
