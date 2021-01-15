@@ -31,21 +31,41 @@ RSpec.describe 'Decouplio::Action on_success on_failure' do
       end
 
       context 'when custom step' do
-        let(:action_block) { on_failure_custom_step }
-        let(:railway_flow) { %i[step_one step_two custom_step custom_pass_step] }
+        let(:action_block) { on_success_custom_step }
         let(:param2) { true }
-        let(:custom_param) { true }
 
-        it 'success' do
-          expect(action).to be_success
+        context 'when custom method moves on success track' do
+          let(:railway_flow) { %i[step_one step_two custom_step custom_pass_step] }
+          let(:custom_param) { true }
+
+          it 'success' do
+            expect(action).to be_success
+          end
+
+          it 'sets result as param1' do
+            expect(action[:result]).to eq 'Custom pass step'
+          end
+
+          it 'sets railway flow' do
+            expect(action.railway_flow).to eq railway_flow
+          end
         end
 
-        it 'sets result as param1' do
-          expect(action[:result]).to eq 'Custom pass step'
-        end
+        context 'when custom method moves on failure track' do
+          let(:railway_flow) { %i[step_one step_two custom_step custom_fail_step] }
+          let(:custom_param) { false }
 
-        it 'sets railway flow' do
-          expect(action.railway_flow).to eq railway_flow
+          it 'success' do
+            expect(action).to be_failure
+          end
+
+          it 'sets result as param1' do
+            expect(action[:result]).to eq 'Custom fail step'
+          end
+
+          it 'sets railway flow' do
+            expect(action.railway_flow).to eq railway_flow
+          end
         end
       end
     end
@@ -66,6 +86,45 @@ RSpec.describe 'Decouplio::Action on_success on_failure' do
 
         it 'sets railway flow' do
           expect(action.railway_flow).to eq railway_flow
+        end
+      end
+
+      context 'when custom step' do
+        let(:action_block) { on_failure_custom_step }
+        let(:param2) { false }
+
+        context 'when custom method moves on success track' do
+          let(:railway_flow) { %i[step_one step_two custom_step custom_pass_step] }
+          let(:custom_param) { true }
+
+          it 'success' do
+            expect(action).to be_success
+          end
+
+          it 'sets result as param1' do
+            expect(action[:result]).to eq 'Custom pass step'
+          end
+
+          it 'sets railway flow' do
+            expect(action.railway_flow).to eq railway_flow
+          end
+        end
+
+        context 'when custom method moves on failure track' do
+          let(:railway_flow) { %i[step_one step_two custom_step custom_fail_step] }
+          let(:custom_param) { false }
+
+          it 'success' do
+            expect(action).to be_failure
+          end
+
+          it 'sets result as param1' do
+            expect(action[:result]).to eq 'Custom fail step'
+          end
+
+          it 'sets railway flow' do
+            expect(action.railway_flow).to eq railway_flow
+          end
         end
       end
     end

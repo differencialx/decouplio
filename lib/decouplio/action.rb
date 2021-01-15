@@ -93,7 +93,7 @@ module Decouplio
         @instance.railway_flow << stp
 
         if result && @instance.success?
-          next_step = on_success_failure_step(stp) || @success_track.shift
+          next_step = on_success_failure_step(stp, result) || @success_track.shift
 
           # handle if:, unless: conditions for steps
           condition = @steps.dig(next_step, :condition)
@@ -113,7 +113,7 @@ module Decouplio
         else
           @instance.fail_action if can_be_failed?(stp)
 
-          next_step = on_success_failure_step(stp) || @failure_track[stp]
+          next_step = on_success_failure_step(stp, result) || @failure_track[stp]
 
           # handle if:, unless: conditions for steps
           condition = @steps.dig(next_step, :condition)
@@ -221,7 +221,12 @@ module Decouplio
       end
 
       def can_be_failed?(stp)
-        effect(stp).empty? || on_failure_finish_him?(stp)
+        effect(stp).empty? || on_failure_finish_him?(stp) || finish_him_on_failure?(stp)
+      end
+
+      def finish_him_on_failure?(stp)
+        effect = effect(stp)
+        effect[:type] == :finish_him && [:on_failure, true].include?(effect[:value])
       end
 
       def on_failure_finish_him?(stp)
@@ -234,10 +239,11 @@ module Decouplio
         effect[:type] == :on_success && effect[:value] == :finish_him
       end
 
-      def on_success_failure_step(stp)
+      def on_success_failure_step(stp, result)
         return if on_failure_finish_him?(stp) || on_success_finish_him?(stp)
 
-        if %i[on_success on_failure].include?(effect(stp)[:type])
+        if effect(stp)[:type] == :on_success && result ||
+          effect(stp)[:type] == :on_failure && !result
           clean_up_track(effect(stp)[:value]) if effect(stp)[:value]
           effect(stp)[:value]
         end
