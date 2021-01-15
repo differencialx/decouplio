@@ -214,7 +214,7 @@ RSpec.describe 'Decouplio::Action railway specs' do
     describe 'pass_way' do
       let(:action_block) { pass_way }
       let(:railway_flow) { %i[model pass_step assign_result] }
-      let(:param2) { 'params2' }
+      let(:param2) { false }
 
       it 'success' do
         expect(action).to be_success

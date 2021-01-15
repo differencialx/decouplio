@@ -68,7 +68,7 @@ module Decouplio
       def pass(stp, **options)
         # raise StepNameIsReservedError
 
-        composed_options = compose_options(options, :step)
+        composed_options = compose_options(options, :pass)
         validate_success_step(composed_options)
         mark_success_track(stp)
         @steps[stp] = composed_options
@@ -89,11 +89,13 @@ module Decouplio
       end
 
       def process_symbol_step(stp)
-        result = call_instance_method(stp)
+        result = call_instance_method(stp) || step_type(stp).eql?(:pass)
         @instance.railway_flow << stp
-        if result && @instance.success?
-          next_step = @success_track.shift
 
+        if result && @instance.success?
+          next_step = on_success_failure_step(stp) || @success_track.shift
+
+          # handle if:, unless: conditions for steps
           condition = @steps.dig(next_step, :condition)
           if !condition.nil? && !condition.empty?
             # raise IfMethodsShouldBeImplemented, "Please define #{if_condition_method} method inside action" unless @instance.respond_to?(if_condition_method)
@@ -109,10 +111,11 @@ module Decouplio
 
           process_step(next_step) if can_be_processed_success_track?(stp)
         else
-          @instance.fail_action
+          @instance.fail_action if can_be_failed?(stp)
 
-          next_step = @failure_track[stp]
+          next_step = on_success_failure_step(stp) || @failure_track[stp]
 
+          # handle if:, unless: conditions for steps
           condition = @steps.dig(next_step, :condition)
           if !condition.nil? && !condition.empty?
             # raise IfMethodsShouldBeImplemented, "Please define #{if_condition_method} method inside action" unless @instance.respond_to?(if_condition_method)
@@ -125,6 +128,7 @@ module Decouplio
               next_step = @failure_track[next_step] if condition_method_result
             end
           end
+
           process_step(next_step) if can_be_processed_failure_track?(stp)
         end
       end
@@ -161,6 +165,7 @@ module Decouplio
         #   case key
         #   when :on_success
         #     raise(Decouplio::Errors::StepArgumentError, 'Invalid arguments for step') unless %i[:finish_him].include?(val)
+        #     also validate if on_success and failure is a symbols, if it is a inner step than tag should be provided
         #   end
         # end
       end
@@ -193,6 +198,10 @@ module Decouplio
         case @steps[stp][:effect][:type]
         when :finish_him
           ![true, :on_success].include?(@steps[stp][:effect][:value])
+        when :on_success
+          ![:finish_him].include?(@steps[stp][:effect][:value])
+        when :on_failure
+          ![:finish_him].include?(@steps[stp][:effect][:value])
         else
           true
         end
@@ -202,9 +211,51 @@ module Decouplio
         case @steps[stp][:effect][:type]
         when :finish_him
           ![true, :on_failure].include?(@steps[stp][:effect][:value])
+        when :on_success
+          ![:finish_him].include?(@steps[stp][:effect][:value])
+        when :on_failure
+          ![:finish_him].include?(@steps[stp][:effect][:value])
         else
           true
         end
+      end
+
+      def can_be_failed?(stp)
+        effect(stp).empty? || on_failure_finish_him?(stp)
+      end
+
+      def on_failure_finish_him?(stp)
+        effect = effect(stp)
+        effect[:type] == :on_failure && effect[:value] == :finish_him
+      end
+
+      def on_success_finish_him?(stp)
+        effect = effect(stp)
+        effect[:type] == :on_success && effect[:value] == :finish_him
+      end
+
+      def on_success_failure_step(stp)
+        return if on_failure_finish_him?(stp) || on_success_finish_him?(stp)
+
+        if %i[on_success on_failure].include?(effect(stp)[:type])
+          clean_up_track(effect(stp)[:value]) if effect(stp)[:value]
+          effect(stp)[:value]
+        end
+      end
+
+      def clean_up_track(stp)
+        case step_type(stp)
+        when :step, :pass
+          @success_track = @success_track[@success_track.index(stp)+1..-1]
+        end
+      end
+
+      def step_type(stp)
+        @steps.dig(stp, :type)
+      end
+
+      def effect(stp)
+        @steps.dig(stp, :effect)
       end
     end
   end

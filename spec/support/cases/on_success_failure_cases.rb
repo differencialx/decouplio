@@ -5,7 +5,7 @@ module OnSuccessFailureCases
   def on_failure_finish_him
     lambda do |_klass|
       step :step_one
-      step :step_two, on_failure: :finis_him
+      step :step_two, on_failure: :finish_him
       step :step_three
 
       def step_one(param1:, **)
@@ -97,7 +97,7 @@ module OnSuccessFailureCases
   def on_success_finish_him
     lambda do |_klass|
       step :step_one
-      step :step_two, on_success: :finis_him
+      step :step_two, on_success: :finish_him
       step :step_three
 
       def step_one(param1:, **)
