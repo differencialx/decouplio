@@ -5,10 +5,28 @@ RSpec.describe 'Decouplio::Action on_success on_failure' do
 
   describe '#call' do
     let(:input_params) do
-      { param1: param1, param2: param2, custom_param: custom_param }
+      {
+        param1: param1,
+        param2: param2,
+        param3: param3,
+        param4: param4,
+        param5: param5,
+        param6: param6,
+        param7: param7,
+        param8: param8,
+        param9: param9,
+        custom_param: custom_param
+      }
     end
     let(:param1) { 'param1' }
     let(:param2) { nil }
+    let(:param3) { nil }
+    let(:param4) { nil }
+    let(:param5) { 'Five' }
+    let(:param6) { 'Six' }
+    let(:param7) { 'Seven' }
+    let(:param8) { 'Eight' }
+    let(:param9) { 'Nine' }
     let(:custom_param) { nil }
 
     describe 'on_success' do
@@ -126,6 +144,106 @@ RSpec.describe 'Decouplio::Action on_success on_failure' do
             expect(action.railway_flow).to eq railway_flow
           end
         end
+      end
+    end
+
+    describe 'on success failure group' do
+      context 'when squad_one is processed' do
+        let(:action_block) { on_success_failure_custom_group }
+        let(:railway_flow) do
+          %i[
+            step_one
+            step_two
+            step_six
+            step_seven
+            step_nine
+            final_step
+          ]
+        end
+        let(:param2) { true }
+
+        specify { expect(action).to be_success }
+        specify { expect(action[:step_six]).to eq 'Six' }
+        specify { expect(action[:step_seven]).to eq 'Seven' }
+        specify { expect(action[:step_nine]).to eq 'Nine' }
+        specify { expect(action[:result]).to eq 'Final' }
+        specify { expect(action.railway_flow).to eq railway_flow }
+      end
+
+      context 'when squad_two is processed' do
+        let(:action_block) { on_success_failure_custom_group }
+        let(:railway_flow) do
+          %i[
+            step_one
+            step_two
+            step_three
+            step_seven
+            step_eight
+            final_step
+          ]
+        end
+        let(:param2) { false }
+        let(:param3) { false }
+
+        specify { expect(action).to be_success }
+        specify { expect(action[:step_seven]).to eq 'Seven' }
+        specify { expect(action[:step_eight]).to eq 'Eight' }
+        specify { expect(action[:result]).to eq 'Final' }
+        specify { expect(action.railway_flow).to eq railway_flow }
+      end
+
+      context 'when squad_three is processed' do
+        let(:action_block) { on_success_failure_custom_group }
+        let(:railway_flow) do
+          %i[
+            step_one
+            step_two
+            step_three
+            step_four
+            step_seven
+            step_nine
+            final_step
+          ]
+        end
+        let(:param2) { false }
+        let(:param3) { false }
+        let(:param4) { true }
+
+        specify { expect(action).to be_success }
+        specify { expect(action[:step_seven]).to eq 'Seven' }
+        specify { expect(action[:step_nine]).to eq 'Nine' }
+        specify { expect(action[:result]).to eq 'Final' }
+        specify { expect(action.railway_flow).to eq railway_flow }
+      end
+
+      context 'when all steps are processed' do
+        let(:action_block) { on_success_failure_custom_group }
+        let(:railway_flow) do
+          %i[
+            step_one
+            step_two
+            step_three
+            step_four
+            step_five
+            step_six
+            step_seven
+            step_eight
+            step_nine
+            final_step
+          ]
+        end
+        let(:param2) { false }
+        let(:param3) { true }
+        let(:param4) { false }
+
+        specify { expect(action).to be_success }
+        specify { expect(action[:step_five]).to eq 'Five' }
+        specify { expect(action[:step_six]).to eq 'Six' }
+        specify { expect(action[:step_seven]).to eq 'Seven' }
+        specify { expect(action[:step_eight]).to eq 'Eight' }
+        specify { expect(action[:step_nine]).to eq 'Nine' }
+        specify { expect(action[:result]).to eq 'Final' }
+        specify { expect(action.railway_flow).to eq railway_flow }
       end
     end
   end

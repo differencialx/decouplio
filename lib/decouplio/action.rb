@@ -93,7 +93,7 @@ module Decouplio
         @instance.railway_flow << stp
 
         if result && @instance.success?
-          next_step = on_success_failure_step(stp, result) || @success_track.shift
+          next_step = on_success_step(stp, result) || @success_track.shift
 
           # handle if:, unless: conditions for steps
           condition = @steps.dig(next_step, :condition)
@@ -113,7 +113,7 @@ module Decouplio
         else
           @instance.fail_action if can_be_failed?(stp)
 
-          next_step = on_success_failure_step(stp, result) || @failure_track[stp]
+          next_step = on_failure_step(stp, result) || @failure_track[stp]
 
           # handle if:, unless: conditions for steps
           condition = @steps.dig(next_step, :condition)
@@ -176,77 +176,78 @@ module Decouplio
 
       def compose_options(options, step_type)
         {
-          effect: compose_effect(options.slice(:finish_him, :on_success, :on_failure)),
+          finish_him: options[:finish_him],
+          on_success: options[:on_success],
+          on_failure: options[:on_failure],
           condition: compose_condition(options.slice(:if, :unless)),
+          squad: options[:squad],
           type: step_type
         }
       end
 
-      def compose_effect(effect_options)
-        return effect_options if effect_options.empty?
-
-        ([[:type, :value]] + effect_options.to_a).transpose.to_h
-      end
-
       def compose_condition(condition_options)
+        # raise OnlyIfOrUnlessCanBePresent # Only one of options can be present :if or :unless
         return condition_options if condition_options.empty?
 
         ([[:method, :type]] + condition_options.invert.to_a).transpose.to_h # { method: :some_method, condition_type: : if/unless }
       end
 
+      def compose_squad(squad_options)
+        {}
+      end
+
       def can_be_processed_success_track?(stp)
-        case @steps[stp][:effect][:type]
-        when :finish_him
-          ![true, :on_success].include?(@steps[stp][:effect][:value])
-        when :on_success
-          ![:finish_him].include?(@steps[stp][:effect][:value])
-        when :on_failure
-          ![:finish_him].include?(@steps[stp][:effect][:value])
-        else
-          true
-        end
+        return true if @steps[stp].slice(:finish_him, :on_success, :on_failure).values.compact.empty?
+
+        !([true, :on_success].include?(@steps[stp][:finish_him]) ||
+          [:finish_him].include?(@steps[stp][:on_success]) ||
+          [:finish_him].include?(@steps[stp][:on_failure]))
       end
 
       def can_be_processed_failure_track?(stp)
-        case @steps[stp][:effect][:type]
-        when :finish_him
-          ![true, :on_failure].include?(@steps[stp][:effect][:value])
-        when :on_success
-          ![:finish_him].include?(@steps[stp][:effect][:value])
-        when :on_failure
-          ![:finish_him].include?(@steps[stp][:effect][:value])
-        else
-          true
-        end
+        return true if @steps[stp].slice(:finish_him, :on_success, :on_failure).values.compact.empty?
+
+
+        !([true, :on_failure].include?(@steps[stp][:finish_him]) ||
+          [:finish_him].include?(@steps[stp][:on_success]) ||
+          [:finish_him].include?(@steps[stp][:on_failure]))
       end
 
       def can_be_failed?(stp)
-        effect(stp).empty? || on_failure_finish_him?(stp) || finish_him_on_failure?(stp)
+        has_no_on_success_failure_logic?(stp) || on_failure_finish_him?(stp) || finish_him_on_failure?(stp)
+      end
+
+      def has_no_on_success_failure_logic?(stp)
+        @steps[stp].slice(:on_failure, :on_success).values.compact.empty?
       end
 
       def finish_him_on_failure?(stp)
-        effect = effect(stp)
-        effect[:type] == :finish_him && [:on_failure, true].include?(effect[:value])
+        [:on_failure, true].include?(@steps.dig(stp, :finish_him))
       end
 
       def on_failure_finish_him?(stp)
-        effect = effect(stp)
-        effect[:type] == :on_failure && effect[:value] == :finish_him
+        @steps.dig(stp, :on_failure) == :finish_him
       end
 
       def on_success_finish_him?(stp)
-        effect = effect(stp)
-        effect[:type] == :on_success && effect[:value] == :finish_him
+        @steps.dig(stp, :on_success) == :finish_him
       end
 
-      def on_success_failure_step(stp, result)
-        return if on_failure_finish_him?(stp) || on_success_finish_him?(stp)
+      def on_success_step(stp, result)
+        return if on_success_finish_him?(stp)
 
-        if effect(stp)[:type] == :on_success && result ||
-          effect(stp)[:type] == :on_failure && !result
-          clean_up_track(effect(stp)[:value]) if effect(stp)[:value]
-          effect(stp)[:value]
+        on_success_value = @steps.dig(stp, :on_success)
+        if on_success_value && result
+          clean_up_track(on_success_value) if on_success_value
+          on_success_value
         end
+      end
+
+      def on_failure_step(stp, result)
+        return if on_failure_finish_him?(stp)
+
+        on_failure_value = @steps.dig(stp, :on_failure)
+        on_failure_value if on_failure_value && !result
       end
 
       def clean_up_track(stp)
@@ -258,10 +259,6 @@ module Decouplio
 
       def step_type(stp)
         @steps.dig(stp, :type)
-      end
-
-      def effect(stp)
-        @steps.dig(stp, :effect)
       end
     end
   end
