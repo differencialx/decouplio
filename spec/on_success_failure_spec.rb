@@ -147,9 +147,9 @@ RSpec.describe 'Decouplio::Action on_success on_failure' do
       end
     end
 
-    describe 'on success failure group' do
+    describe 'on success failure squad' do
       context 'when squad_one is processed' do
-        let(:action_block) { on_success_failure_custom_group }
+        let(:action_block) { on_success_failure_custom_squad }
         let(:railway_flow) do
           %i[
             step_one
@@ -157,7 +157,6 @@ RSpec.describe 'Decouplio::Action on_success on_failure' do
             step_six
             step_seven
             step_nine
-            final_step
           ]
         end
         let(:param2) { true }
@@ -166,12 +165,12 @@ RSpec.describe 'Decouplio::Action on_success on_failure' do
         specify { expect(action[:step_six]).to eq 'Six' }
         specify { expect(action[:step_seven]).to eq 'Seven' }
         specify { expect(action[:step_nine]).to eq 'Nine' }
-        specify { expect(action[:result]).to eq 'Final' }
+        specify { expect(action[:result]).to eq param1 }
         specify { expect(action.railway_flow).to eq railway_flow }
       end
 
       context 'when squad_two is processed' do
-        let(:action_block) { on_success_failure_custom_group }
+        let(:action_block) { on_success_failure_custom_squad }
         let(:railway_flow) do
           %i[
             step_one
@@ -193,7 +192,7 @@ RSpec.describe 'Decouplio::Action on_success on_failure' do
       end
 
       context 'when squad_three is processed' do
-        let(:action_block) { on_success_failure_custom_group }
+        let(:action_block) { on_success_failure_custom_squad }
         let(:railway_flow) do
           %i[
             step_one
@@ -206,18 +205,18 @@ RSpec.describe 'Decouplio::Action on_success on_failure' do
           ]
         end
         let(:param2) { false }
-        let(:param3) { false }
+        let(:param3) { true }
         let(:param4) { true }
 
         specify { expect(action).to be_success }
         specify { expect(action[:step_seven]).to eq 'Seven' }
         specify { expect(action[:step_nine]).to eq 'Nine' }
-        specify { expect(action[:result]).to eq 'Final' }
+        specify { expect(action[:result]).to eq param1 }
         specify { expect(action.railway_flow).to eq railway_flow }
       end
 
       context 'when all steps are processed' do
-        let(:action_block) { on_success_failure_custom_group }
+        let(:action_block) { on_success_failure_custom_squad }
         let(:railway_flow) do
           %i[
             step_one

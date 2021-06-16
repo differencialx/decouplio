@@ -112,12 +112,12 @@ module OnSuccessFailureCases
     end
   end
 
-  def on_success_failure_custom_group
+  def on_success_failure_custom_squad
     lambda do |_klass|
       step :step_one
-      step :step_two, on_success: :squad_one, on_failure: :step_three
+      step :step_two, on_success: :squad_one!, on_failure: :step_three
       step :step_three, on_success: :step_four, on_failure: :squad_two
-      step :step_four, on_success: :squad_three, on_failure: :step_five
+      step :step_four, on_success: :squad_three!, on_failure: :step_five
       step :step_five
       step :step_six, squad: :squad_one
       step :step_seven, squad: %i[squad_one squad_two squad_three]
@@ -170,8 +170,8 @@ module OnSuccessFailureCases
   def on_success_failure_custom_group_with_block
     lambda do |_klass|
       step :step_one
-      step :step_two, on_success: :squad_one, on_failure: :step_three
-      step :step_three, on_success: :squad_three, on_failure: :final_step
+      step :step_two, on_success: :squad_one!, on_failure: :step_three
+      step :step_three, on_success: :squad_three!, on_failure: :final_step
       step :step_four, squad: :squad_one
       step :step_five, squad: %i[squad_one squad_two squad_three]
       step :step_six, squad: %i[squad_two]

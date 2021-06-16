@@ -39,7 +39,8 @@ module Decouplio
       end
 
       def call(**params)
-        @instance = new(params)
+        @strict_squad_mode = false
+        @instance = new(**params)
         process_step(@steps.keys.first)
         @instance
       end
@@ -51,6 +52,15 @@ module Decouplio
 
         composed_options = compose_options(options, :step)
         validate_success_step(composed_options)
+        if composed_options[:squad]
+          [composed_options[:squad]].flatten.each do |sqd|
+            @squads[sqd] ||= []
+            @squads[sqd] << stp
+          end
+        end
+        # if @steps.last[:squad] && !composed_options[:squad]
+
+        # end
         mark_success_track(stp)
         @steps[stp] = composed_options
       end
@@ -75,25 +85,27 @@ module Decouplio
       end
 
       def init_steps
-        @steps ||= {}
-        @success_track ||= []
-        @failure_track ||= {}
+        @steps = {}
+        @success_track = []
+        @failure_track = {}
+        @squads = {}
+        @squad_next_step = {}
       end
 
       private
 
-      def process_step(stp)
+      def process_step(stp, squad = nil)
         if stp.is_a?(Symbol)
-          process_symbol_step(stp)
+          process_symbol_step(stp, squad)
         end
       end
 
-      def process_symbol_step(stp)
+      def process_symbol_step(stp, squad)
         result = call_instance_method(stp) || step_type(stp).eql?(:pass)
         @instance.railway_flow << stp
 
         if result && @instance.success?
-          next_step = on_success_step(stp, result) || @success_track.shift
+          next_step, squad = on_success_step(stp) || next_success_track_step(stp, squad)
 
           # handle if:, unless: conditions for steps
           condition = @steps.dig(next_step, :condition)
@@ -109,11 +121,11 @@ module Decouplio
             end
           end
 
-          process_step(next_step) if can_be_processed_success_track?(stp)
+          process_step(next_step, squad) if can_be_processed_success_track?(stp, squad)
         else
           @instance.fail_action if can_be_failed?(stp)
 
-          next_step = on_failure_step(stp, result) || @failure_track[stp]
+          next_step, squad = on_failure_step(stp) || next_failure_track_step(stp, squad)
 
           # handle if:, unless: conditions for steps
           condition = @steps.dig(next_step, :condition)
@@ -129,7 +141,7 @@ module Decouplio
             end
           end
 
-          process_step(next_step) if can_be_processed_failure_track?(stp)
+          process_step(next_step, squad) if can_be_processed_failure_track?(stp, squad)
         end
       end
 
@@ -168,6 +180,7 @@ module Decouplio
         #     also validate if on_success and failure is a symbols, if it is a inner step than tag should be provided
         #   end
         # end
+        # validate if squad flow specified for step is defined
       end
 
       def validate_failure_step(options)
@@ -192,21 +205,18 @@ module Decouplio
         ([[:method, :type]] + condition_options.invert.to_a).transpose.to_h # { method: :some_method, condition_type: : if/unless }
       end
 
-      def compose_squad(squad_options)
-        {}
-      end
-
-      def can_be_processed_success_track?(stp)
+      def can_be_processed_success_track?(stp, squad)
         return true if @steps[stp].slice(:finish_him, :on_success, :on_failure).values.compact.empty?
+        return !@squads[squad].empty? if squad
 
         !([true, :on_success].include?(@steps[stp][:finish_him]) ||
           [:finish_him].include?(@steps[stp][:on_success]) ||
           [:finish_him].include?(@steps[stp][:on_failure]))
       end
 
-      def can_be_processed_failure_track?(stp)
+      def can_be_processed_failure_track?(stp, squad)
         return true if @steps[stp].slice(:finish_him, :on_success, :on_failure).values.compact.empty?
-
+        return !@squads[squad].empty? if squad
 
         !([true, :on_failure].include?(@steps[stp][:finish_him]) ||
           [:finish_him].include?(@steps[stp][:on_success]) ||
@@ -233,21 +243,51 @@ module Decouplio
         @steps.dig(stp, :on_success) == :finish_him
       end
 
-      def on_success_step(stp, result)
+      def on_success_step(stp)
         return if on_success_finish_him?(stp)
 
         on_success_value = @steps.dig(stp, :on_success)
-        if on_success_value && result
-          clean_up_track(on_success_value) if on_success_value
+        if on_success_value
+          return squad_step(on_success_value) if is_squad_flow?(on_success_value)
+
+          clean_up_track(on_success_value)
           on_success_value
         end
       end
 
-      def on_failure_step(stp, result)
+      def next_success_track_step(stp, squad)
+        if squad
+          squad_step = @squads[squad].shift
+          if @strict_squad_mode
+            [squad_step, squad]
+          else
+            if squad_step
+              [squad_step, squad]
+            else
+              @success_track.shift
+            end
+          end
+        else
+          @success_track.shift
+        end
+      end
+
+      def next_failure_track_step(stp, squad)
+        return [@squads[squad].shift, squad] if squad
+
+        @failure_track[stp]
+      end
+
+      def on_failure_step(stp)
         return if on_failure_finish_him?(stp)
 
         on_failure_value = @steps.dig(stp, :on_failure)
-        on_failure_value if on_failure_value && !result
+        if on_failure_value
+          return squad_step(on_failure_value) if is_squad_flow?(on_failure_value)
+
+          clean_up_track(on_failure_value)
+          on_failure_value
+        end
       end
 
       def clean_up_track(stp)
@@ -259,6 +299,27 @@ module Decouplio
 
       def step_type(stp)
         @steps.dig(stp, :type)
+      end
+
+      def squad_strict_mode_on!
+        @strict_squad_mode = true
+      end
+
+      def squad_strict_mode_off!
+        @strict_squad_mode = false
+      end
+
+      def squad_step(on_success_failure_value)
+        on_success_failure_value.to_s.include?('!') ? squad_strict_mode_on! : squad_strict_mode_off!
+
+        [
+          @squads[on_success_failure_value.to_s.gsub('!', '').to_sym].shift,
+          on_success_failure_value.to_s.gsub('!', '').to_sym
+        ]
+      end
+
+      def is_squad_flow?(on_success_failure_value)
+        !@squads[on_success_failure_value.to_s.gsub('!', '').to_sym].nil?
       end
     end
   end
