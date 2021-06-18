@@ -1,13 +1,18 @@
 # frozen_string_literal: true
 
+require 'pry'
 require_relative 'errors/step_argument_error'
+require_relative 'default_error_handler'
+require 'forwardable'
 
 module Decouplio
   class Action
-    attr_reader :errors, :ctx, :railway_flow
+    extend Forwardable
+    def_delegators :@error_store, :errors, :add_error
+    attr_reader :ctx, :railway_flow
 
-    def initialize(parent_instance: nil, wrapper: false, **params)
-      @errors = {}
+    def initialize(parent_instance: nil, wrapper: false, error_store:,  **params)
+      @error_store = error_store
       @ctx = params
       @railway_flow = []
       @failure = false
@@ -25,27 +30,30 @@ module Decouplio
       !errors.empty? || @failure
     end
 
-    def add_error(key, message)
-      errors.store(key, [message].flatten)
-    end
-
     def fail_action
       @failure = true
     end
 
     class << self
+      attr_accessor :error_store
+
       def inherited(child_class)
+        child_class.error_store = self.error_store || Decouplio::DefaultErrorHandler.new
         child_class.init_steps
       end
 
       def call(**params)
         @strict_squad_mode = false
-        @instance = new(**params)
+        @instance = new(error_store: error_store, **params)
         process_step(@steps.keys.first)
         @instance
       end
 
       protected
+
+      def error_store_instance(handler_class)
+        self.error_store = handler_class
+      end
 
       def step(stp, **options)
         # raise StepNameIsReservedError [finish_him]
@@ -58,9 +66,6 @@ module Decouplio
             @squads[sqd] << stp
           end
         end
-        # if @steps.last[:squad] && !composed_options[:squad]
-
-        # end
         mark_success_track(stp)
         @steps[stp] = composed_options
       end
