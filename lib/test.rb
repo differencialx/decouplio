@@ -11,29 +11,29 @@ class ErrorStore
   end
 end
 
-class Default < Decouplio::Action
-  step :one
+# class Default < Decouplio::Action
+#   step :one
 
-  def one(**)
-    add_error('pidor', 'lox')
-  end
-end
-
-
-class One < Decouplio::Action
-  error_store_instance ErrorStore.new
-  step :one
-
-  def one(**)
-    add_error(key: :pidor, message: 'lox')
-  end
-end
+#   def one(**)
+#     add_error('pidor', 'lox')
+#   end
+# end
 
 
-class Two < One
-  step :two
+# class One < Decouplio::Action
+#   error_store_instance ErrorStore.new
+#   step :one
 
-  def two(**)
-    add_error(key: :pidor, message: 'pidor')
-  end
-end
+#   def one(**)
+#     add_error(key: :pidor, message: 'lox')
+#   end
+# end
+
+
+# class Two < One
+#   step :two
+
+#   def two(**)
+#     add_error(key: :pidor, message: 'pidor')
+#   end
+# end

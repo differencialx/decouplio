@@ -8,7 +8,6 @@ module Decouplio
 
     def add_error(key, message)
       @errors.store(key, [message].flatten)
-      puts 'default'
     end
   end
 end

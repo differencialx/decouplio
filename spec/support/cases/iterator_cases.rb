@@ -2,7 +2,7 @@ module IteratorCases
   IterateAction = Class.new(Decouplio::Action) do
     # validate :validate_item
 
-    step :multiply
+    # step :multiply
 
     def multiply(inner_action_param:, **)
       ctx[:result] = inner_action_param * 2

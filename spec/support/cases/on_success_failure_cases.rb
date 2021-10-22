@@ -115,9 +115,9 @@ module OnSuccessFailureCases
   def on_success_failure_custom_squad
     lambda do |_klass|
       step :step_one
-      step :step_two, on_success: :squad_one!, on_failure: :step_three
-      step :step_three, on_success: :step_four, on_failure: :squad_two
-      step :step_four, on_success: :squad_three!, on_failure: :step_five
+      step :step_two, on_success: { squad: :squad_one, strict: true }, on_failure: :step_three
+      step :step_three, on_success: :step_four, on_failure: { squad: :squad_two }
+      step :step_four, on_success: { squad: :squad_three, strict: true }, on_failure: :step_five
       step :step_five
       step :step_six, squad: :squad_one
       step :step_seven, squad: %i[squad_one squad_two squad_three]

@@ -41,25 +41,5 @@ module FinishHimCases
       end
     end
   end
-
-  def finish_him_anyway
-    lambda do |_klass|
-      step :step_one
-      step :step_two, finish_him: true
-      step :step_three
-
-      def step_one(param1:, **)
-        ctx[:result] = param1
-      end
-
-      def step_two(param2:, **)
-        param2
-      end
-
-      def step_three(**)
-        ctx[:result] = 'Done'
-      end
-    end
-  end
 end
 # rubocop:enable Lint/NestedMethodDefinition
