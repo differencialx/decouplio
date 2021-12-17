@@ -4,8 +4,10 @@
 module RailwayCases
   def success_way
     lambda do |_klass|
-      step :model
-      step :assign_result
+      logic do
+        step :model
+        step :assign_result
+      end
 
       def model(param1:, **)
         ctx[:model] = param1
@@ -19,9 +21,11 @@ module RailwayCases
 
   def failure_way
     lambda do |_klass|
-      step :model
-      fail :set_error
-      step :assign_result
+      logic do
+        step :model
+        fail :set_error
+        step :assign_result
+      end
 
       def model(param1:, **)
         ctx[:model] = param1
@@ -39,11 +43,13 @@ module RailwayCases
 
   def multiple_failure_way
     lambda do |_klass|
-      step :model
-      step :assign_result
-      fail :fail_one
-      fail :fail_two
-      fail :fail_three
+      logic do
+        step :model
+        step :assign_result
+        fail :fail_one
+        fail :fail_two
+        fail :fail_three
+      end
 
       def model(param1:, **)
         ctx[:model] = param1
@@ -69,11 +75,13 @@ module RailwayCases
 
   def failure_with_finish_him
     lambda do |_klass|
-      step :model
-      step :assign_result
-      fail :fail_one
-      fail :fail_two, finish_him: true
-      fail :fail_three
+      logic do
+        step :model
+        step :assign_result
+        fail :fail_one
+        fail :fail_two, finish_him: true
+        fail :fail_three
+      end
 
       def model(param1:, **)
         ctx[:model] = param1
@@ -99,9 +107,11 @@ module RailwayCases
 
   def conditional_execution_for_step
     lambda do |_klass|
-      step :model
-      step :assign_result, if: :assign_result?
-      step :final_step
+      logic do
+        step :model
+        step :assign_result, if: :assign_result?
+        step :final_step
+      end
 
       def model(param1:, **)
         ctx[:model] = param1
@@ -123,10 +133,12 @@ module RailwayCases
 
   def conditional_execution_for_fail
     lambda do |_klass|
-      step :model
-      step :assign_result
-      fail :fail_one, if: :fail_one?
-      fail :fail_two
+      logic do
+        step :model
+        step :assign_result
+        fail :fail_one, if: :fail_one?
+        fail :fail_two
+      end
 
       def model(param1:, **)
         ctx[:model] = param1
@@ -152,9 +164,11 @@ module RailwayCases
 
   def pass_way
     lambda do |_klass|
-      step :model
-      pass :pass_step
-      step :assign_result
+      logic do
+        step :model
+        pass :pass_step
+        step :assign_result
+      end
 
       def model(param1:, **)
         ctx[:model] = param1
@@ -172,10 +186,12 @@ module RailwayCases
 
   def conditional_execution_for_pass
     lambda do |_klass|
-      step :model
-      pass :pass_step, if: :pass_step?
-      fail :fail_one
-      step :assign_result
+      logic do
+        step :model
+        pass :pass_step, if: :pass_step?
+        fail :fail_one
+        step :assign_result
+      end
 
       def model(param1:, **)
         ctx[:model] = param1

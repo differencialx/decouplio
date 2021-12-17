@@ -4,9 +4,11 @@
 module FinishHimCases
   def finish_him_on_success
     lambda do |_klass|
-      step :step_one
-      step :step_two, finish_him: :on_success
-      step :step_three
+      logic do
+        step :step_one
+        step :step_two, finish_him: :on_success
+        step :step_three
+      end
 
       def step_one(param1:, **)
         ctx[:result] = param1
@@ -24,9 +26,11 @@ module FinishHimCases
 
   def finish_him_on_failure
     lambda do |_klass|
-      step :step_one
-      step :step_two, finish_him: :on_failure
-      step :step_three
+      logic do
+        step :step_one
+        step :step_two, finish_him: :on_failure
+        step :step_three
+      end
 
       def step_one(param1:, **)
         ctx[:result] = param1
