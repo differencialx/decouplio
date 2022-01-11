@@ -1,48 +1,116 @@
 module Decouplio
   class LogicComposer
-    FLOW_IDX = 1
-    STEP_NAME_IDX = 0
-    STEP_OPTIONS_IDX = 1
-    STEP_TYPES = %i[step if unless pass strg]
-    FAIL_TYPES = %i[fail]
-
     class << self
       def compose(logic_container:)
-        logic = logic_container.steps.each do |flow|
-          compose_flow(flow[FLOW_IDX].to_a)
+        main_flow = logic_container.steps
+        squads = logic_container.squads
+
+        main_flow = process_strategies(main_flow, squads)
+        main_flow = main_flow.keep_if do |stp|
+          stp.is_main_flow?
         end
-        # binding.pry
+        main_flow = process_conditions(main_flow)
+        main_flow = process_main_flow(main_flow)
+        main_flow
       end
 
       private
 
-      def compose_flow(flow)
-        flow.each_with_index do |entry, idx|
-          stp = entry[STEP_OPTIONS_IDX]
-          if stp.is_step?
-            stp.on_success = obtain_next_step(stp.on_success, flow, idx, STEP_TYPES)
-            stp.on_failure = obtain_next_step(stp.on_failure, flow, idx, FAIL_TYPES)
-          elsif stp.is_fail?
-            stp.on_failure = obtain_next_step(stp.on_failure, flow, idx, FAIL_TYPES)
-          elsif stp.is_pass?
-            stp.on_success = obtain_next_step(stp.on_success, flow, idx, STEP_TYPES)
+      def process_strategies(main_flow, squads)
+        main_flow.map do |stp|
+          next stp unless stp.is_strategy?
+
+          stp.hash_case = stp.hash_case.map do |strg_key, options|
+            [
+              strg_key,
+              squads[options[:squad]] || squads[options[:step]] || squads[options[:action]]
+            ]
+          end.to_h
+
+          stp
+        end
+      end
+
+      def process_conditions(flow_steps)
+        flow_steps = flow_steps.each_with_index.map do |stp, idx|
+          if stp.has_condition?
+            stp.condition.merge!(
+              on_success: stp,
+              on_failure: stp.is_step_type? ? next_success_step(flow_steps, idx, stp.on_success) : next_failure_step(flow_steps, idx, stp.on_failure)
+            )
+            stp.condition = Step.new(**stp.condition)
+          end
+          stp
+        end.flatten
+      end
+
+      def process_main_flow(steps)
+        steps.each_with_index.map do |stp, idx|
+          if stp.is_step? || stp.is_pass?
+            stp.on_success = next_success_step(steps, idx, stp.on_success)
+            stp.on_failure = next_failure_step(steps, idx, stp.on_failure)
           elsif stp.is_strategy?
-            ''
+            stp.hash_case.each do |strg_key, strg_stp|
+              strg_stp.on_success = next_success_step(steps, idx, strg_stp.on_success)
+              strg_stp.on_failure = next_failure_step(steps, idx, strg_stp.on_failure)
+            end
+            stp.on_success = next_success_step(steps, idx, stp.on_success)
+            stp.on_failure = next_failure_step(steps, idx, stp.on_failure)
+          elsif stp.is_fail?
+            stp.on_failure = next_failure_step(steps, idx, stp.on_failure)
+          end
+          stp
+        end
+      end
+
+      def next_success_step(steps, idx, value)
+        if value.is_a?(Symbol)
+          steps[(idx + 1)..-1].each do |stp|
+            if stp.instance_method == value
+              if stp.has_condition?
+                return stp.condition
+              else
+                return stp
+              end
+            end
+          end
+        else
+          steps[(idx + 1)..-1].each do |stp|
+            if stp.is_step_type?
+              if stp.has_condition?
+                return stp.condition
+              else
+                return stp
+              end
+            end
           end
         end
+        nil
       end
 
-      def next_step(steps_array, range, types)
-        steps_array[*range].select { |stp| types.include?(stp[STEP_OPTIONS_IDX].type) }.dig(0,1)
-      end
-
-      def obtain_next_step(current_value, flow, idx, types)
-        if current_value.is_a?(Symbol)
-          return :finish_him if current_value == :finish_him
-          return flow.select { |stp| stp[STEP_NAME_IDX] == current_value }.dig(0, 1)
+      def next_failure_step(steps, idx, value)
+        if value.is_a?(Symbol)
+          steps[(idx + 1)..-1].each do |stp|
+            if stp.instance_method == value
+              if stp.has_condition?
+                return stp.condition
+              else
+                return stp
+              end
+            end
+          end
+        else
+          steps[(idx + 1)..-1].each do |stp|
+            if stp.is_fail_type?
+              if stp.has_condition?
+                return stp.condition
+              else
+                return stp
+              end
+            end
+          end
         end
-
-        next_step(flow, [(idx + 1)..-1], types)
+        nil
       end
     end
   end

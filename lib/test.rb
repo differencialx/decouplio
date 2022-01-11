@@ -1,15 +1,16 @@
-class ErrorStore
-  attr_reader :errors
+require 'pry'
+# class ErrorStore
+#   attr_reader :errors
 
-  def initialize
-    @errors = {}
-  end
+#   def initialize
+#     @errors = {}
+#   end
 
-  def add_error(key:, message:)
-    @errors.store(key, [message].flatten)
-    puts 'pidor'
-  end
-end
+#   def add_error(key:, message:)
+#     @errors.store(key, [message].flatten)
+#     puts 'pidor'
+#   end
+# end
 
 # class Default < Decouplio::Action
 #   step :one
@@ -37,32 +38,65 @@ end
 #     add_error(key: :pidor, message: 'pidor')
 #   end
 # end
- 
-class DecouplioStack < Hash
-  def initialize(squads:, ctx:)
-    @ctx = ctx
-    @squads = squads
-    super
-  end
 
-  def pop
-    element_key = self.first.first
-    case self[element_key][:type]
-    when :step
-      self.delete(element_key)
-    when :strategy
-      strg_config = self.delete(element_key)
-      
-      binding.pry
-    end
-    
-  end
-end
+# class Comp
+#   class << self
+#     attr_reader :steps
 
-def init
-  @ctx = { strg_key: :sqd1 }
-  @squads = {sqd1: {stp1: {type: :step}, stp2: {type: :step}}, sqd2: { stp3: {type: :step}, stp4: {type: :step} }}
-  @stakk =  DecouplioStack.new(squads: @squads, ctx: @ctx)
-  @stakk[:stp0] = { type: :step }
-  @stakk[:strg] = { type: :strategy, ctx_key: :strg_key }
-end
+#     def inherited(subclass)
+#       subclass.init_steps
+#     end
+
+#     def init_steps
+#       @steps = {}
+#     end
+
+#     def step(name)
+#       @steps[name] = name
+#     end
+#   end
+# end
+
+# class One
+#   class << self
+#     attr_reader :lagic
+
+#     def call
+#       binding.pry
+#       self
+#     end
+
+#     private
+
+#     def logic(&block)
+#       @lagic = Class.new(Comp, &block)
+#       puts @logic.object_id
+#     end
+
+#     def squad(&block)
+#       @squads ||= []
+
+#       prc = Proc.new do
+#         logic(&block)
+#       end
+#       @squads.push(
+#         Class.new(One, &prc)
+#       )
+#     end
+#   end
+# end
+
+# class Two < One
+#   # logic do
+#   #   step :lox
+#   #   step :pidor
+#   # end
+
+#   squad do
+#     step :nelox
+#     step :nepidor
+#   end
+# end
+
+
+# two = Two.call

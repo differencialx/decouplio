@@ -12,17 +12,19 @@ module Decouplio
   class Action
     extend Forwardable
     def_delegators :@error_store, :errors, :add_error
-    attr_reader :ctx, :railway_flow
+    attr_reader :railway_flow, :context
 
     def initialize(parent_instance: nil, wrapper: false, error_store:,  **params)
       @error_store = error_store
-      @ctx = params
+      @parent_instance = parent_instance
+      @context = params
       @railway_flow = []
       @failure = false
+      @instance = @parent_instance || self
     end
 
     def [](key)
-      ctx[key]
+      context[key]
     end
 
     def success?
@@ -37,6 +39,18 @@ module Decouplio
       @failure = true
     end
 
+    def invoke_step(method_name)
+      @instance.public_send(method_name, **@instance.ctx)
+    end
+
+    def append_railway_flow(stp)
+      @instance.railway_flow << stp
+    end
+
+    def ctx
+      @instance.context
+    end
+
     def inspect
       # Redefine to show only useful information
       super
@@ -45,13 +59,16 @@ module Decouplio
     class << self
       attr_accessor :error_store
 
+      # Debug accessors
+      attr_reader :squads, :main_flow
+
       def inherited(child_class)
         child_class.error_store = self.error_store || Decouplio::DefaultErrorHandler.new
       end
 
       def call(**params)
         instance = self.new(error_store: error_store, **params)
-        Decouplio::LogicProcessor.call(logic: @logic, instance: instance)
+        Decouplio::LogicProcessor.call(logic: @main_flow, instance: instance)
         instance
       end
 
@@ -63,7 +80,7 @@ module Decouplio
 
       def logic(&block)
         if block_given?
-          @logic = Decouplio::LogicComposer.compose(
+          @main_flow = Decouplio::LogicComposer.compose(
             logic_container: Class.new(Decouplio::LogicContainer, &block)
           )
         else

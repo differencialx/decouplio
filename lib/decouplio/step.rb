@@ -6,22 +6,29 @@ module Decouplio
     IF_TYPE = :if
     UNLESS_TYPE = :unless
     STRATEGY_TYPE = :strategy
+    ACTION_TYPE = :action
 
-    attr_reader :instance_method, :on_success, :on_failure, :type, :name, :condition
-    attr_writer :on_success, :on_failure
+    attr_reader :instance_method, :type, :name, :condition, :hash_case, :action, :on_success, :on_failure, :ctx_key
+    attr_writer :on_success, :on_failure, :hash_case, :condition
 
     def initialize(
-      instance_method:,
-      on_success:,
-      on_failure:,
+      instance_method: nil,
+      on_success: nil,
+      on_failure: nil,
       type:,
-      condition: nil
+      ctx_key: nil,
+      hash_case: nil,
+      condition: nil,
+      action: nil
     )
       @instance_method = instance_method
       @on_success = on_success
       @on_failure = on_failure
       @type = type
       @condition = condition
+      @ctx_key = ctx_key
+      @hash_case = hash_case
+      @action = action
     end
 
     def has_condition?
@@ -41,19 +48,62 @@ module Decouplio
     end
 
     def is_if?
-      @condition[:type] == IF_TYPE
+      @type == IF_TYPE
     end
 
     def is_unless?
-      @condition[:type] == UNLESS_TYPE
+      @type == UNLESS_TYPE
+    end
+
+    def is_condition?
+      is_if? || is_unless?
     end
 
     def is_strategy?
       @type == STRATEGY_TYPE
     end
 
+    def is_action?
+      @type == ACTION_TYPE
+    end
+
+    def is_step_type?
+      is_step? || is_pass? || is_strategy?
+    end
+
+    def is_fail_type?
+      is_fail?
+    end
+
+    def is_main_flow?
+      is_step_type? || is_fail_type?
+    end
+
     def is_finish_him?(railway_flow:)
       self.public_send(railway_flow) == :finish_him
+    end
+
+    def is_fail_with_if?
+      is_condition? && @on_success.is_fail?
+    end
+
+    # Debag methods
+
+#     def inspect
+#       <<-INSPECT
+
+# Success Flow: #{success_flow}
+# Failure Flow: #{failure_flow}
+# Type: #{type}
+#       INSPECT
+#     end
+
+    def success_flow
+      "#{instance_method} -> #{on_success&.success_flow}"
+    end
+
+    def failure_flow
+      "#{instance_method} -> #{on_failure&.failure_flow}"
     end
   end
 end

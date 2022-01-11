@@ -1,10 +1,8 @@
 module Decouplio
   class LogicProcessor
-    MAIN_FLOW = :main
-
     class << self
       def call(logic:, instance:)
-        first_step = logic[MAIN_FLOW].values.first
+        first_step = logic.first
         process_step(first_step, instance)
       end
 
@@ -13,41 +11,33 @@ module Decouplio
       def process_step(stp, instance)
         return if stp.nil?
 
-        # binding.pry
         if stp.is_step? || stp.is_pass? || stp.is_fail?
           process_regular_step(stp, instance)
+        elsif stp.is_condition?
+          process_condition_step(stp, instance)
+        elsif stp.is_strategy?
+          process_strategy_step(stp, instance)
         elsif stp.is_action?
           process_action_step(stp, instance)
         end
       end
 
       def process_regular_step(stp, instance)
-        if stp.has_condition?
-          condition_result = process_condition_step(stp, instance)
-          unless condition_result
-            return process_step(
-              if stp.is_step? || stp.is_pass?
-                stp.on_success
-              elsif stp.is_fail?
-                stp.on_failure
-              end,
-              instance
-            )
-          end
-        end
-
+        # binding.pry
         result = call_instance_method(instance, stp.instance_method) || stp.is_pass?
-        instance.railway_flow << stp.instance_method
+        instance.append_railway_flow(stp.instance_method)
 
         if stp.is_step? || stp.is_pass?
+          # binding.pry if stp.instance_method == :step_three
           if result && instance.success?
             next_step = stp.on_success
             success_of_failure_way = :on_success
           else
             next_step = stp.on_failure
             success_of_failure_way = :on_failure
-            # binding.pry
-            instance.fail_action if stp.is_finish_him?(railway_flow: success_of_failure_way)
+            if stp.is_finish_him?(railway_flow: success_of_failure_way) || !next_step || next_step.is_fail_with_if?
+              instance.fail_action
+            end
           end
         elsif stp.is_fail?
           next_step = stp.on_failure
@@ -60,14 +50,44 @@ module Decouplio
         end
       end
 
-      def process_condition_step(stp, instance)
-        result = call_instance_method(instance, stp.condition[:method])
+      def process_strategy_step(stp, instance)
+        strg_key_value = stp.hash_case[instance[stp.ctx_key]]
 
-        stp.is_if? ? result : !result
+        # TODO raise error if ctx_key is not set
+
+        if strg_key_value.is_action?
+          # binding.pry
+          result = strg_key_value.action.call(parent_instance: instance)
+          if result.success?
+            process_step(strg_key_value.on_success, instance)
+          else
+            instance.errors.merge(result.errors)
+            process_step(strg_key_value.on_failure, instance)
+          end
+        end
+
+      end
+
+      def process_action_step(stp, instance)
+        result = stp.action.call(parent_instance: instance)
+        if result.success?
+          process_step(stp.on_success, instance)
+        else
+          instance.errors.merge(result.errors)
+          process_step(stp.on_failure, instance)
+        end
+      end
+
+      def process_condition_step(stp, instance)
+        result = call_instance_method(instance, stp.instance_method)
+
+        result = stp.is_if? ? result : !result
+
+        process_step(result ? stp.on_success : stp.on_failure, instance)
       end
 
       def call_instance_method(instance, stp)
-        instance.public_send(stp, **instance.ctx)
+        instance.invoke_step(stp)
       end
     end
   end

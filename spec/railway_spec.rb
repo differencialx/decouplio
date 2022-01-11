@@ -277,5 +277,20 @@ RSpec.describe 'Decouplio::Action railway specs' do
         end
       end
     end
+
+    describe 'same_step_several_times' do
+      let(:action_block) { same_step_several_times }
+      let(:param2) { 1 }
+      let(:param1) { 1 }
+      let(:railway_flow) do
+        %i[increment increment increment increment]
+      end
+
+      it 'calls one method several times' do
+        expect(action.success?).to be true
+        expect(action.railway_flow).to eq railway_flow
+        expect(action[:param2]).to eq 5
+      end
+    end
   end
 end

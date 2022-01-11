@@ -14,7 +14,7 @@ module Decouplio
           on_failure ||= :finish_him if options.has_key?(:finish_him)
         end
 
-        condition_options = compose_condition(options.slice(:if, :unless))&.merge(step_type: type)
+        condition_options = compose_condition(options.slice(:if, :unless))
 
         {
           name: name,
@@ -23,7 +23,9 @@ module Decouplio
             on_success: on_success,
             on_failure: on_failure,
             type: type,
-            condition: condition_options
+            condition: condition_options,
+            ctx_key: options[:ctx_key],
+            hash_case: options[:hash_case]
           )
         }
       end
@@ -34,14 +36,7 @@ module Decouplio
         # raise OnlyIfOrUnlessCanBePresent # Only one of options can be present :if or :unless
         return if condition_options.empty?
 
-        ([[:method, :type]] + condition_options.invert.to_a).transpose.to_h # { method: :some_method, type: : if/unless }
-      end
-
-      def generage_condition_alias
-        @counter ||= 1
-        result = "condition_statenemt_#{@counter}"
-        @counter += 1
-        result
+        ([[:instance_method, :type]] + condition_options.invert.to_a).transpose.to_h # { instance_method: :some_method, type: : if/unless }
       end
     end
   end

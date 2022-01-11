@@ -210,5 +210,20 @@ module RailwayCases
       end
     end
   end
+
+  def same_step_several_times
+    lambda do |_klass|
+      logic do
+        step :increment
+        step :increment
+        step :increment
+        step :increment
+      end
+
+      def increment(param1:, **)
+        ctx[:param2] += param1
+      end
+    end
+  end
 end
 # rubocop:enable Lint/NestedMethodDefinition
