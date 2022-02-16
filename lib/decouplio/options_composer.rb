@@ -1,9 +1,12 @@
 require_relative 'step'
+require_relative 'options_validator'
 
 module Decouplio
   class OptionsComposer
     class << self
       def call(name:, options:, type:)
+        validate_options(name: name, type: type, options: options)
+
         on_success = options[:on_success]
         on_failure = options[:on_failure]
 
@@ -11,7 +14,9 @@ module Decouplio
           on_failure ||= :finish_him if options[:finish_him] == :on_failure
           on_success ||= :finish_him if options[:finish_him] == :on_success
         elsif type == :fail
-          on_failure ||= :finish_him if options.has_key?(:finish_him)
+          on_failure ||= :finish_him if options[:finish_him]
+        elsif type == :pass
+          on_success ||= :finish_him if options[:finish_him]
         end
 
         condition_options = compose_condition(options.slice(:if, :unless))
@@ -37,6 +42,10 @@ module Decouplio
         return if condition_options.empty?
 
         ([[:instance_method, :type]] + condition_options.invert.to_a).transpose.to_h # { instance_method: :some_method, type: : if/unless }
+      end
+
+      def validate_options(name:, type:, options:)
+        Decouplio::OptionsValidator.call(name: name, type: type, options: options)
       end
     end
   end

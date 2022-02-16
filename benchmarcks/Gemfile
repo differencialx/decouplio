@@ -1,0 +1,11 @@
+# frozen_string_literal: true
+
+source 'https://rubygems.org'
+
+gem 'mutations'
+gem "active_interaction", '~> 4.1'
+gem 'trailblazer', '~> 2.1'
+gem "interactor", "~> 3.0"
+gem "decouplio", path: "/home/acseler/projects/decouplio"
+gem 'pry-byebug'
+gem 'ruby-prof'

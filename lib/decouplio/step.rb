@@ -6,10 +6,11 @@ module Decouplio
     IF_TYPE = :if
     UNLESS_TYPE = :unless
     STRATEGY_TYPE = :strategy
-    ACTION_TYPE = :action
+    SQUAD_TYPE = :sqaud
 
-    attr_reader :instance_method, :type, :name, :condition, :hash_case, :action, :on_success, :on_failure, :ctx_key
-    attr_writer :on_success, :on_failure, :hash_case, :condition
+    # TODO: review attrs, maybe odd are present
+    attr_reader :instance_method, :type, :name, :condition, :hash_case, :action, :on_success, :on_failure, :ctx_key, :logic_container, :steps
+    attr_writer :on_success, :on_failure, :hash_case, :condition, :logic_container
 
     def initialize(
       instance_method: nil,
@@ -19,7 +20,9 @@ module Decouplio
       ctx_key: nil,
       hash_case: nil,
       condition: nil,
-      action: nil
+      action: nil,
+      logic_container: nil,
+      steps: nil
     )
       @instance_method = instance_method
       @on_success = on_success
@@ -29,6 +32,8 @@ module Decouplio
       @ctx_key = ctx_key
       @hash_case = hash_case
       @action = action
+      @logic_container = logic_container
+      @steps = steps
     end
 
     def has_condition?
@@ -63,8 +68,8 @@ module Decouplio
       @type == STRATEGY_TYPE
     end
 
-    def is_action?
-      @type == ACTION_TYPE
+    def is_squad?
+      @type == SQUAD_TYPE
     end
 
     def is_step_type?

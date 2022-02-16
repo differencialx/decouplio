@@ -2,6 +2,6 @@
 
 module Decouplio
   module Errors
-    class NoStepError < StandardError; end
+    class OptionsValidationError < StandardError; end
   end
 end

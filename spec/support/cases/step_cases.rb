@@ -15,10 +15,5 @@ module StepCases
       end
     end
   end
-
-  def empty_steps
-    lambda do |_klass|
-    end
-  end
 end
 # rubocop:enable Lint/NestedMethodDefinition

@@ -1,3 +1,5 @@
+require_relative 'step'
+
 module Decouplio
   class LogicProcessor
     class << self
@@ -17,7 +19,7 @@ module Decouplio
           process_condition_step(stp, instance)
         elsif stp.is_strategy?
           process_strategy_step(stp, instance)
-        elsif stp.is_action?
+        elsif stp.is_squad?
           process_action_step(stp, instance)
         end
       end
@@ -55,17 +57,17 @@ module Decouplio
 
         # TODO raise error if ctx_key is not set
 
-        if strg_key_value.is_action?
-          # binding.pry
-          result = strg_key_value.action.call(parent_instance: instance)
-          if result.success?
-            process_step(strg_key_value.on_success, instance)
-          else
-            instance.errors.merge(result.errors)
-            process_step(strg_key_value.on_failure, instance)
-          end
+        if strg_key_value.is_squad?
+          next_step = strg_key_value.logic_container.steps.first
+          process_step(next_step, instance)
+          # result = strg_key_value.action.call(parent_instance: instance)
+          # if result.success?
+          #   process_step(strg_key_value.on_success, instance)
+          # else
+          #   instance.errors.merge(result.errors)
+          #   process_step(strg_key_value.on_failure, instance)
+          # end
         end
-
       end
 
       def process_action_step(stp, instance)
