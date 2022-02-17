@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'messages'
-
 module Decouplio
   module Errors
     class UndefinedStepMethodError < StandardError

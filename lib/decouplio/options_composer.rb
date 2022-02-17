@@ -4,8 +4,8 @@ require_relative 'options_validator'
 module Decouplio
   class OptionsComposer
     class << self
-      def call(name:, options:, type:)
-        validate_options(name: name, type: type, options: options)
+      def call(name:, options:, type:, action_class:)
+        validate_options(name: name, type: type, options: options, action_class: action_class)
 
         on_success = options[:on_success]
         on_failure = options[:on_failure]
@@ -44,8 +44,8 @@ module Decouplio
         ([[:instance_method, :type]] + condition_options.invert.to_a).transpose.to_h # { instance_method: :some_method, type: : if/unless }
       end
 
-      def validate_options(name:, type:, options:)
-        Decouplio::OptionsValidator.call(name: name, type: type, options: options)
+      def validate_options(name:, type:, options:, action_class:)
+        Decouplio::OptionsValidator.call(name: name, type: type, options: options, action_class: action_class)
       end
     end
   end

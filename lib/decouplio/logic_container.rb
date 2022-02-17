@@ -27,7 +27,8 @@ module Decouplio
         @steps << Decouplio::OptionsComposer.call(
           name: name,
           options: options,
-          type: type
+          type: type,
+          action_class: @action_class
         )[:options]
       end
     end

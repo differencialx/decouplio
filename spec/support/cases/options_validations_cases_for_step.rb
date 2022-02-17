@@ -86,7 +86,7 @@ module OptionsValidationsCasesForStep
     end
   end
 
-  def when_step_if_method_is_not_defined
+  def when_step_unless_method_is_not_defined
     lambda do |_klass|
       logic do
         step :step_one, unless: :some_undefined_method
@@ -94,6 +94,22 @@ module OptionsValidationsCasesForStep
 
       def step_one(**)
         ctx[:result] = 'result'
+      end
+    end
+  end
+
+  def when_step_option_is_duplicated
+    lambda do |_klass|
+      logic do
+        step :step_one, if: :some_condition, if: :some_condition
+      end
+
+      def step_one(**)
+        ctx[:result] = 'result'
+      end
+
+      def some_condition(**)
+        true
       end
     end
   end

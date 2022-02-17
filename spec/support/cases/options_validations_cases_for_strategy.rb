@@ -92,7 +92,7 @@ module OptionsValidationsCasesForStrategy
     end
   end
 
-  def when_step_not_allowed_option_provided
+  def when_strategy_not_allowed_option_provided
     lambda do |_klass|
       logic do
         squad :squad_one do
@@ -110,7 +110,7 @@ module OptionsValidationsCasesForStrategy
     end
   end
 
-  def when_step_if_method_is_not_defined
+  def when_strategy_if_method_is_not_defined
     lambda do |_klass|
       logic do
         squad :squad_one do
@@ -128,7 +128,7 @@ module OptionsValidationsCasesForStrategy
     end
   end
 
-  def when_step_if_method_is_not_defined
+  def when_strategy_if_method_is_not_defined
     lambda do |_klass|
       logic do
         squad :squad_one do

@@ -1,4 +1,3 @@
-require_relative 'errors/messages'
 require_relative 'errors/undefined_step_method_error'
 
 module Decouplio
