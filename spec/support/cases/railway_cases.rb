@@ -208,6 +208,10 @@ module RailwayCases
       def assign_result(model:, **)
         ctx[:result] = model
       end
+
+      def fail_one(**)
+        ctx[:fail_one] = 'Fail one'
+      end
     end
   end
 

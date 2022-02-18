@@ -98,18 +98,10 @@ module OptionsValidationsCasesForStep
     end
   end
 
-  def when_step_option_is_duplicated
+  def when_step_method_is_not_defined
     lambda do |_klass|
       logic do
-        step :step_one, if: :some_condition, if: :some_condition
-      end
-
-      def step_one(**)
-        ctx[:result] = 'result'
-      end
-
-      def some_condition(**)
-        true
+        step :step_one
       end
     end
   end

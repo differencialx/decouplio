@@ -171,5 +171,18 @@ module OptionsValidationsCasesForFail
       end
     end
   end
+
+  def when_fail_method_is_not_defined
+    lambda do |_klass|
+      logic do
+        step :step_one
+        fail :step_two
+      end
+
+      def step_one(**)
+        ctx[:result] = 'result'
+      end
+    end
+  end
 end
 # rubocop:enable Lint/NestedMethodDefinition

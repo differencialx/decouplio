@@ -24,14 +24,13 @@ module Decouplio
         validate_pass
       when Decouplio::Step::STRATEGY_TYPE
         validate_strategy
-      when Decouplio::Step::SQUAD_TYPE
-        validate_squad
       end
     end
 
     private
 
     def validate_step
+      check_step_method_is_defined
       check_step_extra_keys
       check_step_method_existence
       check_step_finish_him
@@ -39,32 +38,83 @@ module Decouplio
     end
 
     def validate_fail
+      check_fail_method_is_defined
       check_fail_extra_keys
       check_fail_method_existence
       check_fail_finish_him
     end
 
     def validate_pass
-    end
-
-    def validate_if
-    end
-
-    def validate_unless
+      check_pass_method_is_defined
+      check_pass_extra_keys
+      check_pass_method_existence
+      check_pass_finish_him
     end
 
     def validate_strategy
-    end
-
-    def validate_squad
+      check_strategy_required_keys
+      check_strategy_extra_keys
+      check_strategy_method_existence
     end
 
     def raise_validation_error(message)
+      # TODO: consider to create separate error class for each case
+      # with predefined messages
       raise Decouplio::Errors::OptionsValidationError, message
     end
 
     def compose_message(message, *interpolation_values)
+      # TODO: move message composition to separate class it will simplfy
+      # error message testing
       message % interpolation_values
+    end
+
+    def check_step_method_is_defined
+      unless @action_class.public_instance_methods.include?(@name)
+        raise_validation_error(
+          compose_message(
+            STEP_VALIDATION_ERROR_MESSAGE,
+            YELLOW,
+            STEP_METHOD_NOT_DEFINED % @name,
+            METHOD_IS_NOT_DEFINED % [@name],
+            STEP_ALLOWED_OPTIONS_MESSAGE,
+            STEP_MANUAL_URL,
+            NO_COLOR
+          )
+        )
+      end
+    end
+
+    def check_fail_method_is_defined
+      unless @action_class.public_instance_methods.include?(@name)
+        raise_validation_error(
+          compose_message(
+            FAIL_VALIDATION_ERROR_MESSAGE,
+            YELLOW,
+            FAIL_METHOD_NOT_DEFINED % @name,
+            METHOD_IS_NOT_DEFINED % [@name],
+            FAIL_ALLOWED_OPTIONS_MESSAGE,
+            FAIL_MANUAL_URL,
+            NO_COLOR
+          )
+        )
+      end
+    end
+
+    def check_pass_method_is_defined
+      unless @action_class.public_instance_methods.include?(@name)
+        raise_validation_error(
+          compose_message(
+            PASS_VALIDATION_ERROR_MESSAGE,
+            YELLOW,
+            PASS_METHOD_NOT_DEFINED % @name,
+            METHOD_IS_NOT_DEFINED % [@name],
+            PASS_ALLOWED_OPTIONS_MESSAGE,
+            PASS_MANUAL_URL,
+            NO_COLOR
+          )
+        )
+      end
     end
 
     def check_step_extra_keys
@@ -94,9 +144,60 @@ module Decouplio
             FAIL_VALIDATION_ERROR_MESSAGE,
             YELLOW,
             @options.slice(*extra_keys).to_s,
-            OPTIONS_IS_NOT_ALLOWED % [extra_keys.join(', ')],
-            FAIL_ALLOWED_OPTIONS,
+            FAIL_OPTIONS_IS_NOT_ALLOWED % [extra_keys.join(', ')],
+            FAIL_ALLOWED_OPTIONS_MESSAGE,
             FAIL_MANUAL_URL,
+            NO_COLOR
+          )
+        )
+      end
+    end
+
+    def check_pass_extra_keys
+      extra_keys = @options.keys - PASS_ALLOWED_OPTIONS
+
+      if extra_keys.size > 0
+        raise_validation_error(
+          compose_message(
+            PASS_VALIDATION_ERROR_MESSAGE,
+            YELLOW,
+            @options.slice(*extra_keys).to_s,
+            PASS_OPTIONS_IS_NOT_ALLOWED % [extra_keys.join(', ')],
+            PASS_ALLOWED_OPTIONS_MESSAGE,
+            PASS_MANUAL_URL,
+            NO_COLOR
+          )
+        )
+      end
+    end
+
+    def check_strategy_extra_keys
+      extra_keys = @options.keys - STRATEGY_ALLOWED_OPTIONS
+
+      if extra_keys.size > 0
+        raise_validation_error(
+          compose_message(
+            STRATEGY_VALIDATION_ERROR_MESSAGE,
+            YELLOW,
+            @options.slice(*extra_keys).to_s,
+            STRATEGY_OPTIONS_IS_NOT_ALLOWED % [extra_keys.join(', ')],
+            STRATEGY_ALLOWED_OPTIONS_MESSAGE,
+            STRATEGY_MANUAL_URL,
+            NO_COLOR
+          )
+        )
+      end
+    end
+
+    def check_strategy_required_keys
+      unless (STRATEGY_REQUIRED_KEYS - @options.keys).size == 0
+        raise_validation_error(
+          compose_message(
+            STRATEGY_REQUIRED_VALIDATION_ERROR_MESSAGE,
+            YELLOW,
+            STRATEGY_OPTIONS_IS_REQUIRED % [STRATEGY_REQUIRED_KEYS.join(', ')],
+            STRATEGY_ALLOWED_OPTIONS_MESSAGE,
+            STRATEGY_MANUAL_URL,
             NO_COLOR
           )
         )
@@ -105,6 +206,8 @@ module Decouplio
 
     def check_step_method_existence
       @options.slice(*STEP_CHECK_METHOD_EXISTENCE_OPTIONS).each do |option_key, option_value|
+        next if %i[on_success on_failure].include?(option_key) && option_value == :finish_him
+
         unless @action_class.public_instance_methods.include?(option_value)
           raise_validation_error(
             compose_message(
@@ -130,8 +233,44 @@ module Decouplio
               YELLOW,
               @options.slice(option_key).to_s,
               METHOD_IS_NOT_DEFINED % [option_value],
-              FAIL_ALLOWED_OPTIONS,
+              FAIL_ALLOWED_OPTIONS_MESSAGE,
               FAIL_MANUAL_URL,
+              NO_COLOR
+            )
+          )
+        end
+      end
+    end
+
+    def check_pass_method_existence
+      @options.slice(*PASS_CHECK_METHOD_EXISTENCE_OPTIONS).each do |option_key, option_value|
+        unless @action_class.public_instance_methods.include?(option_value)
+          raise_validation_error(
+            compose_message(
+              PASS_VALIDATION_ERROR_MESSAGE,
+              YELLOW,
+              @options.slice(option_key).to_s,
+              METHOD_IS_NOT_DEFINED % [option_value],
+              PASS_ALLOWED_OPTIONS_MESSAGE,
+              PASS_MANUAL_URL,
+              NO_COLOR
+            )
+          )
+        end
+      end
+    end
+
+    def check_strategy_method_existence
+      @options.slice(*STRATEGY_CHECK_METHOD_EXISTENCE_OPTIONS).each do |option_key, option_value|
+        unless @action_class.public_instance_methods.include?(option_value)
+          raise_validation_error(
+            compose_message(
+              STRATEGY_VALIDATION_ERROR_MESSAGE,
+              YELLOW,
+              @options.slice(option_key).to_s,
+              METHOD_IS_NOT_DEFINED % [option_value],
+              STRATEGY_ALLOWED_OPTIONS_MESSAGE,
+              STRATEGY_MANUAL_URL,
               NO_COLOR
             )
           )
@@ -171,8 +310,48 @@ module Decouplio
             YELLOW,
             @options.slice(:finish_him).to_s,
             WRONG_FINISH_HIM_VALUE % [finish_him_value],
-            FAIL_ALLOWED_OPTIONS,
+            FAIL_ALLOWED_OPTIONS_MESSAGE,
             FAIL_MANUAL_URL,
+            NO_COLOR
+          )
+        )
+      end
+    end
+
+    def check_pass_finish_him
+      finish_him_value = @options.dig(:finish_him)
+
+      return unless finish_him_value && @options.has_key?(:finish_him)
+
+      unless ALLOWED_FAIL_FINISH_HIM_VALUES.include?(finish_him_value)
+        raise_validation_error(
+          compose_message(
+            PASS_VALIDATION_ERROR_MESSAGE,
+            YELLOW,
+            @options.slice(:finish_him).to_s,
+            WRONG_FINISH_HIM_VALUE % [finish_him_value],
+            PASS_ALLOWED_OPTIONS_MESSAGE,
+            PASS_MANUAL_URL,
+            NO_COLOR
+          )
+        )
+      end
+    end
+
+    def check_strategy_finish_him
+      finish_him_value = @options.dig(:finish_him)
+
+      return unless finish_him_value && @options.has_key?(:finish_him)
+
+      unless ALLOWED_FAIL_FINISH_HIM_VALUES.include?(finish_him_value)
+        raise_validation_error(
+          compose_message(
+            PASS_VALIDATION_ERROR_MESSAGE,
+            YELLOW,
+            @options.slice(:finish_him).to_s,
+            WRONG_FINISH_HIM_VALUE % [finish_him_value],
+            PASS_ALLOWED_OPTIONS_MESSAGE,
+            PASS_MANUAL_URL,
             NO_COLOR
           )
         )
@@ -189,6 +368,11 @@ module Decouplio
     # Light Gray   0;37     White         1;37
     YELLOW = "\033[1;33m"
     NO_COLOR = "\033[0m"
+
+
+    # *************************************************
+    # STEP
+    # *************************************************
     STEP_VALIDATION_ERROR_MESSAGE = <<~ERROR_MESSAGE
       %s
       Next options are not allowed for "step":
@@ -234,9 +418,14 @@ module Decouplio
     ALLOWED_OPTIONS
     STEP_MANUAL_URL = 'https://stub.step.manual.url'
     EXTRA_STEP_KEYS_ARE_NOT_ALLOWED = 'Please check if step option is allowed'
+    STEP_METHOD_NOT_DEFINED = "step :%s"
 
+    # *************************************************
+    # FAIL
+    # *************************************************
 
     FAIL_VALIDATION_ERROR_MESSAGE = <<~ERROR_MESSAGE
+      %s
       Next options are not allowed for "fail":
       %s
 
@@ -248,6 +437,7 @@ module Decouplio
 
       Please read the menual about allowed options here:
       %s
+      %s
     ERROR_MESSAGE
 
     FAIL_ALLOWED_OPTIONS_MESSAGE = <<~ALLOWED_OPTIONS
@@ -255,7 +445,6 @@ module Decouplio
       if: <instance method symbol>
       unless: <instance method symbol>
     ALLOWED_OPTIONS
-
     FAIL_CHECK_METHOD_EXISTENCE_OPTIONS = %i[
       if
       unless
@@ -267,9 +456,15 @@ module Decouplio
     ]
     ALLOWED_FAIL_FINISH_HIM_VALUES = [true].freeze
     FAIL_MANUAL_URL = 'https://stub.fail.manual.url'
-    OPTIONS_IS_NOT_ALLOWED = '"%s" option(s) is not allowed for "fail"'
+    FAIL_OPTIONS_IS_NOT_ALLOWED = '"%s" option(s) is not allowed for "fail"'
+    FAIL_METHOD_NOT_DEFINED = "fail :%s"
+
+    # *************************************************
+    # PASS
+    # *************************************************
 
     PASS_VALIDATION_ERROR_MESSAGE = <<~ERROR_MESSAGE
+      %s
       Next options are not allowed for "pass":
       %s
 
@@ -281,8 +476,32 @@ module Decouplio
 
       Please read the menual about allowed options here:
       %s
+      %s
     ERROR_MESSAGE
+    PASS_ALLOWED_OPTIONS =  %i[
+      finish_him
+      if
+      unless
+    ]
+    PASS_ALLOWED_OPTIONS_MESSAGE = <<~ALLOWED_OPTIONS
+      finish_him: true
+      if: <instance method symbol>
+      unless: <instance method symbol>
+    ALLOWED_OPTIONS
+    PASS_CHECK_METHOD_EXISTENCE_OPTIONS = %i[
+      if
+      unless
+    ]
+    PASS_MANUAL_URL = 'https://stub.pass.manual.url'
+    PASS_OPTIONS_IS_NOT_ALLOWED = '"%s" option(s) is not allowed for "pass"'
+    PASS_METHOD_NOT_DEFINED = "pass :%s"
+
+    # *************************************************
+    # STRATEGY
+    # *************************************************
+
     STRATEGY_VALIDATION_ERROR_MESSAGE = <<~ERROR_MESSAGE
+      %s
       Next options are not allowed for "strg":
       %s
 
@@ -294,34 +513,65 @@ module Decouplio
 
       Please read the menual about allowed options here:
       %s
+      %s
     ERROR_MESSAGE
+    STRATEGY_REQUIRED_VALIDATION_ERROR_MESSAGE = <<~ERROR_MESSAGE
+    %s
+    Details:
+    %s
+
+    Allowed options are:
+    %s
+
+    Please read the menual about allowed options here:
+    %s
+    %s
+  ERROR_MESSAGE
+    STRATEGY_ALLOWED_OPTIONS =  %i[
+      ctx_key
+      hash_case
+      if
+      unless
+    ]
+    STRATEGY_CHECK_METHOD_EXISTENCE_OPTIONS = %i[
+      if
+      unless
+    ]
+    STRATEGY_REQUIRED_KEYS = %i[
+      ctx_key
+    ]
+
+    # Possible strategy options
+    # on_success: <step name OR :finish_him>
+    # on_failure: <step name OR :finish_him>
+    # finish_him: :on_success
+    # finish_him: :on_failure
+    STRATEGY_ALLOWED_OPTIONS_MESSAGE = <<~ALLOWED_OPTIONS
+      ctx_key: <ctx key with strategy name to be used for strategy mapping> - required
+      if: <instance method symbol>
+      unless: <instance method symbol>
+    ALLOWED_OPTIONS
+    STRATEGY_OPTIONS_IS_NOT_ALLOWED = '"%s" option(s) is not allowed for "strg"'
+    STRATEGY_MANUAL_URL = 'https://stub.strategy.manual.url'
+    STRATEGY_OPTIONS_IS_REQUIRED = 'Next option(s) "%s" are required for "strg"'
+
+
+    # *************************************************
+    # SQUAD
+    # *************************************************
+
     SQUAD_VALIDATION_ERROR_MESSAGE = <<~ERROR_MESSAGE
+      %s
       Next options are not allowed for "squad":
       %s
 
-      "squad" doesn't allow any options
+
     ERROR_MESSAGE
-    FAIL_ALLOWED_OPTIONS_MESSAGE = <<~ALLOWED_OPTIONS
-      finish_him: true
-      if: <instance method symbol>
-      unless: <instance method symbol>
-    ALLOWED_OPTIONS
-    FAIL_ALLOWED_OPTIONS_MESSAGE = <<~ALLOWED_OPTIONS
-      finish_him: true
-      if: <instance method symbol>
-      unless: <instance method symbol>
-    ALLOWED_OPTIONS
-    STRATEGY_ALLOWED_OPTIONS_MESSAGE = <<~ALLOWED_OPTIONS
-      on_success: <step name OR :finish_him>
-      on_failure: <step name OR :finish_him>
-      finish_him: :on_success
-      finish_him: :on_failure
-      if: <instance method symbol>
-      unless: <instance method symbol>
-    ALLOWED_OPTIONS
-    PASS_MANUAL_URL = 'https://stub.pass.manual.url'
-    STRATEGY_MANUAL_URL = 'https://stub.strategy.manual.url'
     SQUAD_MANUAL_URL = 'https://stub.squad.manual.url'
+
+    # *************************************************
+    # COMMON
+    # *************************************************
 
     WRONG_FINISH_HIM_VALUE = '"finish_him" does not allow "%s" value'
     METHOD_IS_NOT_DEFINED = 'Method "%s" is not defined'

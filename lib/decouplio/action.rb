@@ -78,10 +78,11 @@ module Decouplio
 
       def inherited(child_class)
         child_class.error_store = self.error_store || Decouplio::DefaultErrorHandler
+
         class << child_class
           alias_method :__new, :new
-          def new(*args)
-            e = __new(*args)
+          def new(**args)
+            e = __new(**args)
             compose_logic
             e
           end

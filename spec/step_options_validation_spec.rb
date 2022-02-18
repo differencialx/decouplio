@@ -128,10 +128,21 @@ RSpec.describe 'Step options validations' do
                       message: message
     end
 
-    context 'when step option is duplicated' do
-      let(:action_block) { when_step_option_is_duplicated }
+    context 'when step method is not defined' do
+      let(:action_block) { when_step_method_is_not_defined }
 
-      it_behaves_like 'does not raise any error'
+      interpolation_values = [
+        Decouplio::OptionsValidator::YELLOW,
+        'step :step_one',
+        'Method "step_one" is not defined',
+        Decouplio::OptionsValidator::STEP_ALLOWED_OPTIONS_MESSAGE,
+        Decouplio::OptionsValidator::STEP_MANUAL_URL,
+        Decouplio::OptionsValidator::NO_COLOR
+      ]
+      message = Decouplio::OptionsValidator::STEP_VALIDATION_ERROR_MESSAGE % interpolation_values
+
+      it_behaves_like 'raises option validation error',
+                      message: message
     end
   end
 end
