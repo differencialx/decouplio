@@ -70,6 +70,8 @@ module Decouplio
     end
 
     def check_step_method_is_defined
+      return if @options.has_key?(:action)
+
       unless @action_class.public_instance_methods.include?(@name)
         raise_validation_error(
           compose_message(
@@ -401,7 +403,8 @@ module Decouplio
       finish_him
       if
       unless
-      ].freeze
+      action
+    ].freeze
     ALLOWED_STEP_FINISH_HIM_VALUES = [
       :on_success,
       :on_failure,

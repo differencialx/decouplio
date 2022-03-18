@@ -52,7 +52,7 @@ module Decouplio
 
       def process_main_flow(steps)
         steps.each_with_index.map do |stp, idx|
-          if stp.is_step? || stp.is_pass?
+          if stp.is_step? || stp.is_pass? || stp.is_action?
             stp.on_success = next_success_step(steps, idx, stp.on_success)
             stp.on_failure = next_failure_step(steps, idx, stp.on_failure)
 

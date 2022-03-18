@@ -19,7 +19,7 @@ module Decouplio
           process_condition_step(stp, instance)
         elsif stp.is_strategy?
           process_strategy_step(stp, instance)
-        elsif stp.is_squad?
+        elsif stp.is_action?
           process_action_step(stp, instance)
         end
       end
@@ -71,11 +71,13 @@ module Decouplio
       end
 
       def process_action_step(stp, instance)
-        result = stp.action.call(parent_instance: instance)
+        instance.append_railway_flow(stp.instance_method)
+        result = stp.action.call(parent_ctx: instance.context, parent_railway_flow: instance.railway_flow)
+
         if result.success?
           process_step(stp.on_success, instance)
         else
-          instance.errors.merge(result.errors)
+          instance.errors.merge!(result.errors)
           process_step(stp.on_failure, instance)
         end
       end

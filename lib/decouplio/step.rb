@@ -7,6 +7,7 @@ module Decouplio
     UNLESS_TYPE = :unless
     STRATEGY_TYPE = :strategy
     SQUAD_TYPE = :sqaud
+    ACTION_TYPE = :action
 
     # TODO: review attrs, maybe odd are present
     attr_reader :instance_method, :type, :name, :condition, :hash_case, :action, :on_success, :on_failure, :ctx_key, :logic_container, :steps
@@ -72,8 +73,12 @@ module Decouplio
       @type == SQUAD_TYPE
     end
 
+    def is_action?
+      @type == ACTION_TYPE
+    end
+
     def is_step_type?
-      is_step? || is_pass? || is_strategy?
+      is_step? || is_pass? || is_strategy? || is_action?
     end
 
     def is_fail_type?

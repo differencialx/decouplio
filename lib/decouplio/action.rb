@@ -15,13 +15,12 @@ module Decouplio
     def_delegators :@error_store, :errors, :add_error
     attr_reader :railway_flow, :context
 
-    def initialize(parent_instance: nil, wrapper: false, error_store:,  **params)
+    def initialize(parent_railway_flow: nil, parent_ctx: nil, parent_instance: nil, wrapper: false, error_store:,  **params)
       @error_store = error_store
-      @parent_instance = parent_instance
-      @context = params
-      @railway_flow = []
+      @context = parent_ctx || params
+      @railway_flow = parent_railway_flow || []
       @failure = false
-      @instance = @parent_instance || self
+      @instance = parent_instance || self
     end
 
     def [](key)

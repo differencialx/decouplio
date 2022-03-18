@@ -27,10 +27,11 @@ module Decouplio
             instance_method: name,
             on_success: on_success,
             on_failure: on_failure,
-            type: type,
+            type: compose_type(options, type),
             condition: condition_options,
             ctx_key: options[:ctx_key],
-            hash_case: options[:hash_case]
+            hash_case: options[:hash_case],
+            action: options[:action]
           )
         }
       end
@@ -46,6 +47,14 @@ module Decouplio
 
       def validate_options(name:, type:, options:, action_class:)
         Decouplio::OptionsValidator.call(name: name, type: type, options: options, action_class: action_class)
+      end
+
+      def compose_type(options, type)
+        if options.has_key?(:action)
+          Decouplio::Step::ACTION_TYPE
+        else
+          type
+        end
       end
     end
   end

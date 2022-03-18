@@ -57,7 +57,7 @@ module Decouplio
       def squad(squad_name, **options, &block)
         if block_given?
           if !options.empty?
-            raise Decouplio::Errors::OptionsValidationError, 
+            raise Decouplio::Errors::OptionsValidationError,
                   "\033[1;33m Squad does not allow any options \033[0m"
           end
           # squad_wrapped_by_logic = Proc.new do
