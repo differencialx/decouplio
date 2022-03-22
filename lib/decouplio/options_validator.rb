@@ -386,7 +386,7 @@ module Decouplio
       Allowed options are:
       %s
 
-      Please read the menual about allowed options here:
+      Please read the manual about allowed options here:
       %s
       %s
     ERROR_MESSAGE
@@ -438,7 +438,7 @@ module Decouplio
       Allowed options are:
       %s
 
-      Please read the menual about allowed options here:
+      Please read the manual about allowed options here:
       %s
       %s
     ERROR_MESSAGE
@@ -477,7 +477,7 @@ module Decouplio
       Allowed options are:
       %s
 
-      Please read the menual about allowed options here:
+      Please read the manual about allowed options here:
       %s
       %s
     ERROR_MESSAGE
@@ -514,22 +514,22 @@ module Decouplio
       Allowed options are:
       %s
 
-      Please read the menual about allowed options here:
+      Please read the manual about allowed options here:
       %s
       %s
     ERROR_MESSAGE
     STRATEGY_REQUIRED_VALIDATION_ERROR_MESSAGE = <<~ERROR_MESSAGE
-    %s
-    Details:
-    %s
+      %s
+      Details:
+      %s
 
-    Allowed options are:
-    %s
+      Allowed options are:
+      %s
 
-    Please read the menual about allowed options here:
-    %s
-    %s
-  ERROR_MESSAGE
+      Please read the manual about allowed options here:
+      %s
+      %s
+    ERROR_MESSAGE
     STRATEGY_ALLOWED_OPTIONS =  %i[
       ctx_key
       hash_case

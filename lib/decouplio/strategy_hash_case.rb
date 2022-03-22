@@ -1,3 +1,5 @@
+require_relative 'strategy_options_validator'
+
 module Decouplio
   class StrategyHashCase
     class << self
@@ -12,7 +14,14 @@ module Decouplio
       end
 
       def on(strategy_flow, **options)
+        validate_options(options)
         @hash_case[strategy_flow] = options
+      end
+
+      private
+
+      def validate_options(options)
+        StrategyOptionsValidator.call(options: options)
       end
     end
   end

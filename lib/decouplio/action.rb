@@ -11,6 +11,8 @@ require 'forwardable'
 
 module Decouplio
   class Action
+    PASS = true
+
     extend Forwardable
     def_delegators :@error_store, :errors, :add_error
     attr_reader :railway_flow, :context
@@ -51,10 +53,10 @@ module Decouplio
       @instance.context
     end
 
-    def inspect
+    # def inspect
       # TODO: Redefine to show only useful information
-      super
-    end
+      # super
+    # end
 
     class << self
       attr_accessor :error_store

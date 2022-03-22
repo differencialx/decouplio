@@ -55,11 +55,10 @@ module Decouplio
       def process_strategy_step(stp, instance)
         strg_key_value = stp.hash_case[instance[stp.ctx_key]]
 
-        # TODO raise error if ctx_key is not set
+        # TODO: raise error if ctx_key is not set
 
         if strg_key_value.is_squad?
           next_step = strg_key_value.logic_container.steps.first
-          process_step(next_step, instance)
           # result = strg_key_value.action.call(parent_instance: instance)
           # if result.success?
           #   process_step(strg_key_value.on_success, instance)
@@ -67,7 +66,10 @@ module Decouplio
           #   instance.errors.merge(result.errors)
           #   process_step(strg_key_value.on_failure, instance)
           # end
+        elsif strg_key_value.is_step?
+          next_step = strg_key_value
         end
+        process_step(next_step, instance)
       end
 
       def process_action_step(stp, instance)

@@ -16,7 +16,8 @@ RSpec.configure do |config|
   config.include OnSuccessFailureCases
   config.include PrepareParamsCases
   config.include RailwayCases
-  config.include StrategyCases
+  config.include StrategyCasesSquads
+  config.include StrategyCasesSteps
   config.include OptionsValidationsCasesForFail
   config.include OptionsValidationsCasesForPass
   config.include OptionsValidationsCasesForSquad

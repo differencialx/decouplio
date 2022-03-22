@@ -1,4 +1,5 @@
 require_relative 'errors/undefined_step_method_error'
+require_relative 'step'
 
 module Decouplio
   class LogicComposer
@@ -29,7 +30,10 @@ module Decouplio
           stp.hash_case = stp.hash_case.map do |strg_key, options|
             [
               strg_key,
-              squads[options[:squad]] || squads[options[:step]] || squads[options[:action]]
+              squads[options[:squad]] || Decouplio::Step.new(
+                instance_method: options[:step],
+                type: Decouplio::Step::STEP_TYPE
+              )
             ]
           end.to_h
 
@@ -62,21 +66,35 @@ module Decouplio
             stp.on_failure = next_failure_step(steps, idx, stp.on_failure)
 
             stp.hash_case.each do |strg_key, strg_steps|
-              strg_steps.logic_container.steps = compose(logic_container: strg_steps.logic_container)
-              strg_steps.logic_container.steps.each do |strg_step|
-                strg_step.on_success = next_success_step(steps, idx, strg_step.on_success)
-                strg_step.on_failure = next_failure_step(steps, idx, strg_step.on_failure)
-              end
-              strg_steps.logic_container.steps.each do |strg_step|
-                if strg_step.on_success.is_condition?
-                  strg_step.on_success.on_success = next_success_step(steps, idx, strg_step.on_success.on_success)
-                  strg_step.on_success.on_failure = next_failure_step(steps, idx, strg_step.on_success.on_failure)
+              if strg_steps.is_squad?
+                strg_steps.logic_container.steps = compose(logic_container: strg_steps.logic_container)
+                strg_steps.logic_container.steps.each do |strg_step|
+                  strg_step.on_success = next_success_step(steps, idx, strg_step.on_success)
+                  strg_step.on_failure = next_failure_step(steps, idx, strg_step.on_failure)
                 end
-                if strg_step.on_failure.is_condition?
-                  strg_step.on_failure.on_success = next_success_step(steps, idx, strg_step.on_failure.on_success)
-                  strg_step.on_failure.on_failure = next_failure_step(steps, idx, strg_step.on_failure.on_failure)
+                strg_steps.logic_container.steps.each do |strg_step|
+                  if strg_step.on_success.is_condition?
+                    strg_step.on_success.on_success = next_success_step(steps, idx, strg_step.on_success.on_success)
+                    strg_step.on_success.on_failure = next_failure_step(steps, idx, strg_step.on_success.on_failure)
+                  end
+                  if strg_step.on_failure.is_condition?
+                    strg_step.on_failure.on_success = next_success_step(steps, idx, strg_step.on_failure.on_success)
+                    strg_step.on_failure.on_failure = next_failure_step(steps, idx, strg_step.on_failure.on_failure)
+                  end
+                end
+              elsif strg_steps.is_step?
+                strg_steps.on_success = next_success_step(steps, idx, strg_steps.on_success)
+                strg_steps.on_failure = next_failure_step(steps, idx, strg_steps.on_failure)
+                if strg_steps.on_success.is_condition?
+                  strg_steps.on_success.on_success = next_success_step(steps, idx, strg_steps.on_success.on_success)
+                  strg_steps.on_success.on_failure = next_failure_step(steps, idx, strg_steps.on_success.on_failure)
+                end
+                if strg_steps.on_failure.is_condition?
+                  strg_steps.on_failure.on_success = next_success_step(steps, idx, strg_steps.on_failure.on_success)
+                  strg_steps.on_failure.on_failure = next_failure_step(steps, idx, strg_steps.on_failure.on_failure)
                 end
               end
+
               stp.hash_case[strg_key] = strg_steps
             end
           elsif stp.is_fail?

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module StrategyCases
+module StrategyCasesSquads
   def strategy_squads
     lambda do |_klass|
       logic do
