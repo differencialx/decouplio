@@ -3,6 +3,8 @@ require_relative 'strategy_hash_case'
 
 module Decouplio
   class LogicDsl
+    DEFAULT_WRAP_NAME = 'wrap'
+
     class << self
       attr_reader :steps, :squads
 
@@ -60,14 +62,23 @@ module Decouplio
             raise Decouplio::Errors::OptionsValidationError,
                   "\033[1;33m Squad does not allow any options \033[0m"
           end
-          # squad_wrapped_by_logic = Proc.new do
-          #   logic(&block)
-          # end
 
           @squads[squad_name] = Step.new(
             steps: Class.new(self, &block),
             type: Decouplio::Step::SQUAD_TYPE
           )
+        else
+          # TODO: raise an error if no block given
+        end
+      end
+
+      def resq(**options)
+
+      end
+
+      def wrap(name=DEFAULT_WRAP_NAME, **options, &block)
+        if block_given?
+          @steps << options.merge(type: Decouplio::Step::WRAP_TYPE, name: name, wrap_block: block)
         else
           # TODO: raise an error
         end

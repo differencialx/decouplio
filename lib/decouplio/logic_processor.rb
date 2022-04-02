@@ -30,7 +30,6 @@ module Decouplio
         instance.append_railway_flow(stp.instance_method)
 
         if stp.is_step? || stp.is_pass?
-          # binding.pry if stp.instance_method == :step_three
           if result && instance.success?
             next_step = stp.on_success
             success_of_failure_way = :on_success

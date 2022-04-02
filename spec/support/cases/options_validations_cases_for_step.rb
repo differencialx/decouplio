@@ -2,6 +2,32 @@
 
 # rubocop:disable Lint/NestedMethodDefinition
 module OptionsValidationsCasesForStep
+  def when_step_on_success_step_method_not_defined
+    lambda do |_klass|
+      logic do
+        step :step_one, on_success: :step_two
+        step :step_two
+      end
+
+      def step_one(**)
+        ctx[:result] = 'result'
+      end
+    end
+  end
+
+  def when_step_on_failure_step_method_not_defined
+    lambda do |_klass|
+      logic do
+        step :step_one, on_failure: :step_two
+        step :step_two
+      end
+
+      def step_one(**)
+        ctx[:result] = 'result'
+      end
+    end
+  end
+
   def when_step_on_success_step_not_defined
     lambda do |_klass|
       logic do

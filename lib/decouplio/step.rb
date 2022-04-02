@@ -8,6 +8,7 @@ module Decouplio
     STRATEGY_TYPE = :strategy
     SQUAD_TYPE = :sqaud
     ACTION_TYPE = :action
+    WRAP_TYPE = :wrap
 
     # TODO: review attrs, maybe odd are present
     attr_reader :instance_method, :type, :name, :condition, :hash_case, :action, :on_success, :on_failure, :ctx_key, :logic_container, :steps
@@ -23,7 +24,9 @@ module Decouplio
       condition: nil,
       action: nil,
       logic_container: nil,
-      steps: nil
+      steps: nil,
+      resq: nil,
+      wrap_block: nil
     )
       @instance_method = instance_method
       @on_success = on_success
@@ -35,10 +38,16 @@ module Decouplio
       @action = action
       @logic_container = logic_container
       @steps = steps
+      @resq = resq
+      @wrap_block = wrap_block
     end
 
     def has_condition?
       @condition
+    end
+
+    def has_resq?
+      @resq
     end
 
     def is_step?

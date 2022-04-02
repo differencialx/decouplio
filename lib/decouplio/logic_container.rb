@@ -21,6 +21,7 @@ module Decouplio
     private
 
     def process_steps
+      step_names = @logic_container_raw_data.steps.map { |stp| stp[:name] }
       @logic_container_raw_data.steps.each do |options|
         type = options.delete(:type)
         name = options.delete(:name)
@@ -28,7 +29,8 @@ module Decouplio
           name: name,
           options: options,
           type: type,
-          action_class: @action_class
+          action_class: @action_class,
+          step_names: step_names
         )[:options]
       end
     end

@@ -9,7 +9,7 @@ Dir[Dir.pwd + '/spec/support/**/*.rb'].sort.each { |f| require f }
 RSpec.configure do |config|
   config.include AfterBlockCases
   config.include GendalfCases
-  config.include RescueForCases
+  config.include ResqCases
   config.include InnerActionCases
   config.include WrapperCases
   config.include FinishHimCases

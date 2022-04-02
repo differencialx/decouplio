@@ -3,15 +3,16 @@ require_relative 'errors/options_validation_error'
 
 module Decouplio
   class OptionsValidator
-    def self.call(name:, type:, options:, action_class:)
-      new(name: name, type: type, options: options, action_class: action_class).call
+    def self.call(name:, type:, options:, action_class:, step_names:)
+      new(name: name, type: type, options: options, action_class: action_class, step_names: step_names).call
     end
 
-    def initialize(name:, type:, options:, action_class:)
+    def initialize(name:, type:, options:, action_class:, step_names:)
       @type = type
       @options = options
       @name = name
       @action_class = action_class
+      @step_names = step_names
     end
 
     def call
@@ -24,12 +25,15 @@ module Decouplio
         validate_pass
       when Decouplio::Step::STRATEGY_TYPE
         validate_strategy
+      when Decouplio::Step::WRAP_TYPE
+        validate_wrap
       end
     end
 
     private
 
     def validate_step
+      check_step_presence
       check_step_method_is_defined
       check_step_extra_keys
       check_step_method_existence
@@ -55,6 +59,15 @@ module Decouplio
       check_strategy_required_keys
       check_strategy_extra_keys
       check_strategy_method_existence
+    end
+
+    def validate_wrap
+      check_wrap_step_presence
+      check_wrap_method_existence
+      check_wrap_extra_keys
+      check_wrap_finish_him
+      check_wrap_klass_method_presence
+      check_klass_method_is_defined
     end
 
     def raise_validation_error(message)
@@ -116,6 +129,46 @@ module Decouplio
             NO_COLOR
           )
         )
+      end
+    end
+
+    def check_step_presence
+      @options.slice(*STEP_CHECK_STEP_PRESENCE).each do |option_key, option_value|
+        next if %i[on_success on_failure].include?(option_key) && option_value == :finish_him
+
+        unless @step_names.include?(option_value)
+          raise_validation_error(
+            compose_message(
+              STEP_VALIDATION_ERROR_MESSAGE,
+              YELLOW,
+              @options.slice(option_key).to_s,
+              STEP_IS_NOT_DEFINED % [option_value],
+              STEP_ALLOWED_OPTIONS_MESSAGE,
+              STEP_MANUAL_URL,
+              NO_COLOR
+            )
+          )
+        end
+      end
+    end
+
+    def check_wrap_step_presence
+      @options.slice(*WRAP_CHECK_STEP_PRESENCE).each do |option_key, option_value|
+        next if %i[on_success on_failure].include?(option_key) && option_value == :finish_him
+
+        unless @step_names.include?(option_value)
+          raise_validation_error(
+            compose_message(
+              WRAP_VALIDATION_ERROR_MESSAGE,
+              YELLOW,
+              @options.slice(option_key).to_s,
+              STEP_IS_NOT_DEFINED % [option_value],
+              WRAP_ALLOWED_OPTIONS_MESSAGE,
+              WRAP_MANUAL_URL,
+              NO_COLOR
+            )
+          )
+        end
       end
     end
 
@@ -185,6 +238,24 @@ module Decouplio
             STRATEGY_OPTIONS_IS_NOT_ALLOWED % [extra_keys.join(', ')],
             STRATEGY_ALLOWED_OPTIONS_MESSAGE,
             STRATEGY_MANUAL_URL,
+            NO_COLOR
+          )
+        )
+      end
+    end
+
+    def check_wrap_extra_keys
+      extra_keys = @options.keys - WRAP_ALLOWED_OPTIONS
+
+      if extra_keys.size > 0
+        raise_validation_error(
+          compose_message(
+            WRAP_VALIDATION_ERROR_MESSAGE,
+            YELLOW,
+            @options.slice(*extra_keys).to_s,
+            EXTRA_WRAP_KEYS_ARE_NOT_ALLOWED,
+            WRAP_ALLOWED_OPTIONS_MESSAGE,
+            WRAP_MANUAL_URL,
             NO_COLOR
           )
         )
@@ -280,6 +351,26 @@ module Decouplio
       end
     end
 
+    def check_wrap_method_existence
+      @options.slice(*WRAP_CHECK_METHOD_EXISTENCE_OPTIONS).each do |option_key, option_value|
+        next if %i[on_success on_failure].include?(option_key) && option_value == :finish_him
+
+        unless @action_class.public_instance_methods.include?(option_value)
+          raise_validation_error(
+            compose_message(
+              WRAP_VALIDATION_ERROR_MESSAGE,
+              YELLOW,
+              @options.slice(option_key).to_s,
+              METHOD_IS_NOT_DEFINED % [option_value],
+              WRAP_ALLOWED_OPTIONS_MESSAGE,
+              WRAP_MANUAL_URL,
+              NO_COLOR
+            )
+          )
+        end
+      end
+    end
+
     def check_step_finish_him
       finish_him_value = @options.dig(:finish_him)
 
@@ -360,6 +451,65 @@ module Decouplio
       end
     end
 
+    def check_wrap_finish_him
+      finish_him_value = @options.dig(:finish_him)
+
+      return unless finish_him_value && @options.has_key?(:finish_him)
+
+      unless ALLOWED_WRAP_FINISH_HIM_VALUES.include?(finish_him_value)
+        raise_validation_error(
+          compose_message(
+            WRAP_VALIDATION_ERROR_MESSAGE,
+            YELLOW,
+            @options.slice(:finish_him).to_s,
+            WRONG_FINISH_HIM_VALUE % [finish_him_value],
+            WRAP_ALLOWED_OPTIONS_MESSAGE,
+            WRAP_MANUAL_URL,
+            NO_COLOR
+          )
+        )
+      end
+    end
+
+    def check_wrap_klass_method_presence
+      klass_method_options = @options.slice(:klass, :method)
+      klass_method_options_size = klass_method_options.size
+
+      return if klass_method_options_size == 0 || klass_method_options_size == 2
+
+      raise_validation_error(
+        compose_message(
+          WRAP_VALIDATION_ERROR_MESSAGE,
+          YELLOW,
+          klass_method_options.to_s,
+          KLASS_AND_METHOD_PRESENCE,
+          WRAP_ALLOWED_OPTIONS_MESSAGE,
+          WRAP_MANUAL_URL,
+          NO_COLOR
+        )
+      )
+    end
+
+    def check_klass_method_is_defined
+      klass_method_options = @options.slice(:klass, :method)
+
+      return if klass_method_options.size == 0
+
+      return if @options[:klass].public_methods.include?(@options[:method])
+
+      raise_validation_error(
+        compose_message(
+          WRAP_VALIDATION_ERROR_MESSAGE,
+          YELLOW,
+          klass_method_options.to_s,
+          METHOD_IS_NOT_DEFINED_FOR_KLASS % [@options[:method], @options[:klass]],
+          WRAP_ALLOWED_OPTIONS_MESSAGE,
+          WRAP_MANUAL_URL,
+          NO_COLOR
+        )
+      )
+    end
+
     # Black        0;30     Dark Gray     1;30
     # Red          0;31     Light Red     1;31
     # Green        0;32     Light Green   1;32
@@ -397,6 +547,10 @@ module Decouplio
       if
       unless
     ]
+    STEP_CHECK_STEP_PRESENCE = %i[
+      on_success
+      on_failure
+    ].freeze
     STEP_ALLOWED_OPTIONS = %i[
       on_success
       on_failure
@@ -407,8 +561,7 @@ module Decouplio
     ].freeze
     ALLOWED_STEP_FINISH_HIM_VALUES = [
       :on_success,
-      :on_failure,
-      true
+      :on_failure
     ].freeze
 
     STEP_ALLOWED_OPTIONS_MESSAGE = <<~ALLOWED_OPTIONS
@@ -567,10 +720,68 @@ module Decouplio
       %s
       Next options are not allowed for "squad":
       %s
-
-
     ERROR_MESSAGE
+
     SQUAD_MANUAL_URL = 'https://stub.squad.manual.url'
+
+    # *************************************************
+    # WRAP
+    # *************************************************
+    WRAP_VALIDATION_ERROR_MESSAGE = <<~ERROR_MESSAGE
+      %s
+      Next options are not allowed for "wrap":
+      %s
+
+      Details:
+      %s
+
+      Allowed options are:
+      %s
+
+      Please read the manual about allowed options here:
+      %s
+      %s
+    ERROR_MESSAGE
+
+    WRAP_CHECK_METHOD_EXISTENCE_OPTIONS = %i[
+      on_success
+      on_failure
+      if
+      unless
+    ]
+    WRAP_CHECK_STEP_PRESENCE = %i[
+      on_success
+      on_failure
+    ].freeze
+    WRAP_ALLOWED_OPTIONS = %i[
+      on_success
+      on_failure
+      finish_him
+      if
+      unless
+      klass
+      method
+      wrap_block
+    ].freeze
+    ALLOWED_WRAP_FINISH_HIM_VALUES = [
+      :on_success,
+      :on_failure
+    ].freeze
+
+    WRAP_ALLOWED_OPTIONS_MESSAGE = <<~ALLOWED_OPTIONS
+      on_success: <step name OR :finish_him>
+      on_failure: <step name OR :finish_him>
+      finish_him: :on_success
+      finish_him: :on_failure
+      if: <instance method symbol>
+      unless: <instance method symbol>
+      klass: <class which implements wrap method, "method" option should be present>
+      method: <method name for wrapping, "klass" option should be present>
+    ALLOWED_OPTIONS
+    WRAP_MANUAL_URL = 'https://stub.wrap.manual.url'
+    EXTRA_WRAP_KEYS_ARE_NOT_ALLOWED = 'Please check if wrap option is allowed'
+    KLASS_AND_METHOD_PRESENCE = '"klass" options should be passed along with "method" option'
+    METHOD_IS_NOT_DEFINED_FOR_KLASS = 'Method "%s" is not defined for "%s" class'
 
     # *************************************************
     # COMMON
@@ -578,5 +789,6 @@ module Decouplio
 
     WRONG_FINISH_HIM_VALUE = '"finish_him" does not allow "%s" value'
     METHOD_IS_NOT_DEFINED = 'Method "%s" is not defined'
+    STEP_IS_NOT_DEFINED = 'Step "%s" is not defined'
   end
 end
