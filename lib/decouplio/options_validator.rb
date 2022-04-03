@@ -62,6 +62,7 @@ module Decouplio
     end
 
     def validate_wrap
+      check_wrap_name
       check_wrap_step_presence
       check_wrap_method_existence
       check_wrap_extra_keys
@@ -136,7 +137,7 @@ module Decouplio
       @options.slice(*STEP_CHECK_STEP_PRESENCE).each do |option_key, option_value|
         next if %i[on_success on_failure].include?(option_key) && option_value == :finish_him
 
-        unless @step_names.include?(option_value)
+        unless @step_names.keys.include?(option_value)
           raise_validation_error(
             compose_message(
               STEP_VALIDATION_ERROR_MESSAGE,
@@ -156,7 +157,7 @@ module Decouplio
       @options.slice(*WRAP_CHECK_STEP_PRESENCE).each do |option_key, option_value|
         next if %i[on_success on_failure].include?(option_key) && option_value == :finish_him
 
-        unless @step_names.include?(option_value)
+        unless @step_names.keys.include?(option_value)
           raise_validation_error(
             compose_message(
               WRAP_VALIDATION_ERROR_MESSAGE,
@@ -280,6 +281,7 @@ module Decouplio
     def check_step_method_existence
       @options.slice(*STEP_CHECK_METHOD_EXISTENCE_OPTIONS).each do |option_key, option_value|
         next if %i[on_success on_failure].include?(option_key) && option_value == :finish_him
+        next if @step_names[option_value] == :wrap
 
         unless @action_class.public_instance_methods.include?(option_value)
           raise_validation_error(
@@ -508,6 +510,23 @@ module Decouplio
           NO_COLOR
         )
       )
+    end
+
+    def check_wrap_name
+      return if @name.is_a?(Symbol)
+
+      raise_validation_error(
+        compose_message(
+          WRAP_VALIDATION_ERROR_MESSAGE,
+          YELLOW,
+          WRAP_NAME_IS_EMPTY,
+          SPECIFY_WRAP_NAME,
+          WRAP_ALLOWED_OPTIONS_MESSAGE,
+          WRAP_MANUAL_URL,
+          NO_COLOR
+        )
+      )
+
     end
 
     # Black        0;30     Dark Gray     1;30
@@ -782,6 +801,8 @@ module Decouplio
     EXTRA_WRAP_KEYS_ARE_NOT_ALLOWED = 'Please check if wrap option is allowed'
     KLASS_AND_METHOD_PRESENCE = '"klass" options should be passed along with "method" option'
     METHOD_IS_NOT_DEFINED_FOR_KLASS = 'Method "%s" is not defined for "%s" class'
+    WRAP_NAME_IS_EMPTY = 'wrap name is empty'
+    SPECIFY_WRAP_NAME = 'Please specify name for "wrap"'
 
     # *************************************************
     # COMMON

@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
 require 'pry' # TODO remove
-require_relative 'logic_dsl'
-require_relative 'logic_composer'
+require_relative 'flow'
 require_relative 'logic_processor'
-require_relative 'logic_container'
 require_relative 'errors/step_argument_error'
 require_relative 'default_error_handler'
 require 'forwardable'
@@ -35,7 +33,7 @@ module Decouplio
     end
 
     def failure?
-      @failure || (!errors.empty? && !@wrap_inner_action_failure)
+       (@failure || !errors.empty?) && !@wrap_inner_action_failure
     end
 
     def fail_action
@@ -71,7 +69,7 @@ module Decouplio
 
       def call(**params)
         instance = self.new(error_store: error_store.new, **params)
-        Decouplio::LogicProcessor.call(logic: @first_step, instance: instance)
+        Decouplio::LogicProcessor.call(flow: @flow, instance: instance)
         # TODO: process block with after actions
         instance
       end
@@ -105,12 +103,7 @@ module Decouplio
       end
 
       def compose_logic
-        logic_container_raw_data = Class.new(Decouplio::LogicDsl, &@logic)
-        logic_container = LogicContainer.new(
-          logic_container_raw_data: logic_container_raw_data,
-          action_class: self
-        ).call
-        @first_step = Decouplio::LogicComposer.compose(logic_container: logic_container)
+        @flow = Flow.call(logic: @logic, action_class: self)
       end
     end
   end

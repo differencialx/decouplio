@@ -11,8 +11,26 @@ module Decouplio
     WRAP_TYPE = :wrap
 
     # TODO: review attrs, maybe odd are present
-    attr_reader :instance_method, :type, :name, :condition, :hash_case, :action, :on_success, :on_failure, :ctx_key, :logic_container, :steps
-    attr_writer :on_success, :on_failure, :hash_case, :condition, :logic_container
+    attr_reader :instance_method,
+                :type,
+                :name,
+                :condition,
+                :hash_case,
+                :action,
+                :on_success,
+                :on_failure,
+                :ctx_key,
+                :logic_container,
+                :steps,
+                :klass,
+                :method,
+                :wrap_inner_flow
+
+    attr_writer :on_success,
+                :on_failure,
+                :hash_case,
+                :condition,
+                :logic_container
 
     def initialize(
       instance_method: nil,
@@ -26,7 +44,9 @@ module Decouplio
       logic_container: nil,
       steps: nil,
       resq: nil,
-      wrap_block: nil
+      klass: nil,
+      method: nil,
+      wrap_inner_flow: nil
     )
       @instance_method = instance_method
       @on_success = on_success
@@ -39,7 +59,9 @@ module Decouplio
       @logic_container = logic_container
       @steps = steps
       @resq = resq
-      @wrap_block = wrap_block
+      @wrap_inner_flow = wrap_inner_flow
+      @klass = klass
+      @method = method
     end
 
     def has_condition?
@@ -48,6 +70,10 @@ module Decouplio
 
     def has_resq?
       @resq
+    end
+
+    def has_specific_wrap?
+      @klass && @method
     end
 
     def is_step?
@@ -86,8 +112,12 @@ module Decouplio
       @type == ACTION_TYPE
     end
 
+    def is_wrap?
+      @type == WRAP_TYPE
+    end
+
     def is_step_type?
-      is_step? || is_pass? || is_strategy? || is_action?
+      is_step? || is_pass? || is_strategy? || is_action? || is_wrap?
     end
 
     def is_fail_type?

@@ -225,5 +225,22 @@ RSpec.describe 'Step options validations' do
       it_behaves_like 'raises option validation error',
                       message: message
     end
+
+    context 'when wrap name is not specified' do
+      let(:action_block) { when_wrap_name_is_not_specified }
+
+      interpolation_values = [
+        Decouplio::OptionsValidator::YELLOW,
+        'wrap name is empty',
+        'Please specify name for "wrap"',
+        Decouplio::OptionsValidator::WRAP_ALLOWED_OPTIONS_MESSAGE,
+        Decouplio::OptionsValidator::WRAP_MANUAL_URL,
+        Decouplio::OptionsValidator::NO_COLOR
+      ]
+      message = Decouplio::OptionsValidator::WRAP_VALIDATION_ERROR_MESSAGE % interpolation_values
+
+      it_behaves_like 'raises option validation error',
+                      message: message
+    end
   end
 end

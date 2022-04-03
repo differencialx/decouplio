@@ -87,7 +87,7 @@ module OptionsValidationsCasesForStep
   def when_wrap_finish_him_is_not_a_boolean
     lambda do |_klass|
       logic do
-        wrap finish_him: 123 do
+        wrap :wrap_name, finish_him: 123 do
           step :step_one
         end
       end
@@ -101,7 +101,7 @@ module OptionsValidationsCasesForStep
   def when_wrap_finish_him_is_a_boolean
     lambda do |_klass|
       logic do
-        wrap finish_him: true do
+        wrap :wrap_name, finish_him: true do
           step :step_one
         end
       end
@@ -115,7 +115,7 @@ module OptionsValidationsCasesForStep
   def when_wrap_finish_him_is_not_a_on_success_or_on_failure_symbol
     lambda do |_klass|
       logic do
-        wrap finish_him: :some_option do
+        wrap :wrap_name, finish_him: :some_option do
           step :step_one
         end
       end
@@ -129,7 +129,7 @@ module OptionsValidationsCasesForStep
   def when_wrap_not_allowed_option_provided
     lambda do |_klass|
       logic do
-        wrap not_allowed_option: :some_option do
+        wrap :wrap_name, not_allowed_option: :some_option do
           step :step_one
         end
       end
@@ -143,7 +143,7 @@ module OptionsValidationsCasesForStep
   def when_wrap_if_method_is_not_defined
     lambda do |_klass|
       logic do
-        wrap if: :some_undefined_method do
+        wrap :wrap_name, if: :some_undefined_method do
           step :step_one
         end
       end
@@ -157,7 +157,7 @@ module OptionsValidationsCasesForStep
   def when_wrap_unless_method_is_not_defined
     lambda do |_klass|
       logic do
-        wrap unless: :some_undefined_method do
+        wrap :wrap_name, unless: :some_undefined_method do
           step :step_one
         end
       end
@@ -171,13 +171,13 @@ module OptionsValidationsCasesForStep
   def when_wrap_klass_method_not_defined
     lambda do |_klass|
       logic do
-        wrap klass: ClassWithWrapperMethod, method: :turonsakteon do
+        wrap :wrap_name, klass: ClassWithWrapperMethod, method: :turonsakteon do
           step :step_one
         end
+      end
 
-        def step_one(**)
-          ctx[:result] = 'Success'
-        end
+      def step_one(**)
+        ctx[:result] = 'Success'
       end
     end
   end
@@ -185,13 +185,13 @@ module OptionsValidationsCasesForStep
   def when_wrap_klass_is_present_and_method_was_not_passed
     lambda do |_klass|
       logic do
-        wrap klass: ClassWithWrapperMethod do
+        wrap :wrap_name, klass: ClassWithWrapperMethod do
           step :step_one
         end
+      end
 
-        def step_one(**)
-          ctx[:result] = 'Success'
-        end
+      def step_one(**)
+        ctx[:result] = 'Success'
       end
     end
   end
@@ -199,13 +199,27 @@ module OptionsValidationsCasesForStep
   def when_wrap_method_is_present_and_klass_was_not_passed
     lambda do |_klass|
       logic do
-        wrap method: :turonsakteon do
+        wrap :wrap_name, method: :turonsakteon do
           step :step_one
         end
+      end
 
-        def step_one(**)
-          ctx[:result] = 'Success'
+      def step_one(**)
+        ctx[:result] = 'Success'
+      end
+    end
+  end
+
+  def when_wrap_name_is_not_specified
+    lambda do |_klass|
+      logic do
+        wrap klass: ClassWithWrapperMethod, method: :some_method do
+          step :step_one
         end
+      end
+
+      def step_one(**)
+        ctx[:result] = 'Success'
       end
     end
   end

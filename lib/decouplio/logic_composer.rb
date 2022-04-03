@@ -56,10 +56,9 @@ module Decouplio
 
       def process_main_flow(steps)
         steps.each_with_index.map do |stp, idx|
-          if stp.is_step? || stp.is_pass? || stp.is_action?
+          if stp.is_step? || stp.is_pass? || stp.is_action? || stp.is_wrap?
             stp.on_success = next_success_step(steps, idx, stp.on_success)
             stp.on_failure = next_failure_step(steps, idx, stp.on_failure)
-
           elsif stp.is_strategy?
             # TODO: Add specs for strategy on_success on_failure
             stp.on_success = next_success_step(steps, idx, stp.on_success)

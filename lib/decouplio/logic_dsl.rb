@@ -63,7 +63,7 @@ module Decouplio
                   "\033[1;33m Squad does not allow any options \033[0m"
           end
 
-          @squads[squad_name] = Step.new(
+          @squads[squad_name] = Decouplio::Step.new(
             steps: Class.new(self, &block),
             type: Decouplio::Step::SQUAD_TYPE
           )
@@ -76,9 +76,13 @@ module Decouplio
 
       end
 
-      def wrap(name=DEFAULT_WRAP_NAME, **options, &block)
+      def wrap(name, **options, &block)
         if block_given?
-          @steps << options.merge(type: Decouplio::Step::WRAP_TYPE, name: name, wrap_block: block)
+          @steps << options.merge(
+            type: Decouplio::Step::WRAP_TYPE,
+            name: name,
+            wrap_inner_block: block
+          )
         else
           # TODO: raise an error
         end

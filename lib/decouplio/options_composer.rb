@@ -4,13 +4,13 @@ require_relative 'options_validator'
 module Decouplio
   class OptionsComposer
     class << self
-      def call(name:, options:, type:, action_class:, step_names:)
+      def call(name:, options:, type:, action_class:, step_names:, wrap_inner_flow: nil)
         validate_options(name: name, type: type, options: options, action_class: action_class, step_names: step_names)
 
         on_success = options[:on_success]
         on_failure = options[:on_failure]
 
-        if type == :step
+        if %i[wrap step].include?(type)
           on_failure ||= :finish_him if options[:finish_him] == :on_failure
           on_success ||= :finish_him if options[:finish_him] == :on_success
         elsif type == :fail
@@ -32,7 +32,9 @@ module Decouplio
             ctx_key: options[:ctx_key],
             hash_case: options[:hash_case],
             action: options[:action],
-            wrap_block: options[:wrap_block]
+            klass: options[:klass],
+            method: options[:method],
+            wrap_inner_flow: wrap_inner_flow
           )
         }
       end
