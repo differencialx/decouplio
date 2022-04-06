@@ -84,28 +84,15 @@ module Decouplio
 
       def inherited(child_class)
         child_class.error_store = error_store || Decouplio::DefaultErrorHandler
-
-        class << child_class
-          alias_method :__new, :new
-          def new(**args)
-            e = __new(**args)
-            compose_logic
-            e
-          end
-        end
       end
 
       def logic(&block)
         # TODO: raise error if @main flow is not empty, check the case when several logic block are difined
         if block_given?
-          @logic = block
+          @flow = Flow.call(logic: block, action_class: self)
         else
           # TODO: rails error if no logic is provided
         end
-      end
-
-      def compose_logic
-        @flow = Flow.call(logic: @logic, action_class: self)
       end
     end
   end

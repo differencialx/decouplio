@@ -38,47 +38,47 @@ module Decouplio
 
     def validate_step
       check_step_presence
-      check_step_method_is_defined
+      # check_step_method_is_defined
       check_step_extra_keys
-      check_step_method_existence
+      # check_step_method_existence
       check_step_finish_him
       # TODO: check reccursion call for on_success and on_failure
     end
 
     def validate_fail
-      check_fail_method_is_defined
+      # check_fail_method_is_defined
       check_fail_extra_keys
-      check_fail_method_existence
+      # check_fail_method_existence
       check_fail_finish_him
     end
 
     def validate_pass
-      check_pass_method_is_defined
+      # check_pass_method_is_defined
       check_pass_extra_keys
-      check_pass_method_existence
+      # check_pass_method_existence
       check_pass_finish_him
     end
 
     def validate_strategy
       check_strategy_required_keys
       check_strategy_extra_keys
-      check_strategy_method_existence
+      # check_strategy_method_existence
     end
 
     def validate_wrap
       check_wrap_name
       check_wrap_step_presence
-      check_wrap_method_existence
+      # check_wrap_method_existence
       check_wrap_extra_keys
       check_wrap_finish_him
       check_wrap_klass_method_presence
-      check_klass_method_is_defined
+      # check_klass_method_is_defined
     end
 
     def validate_resq
       check_resq_extra_keys
       check_resq_handler_method_is_a_symbol
-      check_resq_method_existence
+      # check_resq_method_existence
       check_resq_error_classes
       check_resq_exception_classes_inheritance
     end
