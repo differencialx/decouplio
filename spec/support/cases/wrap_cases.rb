@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-# rubocop:disable Lint/NestedMethodDefinition
 module WrapCases
-  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:disable Metrics/AbcSize
   def when_wrap_with_klass_method
     lambda do |_klass|
       logic do
@@ -589,6 +588,5 @@ module WrapCases
       end
     end
   end
-  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:enable Metrics/AbcSize
 end
-# rubocop:enable Lint/NestedMethodDefinition

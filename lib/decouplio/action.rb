@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'pry' # TODO remove
+require 'pry' # TODO: remove
 require_relative 'flow'
 require_relative 'logic_processor'
 require_relative 'errors/step_argument_error'
@@ -15,7 +15,9 @@ module Decouplio
     def_delegators :@error_store, :errors, :add_error
     attr_reader :railway_flow, :context
 
-    def initialize(parent_railway_flow: nil, parent_ctx: nil, parent_instance: nil, wrapper: false, error_store:,  **params)
+    def initialize(
+      parent_railway_flow: nil, parent_ctx: nil, parent_instance: nil, wrapper: false, error_store:, **params
+    )
       @error_store = error_store
       @context = parent_ctx || params
       @railway_flow = parent_railway_flow || []
@@ -33,7 +35,7 @@ module Decouplio
     end
 
     def failure?
-       (@failure || !errors.empty?) && !@wrap_inner_action_failure
+      (@failure || !errors.empty?) && !@wrap_inner_action_failure
     end
 
     def fail_action
@@ -57,8 +59,8 @@ module Decouplio
     end
 
     # def inspect
-      # TODO: Redefine to show only useful information
-      # super
+    # TODO: Redefine to show only useful information
+    # super
     # end
 
     class << self
@@ -68,7 +70,7 @@ module Decouplio
       attr_reader :squads, :main_flow
 
       def call(**params)
-        instance = self.new(error_store: error_store.new, **params)
+        instance = new(error_store: error_store.new, **params)
         Decouplio::LogicProcessor.call(flow: @flow, instance: instance)
         # TODO: process block with after actions
         instance
@@ -81,7 +83,7 @@ module Decouplio
       private
 
       def inherited(child_class)
-        child_class.error_store = self.error_store || Decouplio::DefaultErrorHandler
+        child_class.error_store = error_store || Decouplio::DefaultErrorHandler
 
         class << child_class
           alias_method :__new, :new
@@ -98,7 +100,7 @@ module Decouplio
         if block_given?
           @logic = block
         else
-          # TODO rails error if no logic is provided
+          # TODO: rails error if no logic is provided
         end
       end
 

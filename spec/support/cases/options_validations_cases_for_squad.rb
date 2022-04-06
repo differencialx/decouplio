@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Lint/NestedMethodDefinition
 module OptionsValidationsCasesForSquad
   def when_squad_other_options_not_allowed
     lambda do |_klass|
@@ -20,4 +19,3 @@ module OptionsValidationsCasesForSquad
     end
   end
 end
-# rubocop:enable Lint/NestedMethodDefinition

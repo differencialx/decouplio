@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Lint/NestedMethodDefinition
 module OptionsValidationsCasesForStrategy
   def when_strategy_not_allowed_option_provided
     lambda do |_klass|
@@ -74,4 +73,3 @@ module OptionsValidationsCasesForStrategy
     end
   end
 end
-# rubocop:enable Lint/NestedMethodDefinition

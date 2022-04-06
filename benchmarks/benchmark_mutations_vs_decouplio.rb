@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'mutations'
 require_relative '../lib/decouplio'
 require 'pry'
@@ -75,6 +77,6 @@ end
 iteration_count = 1_000_00
 
 Benchmark.bmbm do |x|
-  x.report("Mutation") { iteration_count.times { MutationTest.run(param1: 'param1') } }
-  x.report("Decouplio")  { iteration_count.times { DecouplioTest.call(param1: 'param1') } }
+  x.report('Mutation') { iteration_count.times { MutationTest.run(param1: 'param1') } }
+  x.report('Decouplio')  { iteration_count.times { DecouplioTest.call(param1: 'param1') } }
 end

@@ -1,8 +1,9 @@
+# frozen_string_literal: true
+
 require 'active_interaction'
 require_relative '../lib/decouplio'
 require 'pry'
 require 'benchmark'
-
 
 class ActiveInteractionTest < ActiveInteraction::Base
   string :param1
@@ -74,6 +75,6 @@ end
 iteration_count = 1_000_00
 
 Benchmark.bmbm do |x|
-  x.report("ActiveInteraction") { iteration_count.times { ActiveInteractionTest.run(param1: 'param1') } }
-  x.report("Decouplio")  { iteration_count.times { DecouplioTest.call(param1: 'param1') } }
+  x.report('ActiveInteraction') { iteration_count.times { ActiveInteractionTest.run(param1: 'param1') } }
+  x.report('Decouplio') { iteration_count.times { DecouplioTest.call(param1: 'param1') } }
 end

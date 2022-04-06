@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Lint/NestedMethodDefinition
 module GendalfCases
   class GendalfDummy
     def initialize(user, record)

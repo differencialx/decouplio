@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require_relative 'options_composer'
 require_relative 'flow'
 
 module Decouplio
   class LogicContainer
-    attr_reader :steps, :squads
-    attr_writer :steps
+    attr_accessor :steps
+    attr_reader :squads
 
     def initialize(logic_container_raw_data:, action_class:)
       @logic_container_raw_data = logic_container_raw_data

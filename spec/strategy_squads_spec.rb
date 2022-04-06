@@ -27,7 +27,6 @@ RSpec.describe 'Decouplio::Action strategy squad' do
     let(:param4) { 'param4' }
     let(:param5) { 'param5' }
     let(:param6) { 'param6' }
-    let(:param6) { 'param6' }
     let(:final) { 'Final' }
     let(:strategy_two_key) { 'not_existing_strategy' }
     let(:process_step_four) { true }

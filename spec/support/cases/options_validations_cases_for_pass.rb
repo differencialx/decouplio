@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Lint/NestedMethodDefinition
 module OptionsValidationsCasesForPass
   def when_pass_on_succes_is_not_allowed
     lambda do |_klass|
@@ -185,4 +184,3 @@ module OptionsValidationsCasesForPass
     end
   end
 end
-# rubocop:enable Lint/NestedMethodDefinition

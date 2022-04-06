@@ -1,23 +1,54 @@
 require: rubocop-rspec
 
 AllCops:
+  NewCops: enable
   Exclude:
     - 'decouplio.gemspec'
+    - vendor/**/*
 
 Style/Documentation:
   Enabled: false
 
-Metrics/LineLength:
-    Max: 120
+Style/SignalException:
+  Enabled: false
+
+Layout/LineLength:
+  Max: 120
+
+Lint/NestedMethodDefinition:
+  Exclude:
+    - spec/**/*
+
+Lint/UnreachableCode:
+  Exclude:
+    - spec/**/*
 
 Style/FrozenStringLiteralComment:
   Enabled: true
 
 Metrics/BlockLength:
-  ExcludedMethods: ['describe','context']
+  ExcludedMethods: ['describe','context', 'lambda', 'logic']
+
+Metrics/ModuleLength:
+  Exclude:
+    - spec/**/*
+
+Metrics/MethodLength:
+  Exclude:
+    - spec/**/*
 
 RSpec/DescribeClass:
   Enabled: false
 
 RSpec/NestedGroups:
-  Max: 4
+  Max: 10
+
+RSpec/ExampleLength:
+  Max: 15
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+Naming/PredicateName:
+  Exclude:
+    - lib/decouplio/step.rb

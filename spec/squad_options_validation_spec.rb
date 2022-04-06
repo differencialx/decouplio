@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe 'Squad options validations' do
   include_context 'with basic spec setup'
 

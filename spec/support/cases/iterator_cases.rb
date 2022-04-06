@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module IteratorCases
   IterateAction = Class.new(Decouplio::Action) do
     # validate :validate_item

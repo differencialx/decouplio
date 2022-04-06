@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../lib/decouplio'
 require 'pry'
 require 'benchmark'
@@ -116,6 +118,6 @@ end
 iteration_count = 1_000_00
 
 Benchmark.bmbm do |x|
-  x.report("RegularService") { iteration_count.times { RegularServiceTest.call(param1: 'param1') } }
-  x.report("Decouplio")  { iteration_count.times { DecouplioTest.call(param1: 'param1') } }
+  x.report('RegularService') { iteration_count.times { RegularServiceTest.call(param1: 'param1') } }
+  x.report('Decouplio') { iteration_count.times { DecouplioTest.call(param1: 'param1') } }
 end

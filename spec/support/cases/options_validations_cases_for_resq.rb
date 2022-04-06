@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Lint/NestedMethodDefinition
 module OptionsValidationsCasesForPass
   def when_resq_not_allowed_option_is_passed
     lambda do |_klass|
@@ -43,7 +42,7 @@ module OptionsValidationsCasesForPass
         ctx[:result] = 'result'
       end
 
-      def handle_error(error, **)
+      def handle_error(_, **)
         add_error(:some_error, 'Error message')
       end
     end
@@ -60,7 +59,7 @@ module OptionsValidationsCasesForPass
         ctx[:result] = 'result'
       end
 
-      def handle_error(error, **)
+      def handle_error(_, **)
         add_error(:some_error, 'Error message')
       end
     end
@@ -77,10 +76,9 @@ module OptionsValidationsCasesForPass
         ctx[:result] = 'result'
       end
 
-      def handle_error(error, **)
+      def handle_error(_, **)
         add_error(:some_error, 'Error message')
       end
     end
   end
 end
-# rubocop:enable Lint/NestedMethodDefinition

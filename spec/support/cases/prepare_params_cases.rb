@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Lint/NestedMethodDefinition
 module PrepareParamsCases
   # def prepare_params_block
   #   lambda do |_klass|
@@ -113,4 +112,3 @@ module PrepareParamsCases
   #   end
   # end
 end
-# rubocop:enable Lint/NestedMethodDefinition

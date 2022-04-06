@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Lint/NestedMethodDefinition
 module ResqCases
   def resq_undefined_handler_method
     lambda do |_klass|
@@ -46,7 +45,7 @@ module ResqCases
         ctx[:result] = 'Success'
       end
 
-      def handle_error(error, **)
+      def handle_error(_error, **)
         add_error(:some_error, 'Error message')
       end
     end
@@ -333,4 +332,3 @@ module ResqCases
     end
   end
 end
-# rubocop:enable Lint/NestedMethodDefinition

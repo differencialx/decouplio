@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Decouplio
   class Step
     STEP_TYPE = :step
@@ -22,26 +24,20 @@ module Decouplio
     attr_reader :instance_method,
                 :type,
                 :name,
-                :condition,
-                :hash_case,
                 :action,
-                :on_success,
-                :on_failure,
                 :ctx_key,
-                :logic_container,
                 :steps,
                 :klass,
                 :method,
                 :wrap_inner_flow,
-                :handlers,
-                :resq
+                :handlers
 
-    attr_writer :on_success,
-                :on_failure,
-                :hash_case,
-                :condition,
-                :logic_container,
-                :resq
+    attr_accessor :on_success,
+                  :on_failure,
+                  :hash_case,
+                  :condition,
+                  :logic_container,
+                  :resq
 
     def initialize(
       instance_method: nil,
@@ -146,23 +142,22 @@ module Decouplio
     end
 
     def is_finish_him?(railway_flow:)
-      self.public_send(railway_flow) == :finish_him
+      public_send(railway_flow) == :finish_him
     end
 
     def is_fail_with_if?
       is_condition? && @on_success.is_fail?
     end
 
-    # Debag methods
+    # Debug methods
 
-#     def inspect
-#       <<-INSPECT
-
-# Success Flow: #{success_flow}
-# Failure Flow: #{failure_flow}
-# Type: #{type}
-#       INSPECT
-#     end
+    # def inspect
+    #   <<-INSPECT
+    #     Success Flow: #{success_flow}
+    #     Failure Flow: #{failure_flow}
+    #     Type: #{type}
+    #   INSPECT
+    # end
 
     def success_flow
       "#{instance_method} -> #{on_success&.success_flow}"

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Lint/NestedMethodDefinition
 module OptionsValidationsCasesForStep
   def when_wrap_on_success_method_not_defined
     lambda do |_klass|
@@ -224,4 +223,3 @@ module OptionsValidationsCasesForStep
     end
   end
 end
-# rubocop:enable Lint/NestedMethodDefinition

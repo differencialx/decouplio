@@ -29,7 +29,7 @@ RSpec.describe 'Decouplio::Action railway specs' do
 
     describe 'failure_way' do
       let(:action_block) { failure_way }
-      let(:railway_flow) { %i[model set_error] }
+      let(:railway_flow) { %i[model error] }
       let(:param1) { nil }
 
       it 'failure' do

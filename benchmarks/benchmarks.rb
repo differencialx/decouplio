@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'active_interaction'
 require 'interactor'
 require 'mutations'
@@ -288,7 +290,7 @@ class TrailblazerTest < Trailblazer::Activity::Railway
   end
 end
 
-iteration_count = 100000
+iteration_count = 100_000 # rubocop:disable Lint/UselessAssignment
 
 # result = RubyProf.profile do
 #   iteration_count.times { InteractorTestOrganizer.call(param1: 'param1') }
@@ -329,7 +331,7 @@ iteration_count = 100000
 # end
 
 # result = RubyProf.profile do
-  # iteration_count.times { DecouplioTest.call(param1: 'param1') }
+# iteration_count.times { DecouplioTest.call(param1: 'param1') }
 # end
 # result = RubyProf.profile do
 #   iteration_count.times { TrailblazerTest.call(param1: 'param1') }
