@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module WrapCases
-  # rubocop:disable Metrics/AbcSize
   def when_wrap_with_klass_method
     lambda do |_klass|
       logic do
@@ -588,5 +587,4 @@ module WrapCases
       end
     end
   end
-  # rubocop:enable Metrics/AbcSize
 end
