@@ -22,6 +22,8 @@ RSpec.describe 'Decouplio::Action wrap cases' do
           allow(AfterTransactionAction).to receive(:call)
           allow(ClassWithWrapperMethod).to receive(:transaction)
             .and_call_original
+          allow(StubDummy).to receive(:call)
+            .and_call_original
         end
 
         context 'when success' do
@@ -34,6 +36,7 @@ RSpec.describe 'Decouplio::Action wrap cases' do
             expect(ClassWithWrapperMethod).to have_received(:transaction)
             expect(BeforeTransactionAction).to have_received(:call)
             expect(AfterTransactionAction).to have_received(:call)
+            expect(StubDummy).to have_received(:call)
           end
         end
 
@@ -53,6 +56,7 @@ RSpec.describe 'Decouplio::Action wrap cases' do
             expect(ClassWithWrapperMethod).to have_received(:transaction)
             expect(BeforeTransactionAction).to have_received(:call)
             expect(AfterTransactionAction).to have_received(:call)
+            expect(StubDummy).to have_received(:call)
           end
         end
       end

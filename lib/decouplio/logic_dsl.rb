@@ -1,5 +1,7 @@
+require_relative 'step'
 require_relative 'options_composer'
 require_relative 'strategy_hash_case'
+require_relative 'errors/options_validation_error'
 
 module Decouplio
   class LogicDsl
@@ -73,7 +75,18 @@ module Decouplio
       end
 
       def resq(**options)
+        unless Decouplio::Step::MAIN_FLOW_TYPES.include?(@steps.last&.[](:type))
+          raise Decouplio::Errors::OptionsValidationError,
+                <<~ERROR
+                  \033[1;33m
+                  "resq" should be defined only after:
+                  #{Decouplio::Step::MAIN_FLOW_TYPES.join("\n")}
+                  \033[0m
+                ERROR
 
+        end
+
+        @steps << options.merge(type: Decouplio::Step::RESQ_TYPE)
       end
 
       def wrap(name, **options, &block)

@@ -27,6 +27,31 @@ module ResqCases
     end
   end
 
+  def when_resq_does_not_handle_errors_for_next_steps
+    lambda do |_klass|
+      logic do
+        wrap :wrap_name do
+          step :wrap_step
+        end
+        resq handle_error: ArgumentError
+
+        step :step_one
+      end
+
+      def step_one(**)
+        StubDummy.call
+      end
+
+      def wrap_step(**)
+        ctx[:result] = 'Success'
+      end
+
+      def handle_error(error, **)
+        add_error(:some_error, 'Error message')
+      end
+    end
+  end
+
   def step_resq_single_error_class
     lambda do |_klass|
       logic do

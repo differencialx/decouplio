@@ -11,12 +11,12 @@ module Decouplio
         # TODO: raise error if first step is fail
         squads = logic_container.squads
 
-        # binding.pry
         main_flow = process_strategies(main_flow, squads)
         main_flow = main_flow.keep_if do |stp|
           stp.is_main_flow?
         end
         main_flow = process_conditions(main_flow)
+        main_flow = process_resq(main_flow)
         main_flow = process_main_flow(main_flow)
         main_flow
       end
@@ -56,7 +56,7 @@ module Decouplio
 
       def process_main_flow(steps)
         steps.each_with_index.map do |stp, idx|
-          if stp.is_step? || stp.is_pass? || stp.is_action? || stp.is_wrap?
+          if stp.is_step? || stp.is_pass? || stp.is_action? || stp.is_wrap? || stp.is_resq?
             stp.on_success = next_success_step(steps, idx, stp.on_success)
             stp.on_failure = next_failure_step(steps, idx, stp.on_failure)
           elsif stp.is_strategy?
@@ -70,37 +70,62 @@ module Decouplio
                 strg_steps.logic_container.steps.each do |strg_step|
                   strg_step.on_success = next_success_step(steps, idx, strg_step.on_success)
                   strg_step.on_failure = next_failure_step(steps, idx, strg_step.on_failure)
-                end
-                strg_steps.logic_container.steps.each do |strg_step|
-                  if strg_step.on_success.is_condition?
+                  if strg_step.on_success&.is_condition?
                     strg_step.on_success.on_success = next_success_step(steps, idx, strg_step.on_success.on_success)
                     strg_step.on_success.on_failure = next_failure_step(steps, idx, strg_step.on_success.on_failure)
                   end
-                  if strg_step.on_failure.is_condition?
+                  if strg_step.on_failure&.is_condition?
                     strg_step.on_failure.on_success = next_success_step(steps, idx, strg_step.on_failure.on_success)
                     strg_step.on_failure.on_failure = next_failure_step(steps, idx, strg_step.on_failure.on_failure)
+                  end
+                  if stp.has_resq?
+                    strg_step.resq ||= stp.resq
                   end
                 end
               elsif strg_steps.is_step?
                 strg_steps.on_success = next_success_step(steps, idx, strg_steps.on_success)
                 strg_steps.on_failure = next_failure_step(steps, idx, strg_steps.on_failure)
-                if strg_steps.on_success.is_condition?
+                if strg_steps.on_success&.is_condition?
                   strg_steps.on_success.on_success = next_success_step(steps, idx, strg_steps.on_success.on_success)
                   strg_steps.on_success.on_failure = next_failure_step(steps, idx, strg_steps.on_success.on_failure)
                 end
-                if strg_steps.on_failure.is_condition?
+                if strg_steps.on_failure&.is_condition?
                   strg_steps.on_failure.on_success = next_success_step(steps, idx, strg_steps.on_failure.on_success)
                   strg_steps.on_failure.on_failure = next_failure_step(steps, idx, strg_steps.on_failure.on_failure)
+                end
+                if stp.has_resq?
+                  strg_steps.resq ||= stp.resq
                 end
               end
 
               stp.hash_case[strg_key] = strg_steps
             end
+            stp.resq = nil
           elsif stp.is_fail?
             stp.on_failure = next_failure_step(steps, idx, stp.on_failure)
           end
           stp
         end
+      end
+
+      def process_resq(steps)
+        steps_to_filter_out = []
+
+        steps.each_with_index do |stp, index|
+          next unless stp.is_resq?
+
+          prev_step = steps[index - 1]
+          # TODO: mayby it will be better to redefine resq= method for step, and if it's strategy, when assign resq for
+          # for all strategy steps
+          prev_step.resq = {
+            handlers: stp.handlers,
+            klass: stp.klass,
+            method: stp.method
+          }
+          steps_to_filter_out << stp
+        end
+
+        steps.reject { |stp| steps_to_filter_out.include?(stp)  }
       end
 
       def next_success_step(steps, idx, value)

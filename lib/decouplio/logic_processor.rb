@@ -13,23 +13,19 @@ module Decouplio
       def process_step(stp, instance)
         return if stp.nil?
 
-        if stp.is_step? || stp.is_pass? || stp.is_fail?
-          process_regular_step(stp, instance)
-        elsif stp.is_condition?
-          process_condition_step(stp, instance)
-        elsif stp.is_strategy?
-          process_strategy_step(stp, instance)
-        elsif stp.is_action?
-          process_action_step(stp, instance)
-        elsif stp.is_wrap?
-          process_wrap_step(stp, instance)
+        if stp.has_resq?
+          next_step = process_resq_step(stp, instance)
+        else
+          next_step = next_flow_step(stp, instance)
         end
+
+        process_step(next_step, instance)
       end
 
       def process_regular_step(stp, instance)
         # binding.pry
-        result = call_instance_method(instance, stp.instance_method) || stp.is_pass?
         instance.append_railway_flow(stp.instance_method)
+        result = call_instance_method(instance, stp.instance_method) || stp.is_pass?
 
         if stp.is_step? || stp.is_pass?
           if result && instance.success?
@@ -49,7 +45,9 @@ module Decouplio
         end
 
         unless stp.is_finish_him?(railway_flow: success_of_failure_way)
-          process_step(next_step, instance)
+          next_step
+        else
+          NO_STEP_FOUND
         end
       end
 
@@ -63,7 +61,8 @@ module Decouplio
         elsif strg_key_value.is_step?
           next_step = strg_key_value
         end
-        process_step(next_step, instance)
+
+        next_step
       end
 
       def process_action_step(stp, instance)
@@ -71,10 +70,10 @@ module Decouplio
         result = stp.action.call(parent_ctx: instance.context, parent_railway_flow: instance.railway_flow)
 
         if result.success?
-          process_step(stp.on_success, instance)
+          stp.on_success
         else
           instance.errors.merge!(result.errors)
-          process_step(stp.on_failure, instance)
+          stp.on_failure
         end
       end
 
@@ -97,7 +96,9 @@ module Decouplio
         end
 
         unless stp.is_finish_him?(railway_flow: success_of_failure_way)
-          process_step(next_step, instance)
+          next_step
+        else
+          NO_STEP_FOUND
         end
       end
 
@@ -106,7 +107,41 @@ module Decouplio
 
         result = stp.is_if? ? result : !result
 
-        process_step(result ? stp.on_success : stp.on_failure, instance)
+        result ? stp.on_success : stp.on_failure
+      end
+
+      def process_resq_step(stp, instance)
+        next_step = next_flow_step(stp, instance)
+
+      rescue *stp.resq[:handlers].keys => error
+        handler_method = stp.resq[:handlers][error.class]
+
+        raise error unless handler_method
+
+        instance.append_railway_flow(handler_method)
+        instance.public_send(
+          handler_method,
+          error,
+          **instance.ctx
+        )
+
+        instance.failure? ? stp.on_failure : stp.on_success
+      else
+        return next_step
+      end
+
+      def next_flow_step(stp, instance)
+        if stp.is_step? || stp.is_pass? || stp.is_fail?
+          process_regular_step(stp, instance)
+        elsif stp.is_condition?
+          process_condition_step(stp, instance)
+        elsif stp.is_strategy?
+          process_strategy_step(stp, instance)
+        elsif stp.is_action?
+          process_action_step(stp, instance)
+        elsif stp.is_wrap?
+          process_wrap_step(stp, instance)
+        end
       end
 
       def call_instance_method(instance, stp)

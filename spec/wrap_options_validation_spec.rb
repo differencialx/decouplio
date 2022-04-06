@@ -1,4 +1,4 @@
-RSpec.describe 'Step options validations' do
+RSpec.describe 'Wrap options validations' do
   include_context 'with basic spec setup'
 
   describe '.call' do

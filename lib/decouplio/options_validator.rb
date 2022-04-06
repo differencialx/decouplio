@@ -27,6 +27,8 @@ module Decouplio
         validate_strategy
       when Decouplio::Step::WRAP_TYPE
         validate_wrap
+      when Decouplio::Step::RESQ_TYPE
+        validate_resq
       end
     end
 
@@ -69,6 +71,14 @@ module Decouplio
       check_wrap_finish_him
       check_wrap_klass_method_presence
       check_klass_method_is_defined
+    end
+
+    def validate_resq
+      check_resq_extra_keys
+      check_resq_handler_method_is_a_symbol
+      check_resq_method_existence
+      check_resq_error_classes
+      check_resq_exception_classes_inheritance
     end
 
     def raise_validation_error(message)
@@ -373,6 +383,24 @@ module Decouplio
       end
     end
 
+    def check_resq_method_existence
+      @options.keys.each do |handler_method|
+        next if @action_class.public_instance_methods.include?(handler_method)
+
+        raise_validation_error(
+          compose_message(
+            RESQ_VALIDATION_ERROR_MESSAGE,
+            YELLOW,
+            METHOD_IS_NOT_DEFINED % [handler_method],
+            PLEASE_DEFINE_HANDLER_METHOD % [handler_method],
+            RESQ_ALLOWED_OPTIONS_MESSAGE,
+            RESQ_MANUAL_URL,
+            NO_COLOR
+          )
+        )
+      end
+    end
+
     def check_step_finish_him
       finish_him_value = @options.dig(:finish_him)
 
@@ -526,7 +554,82 @@ module Decouplio
           NO_COLOR
         )
       )
+    end
 
+    def check_resq_extra_keys
+      extra_options = @options.slice(*RESQ_NOT_ALLOWED_OPTIONS)
+
+      return if extra_options.empty?
+
+      raise_validation_error(
+        compose_message(
+          RESQ_VALIDATION_ERROR_MESSAGE,
+          YELLOW,
+          extra_options.to_s,
+          RESQ_DOES_NOT_ALLOW_OPTIONS % [extra_options],
+          RESQ_ALLOWED_OPTIONS_MESSAGE,
+          RESQ_MANUAL_URL,
+          NO_COLOR
+        )
+      )
+    end
+
+    def check_resq_handler_method_is_a_symbol
+      @options.keys.each do |handler_method|
+        next if handler_method.is_a?(Symbol)
+
+        raise_validation_error(
+          compose_message(
+            RESQ_VALIDATION_ERROR_MESSAGE,
+            YELLOW,
+            @options.slice(handler_method).to_s,
+            HANDLER_METHOD_SHOULD_BE_A_SYMBOL,
+            RESQ_ALLOWED_OPTIONS_MESSAGE,
+            RESQ_MANUAL_URL,
+            NO_COLOR
+          )
+        )
+      end
+    end
+
+    def check_resq_error_classes
+      @options.each do |handler_method, error_classes|
+        next if error_classes.is_a?(Class) || error_classes.is_a?(Array)
+
+        raise_validation_error(
+          compose_message(
+            RESQ_VALIDATION_ERROR_MESSAGE,
+            YELLOW,
+            @options.slice(handler_method).to_s,
+            WRONG_ERROR_CLASS % [handler_method],
+            RESQ_ALLOWED_OPTIONS_MESSAGE,
+            RESQ_MANUAL_URL,
+            NO_COLOR
+          )
+        )
+      end
+    end
+
+    def check_resq_exception_classes_inheritance
+      @options.each do |handler_method, error_classes|
+        not_excpetion_classes = [error_classes].flatten.reject do |klass|
+          klass < Exception
+        end
+
+        next if not_excpetion_classes.empty?
+
+        raise_validation_error(
+          compose_message(
+            RESQ_VALIDATION_ERROR_MESSAGE,
+            YELLOW,
+            @options.slice(handler_method).to_s,
+            ERROR_CLASS_INHERITANCE % not_excpetion_classes.to_s,
+            RESQ_ALLOWED_OPTIONS_MESSAGE,
+            RESQ_MANUAL_URL,
+            NO_COLOR
+          )
+        )
+      end
     end
 
     # Black        0;30     Dark Gray     1;30
@@ -803,6 +906,67 @@ module Decouplio
     METHOD_IS_NOT_DEFINED_FOR_KLASS = 'Method "%s" is not defined for "%s" class'
     WRAP_NAME_IS_EMPTY = 'wrap name is empty'
     SPECIFY_WRAP_NAME = 'Please specify name for "wrap"'
+
+    # *************************************************
+    # RESQ
+    # *************************************************
+    RESQ_VALIDATION_ERROR_MESSAGE = <<~ERROR_MESSAGE
+      %s
+      Next options are not allowed for "resq":
+      %s
+
+      Details:
+      %s
+
+      Allowed options are:
+      %s
+
+      Please read the manual about allowed options here:
+      %s
+      %s
+    ERROR_MESSAGE
+
+    RESQ_NOT_ALLOWED_OPTIONS = %i[
+      on_success
+      on_failure
+      finish_him
+      if
+      unless
+      klass
+      method
+    ].freeze
+
+    RESQ_ALLOWED_OPTIONS_MESSAGE = <<~ALLOWED_OPTIONS
+      <method name> => <exception class>
+      OR
+      <method name> => [<excpetion class one>, <exception class two>]
+
+      RESQ can have several handler methods, e.g.:
+      logic do
+        step :some_step
+        resq first_handler: [NoMethodError, ArgumentError],
+             second_handler: StandardError
+      end
+
+      def some_step(**)
+        ctx[:result] = <code which may raise an error>
+      end
+
+      def first_handler(error, **)
+        # Error handling code
+      end
+
+      def second_handler(error, **)
+        # Error handling code
+      end
+
+    ALLOWED_OPTIONS
+    RESQ_DOES_NOT_ALLOW_OPTIONS = '"resq" does not allow "%s" options'
+    RESQ_MANUAL_URL = 'https://stub.resq.manual.url'
+    PLEASE_DEFINE_HANDLER_METHOD = 'Please define "%s" method'
+    HANDLER_METHOD_SHOULD_BE_A_SYMBOL = 'Handler method should be a symbol'
+    ERROR_CLASS_INHERITANCE = 'Please use exception class. %s does not inherited from Exception class'
+    WRONG_ERROR_CLASS = 'Please specify exception class(es) for "%s"'
 
     # *************************************************
     # COMMON

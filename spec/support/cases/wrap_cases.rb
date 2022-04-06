@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # rubocop:disable Lint/NestedMethodDefinition
-module WrapperCases
+module WrapCases
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def when_wrap_with_klass_method
     lambda do |_klass|
@@ -18,7 +18,7 @@ module WrapperCases
       end
 
       def handler_step(error, **)
-        add_error(wrapper_error: error.message)
+        add_error(:wrapper_error, error.message)
       end
 
       def step_one(string_param:, **)
@@ -55,7 +55,7 @@ module WrapperCases
       end
 
       def handler_step(error, **)
-        add_error(wrapper_error: error.message)
+        add_error(:wrapper_error, error.message)
       end
 
       def step_one(**)
@@ -95,7 +95,7 @@ module WrapperCases
       end
 
       def handler_step(error, **)
-        add_error(wrapper_error: error.message)
+        add_error(:wrapper_error, error.message)
       end
 
       def handle_wrap_fail(**)

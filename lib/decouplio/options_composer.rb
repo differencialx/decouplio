@@ -10,6 +10,8 @@ module Decouplio
         on_success = options[:on_success]
         on_failure = options[:on_failure]
 
+        error_handlers = nil
+
         if %i[wrap step].include?(type)
           on_failure ||= :finish_him if options[:finish_him] == :on_failure
           on_success ||= :finish_him if options[:finish_him] == :on_success
@@ -17,6 +19,14 @@ module Decouplio
           on_failure ||= :finish_him if options[:finish_him]
         elsif type == :pass
           on_success ||= :finish_him if options[:finish_him]
+        elsif type == :resq
+          error_handlers = {}
+
+          options.each do |handler_method, error_classes|
+            [error_classes].flatten.each do |error_class|
+              error_handlers[error_class] = handler_method
+            end
+          end
         end
 
         condition_options = compose_condition(options.slice(:if, :unless))
@@ -34,7 +44,8 @@ module Decouplio
             action: options[:action],
             klass: options[:klass],
             method: options[:method],
-            wrap_inner_flow: wrap_inner_flow
+            wrap_inner_flow: wrap_inner_flow,
+            handlers: error_handlers
           )
         }
       end
