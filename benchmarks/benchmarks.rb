@@ -346,11 +346,11 @@ iteration_count = 100_000 # rubocop:disable Lint/UselessAssignment
 # printer = RubyProf::GraphPrinter.new(result)
 # printer.print(STDOUT, {})
 
-# Benchmark.bmbm do |x|
-#   x.report("RegularService") { iteration_count.times { RegularServiceTest.call(param1: 'param1') } }
-#   x.report("ActiveInteraction") { iteration_count.times { ActiveInteractionTest.run(param1: 'param1') } }
-#   x.report("Mutation") { iteration_count.times { MutationTest.run(param1: 'param1') } }
-#   # x.report("Interactor") { iteration_count.times { InteractorTestOrganizer.call(param1: 'param1') } }
-#   # x.report("Trailblazer") { iteration_count.times { TrailblazerTest.call(param1: 'param1') } }
-#   x.report("Decouplio")  { iteration_count.times { DecouplioTest.call(param1: 'param1') } }
-# end
+Benchmark.bmbm do |x|
+  x.report("RegularService") { iteration_count.times { RegularServiceTest.call(param1: 'param1') } }
+  x.report("ActiveInteraction") { iteration_count.times { ActiveInteractionTest.run(param1: 'param1') } }
+  x.report("Mutation") { iteration_count.times { MutationTest.run(param1: 'param1') } }
+  x.report("Interactor") { iteration_count.times { InteractorTestOrganizer.call(param1: 'param1') } }
+  x.report("Trailblazer") { iteration_count.times { TrailblazerTest.call(param1: 'param1') } }
+  x.report("Decouplio")  { iteration_count.times { DecouplioTest.call(param1: 'param1') } }
+end

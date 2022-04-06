@@ -19,7 +19,7 @@ RSpec.describe 'Decouplio::Action resq cases' do
         .and_raise(*error_to_raise)
     end
 
-    context 'when handler method is not defined' do
+    xcontext 'when handler method is not defined' do
       let(:action_block) { resq_undefined_handler_method }
       let(:interpolation_values) do
         [

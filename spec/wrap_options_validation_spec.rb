@@ -4,7 +4,7 @@ RSpec.describe 'Wrap options validations' do
   include_context 'with basic spec setup'
 
   describe '.call' do
-    context 'when wrap on_success step method is not defined' do
+    xcontext 'when wrap on_success step method is not defined' do
       let(:action_block) { when_wrap_on_success_method_not_defined }
 
       interpolation_values = [
@@ -22,7 +22,7 @@ RSpec.describe 'Wrap options validations' do
                       message: message
     end
 
-    context 'when wrap on_failure step method is not defined' do
+    xcontext 'when wrap on_failure step method is not defined' do
       let(:action_block) { when_wrap_on_falire_method_not_defined }
 
       interpolation_values = [
@@ -143,7 +143,7 @@ RSpec.describe 'Wrap options validations' do
                       message: message
     end
 
-    context 'when if method is not defined for wrap' do
+    xcontext 'when if method is not defined for wrap' do
       let(:action_block) { when_wrap_if_method_is_not_defined }
 
       interpolation_values = [
@@ -160,7 +160,7 @@ RSpec.describe 'Wrap options validations' do
                       message: message
     end
 
-    context 'when unless method is not defined for wrap' do
+    xcontext 'when unless method is not defined for wrap' do
       let(:action_block) { when_wrap_unless_method_is_not_defined }
 
       interpolation_values = [
@@ -177,7 +177,7 @@ RSpec.describe 'Wrap options validations' do
                       message: message
     end
 
-    context 'when wrap klass method is not defined' do
+    xcontext 'when wrap klass method is not defined' do
       let(:action_block) { when_wrap_klass_method_not_defined }
 
       interpolation_values = [

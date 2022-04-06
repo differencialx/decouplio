@@ -114,7 +114,7 @@ RSpec.describe 'Fail options validations' do
                       message: message
     end
 
-    context 'when if method is not defined' do
+    xcontext 'when if method is not defined' do
       let(:action_block) { when_fail_if_method_is_not_defined }
 
       interpolation_values = [
@@ -131,7 +131,7 @@ RSpec.describe 'Fail options validations' do
                       message: message
     end
 
-    context 'when unless method is not defined' do
+    xcontext 'when unless method is not defined' do
       let(:action_block) { when_fail_unless_method_is_not_defined }
 
       interpolation_values = [
@@ -165,7 +165,7 @@ RSpec.describe 'Fail options validations' do
                       message: message
     end
 
-    context 'when fail method is not defined' do
+    xcontext 'when fail method is not defined' do
       let(:action_block) { when_fail_method_is_not_defined }
 
       interpolation_values = [

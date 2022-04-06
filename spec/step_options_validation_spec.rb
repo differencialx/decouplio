@@ -4,7 +4,7 @@ RSpec.describe 'Step options validations' do
   include_context 'with basic spec setup'
 
   describe '.call' do
-    context 'when on_success step method is not defined' do
+    xcontext 'when on_success step method is not defined' do
       let(:action_block) { when_step_on_success_step_method_not_defined }
 
       interpolation_values = [
@@ -22,7 +22,7 @@ RSpec.describe 'Step options validations' do
                       message: message
     end
 
-    context 'when on_failure step method is not defined' do
+    xcontext 'when on_failure step method is not defined' do
       let(:action_block) { when_step_on_failure_step_method_not_defined }
 
       interpolation_values = [
@@ -143,7 +143,7 @@ RSpec.describe 'Step options validations' do
                       message: message
     end
 
-    context 'when if method is not defined' do
+    xcontext 'when if method is not defined' do
       let(:action_block) { when_step_if_method_is_not_defined }
 
       interpolation_values = [
@@ -160,7 +160,7 @@ RSpec.describe 'Step options validations' do
                       message: message
     end
 
-    context 'when unless method is not defined' do
+    xcontext 'when unless method is not defined' do
       let(:action_block) { when_step_unless_method_is_not_defined }
 
       interpolation_values = [
@@ -177,7 +177,7 @@ RSpec.describe 'Step options validations' do
                       message: message
     end
 
-    context 'when step method is not defined' do
+    xcontext 'when step method is not defined' do
       let(:action_block) { when_step_method_is_not_defined }
 
       interpolation_values = [

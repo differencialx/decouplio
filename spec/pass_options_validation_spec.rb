@@ -114,7 +114,7 @@ RSpec.describe 'Pass options validations' do
                       message: message
     end
 
-    context 'when if method is not defined' do
+    xcontext 'when if method is not defined' do
       let(:action_block) { when_pass_if_method_is_not_defined }
 
       interpolation_values = [
@@ -131,7 +131,7 @@ RSpec.describe 'Pass options validations' do
                       message: message
     end
 
-    context 'when unless method is not defined' do
+    xcontext 'when unless method is not defined' do
       let(:action_block) { when_pass_unless_method_is_not_defined }
 
       interpolation_values = [
@@ -165,7 +165,7 @@ RSpec.describe 'Pass options validations' do
                       message: message
     end
 
-    context 'when pass method is not defined' do
+    xcontext 'when pass method is not defined' do
       let(:action_block) { when_pass_method_is_not_defined }
 
       interpolation_values = [
