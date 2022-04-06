@@ -3,9 +3,13 @@ jobs:
   build:
     working_directory: ~/decouplio
     docker:
-      - image: ruby:2.6.0
+      - image: ruby:2.7.0
     steps:
       - checkout
+
+      - run:
+          name: Install bundler
+          command: gem install bundler:2.1.2
 
       - restore_cache:
           keys:
