@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 module Decouplio
   module Wrappers
@@ -9,7 +10,7 @@ module Decouplio
       end
 
       def self.raise_no_block_error
-        raise ::Decouplio::Errors:NoBlockWrapperError, 'Block should be specified for wrapper'
+        raise ::Decouplio::Errors :NoBlockWrapperError, 'Block should be specified for wrapper'
       end
     end
   end

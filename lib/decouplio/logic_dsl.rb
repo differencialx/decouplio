@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'step'
 require_relative 'options_composer'
 require_relative 'strategy_hash_case'
@@ -24,7 +26,7 @@ module Decouplio
       def step(stp, **options)
         # raise StepNameIsReservedError
         # if stp.is_a?(Symbol)
-          # raise StepMethodIsNotDefined unless self.instance_public_methods.include?(stp)
+        # raise StepMethodIsNotDefined unless self.instance_public_methods.include?(stp)
         # end
         # raise StepNameIsReserved [finish_him, on_success, on_failure, squad, if, unless]
 
@@ -53,14 +55,18 @@ module Decouplio
       def strg(strategy_name, **options, &block)
         hash_case = Class.new(Decouplio::StrategyHashCase, &block).hash_case
         options[:hash_case] = hash_case
-        # composed_options = OptionsComposer.call(name: strategy_name, options: options, type: Decouplio::Step::STRATEGY_TYPE)
+        # composed_options = OptionsComposer.call(
+        #   name: strategy_name,
+        #   options: options,
+        #   type: Decouplio::Step::STRATEGY_TYPE
+        # )
         # @steps << composed_options[:options]
         @steps << options.merge(type: Decouplio::Step::STRATEGY_TYPE, name: strategy_name)
       end
 
       def squad(squad_name, **options, &block)
         if block_given?
-          if !options.empty?
+          unless options.empty?
             raise Decouplio::Errors::OptionsValidationError,
                   "\033[1;33m Squad does not allow any options \033[0m"
           end

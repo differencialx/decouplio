@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Lint/NestedMethodDefinition
 module AfterBlockCases
   def after_block_success
     lambda do |_klass|

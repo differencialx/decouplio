@@ -71,9 +71,7 @@ module StrategyCasesSquads
       end
 
       def step_four(param4:, **)
-        if !param4.nil?
-          ctx[:step_four] = ctx[:step_four].to_s + param4
-        end
+        ctx[:step_four] = ctx[:step_four].to_s + param4 unless param4.nil?
       end
 
       def step_five(param5:, **)
@@ -89,11 +87,7 @@ module StrategyCasesSquads
       end
 
       def assign_second_strategy(strategy_two_key:, **)
-        if strategy_two_key == 'not_existing_strategy'
-          ctx[:strategy_two_key] = nil
-        else
-          ctx[:strategy_two_key] = strategy_two_key
-        end
+        ctx[:strategy_two_key] = strategy_two_key == 'not_existing_strategy' ? nil : strategy_two_key
       end
 
       def process_strategy_two?(process_strategy_two:, **)

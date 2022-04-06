@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'errors/options_validation_error'
 
 module Decouplio
@@ -58,7 +60,7 @@ module Decouplio
       message % interpolation_params
     end
 
-    ALLOWED_OPTIONS = %i[squad step]
+    ALLOWED_OPTIONS = %i[squad step].freeze
     YELLOW = "\033[1;33m"
     NO_COLOR = "\033[0m"
     STRATEGY_ON_ERROR_MESSAGE = <<~ERROR_MESSAGE

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Lint/NestedMethodDefinition
 module FinishHimCases
   def finish_him_on_success
     lambda do |_klass|
@@ -90,4 +89,3 @@ module FinishHimCases
     end
   end
 end
-# rubocop:enable Lint/NestedMethodDefinition

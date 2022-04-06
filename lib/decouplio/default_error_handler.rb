@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Decouplio
   class DefaultErrorHandler
     attr_reader :errors

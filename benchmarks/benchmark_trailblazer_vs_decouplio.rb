@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'trailblazer'
 require_relative '../lib/decouplio'
 require 'pry'
@@ -104,6 +106,6 @@ end
 iteration_count = 100_000
 
 Benchmark.bmbm do |x|
-  x.report("Trailblazer") { iteration_count.times { TrailblazerTest.call(param1: 'param1') } }
-  x.report("Decouplio")  { iteration_count.times { DecouplioTest.call(param1: 'param1') } }
+  x.report('Trailblazer') { iteration_count.times { TrailblazerTest.call(param1: 'param1') } }
+  x.report('Decouplio') { iteration_count.times { DecouplioTest.call(param1: 'param1') } }
 end

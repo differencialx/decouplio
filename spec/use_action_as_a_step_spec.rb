@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe 'Use Decouplio::Action as a step' do
   include_context 'with basic spec setup'
 

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Lint/NestedMethodDefinition
 module OnSuccessFailureCases
   def on_failure_finish_him
     lambda do |_klass|
@@ -161,6 +160,3 @@ module OnSuccessFailureCases
     end
   end
 end
-
-
-# rubocop:enable Lint/NestedMethodDefinition

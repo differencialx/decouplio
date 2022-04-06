@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'step'
 require_relative 'options_validator'
 
@@ -56,15 +58,22 @@ module Decouplio
         # raise OnlyIfOrUnlessCanBePresent # Only one of options can be present :if or :unless
         return if condition_options.empty?
 
-        ([[:instance_method, :type]] + condition_options.invert.to_a).transpose.to_h # { instance_method: :some_method, type: : if/unless }
+        ([%i[instance_method type]] + condition_options.invert.to_a).transpose.to_h
+        # { instance_method: :some_method, type: : if/unless }
       end
 
       def validate_options(name:, type:, options:, action_class:, step_names:)
-        Decouplio::OptionsValidator.call(name: name, type: type, options: options, action_class: action_class, step_names: step_names)
+        Decouplio::OptionsValidator.call(
+          name: name,
+          type: type,
+          options: options,
+          action_class: action_class,
+          step_names: step_names
+        )
       end
 
       def compose_type(options, type)
-        if options.has_key?(:action)
+        if options.key?(:action)
           Decouplio::Step::ACTION_TYPE
         else
           type

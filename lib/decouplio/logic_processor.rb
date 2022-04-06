@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'step'
 
 module Decouplio
@@ -13,11 +15,11 @@ module Decouplio
       def process_step(stp, instance)
         return if stp.nil?
 
-        if stp.has_resq?
-          next_step = process_resq_step(stp, instance)
-        else
-          next_step = next_flow_step(stp, instance)
-        end
+        next_step = if stp.has_resq?
+                      process_resq_step(stp, instance)
+                    else
+                      next_flow_step(stp, instance)
+                    end
 
         process_step(next_step, instance)
       end
@@ -44,10 +46,10 @@ module Decouplio
           instance.fail_action
         end
 
-        unless stp.is_finish_him?(railway_flow: success_of_failure_way)
-          next_step
-        else
+        if stp.is_finish_him?(railway_flow: success_of_failure_way)
           NO_STEP_FOUND
+        else
+          next_step
         end
       end
 
@@ -91,14 +93,12 @@ module Decouplio
         success_of_failure_way = instance.success? ? :on_success : :on_failure
         next_step = instance.success? ? stp.on_success : stp.on_failure
 
-        if success_of_failure_way == :on_failure && next_step&.is_step_type?
-          instance.fail_wrap_inner_action
-        end
+        instance.fail_wrap_inner_action if success_of_failure_way == :on_failure && next_step&.is_step_type?
 
-        unless stp.is_finish_him?(railway_flow: success_of_failure_way)
-          next_step
-        else
+        if stp.is_finish_him?(railway_flow: success_of_failure_way)
           NO_STEP_FOUND
+        else
+          next_step
         end
       end
 
@@ -112,22 +112,21 @@ module Decouplio
 
       def process_resq_step(stp, instance)
         next_step = next_flow_step(stp, instance)
+      rescue *stp.resq[:handlers].keys => e
+        handler_method = stp.resq[:handlers][e.class]
 
-      rescue *stp.resq[:handlers].keys => error
-        handler_method = stp.resq[:handlers][error.class]
-
-        raise error unless handler_method
+        raise e unless handler_method
 
         instance.append_railway_flow(handler_method)
         instance.public_send(
           handler_method,
-          error,
+          e,
           **instance.ctx
         )
 
         instance.failure? ? stp.on_failure : stp.on_success
       else
-        return next_step
+        next_step
       end
 
       def next_flow_step(stp, instance)

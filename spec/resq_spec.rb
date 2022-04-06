@@ -38,7 +38,7 @@ RSpec.describe 'Decouplio::Action resq cases' do
       it 'raises an Decouplio::Errors::OptionsValidationError' do
         # binding.pry
 
-        expect{ action }.to raise_error(
+        expect { action }.to raise_error(
           Decouplio::Errors::OptionsValidationError,
           expected_message
         )
@@ -57,7 +57,7 @@ RSpec.describe 'Decouplio::Action resq cases' do
       end
 
       it 'raises Decouplio::Errors::OptionsValidationError' do
-        expect{ action }.to raise_error(
+        expect { action }.to raise_error(
           Decouplio::Errors::OptionsValidationError,
           expected_message
         )
@@ -102,7 +102,7 @@ RSpec.describe 'Decouplio::Action resq cases' do
           let(:error_class) { NoMethodError }
 
           it 'handles the error' do
-            expect{ action }.to raise_error(NoMethodError)
+            expect { action }.to raise_error(NoMethodError)
           end
         end
       end
@@ -412,7 +412,7 @@ RSpec.describe 'Decouplio::Action resq cases' do
           end
         end
 
-        context 'NoMethodError' do
+        context 'when NoMethodError' do
           let(:error_class) { NoMethodError }
           let(:error_message) { 'NoMethodError error message' }
           let(:expected_errors) do

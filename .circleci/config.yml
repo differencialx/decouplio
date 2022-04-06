@@ -25,5 +25,9 @@ jobs:
             - vendor/bundle
 
       - run:
+          name: Run Rubocop
+          command: bundle exec rubocop -P
+
+      - run:
           name: Run Tests
           command: bundle exec rspec

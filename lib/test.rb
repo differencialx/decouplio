@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 require 'pry'
+
 # class ErrorStore
 #   attr_reader :errors
 
@@ -20,7 +23,6 @@ require 'pry'
 #   end
 # end
 
-
 # class One < Decouplio::Action
 #   error_store_instance ErrorStore.new
 #   step :one
@@ -29,7 +31,6 @@ require 'pry'
 #     add_error(key: :pidor, message: 'lox')
 #   end
 # end
-
 
 # class Two < One
 #   step :two
@@ -97,6 +98,5 @@ require 'pry'
 #     step :nepidor
 #   end
 # end
-
 
 # two = Two.call

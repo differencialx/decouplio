@@ -30,7 +30,7 @@ RSpec.describe 'Decouplio::Action strategy squad' do
       let(:action_block) { strategy_steps }
 
       context 'when strategy_one' do
-        context 'fails' do
+        describe 'fails' do
           let(:strg_1) { :strg_1 }
           let(:param1) { false }
           let(:railway_flow) { %i[assign_strategy_one_key step_one strategy_failure] }
@@ -50,15 +50,17 @@ RSpec.describe 'Decouplio::Action strategy squad' do
           end
         end
 
-        context 'pass' do
+        describe 'pass' do
           context 'when strg_1 value' do
             let(:strg_1) { :strg_1 }
 
             context 'when strategy_two' do
-              context 'fails' do
+              describe 'fails' do
                 let(:strg_2) { :strg_4 }
                 let(:param4) { false }
-                let(:railway_flow) { %i[assign_strategy_one_key step_one assign_strategy_two_key step_four strategy_failure] }
+                let(:railway_flow) do
+                  %i[assign_strategy_one_key step_one assign_strategy_two_key step_four strategy_failure]
+                end
 
                 it 'fails' do
                   expect(action).to be_failure
@@ -75,10 +77,12 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                 end
               end
 
-              context 'pass' do
+              describe 'pass' do
                 context 'when strg_4 value' do
                   let(:strg_2) { :strg_4 }
-                  let(:railway_flow) { %i[assign_strategy_one_key step_one assign_strategy_two_key step_four final_step] }
+                  let(:railway_flow) do
+                    %i[assign_strategy_one_key step_one assign_strategy_two_key step_four final_step]
+                  end
 
                   it 'pass' do
                     expect(action).to be_success
@@ -97,7 +101,9 @@ RSpec.describe 'Decouplio::Action strategy squad' do
 
                 context 'when strg_5 value' do
                   let(:strg_2) { :strg_5 }
-                  let(:railway_flow) { %i[assign_strategy_one_key step_one assign_strategy_two_key step_five final_step] }
+                  let(:railway_flow) do
+                    %i[assign_strategy_one_key step_one assign_strategy_two_key step_five final_step]
+                  end
 
                   it 'pass' do
                     expect(action).to be_success
@@ -121,10 +127,12 @@ RSpec.describe 'Decouplio::Action strategy squad' do
             let(:strg_1) { :strg_2 }
 
             context 'when strategy_two' do
-              context 'fails' do
+              describe 'fails' do
                 let(:strg_2) { :strg_4 }
                 let(:param4) { false }
-                let(:railway_flow) { %i[assign_strategy_one_key step_two assign_strategy_two_key step_four strategy_failure] }
+                let(:railway_flow) do
+                  %i[assign_strategy_one_key step_two assign_strategy_two_key step_four strategy_failure]
+                end
 
                 it 'fails' do
                   expect(action).to be_failure
@@ -141,10 +149,12 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                 end
               end
 
-              context 'pass' do
+              describe 'pass' do
                 context 'when strg_4 value' do
                   let(:strg_2) { :strg_4 }
-                  let(:railway_flow) { %i[assign_strategy_one_key step_two assign_strategy_two_key step_four final_step] }
+                  let(:railway_flow) do
+                    %i[assign_strategy_one_key step_two assign_strategy_two_key step_four final_step]
+                  end
 
                   it 'pass' do
                     expect(action).to be_success
@@ -163,7 +173,9 @@ RSpec.describe 'Decouplio::Action strategy squad' do
 
                 context 'when strg_5 value' do
                   let(:strg_2) { :strg_5 }
-                  let(:railway_flow) { %i[assign_strategy_one_key step_two assign_strategy_two_key step_five final_step] }
+                  let(:railway_flow) do
+                    %i[assign_strategy_one_key step_two assign_strategy_two_key step_five final_step]
+                  end
 
                   it 'pass' do
                     expect(action).to be_success
@@ -187,10 +199,12 @@ RSpec.describe 'Decouplio::Action strategy squad' do
             let(:strg_1) { :strg_3 }
 
             context 'when strategy_two' do
-              context 'fails' do
+              describe 'fails' do
                 let(:strg_2) { :strg_4 }
                 let(:param4) { false }
-                let(:railway_flow) { %i[assign_strategy_one_key step_three assign_strategy_two_key step_four strategy_failure] }
+                let(:railway_flow) do
+                  %i[assign_strategy_one_key step_three assign_strategy_two_key step_four strategy_failure]
+                end
 
                 it 'fails' do
                   expect(action).to be_failure
@@ -207,10 +221,12 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                 end
               end
 
-              context 'pass' do
+              describe 'pass' do
                 context 'when strg_4 value' do
                   let(:strg_2) { :strg_4 }
-                  let(:railway_flow) { %i[assign_strategy_one_key step_three assign_strategy_two_key step_four final_step] }
+                  let(:railway_flow) do
+                    %i[assign_strategy_one_key step_three assign_strategy_two_key step_four final_step]
+                  end
 
                   it 'pass' do
                     expect(action).to be_success
@@ -229,7 +245,9 @@ RSpec.describe 'Decouplio::Action strategy squad' do
 
                 context 'when strg_5 value' do
                   let(:strg_2) { :strg_5 }
-                  let(:railway_flow) { %i[assign_strategy_one_key step_three assign_strategy_two_key step_five final_step] }
+                  let(:railway_flow) do
+                    %i[assign_strategy_one_key step_three assign_strategy_two_key step_five final_step]
+                  end
 
                   it 'pass' do
                     expect(action).to be_success

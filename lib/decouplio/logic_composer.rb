@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'errors/undefined_step_method_error'
 require_relative 'step'
 
@@ -17,8 +19,7 @@ module Decouplio
         end
         main_flow = process_conditions(main_flow)
         main_flow = process_resq(main_flow)
-        main_flow = process_main_flow(main_flow)
-        main_flow
+        process_main_flow(main_flow)
       end
 
       private
@@ -46,7 +47,11 @@ module Decouplio
           if stp.has_condition?
             stp.condition.merge!(
               on_success: stp,
-              on_failure: stp.is_step_type? ? next_success_step(flow_steps, idx, stp.on_success) : next_failure_step(flow_steps, idx, stp.on_failure)
+              on_failure: if stp.is_step_type?
+                            next_success_step(flow_steps, idx, stp.on_success)
+                          else
+                            next_failure_step(flow_steps, idx, stp.on_failure)
+                          end
             )
             stp.condition = Step.new(**stp.condition)
           end
@@ -78,9 +83,7 @@ module Decouplio
                     strg_step.on_failure.on_success = next_success_step(steps, idx, strg_step.on_failure.on_success)
                     strg_step.on_failure.on_failure = next_failure_step(steps, idx, strg_step.on_failure.on_failure)
                   end
-                  if stp.has_resq?
-                    strg_step.resq ||= stp.resq
-                  end
+                  strg_step.resq ||= stp.resq if stp.has_resq?
                 end
               elsif strg_steps.is_step?
                 strg_steps.on_success = next_success_step(steps, idx, strg_steps.on_success)
@@ -93,9 +96,7 @@ module Decouplio
                   strg_steps.on_failure.on_success = next_success_step(steps, idx, strg_steps.on_failure.on_success)
                   strg_steps.on_failure.on_failure = next_failure_step(steps, idx, strg_steps.on_failure.on_failure)
                 end
-                if stp.has_resq?
-                  strg_steps.resq ||= stp.resq
-                end
+                strg_steps.resq ||= stp.resq if stp.has_resq?
               end
 
               stp.hash_case[strg_key] = strg_steps
@@ -125,7 +126,7 @@ module Decouplio
           steps_to_filter_out << stp
         end
 
-        steps.reject { |stp| steps_to_filter_out.include?(stp)  }
+        steps.reject { |stp| steps_to_filter_out.include?(stp) }
       end
 
       def next_success_step(steps, idx, value)

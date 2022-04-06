@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe 'Wrap options validations' do
   include_context 'with basic spec setup'
 

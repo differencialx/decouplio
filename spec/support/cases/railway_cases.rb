@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Lint/NestedMethodDefinition
 module RailwayCases
   def success_way
     lambda do |_klass|
@@ -23,7 +22,7 @@ module RailwayCases
     lambda do |_klass|
       logic do
         step :model
-        fail :set_error
+        fail :error
         step :assign_result
       end
 
@@ -31,7 +30,7 @@ module RailwayCases
         ctx[:model] = param1
       end
 
-      def set_error(**)
+      def error(**)
         ctx[:error] = 'Error message'
       end
 
@@ -117,7 +116,7 @@ module RailwayCases
         ctx[:model] = param1
       end
 
-      def assign_result?(param2: ,**)
+      def assign_result?(param2:, **)
         param2 == true
       end
 
@@ -230,4 +229,3 @@ module RailwayCases
     end
   end
 end
-# rubocop:enable Lint/NestedMethodDefinition

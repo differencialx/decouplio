@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe 'Resq options validations' do
   include_context 'with basic spec setup'
 
@@ -74,7 +76,7 @@ RSpec.describe 'Resq options validations' do
                       message: message
     end
 
-    context 'when resq error classes is not inherited from exception' do
+    context 'when resq error classes is not a class or array' do
       let(:action_block) { when_resq_error_class_is_not_a_class_or_array }
 
       interpolation_values = [
