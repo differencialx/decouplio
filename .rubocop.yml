@@ -4,6 +4,7 @@ require: rubocop-rspec
 
 AllCops:
   NewCops: enable
+  SuggestExtensions: false
   Exclude:
     - 'decouplio.gemspec'
     - vendor/**/*
@@ -29,7 +30,7 @@ Style/FrozenStringLiteralComment:
   Enabled: true
 
 Metrics/BlockLength:
-  ExcludedMethods: ['describe','context', 'lambda', 'logic']
+  IgnoredMethods: ['describe','context', 'lambda', 'logic']
 
 Metrics/ModuleLength:
   Exclude:
