@@ -44,6 +44,7 @@ RSpec.describe 'Decouplio::Action strategy squad' do
           let(:railway_flow) do
             %i[
               assign_strategy_one_key
+              strategy_one
               step_one
               step_three
               strategy_failure
@@ -51,6 +52,8 @@ RSpec.describe 'Decouplio::Action strategy squad' do
           end
 
           it 'sets params to ctx' do
+            expect(action).to be_failure
+            expect(action.railway_flow).to eq railway_flow
             expect(action[:strg_key]).to eq strategy_one_key
             expect(action[:step_one]).to eq param1
             expect(action[:step_two]).to be_nil
@@ -62,14 +65,6 @@ RSpec.describe 'Decouplio::Action strategy squad' do
             expect(action[:result]).to be_nil
             expect(action[:strategy_failure_handled]).to be true
           end
-
-          it 'sets proper railway flow' do
-            expect(action.railway_flow).to eq railway_flow
-          end
-
-          it 'success' do
-            expect(action.failure?).to be true
-          end
         end
 
         context 'when strg_1 passes and strategy two should not be processed' do
@@ -79,6 +74,7 @@ RSpec.describe 'Decouplio::Action strategy squad' do
           let(:railway_flow) do
             %i[
               assign_strategy_one_key
+              strategy_one
               step_one
               step_four
               final_step
@@ -86,6 +82,8 @@ RSpec.describe 'Decouplio::Action strategy squad' do
           end
 
           it 'sets params to ctx' do
+            expect(action).to be_success
+            expect(action.railway_flow).to eq railway_flow
             expect(action[:strg_key]).to eq strategy_one_key
             expect(action[:step_one]).to eq param1
             expect(action[:step_two]).to be_nil
@@ -96,14 +94,6 @@ RSpec.describe 'Decouplio::Action strategy squad' do
             expect(action[:process_strategy_two]).to be false
             expect(action[:result]).to eq final
             expect(action[:strategy_failure_handled]).to be_nil
-          end
-
-          it 'sets proper railway flow' do
-            expect(action.railway_flow).to eq railway_flow
-          end
-
-          it 'success' do
-            expect(action.success?).to be true
           end
         end
 
@@ -117,6 +107,7 @@ RSpec.describe 'Decouplio::Action strategy squad' do
             let(:railway_flow) do
               %i[
                 assign_strategy_one_key
+                strategy_one
                 step_one
                 step_three
                 strategy_failure
@@ -124,6 +115,8 @@ RSpec.describe 'Decouplio::Action strategy squad' do
             end
 
             it 'sets params to ctx' do
+              expect(action).to be_failure
+              expect(action.railway_flow).to eq railway_flow
               expect(action[:strg_key]).to eq strategy_one_key
               expect(action[:step_one]).to eq param1
               expect(action[:step_two]).to be_nil
@@ -134,14 +127,6 @@ RSpec.describe 'Decouplio::Action strategy squad' do
               expect(action[:process_strategy_two]).to be true
               expect(action[:result]).to be_nil
               expect(action[:strategy_failure_handled]).to be true
-            end
-
-            it 'sets proper railway flow' do
-              expect(action.railway_flow).to eq railway_flow
-            end
-
-            it 'success' do
-              expect(action.failure?).to be true
             end
           end
 
@@ -157,14 +142,18 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                 let(:railway_flow) do
                   %i[
                     assign_strategy_one_key
+                    strategy_one
                     step_one
                     step_four
+                    strategy_two
                     step_five
                     final_step
                   ]
                 end
 
                 it 'sets params to ctx' do
+                  expect(action).to be_success
+                  expect(action.railway_flow).to eq railway_flow
                   expect(action[:strg_key]).to eq strategy_one_key
                   expect(action[:strategy_two_key]).to eq strategy_two_key
                   expect(action[:step_one]).to eq param1
@@ -177,14 +166,6 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                   expect(action[:result]).to eq final
                   expect(action[:strategy_failure_handled]).to be_nil
                 end
-
-                it 'sets proper railway flow' do
-                  expect(action.railway_flow).to eq railway_flow
-                end
-
-                it 'success' do
-                  expect(action.success?).to be true
-                end
               end
 
               context 'when step_five fails' do
@@ -195,9 +176,11 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                   let(:railway_flow) do
                     %i[
                       assign_strategy_one_key
+                      strategy_one
                       step_one
                       step_three
                       step_four
+                      strategy_two
                       step_five
                       step_four
                       strategy_failure
@@ -205,6 +188,8 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                   end
 
                   it 'sets params to ctx' do
+                    expect(action).to be_failure
+                    expect(action.railway_flow).to eq railway_flow
                     expect(action[:strg_key]).to eq strategy_one_key
                     expect(action[:strategy_two_key]).to eq strategy_two_key
                     expect(action[:step_one]).to eq param1
@@ -217,14 +202,6 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                     expect(action[:result]).to be_nil
                     expect(action[:strategy_failure_handled]).to be true
                   end
-
-                  it 'sets proper railway flow' do
-                    expect(action.railway_flow).to eq railway_flow
-                  end
-
-                  it 'success' do
-                    expect(action.failure?).to be true
-                  end
                 end
 
                 context 'when step_four should not be processed' do
@@ -234,15 +211,19 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                   let(:railway_flow) do
                     %i[
                       assign_strategy_one_key
+                      strategy_one
                       step_one
                       step_three
                       step_four
+                      strategy_two
                       step_five
                       strategy_failure
                     ]
                   end
 
                   it 'sets params to ctx' do
+                    expect(action).to be_failure
+                    expect(action.railway_flow).to eq railway_flow
                     expect(action[:strg_key]).to eq strategy_one_key
                     expect(action[:strategy_two_key]).to eq strategy_two_key
                     expect(action[:step_one]).to eq param1
@@ -254,14 +235,6 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                     expect(action[:process_strategy_two]).to be true
                     expect(action[:result]).to be_nil
                     expect(action[:strategy_failure_handled]).to be true
-                  end
-
-                  it 'sets proper railway flow' do
-                    expect(action.railway_flow).to eq railway_flow
-                  end
-
-                  it 'success' do
-                    expect(action.failure?).to be true
                   end
                 end
               end
@@ -278,8 +251,10 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                 let(:railway_flow) do
                   %i[
                     assign_strategy_one_key
+                    strategy_one
                     step_one
                     step_four
+                    strategy_two
                     step_five
                     step_six
                     strategy_failure
@@ -287,6 +262,8 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                 end
 
                 it 'sets params to ctx' do
+                  expect(action).to be_failure
+                  expect(action.railway_flow).to eq railway_flow
                   expect(action[:strg_key]).to eq strategy_one_key
                   expect(action[:strategy_two_key]).to eq strategy_two_key
                   expect(action[:step_one]).to eq param1
@@ -299,14 +276,6 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                   expect(action[:result]).to be_nil
                   expect(action[:strategy_failure_handled]).to be true
                 end
-
-                it 'sets proper railway flow' do
-                  expect(action.railway_flow).to eq railway_flow
-                end
-
-                it 'success' do
-                  expect(action.failure?).to be true
-                end
               end
 
               context 'when step five pass' do
@@ -314,8 +283,10 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                 let(:railway_flow) do
                   %i[
                     assign_strategy_one_key
+                    strategy_one
                     step_one
                     step_four
+                    strategy_two
                     step_five
                     step_four
                     final_step
@@ -323,6 +294,8 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                 end
 
                 it 'sets params to ctx' do
+                  expect(action).to be_success
+                  expect(action.railway_flow).to eq railway_flow
                   expect(action[:strg_key]).to eq strategy_one_key
                   expect(action[:strategy_two_key]).to eq strategy_two_key
                   expect(action[:step_one]).to eq param1
@@ -334,14 +307,6 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                   expect(action[:process_strategy_two]).to be true
                   expect(action[:result]).to eq final
                   expect(action[:strategy_failure_handled]).to be_nil
-                end
-
-                it 'sets proper railway flow' do
-                  expect(action.railway_flow).to eq railway_flow
-                end
-
-                it 'success' do
-                  expect(action.success?).to be true
                 end
               end
             end
@@ -359,12 +324,15 @@ RSpec.describe 'Decouplio::Action strategy squad' do
             let(:railway_flow) do
               %i[
                 assign_strategy_one_key
+                strategy_one
                 step_two
                 strategy_failure
               ]
             end
 
             it 'sets params to ctx' do
+              expect(action).to be_failure
+              expect(action.railway_flow).to eq railway_flow
               expect(action[:strg_key]).to eq strategy_one_key
               expect(action[:strategy_two_key]).to eq 'not_existing_strategy'
               expect(action[:step_one]).to be_nil
@@ -377,14 +345,6 @@ RSpec.describe 'Decouplio::Action strategy squad' do
               expect(action[:result]).to be_nil
               expect(action[:strategy_failure_handled]).to be true
             end
-
-            it 'sets proper railway flow' do
-              expect(action.railway_flow).to eq railway_flow
-            end
-
-            it 'success' do
-              expect(action.failure?).to be true
-            end
           end
 
           context 'when step_three fails' do
@@ -393,6 +353,7 @@ RSpec.describe 'Decouplio::Action strategy squad' do
             let(:railway_flow) do
               %i[
                 assign_strategy_one_key
+                strategy_one
                 step_two
                 step_three
                 strategy_failure
@@ -400,6 +361,8 @@ RSpec.describe 'Decouplio::Action strategy squad' do
             end
 
             it 'sets params to ctx' do
+              expect(action).to be_failure
+              expect(action.railway_flow).to eq railway_flow
               expect(action[:strg_key]).to eq strategy_one_key
               expect(action[:strategy_two_key]).to eq 'not_existing_strategy'
               expect(action[:step_one]).to be_nil
@@ -412,14 +375,6 @@ RSpec.describe 'Decouplio::Action strategy squad' do
               expect(action[:result]).to be_nil
               expect(action[:strategy_failure_handled]).to be true
             end
-
-            it 'sets proper railway flow' do
-              expect(action.railway_flow).to eq railway_flow
-            end
-
-            it 'success' do
-              expect(action.failure?).to be true
-            end
           end
         end
 
@@ -429,6 +384,7 @@ RSpec.describe 'Decouplio::Action strategy squad' do
           let(:railway_flow) do
             %i[
               assign_strategy_one_key
+              strategy_one
               step_two
               step_three
               final_step
@@ -436,6 +392,8 @@ RSpec.describe 'Decouplio::Action strategy squad' do
           end
 
           it 'sets params to ctx' do
+            expect(action.success?).to be true
+            expect(action.railway_flow).to eq railway_flow
             expect(action[:strg_key]).to eq strategy_one_key
             expect(action[:step_one]).to be_nil
             expect(action[:step_two]).to eq param2
@@ -446,14 +404,6 @@ RSpec.describe 'Decouplio::Action strategy squad' do
             expect(action[:process_strategy_two]).to be false
             expect(action[:result]).to eq final
             expect(action[:strategy_failure_handled]).to be_nil
-          end
-
-          it 'sets proper railway flow' do
-            expect(action.railway_flow).to eq railway_flow
-          end
-
-          it 'success' do
-            expect(action.success?).to be true
           end
         end
 
@@ -467,6 +417,7 @@ RSpec.describe 'Decouplio::Action strategy squad' do
             let(:railway_flow) do
               %i[
                 assign_strategy_one_key
+                strategy_one
                 step_two
                 step_three
                 strategy_failure
@@ -474,6 +425,8 @@ RSpec.describe 'Decouplio::Action strategy squad' do
             end
 
             it 'sets params to ctx' do
+              expect(action.failure?).to be true
+              expect(action.railway_flow).to eq railway_flow
               expect(action[:strg_key]).to eq strategy_one_key
               expect(action[:step_one]).to be_nil
               expect(action[:step_two]).to eq param2
@@ -484,14 +437,6 @@ RSpec.describe 'Decouplio::Action strategy squad' do
               expect(action[:process_strategy_two]).to be true
               expect(action[:result]).to be_nil
               expect(action[:strategy_failure_handled]).to be true
-            end
-
-            it 'sets proper railway flow' do
-              expect(action.railway_flow).to eq railway_flow
-            end
-
-            it 'success' do
-              expect(action.failure?).to be true
             end
           end
 
@@ -506,14 +451,18 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                 let(:railway_flow) do
                   %i[
                     assign_strategy_one_key
+                    strategy_one
                     step_two
                     step_three
+                    strategy_two
                     step_five
                     final_step
                   ]
                 end
 
                 it 'sets params to ctx' do
+                  expect(action).to be_success
+                  expect(action.railway_flow).to eq railway_flow
                   expect(action[:strg_key]).to eq strategy_one_key
                   expect(action[:strategy_two_key]).to eq strategy_two_key
                   expect(action[:step_one]).to be_nil
@@ -526,14 +475,6 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                   expect(action[:result]).to eq final
                   expect(action[:strategy_failure_handled]).to be_nil
                 end
-
-                it 'sets proper railway flow' do
-                  expect(action.railway_flow).to eq railway_flow
-                end
-
-                it 'success' do
-                  expect(action.success?).to be true
-                end
               end
 
               context 'when step_five fails' do
@@ -544,8 +485,10 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                   let(:railway_flow) do
                     %i[
                       assign_strategy_one_key
+                      strategy_one
                       step_two
                       step_three
+                      strategy_two
                       step_five
                       step_four
                       strategy_failure
@@ -553,6 +496,8 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                   end
 
                   it 'sets params to ctx' do
+                    expect(action.failure?).to be true
+                    expect(action.railway_flow).to eq railway_flow
                     expect(action[:strg_key]).to eq strategy_one_key
                     expect(action[:strategy_two_key]).to eq strategy_two_key
                     expect(action[:step_one]).to be_nil
@@ -565,14 +510,6 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                     expect(action[:result]).to be_nil
                     expect(action[:strategy_failure_handled]).to be true
                   end
-
-                  it 'sets proper railway flow' do
-                    expect(action.railway_flow).to eq railway_flow
-                  end
-
-                  it 'success' do
-                    expect(action.failure?).to be true
-                  end
                 end
 
                 context 'when step_four should not be processed' do
@@ -581,14 +518,18 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                   let(:railway_flow) do
                     %i[
                       assign_strategy_one_key
+                      strategy_one
                       step_two
                       step_three
+                      strategy_two
                       step_five
                       strategy_failure
                     ]
                   end
 
                   it 'sets params to ctx' do
+                    expect(action).to be_failure
+                    expect(action.railway_flow).to eq railway_flow
                     expect(action[:strg_key]).to eq strategy_one_key
                     expect(action[:strategy_two_key]).to eq strategy_two_key
                     expect(action[:step_one]).to be_nil
@@ -600,14 +541,6 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                     expect(action[:process_strategy_two]).to be true
                     expect(action[:result]).to be_nil
                     expect(action[:strategy_failure_handled]).to be true
-                  end
-
-                  it 'sets proper railway flow' do
-                    expect(action.railway_flow).to eq railway_flow
-                  end
-
-                  it 'success' do
-                    expect(action.failure?).to be true
                   end
                 end
               end
@@ -623,8 +556,10 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                 let(:railway_flow) do
                   %i[
                     assign_strategy_one_key
+                    strategy_one
                     step_two
                     step_three
+                    strategy_two
                     step_five
                     step_six
                     strategy_failure
@@ -632,6 +567,8 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                 end
 
                 it 'sets params to ctx' do
+                  expect(action).to be_failure
+                  expect(action.railway_flow).to eq railway_flow
                   expect(action[:strg_key]).to eq strategy_one_key
                   expect(action[:strategy_two_key]).to eq strategy_two_key
                   expect(action[:step_one]).to be_nil
@@ -644,22 +581,16 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                   expect(action[:result]).to be_nil
                   expect(action[:strategy_failure_handled]).to be true
                 end
-
-                it 'sets proper railway flow' do
-                  expect(action.railway_flow).to eq railway_flow
-                end
-
-                it 'success' do
-                  expect(action.failure?).to be true
-                end
               end
 
               context 'when step five pass' do
                 let(:railway_flow) do
                   %i[
                     assign_strategy_one_key
+                    strategy_one
                     step_two
                     step_three
+                    strategy_two
                     step_five
                     step_four
                     final_step
@@ -667,6 +598,8 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                 end
 
                 it 'sets params to ctx' do
+                  expect(action).to be_success
+                  expect(action.railway_flow).to eq railway_flow
                   expect(action[:strg_key]).to eq strategy_one_key
                   expect(action[:strategy_two_key]).to eq strategy_two_key
                   expect(action[:step_one]).to be_nil
@@ -678,14 +611,6 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                   expect(action[:process_strategy_two]).to be true
                   expect(action[:result]).to eq final
                   expect(action[:strategy_failure_handled]).to be_nil
-                end
-
-                it 'sets proper railway flow' do
-                  expect(action.railway_flow).to eq railway_flow
-                end
-
-                it 'success' do
-                  expect(action.success?).to be true
                 end
               end
             end
@@ -703,12 +628,15 @@ RSpec.describe 'Decouplio::Action strategy squad' do
             let(:railway_flow) do
               %i[
                 assign_strategy_one_key
+                strategy_one
                 step_one
                 strategy_failure
               ]
             end
 
             it 'sets params to ctx' do
+              expect(action).to be_failure
+              expect(action.railway_flow).to eq railway_flow
               expect(action[:strg_key]).to eq strategy_one_key
               expect(action[:strategy_two_key]).to eq 'not_existing_strategy'
               expect(action[:step_one]).to be_nil
@@ -721,14 +649,6 @@ RSpec.describe 'Decouplio::Action strategy squad' do
               expect(action[:result]).to be_nil
               expect(action[:strategy_failure_handled]).to be true
             end
-
-            it 'sets proper railway flow' do
-              expect(action.railway_flow).to eq railway_flow
-            end
-
-            it 'success' do
-              expect(action.failure?).to be true
-            end
           end
 
           context 'when step_four fails' do
@@ -737,6 +657,7 @@ RSpec.describe 'Decouplio::Action strategy squad' do
             let(:railway_flow) do
               %i[
                 assign_strategy_one_key
+                strategy_one
                 step_one
                 step_four
                 strategy_failure
@@ -744,6 +665,8 @@ RSpec.describe 'Decouplio::Action strategy squad' do
             end
 
             it 'sets params to ctx' do
+              expect(action).to be_failure
+              expect(action.railway_flow).to eq railway_flow
               expect(action[:strg_key]).to eq strategy_one_key
               expect(action[:strategy_two_key]).to eq 'not_existing_strategy'
               expect(action[:step_one]).to eq param1
@@ -756,14 +679,6 @@ RSpec.describe 'Decouplio::Action strategy squad' do
               expect(action[:result]).to be_nil
               expect(action[:strategy_failure_handled]).to be true
             end
-
-            it 'sets proper railway flow' do
-              expect(action.railway_flow).to eq railway_flow
-            end
-
-            it 'success' do
-              expect(action.failure?).to be true
-            end
           end
 
           context 'when assign_second_strategy fails' do
@@ -772,6 +687,7 @@ RSpec.describe 'Decouplio::Action strategy squad' do
             let(:railway_flow) do
               %i[
                 assign_strategy_one_key
+                strategy_one
                 step_one
                 step_four
                 assign_second_strategy
@@ -780,6 +696,8 @@ RSpec.describe 'Decouplio::Action strategy squad' do
             end
 
             it 'sets params to ctx' do
+              expect(action).to be_failure
+              expect(action.railway_flow).to eq railway_flow
               expect(action[:strg_key]).to eq strategy_one_key
               expect(action[:strategy_two_key]).to be_nil
               expect(action[:step_one]).to eq param1
@@ -792,14 +710,6 @@ RSpec.describe 'Decouplio::Action strategy squad' do
               expect(action[:result]).to be_nil
               expect(action[:strategy_failure_handled]).to be true
             end
-
-            it 'sets proper railway flow' do
-              expect(action.railway_flow).to eq railway_flow
-            end
-
-            it 'success' do
-              expect(action.failure?).to be true
-            end
           end
         end
 
@@ -810,6 +720,7 @@ RSpec.describe 'Decouplio::Action strategy squad' do
           let(:railway_flow) do
             %i[
               assign_strategy_one_key
+              strategy_one
               step_one
               step_four
               assign_second_strategy
@@ -818,6 +729,8 @@ RSpec.describe 'Decouplio::Action strategy squad' do
           end
 
           it 'sets params to ctx' do
+            expect(action).to be_success
+            expect(action.railway_flow).to eq railway_flow
             expect(action[:strg_key]).to eq strategy_one_key
             expect(action[:strategy_two_key]).to eq :strg_4
             expect(action[:step_one]).to eq param1
@@ -829,14 +742,6 @@ RSpec.describe 'Decouplio::Action strategy squad' do
             expect(action[:process_strategy_two]).to be false
             expect(action[:result]).to eq final
             expect(action[:strategy_failure_handled]).to be_nil
-          end
-
-          it 'sets proper railway flow' do
-            expect(action.railway_flow).to eq railway_flow
-          end
-
-          it 'success' do
-            expect(action.success?).to be true
           end
         end
 
@@ -850,6 +755,7 @@ RSpec.describe 'Decouplio::Action strategy squad' do
             let(:railway_flow) do
               %i[
                 assign_strategy_one_key
+                strategy_one
                 step_one
                 step_four
                 strategy_failure
@@ -857,6 +763,8 @@ RSpec.describe 'Decouplio::Action strategy squad' do
             end
 
             it 'sets params to ctx' do
+              expect(action).to be_failure
+              expect(action.railway_flow).to eq railway_flow
               expect(action[:strg_key]).to eq strategy_one_key
               expect(action[:strategy_two_key]).to eq :strg_4
               expect(action[:step_one]).to eq param1
@@ -868,14 +776,6 @@ RSpec.describe 'Decouplio::Action strategy squad' do
               expect(action[:process_strategy_two]).to be true
               expect(action[:result]).to be_nil
               expect(action[:strategy_failure_handled]).to be true
-            end
-
-            it 'sets proper railway flow' do
-              expect(action.railway_flow).to eq railway_flow
-            end
-
-            it 'success' do
-              expect(action.failure?).to be true
             end
           end
 
@@ -889,15 +789,19 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                 let(:railway_flow) do
                   %i[
                     assign_strategy_one_key
+                    strategy_one
                     step_one
                     step_four
                     assign_second_strategy
+                    strategy_two
                     step_five
                     final_step
                   ]
                 end
 
                 it 'sets params to ctx' do
+                  expect(action).to be_success
+                  expect(action.railway_flow).to eq railway_flow
                   expect(action[:strg_key]).to eq strategy_one_key
                   expect(action[:strategy_two_key]).to eq :strg_4
                   expect(action[:step_one]).to eq param1
@@ -910,14 +814,6 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                   expect(action[:result]).to eq final
                   expect(action[:strategy_failure_handled]).to be_nil
                 end
-
-                it 'sets proper railway flow' do
-                  expect(action.railway_flow).to eq railway_flow
-                end
-
-                it 'success' do
-                  expect(action.success?).to be true
-                end
               end
 
               context 'when step_five fails' do
@@ -927,9 +823,11 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                   let(:railway_flow) do
                     %i[
                       assign_strategy_one_key
+                      strategy_one
                       step_one
                       step_four
                       assign_second_strategy
+                      strategy_two
                       step_five
                       step_four
                       strategy_failure
@@ -937,6 +835,8 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                   end
 
                   it 'sets params to ctx' do
+                    expect(action).to be_failure
+                    expect(action.railway_flow).to eq railway_flow
                     expect(action[:strg_key]).to eq strategy_one_key
                     expect(action[:strategy_two_key]).to eq strategy_two_key
                     expect(action[:step_one]).to eq param1
@@ -949,14 +849,6 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                     expect(action[:result]).to be_nil
                     expect(action[:strategy_failure_handled]).to be true
                   end
-
-                  it 'sets proper railway flow' do
-                    expect(action.railway_flow).to eq railway_flow
-                  end
-
-                  it 'success' do
-                    expect(action.failure?).to be true
-                  end
                 end
 
                 context 'when step_four should not be processed' do
@@ -965,15 +857,19 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                   let(:railway_flow) do
                     %i[
                       assign_strategy_one_key
+                      strategy_one
                       step_one
                       step_four
                       assign_second_strategy
+                      strategy_two
                       step_five
                       strategy_failure
                     ]
                   end
 
                   it 'sets params to ctx' do
+                    expect(action).to be_failure
+                    expect(action.railway_flow).to eq railway_flow
                     expect(action[:strg_key]).to eq strategy_one_key
                     expect(action[:strategy_two_key]).to eq strategy_two_key
                     expect(action[:step_one]).to eq param1
@@ -985,14 +881,6 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                     expect(action[:process_strategy_two]).to be true
                     expect(action[:result]).to be_nil
                     expect(action[:strategy_failure_handled]).to be true
-                  end
-
-                  it 'sets proper railway flow' do
-                    expect(action.railway_flow).to eq railway_flow
-                  end
-
-                  it 'success' do
-                    expect(action.failure?).to be true
                   end
                 end
               end
@@ -1008,9 +896,11 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                 let(:railway_flow) do
                   %i[
                     assign_strategy_one_key
+                    strategy_one
                     step_one
                     step_four
                     assign_second_strategy
+                    strategy_two
                     step_five
                     step_six
                     strategy_failure
@@ -1018,6 +908,8 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                 end
 
                 it 'sets params to ctx' do
+                  expect(action).to be_failure
+                  expect(action.railway_flow).to eq railway_flow
                   expect(action[:strg_key]).to eq strategy_one_key
                   expect(action[:strategy_two_key]).to eq strategy_two_key
                   expect(action[:step_one]).to eq param1
@@ -1030,23 +922,17 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                   expect(action[:result]).to be_nil
                   expect(action[:strategy_failure_handled]).to be true
                 end
-
-                it 'sets proper railway flow' do
-                  expect(action.railway_flow).to eq railway_flow
-                end
-
-                it 'success' do
-                  expect(action.failure?).to be true
-                end
               end
 
               context 'when step five pass' do
                 let(:railway_flow) do
                   %i[
                     assign_strategy_one_key
+                    strategy_one
                     step_one
                     step_four
                     assign_second_strategy
+                    strategy_two
                     step_five
                     step_four
                     final_step
@@ -1054,6 +940,8 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                 end
 
                 it 'sets params to ctx' do
+                  expect(action).to be_success
+                  expect(action.railway_flow).to eq railway_flow
                   expect(action[:strg_key]).to eq strategy_one_key
                   expect(action[:strategy_two_key]).to eq strategy_two_key
                   expect(action[:step_one]).to eq param1
@@ -1065,14 +953,6 @@ RSpec.describe 'Decouplio::Action strategy squad' do
                   expect(action[:process_strategy_two]).to be true
                   expect(action[:result]).to eq final
                   expect(action[:strategy_failure_handled]).to be_nil
-                end
-
-                it 'sets proper railway flow' do
-                  expect(action.railway_flow).to eq railway_flow
-                end
-
-                it 'success' do
-                  expect(action.success?).to be true
                 end
               end
             end

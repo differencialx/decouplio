@@ -331,4 +331,77 @@ module ResqCases
       end
     end
   end
+
+  def when_resq_for_step_with_condition_success_track
+    lambda do |_klass|
+      logic do
+        step :step_one, if: :do_step_one?, on_failure: :success_step
+        resq handle_error: ArgumentError
+        step :step_two
+        fail :fail_step
+        step :success_step
+      end
+
+      def step_one(**)
+        ctx[:step_one] = 'Success'
+      end
+
+      def step_two(**)
+        ctx[:step_two] = 'Success'
+      end
+
+      def fail_step(**)
+        ctx[:fail_step] = 'Failed step'
+      end
+
+      def success_step(**)
+        ctx[:success_step] = 'Success step'
+      end
+
+      def do_step_one?(**)
+        StubDummy.call
+      end
+
+      def handle_error(error, **)
+        add_error(handled_error: error.message)
+      end
+    end
+  end
+
+  def when_resq_for_step_with_condition_failure_track
+    lambda do |_klass|
+      logic do
+        step :step_one, if: :do_step_one?, on_failure: :final_fail_step
+        resq handle_error: ArgumentError
+        step :step_two
+        fail :fail_step
+        step :success_step
+        fail :final_fail_step
+      end
+
+      def step_one(**)
+        ctx[:step_one] = 'Success'
+      end
+
+      def step_two(**)
+        ctx[:step_two] = 'Success'
+      end
+
+      def fail_step(**)
+        ctx[:fail_step] = 'Failed step'
+      end
+
+      def success_step(**)
+        ctx[:success_step] = 'Success step'
+      end
+
+      def do_step_one?(**)
+        StubDummy.call
+      end
+
+      def handle_error(error, **)
+        add_error(handled_error: error.message)
+      end
+    end
+  end
 end

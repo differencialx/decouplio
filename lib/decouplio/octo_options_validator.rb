@@ -3,7 +3,7 @@
 require_relative 'errors/options_validation_error'
 
 module Decouplio
-  class StrategyOptionsValidator
+  class OctoOptionsValidator
     def self.call(options:)
       new(options: options).call
     end

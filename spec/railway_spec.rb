@@ -8,22 +8,31 @@ RSpec.describe 'Decouplio::Action railway specs' do
       { param1: param1, param2: param2 }
     end
     let(:param1) { 'param1' }
-    let(:param2) { nil }
+    let(:param2) { 'param2' }
 
     describe 'success_way' do
       let(:action_block) { success_way }
-      let(:railway_flow) { %i[model assign_result] }
 
-      it 'success' do
-        expect(action).to be_success
+      context 'when success' do
+        let(:railway_flow) { %i[model assign_result] }
+
+        it 'success' do
+          expect(action).to be_success
+          expect(action.railway_flow).to eq railway_flow
+          expect(action[:result]).to eq param2
+        end
       end
 
-      it 'sets result as param1' do
-        expect(action[:result]).to eq param1
-      end
+      context 'when failure' do
+        let(:railway_flow) { %i[model assign_result] }
+        let(:param2) { false }
 
-      it 'sets railway flow' do
-        expect(action.railway_flow).to eq railway_flow
+        it 'fails' do
+          expect(action).to be_failure
+          expect(action.railway_flow).to eq railway_flow
+          expect(action[:model]).to eq param1
+          expect(action[:result]).to eq param2
+        end
       end
     end
 
@@ -34,17 +43,8 @@ RSpec.describe 'Decouplio::Action railway specs' do
 
       it 'failure' do
         expect(action).to be_failure
-      end
-
-      it 'does not set result as param1' do
-        expect(action[:result]).to be_nil
-      end
-
-      it 'sets railway flow' do
         expect(action.railway_flow).to eq railway_flow
-      end
-
-      it 'sets error message' do
+        expect(action[:result]).to be_nil
         expect(action[:error]).to eq error_message
       end
     end
@@ -56,25 +56,10 @@ RSpec.describe 'Decouplio::Action railway specs' do
 
       it 'failure' do
         expect(action).to be_failure
-      end
-
-      it 'does not set result as param1' do
-        expect(action[:result]).to be_nil
-      end
-
-      it 'sets railway flow' do
         expect(action.railway_flow).to eq railway_flow
-      end
-
-      it 'sets error message 1' do
+        expect(action[:result]).to be_nil
         expect(action[:error1]).to eq 'Error message 1'
-      end
-
-      it 'sets error message 2' do
         expect(action[:error2]).to eq 'Error message 2'
-      end
-
-      it 'sets error message 3' do
         expect(action[:error3]).to eq 'Error message 3'
       end
     end
@@ -86,25 +71,10 @@ RSpec.describe 'Decouplio::Action railway specs' do
 
       it 'failure' do
         expect(action).to be_failure
-      end
-
-      it 'does not set result as param1' do
-        expect(action[:result]).to be_nil
-      end
-
-      it 'sets railway flow' do
         expect(action.railway_flow).to eq railway_flow
-      end
-
-      it 'sets error message 1' do
+        expect(action[:result]).to be_nil
         expect(action[:error1]).to eq 'Error message 1'
-      end
-
-      it 'sets error message 2' do
         expect(action[:error2]).to eq 'Error message 2'
-      end
-
-      it 'sets error message 3' do
         expect(action[:error3]).to be_nil
       end
     end
@@ -119,18 +89,9 @@ RSpec.describe 'Decouplio::Action railway specs' do
 
         it 'success' do
           expect(action).to be_success
-        end
-
-        it 'sets final step as param1' do
-          expect(action[:final_step]).to eq param1
-        end
-
-        it 'sets result' do
-          expect(action[:result]).to eq param1
-        end
-
-        it 'sets railway flow' do
           expect(action.railway_flow).to eq railway_flow
+          expect(action[:final_step]).to eq param1
+          expect(action[:result]).to eq param1
         end
       end
 
@@ -140,18 +101,9 @@ RSpec.describe 'Decouplio::Action railway specs' do
 
         it 'success' do
           expect(action).to be_success
-        end
-
-        it 'sets final step as param1' do
-          expect(action[:final_step]).to eq param1
-        end
-
-        it 'does not set result' do
-          expect(action[:result]).to be_nil
-        end
-
-        it 'sets railway flow' do
           expect(action.railway_flow).to eq railway_flow
+          expect(action[:final_step]).to eq param1
+          expect(action[:result]).to be_nil
         end
       end
     end
@@ -160,53 +112,29 @@ RSpec.describe 'Decouplio::Action railway specs' do
       let(:action_block) { conditional_execution_for_fail }
       let(:param1) { nil }
 
-      context 'when assign result should be performed' do
+      context 'when fail_one should be performed' do
         let(:param2) { true }
         let(:railway_flow) { %i[model fail_one fail_two] }
 
         it 'failure' do
           expect(action).to be_failure
-        end
-
-        it 'sets error message 1' do
-          expect(action[:error1]).to eq 'Error message 1'
-        end
-
-        it 'sets error message 2' do
-          expect(action[:error2]).to eq 'Error message 2'
-        end
-
-        it 'does not set result' do
-          expect(action[:result]).to be_nil
-        end
-
-        it 'sets railway flow' do
           expect(action.railway_flow).to eq railway_flow
+          expect(action[:error1]).to eq 'Error message 1'
+          expect(action[:error2]).to eq 'Error message 2'
+          expect(action[:result]).to be_nil
         end
       end
 
-      context 'when assign result should not be performed' do
+      context 'when fail_one should not be performed' do
         let(:param2) { false }
         let(:railway_flow) { %i[model fail_two] }
 
         it 'failure' do
           expect(action).to be_failure
-        end
-
-        it 'sets error message 1' do
-          expect(action[:error1]).to be_nil
-        end
-
-        it 'sets error message 2' do
-          expect(action[:error2]).to eq 'Error message 2'
-        end
-
-        it 'does not set result' do
-          expect(action[:result]).to be_nil
-        end
-
-        it 'sets railway flow' do
           expect(action.railway_flow).to eq railway_flow
+          expect(action[:error1]).to be_nil
+          expect(action[:error2]).to eq 'Error message 2'
+          expect(action[:result]).to be_nil
         end
       end
     end
@@ -218,17 +146,8 @@ RSpec.describe 'Decouplio::Action railway specs' do
 
       it 'success' do
         expect(action).to be_success
-      end
-
-      it 'sets result as param1' do
-        expect(action[:result]).to eq param1
-      end
-
-      it 'sets railway flow' do
         expect(action.railway_flow).to eq railway_flow
-      end
-
-      it 'sets pass_step as param2' do
+        expect(action[:result]).to eq param1
         expect(action[:pass_step]).to eq param2
       end
     end
@@ -242,38 +161,21 @@ RSpec.describe 'Decouplio::Action railway specs' do
 
         it 'success' do
           expect(action).to be_success
-        end
-
-        it 'sets result as param1' do
-          expect(action[:result]).to eq param1
-        end
-
-        it 'sets railway flow' do
           expect(action.railway_flow).to eq railway_flow
-        end
-
-        it 'sets pass_step as param2' do
+          expect(action[:result]).to eq param1
           expect(action[:pass_step]).to eq param2
         end
       end
 
       context 'when param2 nil' do
+        let(:param2) { nil }
         let(:railway_flow) { %i[model assign_result] }
 
         it 'success' do
           expect(action).to be_success
-        end
-
-        it 'sets result as param1' do
-          expect(action[:result]).to eq param1
-        end
-
-        it 'sets railway flow' do
           expect(action.railway_flow).to eq railway_flow
-        end
-
-        it 'sets pass_step as param2' do
           expect(action[:pass_step]).to be_nil
+          expect(action[:result]).to eq param1
         end
       end
     end

@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require_relative 'strategy_options_validator'
+require_relative 'octo_options_validator'
 
 module Decouplio
-  class StrategyHashCase
+  class OctoHashCase
     class << self
       attr_reader :hash_case
 
@@ -23,7 +23,7 @@ module Decouplio
       private
 
       def validate_options(options)
-        StrategyOptionsValidator.call(options: options)
+        OctoOptionsValidator.call(options: options)
       end
     end
   end

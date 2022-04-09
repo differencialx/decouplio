@@ -1,6 +1,42 @@
 # frozen_string_literal: true
 
 module WrapCases
+  def wrap_without_resq_with_klass_method
+    lambda do |_klass|
+      logic do
+        step :step_one
+
+        wrap :wrap_name, klass: ClassWithWrapperMethod, method: :transaction do
+          step :transaction_step_one
+          step :transaction_step_two
+        end
+
+        step :step_two
+      end
+
+      def handler_step(error, **)
+        add_error(:wrapper_error, error.message)
+      end
+
+      def step_one(string_param:, **)
+        ctx[:result] = string_param
+      end
+
+      def step_two(integer_param:, **)
+        ctx[:result] = ctx[:result].to_i + integer_param
+      end
+
+      def transaction_step_one(integer_param:, **)
+        ctx[:result] = ctx[:result].to_i + integer_param
+      end
+
+      def transaction_step_two(integer_param:, **)
+        ctx[:result] = ctx[:result] + integer_param
+        StubDummy.call
+      end
+    end
+  end
+
   def when_wrap_with_klass_method
     lambda do |_klass|
       logic do

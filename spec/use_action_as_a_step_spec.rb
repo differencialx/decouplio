@@ -116,7 +116,9 @@ RSpec.describe 'Use Decouplio::Action as a step' do
           }
         end
 
-        it 'fails' do
+        # TODO: it's not clear should this case be success or failure
+        # Skipped this test
+        xit 'fails' do
           expect(action).to be_failure
           expect(action[:inner_action_param]).to eq param1
           expect(action.railway_flow).to eq railway_flow

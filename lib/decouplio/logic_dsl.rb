@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative 'step'
-require_relative 'options_composer'
-require_relative 'strategy_hash_case'
+require_relative 'flow'
+require_relative 'const/const'
+require_relative 'octo_hash_case'
 require_relative 'errors/options_validation_error'
 
 module Decouplio
@@ -30,9 +30,7 @@ module Decouplio
         # end
         # raise StepNameIsReserved [finish_him, on_success, on_failure, squad, if, unless]
 
-        # composed_options = OptionsComposer.call(name: stp, options: options, type: Decouplio::Step::STEP_TYPE)
-        # @steps << composed_options[:options]
-        @steps << options.merge(type: Decouplio::Step::STEP_TYPE, name: stp)
+        @steps << options.merge(type: Decouplio::Const::STEP_TYPE, name: stp)
       end
 
       # TODO: use another name, currently it redefines Kernel#fail method
@@ -40,28 +38,18 @@ module Decouplio
         # raise StepNameIsReservedError
         # raise FailCantBeFirstStepError, "'fail' can't be a first step, please use 'step'"
 
-        # composed_options = OptionsComposer.call(name: stp, options: options, type: Decouplio::Step::FAIL_TYPE)
-        # @steps << composed_options[:options]
-        @steps << options.merge(type: Decouplio::Step::FAIL_TYPE, name: stp)
+        @steps << options.merge(type: Decouplio::Const::FAIL_TYPE, name: stp)
       end
 
       def pass(stp, **options)
         # raise StepNameIsReservedError
-        # composed_options = OptionsComposer.call(name: stp, options: options, type: Decouplio::Step::PASS_TYPE)
-        # @steps << composed_options[:options]
-        @steps << options.merge(type: Decouplio::Step::PASS_TYPE, name: stp)
+        @steps << options.merge(type: Decouplio::Const::PASS_TYPE, name: stp)
       end
 
       def strg(strategy_name, **options, &block)
-        hash_case = Class.new(Decouplio::StrategyHashCase, &block).hash_case
+        hash_case = Class.new(Decouplio::OctoHashCase, &block).hash_case
         options[:hash_case] = hash_case
-        # composed_options = OptionsComposer.call(
-        #   name: strategy_name,
-        #   options: options,
-        #   type: Decouplio::Step::STRATEGY_TYPE
-        # )
-        # @steps << composed_options[:options]
-        @steps << options.merge(type: Decouplio::Step::STRATEGY_TYPE, name: strategy_name)
+        @steps << options.merge(type: Decouplio::Const::OCTO_TYPE, name: strategy_name)
       end
 
       def squad(squad_name, **options, &block)
@@ -71,36 +59,38 @@ module Decouplio
                   "\033[1;33m Squad does not allow any options \033[0m"
           end
 
-          @squads[squad_name] = Decouplio::Step.new(
-            steps: Class.new(self, &block),
-            type: Decouplio::Step::SQUAD_TYPE
-          )
+          @squads[squad_name] = Class.new(self, &block)
         else
           # TODO: raise an error if no block given
         end
       end
 
-      def resq(**options)
-        unless Decouplio::Step::MAIN_FLOW_TYPES.include?(@steps.last&.[](:type))
+      def resq(name=:resq, **options)
+        unless Decouplio::Const::MAIN_FLOW_TYPES.include?(@steps.last&.[](:type))
           raise Decouplio::Errors::OptionsValidationError,
                 <<~ERROR
                   \033[1;33m
                   "resq" should be defined only after:
-                  #{Decouplio::Step::MAIN_FLOW_TYPES.join("\n")}
+                  #{Decouplio::Const::MAIN_FLOW_TYPES.join("\n")}
                   \033[0m
                 ERROR
 
         end
 
-        @steps << options.merge(type: Decouplio::Step::RESQ_TYPE)
+        @steps << {
+          name: name,
+          type: Decouplio::Const::RESQ_TYPE,
+          step_to_resq: @steps.delete(@steps.last),
+          handler_hash: options
+        }
       end
 
       def wrap(name, **options, &block)
         if block_given?
           @steps << options.merge(
-            type: Decouplio::Step::WRAP_TYPE,
+            type: Decouplio::Const::WRAP_TYPE,
             name: name,
-            wrap_inner_block: block
+            wrap_flow: Flow.call(logic: block, action_class: self)
           )
         else
           # TODO: raise an error

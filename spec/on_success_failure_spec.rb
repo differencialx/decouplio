@@ -39,14 +39,8 @@ RSpec.describe 'Decouplio::Action on_success on_failure' do
 
         it 'success' do
           expect(action).to be_success
-        end
-
-        it 'sets result as param1' do
-          expect(action[:result]).to eq param1
-        end
-
-        it 'sets railway flow' do
           expect(action.railway_flow).to eq railway_flow
+          expect(action[:result]).to eq param1
         end
       end
 
@@ -60,14 +54,8 @@ RSpec.describe 'Decouplio::Action on_success on_failure' do
 
           it 'success' do
             expect(action).to be_success
-          end
-
-          it 'sets result as param1' do
-            expect(action[:result]).to eq 'Custom pass step'
-          end
-
-          it 'sets railway flow' do
             expect(action.railway_flow).to eq railway_flow
+            expect(action[:result]).to eq 'Custom pass step'
           end
         end
 
@@ -77,14 +65,8 @@ RSpec.describe 'Decouplio::Action on_success on_failure' do
 
           it 'success' do
             expect(action).to be_failure
-          end
-
-          it 'sets result as param1' do
-            expect(action[:result]).to eq 'Custom fail step'
-          end
-
-          it 'sets railway flow' do
             expect(action.railway_flow).to eq railway_flow
+            expect(action[:result]).to eq 'Custom fail step'
           end
         end
       end
@@ -98,14 +80,8 @@ RSpec.describe 'Decouplio::Action on_success on_failure' do
 
         it 'success' do
           expect(action).to be_failure
-        end
-
-        it 'sets result as param1' do
-          expect(action[:result]).to eq param1
-        end
-
-        it 'sets railway flow' do
           expect(action.railway_flow).to eq railway_flow
+          expect(action[:result]).to eq param1
         end
       end
 
@@ -119,14 +95,8 @@ RSpec.describe 'Decouplio::Action on_success on_failure' do
 
           it 'success' do
             expect(action).to be_success
-          end
-
-          it 'sets result as param1' do
-            expect(action[:result]).to eq 'Custom pass step'
-          end
-
-          it 'sets railway flow' do
             expect(action.railway_flow).to eq railway_flow
+            expect(action[:result]).to eq 'Custom pass step'
           end
         end
 
@@ -136,14 +106,8 @@ RSpec.describe 'Decouplio::Action on_success on_failure' do
 
           it 'success' do
             expect(action).to be_failure
-          end
-
-          it 'sets result as param1' do
-            expect(action[:result]).to eq 'Custom fail step'
-          end
-
-          it 'sets railway flow' do
             expect(action.railway_flow).to eq railway_flow
+            expect(action[:result]).to eq 'Custom fail step'
           end
         end
       end
@@ -158,18 +122,9 @@ RSpec.describe 'Decouplio::Action on_success on_failure' do
 
           it 'fails' do
             expect(action).to be_failure
-          end
-
-          it 'sets step_one as param1' do
-            expect(action[:step_one]).to eq param1
-          end
-
-          it 'sets result' do
-            expect(action[:result]).to eq 'Custom fail step'
-          end
-
-          it 'sets railway flow' do
             expect(action.railway_flow).to eq railway_flow
+            expect(action[:step_one]).to eq param1
+            expect(action[:result]).to eq 'Custom fail step'
           end
         end
 
@@ -180,18 +135,9 @@ RSpec.describe 'Decouplio::Action on_success on_failure' do
 
           it 'fails' do
             expect(action).to be_failure
-          end
-
-          it 'sets step_one as param1' do
-            expect(action[:step_one]).to eq param1
-          end
-
-          it 'sets result' do
-            expect(action[:result]).to be_nil
-          end
-
-          it 'sets railway flow' do
             expect(action.railway_flow).to eq railway_flow
+            expect(action[:step_one]).to eq param1
+            expect(action[:result]).to be_nil
           end
         end
       end

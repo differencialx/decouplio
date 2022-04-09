@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'step'
+require_relative 'const/const'
 require_relative 'errors/options_validation_error'
 
 module Decouplio
@@ -19,17 +19,17 @@ module Decouplio
 
     def call
       case @type
-      when Decouplio::Step::STEP_TYPE
+      when Decouplio::Const::STEP_TYPE
         validate_step
-      when Decouplio::Step::FAIL_TYPE
+      when Decouplio::Const::FAIL_TYPE
         validate_fail
-      when Decouplio::Step::PASS_TYPE
+      when Decouplio::Const::PASS_TYPE
         validate_pass
-      when Decouplio::Step::STRATEGY_TYPE
+      when Decouplio::Const::OCTO_TYPE
         validate_strategy
-      when Decouplio::Step::WRAP_TYPE
+      when Decouplio::Const::WRAP_TYPE
         validate_wrap
-      when Decouplio::Step::RESQ_TYPE
+      when Decouplio::Const::RESQ_TYPE
         validate_resq
       end
     end

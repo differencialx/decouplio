@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module StrategyCasesSteps
+module OctoCasesSteps
   def strategy_steps
     lambda do |_klass|
       logic do

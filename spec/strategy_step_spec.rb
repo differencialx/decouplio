@@ -3,7 +3,7 @@
 RSpec.describe 'Decouplio::Action strategy squad' do
   include_context 'with basic spec setup'
 
-  describe '#call' do
+  xdescribe '#call' do
     let(:input_params) do
       {
         strg_1: strg_1,

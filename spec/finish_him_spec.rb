@@ -17,14 +17,8 @@ RSpec.describe 'Decouplio::Action finish_him' do
 
       it 'success' do
         expect(action).to be_success
-      end
-
-      it 'sets result as param1' do
-        expect(action[:result]).to eq param1
-      end
-
-      it 'sets railway flow' do
         expect(action.railway_flow).to eq railway_flow
+        expect(action[:result]).to eq param1
       end
     end
 
@@ -34,14 +28,8 @@ RSpec.describe 'Decouplio::Action finish_him' do
 
       it 'success' do
         expect(action).to be_failure
-      end
-
-      it 'sets result as param1' do
-        expect(action[:result]).to eq param1
-      end
-
-      it 'sets railway flow' do
         expect(action.railway_flow).to eq railway_flow
+        expect(action[:result]).to eq param1
       end
     end
 
@@ -52,18 +40,9 @@ RSpec.describe 'Decouplio::Action finish_him' do
 
       it 'success' do
         expect(action).to be_failure
-      end
-
-      it 'sets result as param1' do
-        expect(action[:result]).to eq param1
-      end
-
-      it 'sets step_two as param2' do
-        expect(action[:step_two]).to eq param2
-      end
-
-      it 'sets railway flow' do
         expect(action.railway_flow).to eq railway_flow
+        expect(action[:result]).to eq param1
+        expect(action[:step_two]).to eq param2
       end
     end
 
@@ -73,18 +52,9 @@ RSpec.describe 'Decouplio::Action finish_him' do
 
       it 'success' do
         expect(action).to be_success
-      end
-
-      it 'sets result as param1' do
-        expect(action[:result]).to eq param1
-      end
-
-      it 'sets step_two as param2' do
-        expect(action[:step_two]).to eq param2
-      end
-
-      it 'sets railway flow' do
         expect(action.railway_flow).to eq railway_flow
+        expect(action[:result]).to eq param1
+        expect(action[:step_two]).to eq param2
       end
     end
   end

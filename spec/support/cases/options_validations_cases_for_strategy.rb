@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module OptionsValidationsCasesForStrategy
+module OptionsValidationsCasesForOcto
   def when_strategy_not_allowed_option_provided
     lambda do |_klass|
       logic do
