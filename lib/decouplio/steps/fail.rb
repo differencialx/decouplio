@@ -22,12 +22,12 @@ module Decouplio
 
         instance.fail_action
 
-        return Decouplio::Const::FAIL unless @finish_him
+        return Decouplio::Const::Results::FAIL unless @finish_him
 
         if @finish_him == true
-          Decouplio::Const::FINISH_HIM
+          Decouplio::Const::Results::FINISH_HIM
         else
-          Decouplio::Const::FAIL
+          Decouplio::Const::Results::FAIL
         end
       end
     end

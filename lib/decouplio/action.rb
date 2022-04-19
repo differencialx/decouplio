@@ -70,7 +70,7 @@ module Decouplio
       attr_accessor :error_store
 
       # TODO: remove Debug accessors
-      attr_reader :squads, :main_flow
+      attr_reader :palps, :main_flow
 
       def error_store_instance(handler_class)
         self.error_store = handler_class

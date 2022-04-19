@@ -1,16 +1,18 @@
 # frozen_string_literal: true
 
 require_relative 'flow'
-require_relative 'const/const'
+require_relative 'const/types'
 require_relative 'octo_hash_case'
 require_relative 'errors/options_validation_error'
+require_relative 'errors/palp_validation_error'
+require_relative 'errors/resq_definition_error'
 
 module Decouplio
   class LogicDsl
     DEFAULT_WRAP_NAME = 'wrap'
 
     class << self
-      attr_reader :steps, :squads
+      attr_reader :steps, :palps
 
       def inherited(subclass)
         subclass.init_steps
@@ -18,19 +20,19 @@ module Decouplio
 
       def init_steps
         @steps = []
-        @squads = {}
+        @palps = {}
       end
 
-      # option - may contain { on_success:, on_failure:, squad:, if:, unless: }
+      # option - may contain { on_success:, on_failure:, palp:, if:, unless: }
       # stp - step symbol
       def step(stp, **options)
         # raise StepNameIsReservedError
         # if stp.is_a?(Symbol)
         # raise StepMethodIsNotDefined unless self.instance_public_methods.include?(stp)
         # end
-        # raise StepNameIsReserved [finish_him, on_success, on_failure, squad, if, unless]
+        # raise StepNameIsReserved [finish_him, on_success, on_failure, palp, if, unless]
 
-        @steps << options.merge(type: Decouplio::Const::STEP_TYPE, name: stp)
+        @steps << options.merge(type: Decouplio::Const::Types::STEP_TYPE, name: stp)
       end
 
       # TODO: use another name, currently it redefines Kernel#fail method
@@ -38,48 +40,40 @@ module Decouplio
         # raise StepNameIsReservedError
         # raise FailCantBeFirstStepError, "'fail' can't be a first step, please use 'step'"
 
-        @steps << options.merge(type: Decouplio::Const::FAIL_TYPE, name: stp)
+        @steps << options.merge(type: Decouplio::Const::Types::FAIL_TYPE, name: stp)
       end
 
       def pass(stp, **options)
         # raise StepNameIsReservedError
-        @steps << options.merge(type: Decouplio::Const::PASS_TYPE, name: stp)
+        @steps << options.merge(type: Decouplio::Const::Types::PASS_TYPE, name: stp)
       end
 
-      def strg(strategy_name, **options, &block)
+      def octo(strategy_name, **options, &block)
         hash_case = Class.new(Decouplio::OctoHashCase, &block).hash_case
         options[:hash_case] = hash_case
-        @steps << options.merge(type: Decouplio::Const::OCTO_TYPE, name: strategy_name)
+        @steps << options.merge(type: Decouplio::Const::Types::OCTO_TYPE, name: strategy_name)
       end
 
-      def squad(squad_name, **options, &block)
+      def palp(palp_name, **options, &block)
         if block_given?
           unless options.empty?
-            raise Decouplio::Errors::OptionsValidationError,
-                  "\033[1;33m Squad does not allow any options \033[0m"
+            raise Decouplio::Errors::PalpValidationError
           end
 
-          @squads[squad_name] = Class.new(self, &block)
+          @palps[palp_name] = Class.new(self, &block)
         else
           # TODO: raise an error if no block given
         end
       end
 
       def resq(name=:resq, **options)
-        unless Decouplio::Const::MAIN_FLOW_TYPES.include?(@steps.last&.[](:type))
-          raise Decouplio::Errors::OptionsValidationError,
-                <<~ERROR
-                  \033[1;33m
-                  "resq" should be defined only after:
-                  #{Decouplio::Const::MAIN_FLOW_TYPES.join("\n")}
-                  \033[0m
-                ERROR
-
+        unless Decouplio::Const::Types::MAIN_FLOW_TYPES.include?(@steps.last&.[](:type))
+          raise Decouplio::Errors::ResqDefinitionError
         end
 
         @steps << {
           name: name,
-          type: Decouplio::Const::RESQ_TYPE,
+          type: Decouplio::Const::Types::RESQ_TYPE,
           step_to_resq: @steps.delete(@steps.last),
           handler_hash: options
         }
@@ -88,7 +82,7 @@ module Decouplio
       def wrap(name, **options, &block)
         if block_given?
           @steps << options.merge(
-            type: Decouplio::Const::WRAP_TYPE,
+            type: Decouplio::Const::Types::WRAP_TYPE,
             name: name,
             wrap_flow: Flow.call(logic: block, action_class: self)
           )

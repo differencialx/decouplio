@@ -16,7 +16,7 @@ module Decouplio
       private
 
       def resolve(result:, instance:)
-        result ? Decouplio::Const::FAIL : Decouplio::Const::PASS
+        result ? Decouplio::Const::Results::FAIL : Decouplio::Const::Results::PASS
       end
     end
   end

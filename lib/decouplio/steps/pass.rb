@@ -18,7 +18,7 @@ module Decouplio
       private
 
       def resolve
-        @finish_him ? Decouplio::Const::FINISH_HIM : Decouplio::Const::PASS
+        @finish_him ? Decouplio::Const::Results::FINISH_HIM : Decouplio::Const::Results::PASS
       end
     end
   end

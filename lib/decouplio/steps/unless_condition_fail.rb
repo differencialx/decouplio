@@ -10,9 +10,9 @@ module Decouplio
           # Then we should fail action as next action
           # can be empty. Consider to optimize it somehow
           # to avoid multiple call of Action#instance.fail_action
-          Decouplio::Const::FAIL
+          Decouplio::Const::Results::FAIL
         else
-          Decouplio::Const::PASS
+          Decouplio::Const::Results::PASS
         end
       end
     end

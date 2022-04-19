@@ -60,7 +60,7 @@ module Decouplio
       message % interpolation_params
     end
 
-    ALLOWED_OPTIONS = %i[squad step].freeze
+    ALLOWED_OPTIONS = %i[palp step].freeze
     YELLOW = "\033[1;33m"
     NO_COLOR = "\033[0m"
     STRATEGY_ON_ERROR_MESSAGE = <<~ERROR_MESSAGE
@@ -82,7 +82,7 @@ module Decouplio
     ONLY_ONE_OPTION_PER_TIME_IS_ALLOWED = 'Only one option is allowed for "on".'
     ON_ALLOWED_OPTIONS = %i[
       step
-      squad
+      palp
     ].freeze
     STRATEGY_MANUAL_URL = 'https://stub.strategy.manual.url'
   end

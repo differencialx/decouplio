@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-shared_examples 'raises option validation error' do |message:|
+shared_examples 'raises option validation error' do |error_class:, message:|
   it 'raises option validation error' do
     # binding.pry
     # action
 
-    expect { action }.to raise_error Decouplio::Errors::OptionsValidationError, message
+    expect { action }.to raise_error error_class, message
   end
 end
 

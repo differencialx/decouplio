@@ -25,8 +25,8 @@ module OptionsValidationsCasesForFail
         fail :handle_step_one, on_failure: :step_one
       end
 
-      def step_one(string_param:, **)
-        ctx[:result] = string_param
+      def step_one(**)
+        ctx[:result] = 'result'
       end
 
       def handle_step_one(**)
@@ -42,8 +42,8 @@ module OptionsValidationsCasesForFail
         fail :handle_step_one, finish_him: 123
       end
 
-      def step_one(string_param:, **)
-        ctx[:result] = string_param
+      def step_one(**)
+        ctx[:result] = 'result'
       end
 
       def handle_step_one(**)
@@ -76,8 +76,8 @@ module OptionsValidationsCasesForFail
         fail :handle_step_one, finish_him: :some_step
       end
 
-      def step_one(string_param:, **)
-        ctx[:result] = string_param
+      def step_one(**)
+        ctx[:result] = 'result'
       end
 
       def handle_step_one(**)
@@ -93,8 +93,8 @@ module OptionsValidationsCasesForFail
         fail :handle_step_one, finish_him: :on_success
       end
 
-      def step_one(string_param:, **)
-        ctx[:result] = string_param
+      def step_one(**)
+        ctx[:result] = 'result'
       end
 
       def handle_step_one(**)
@@ -110,8 +110,8 @@ module OptionsValidationsCasesForFail
         fail :handle_step_one, finish_him: :on_failure
       end
 
-      def step_one(string_param:, **)
-        ctx[:result] = string_param
+      def step_one(**)
+        ctx[:result] = 'result'
       end
 
       def handle_step_one(**)
@@ -161,8 +161,8 @@ module OptionsValidationsCasesForFail
         fail :handle_step_one, unless: :some_undefined_method
       end
 
-      def step_one(string_param:, **)
-        ctx[:result] = string_param
+      def step_one(**)
+        ctx[:result] = 'result'
       end
 
       def handle_step_one(**)

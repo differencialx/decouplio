@@ -35,18 +35,18 @@ module Decouplio
 
         if @finish_him == :on_success
           if result
-            Decouplio::Const::FINISH_HIM
+            Decouplio::Const::Results::FINISH_HIM
           else
             instance.errors.merge!(outcome.errors)
-            Decouplio::Const::FAIL
+            Decouplio::Const::Results::FAIL
           end
         elsif @finish_him == :on_failure
           unless result
             instance.fail_action
             instance.errors.merge!(outcome.errors)
-            Decouplio::Const::FINISH_HIM
+            Decouplio::Const::Results::FINISH_HIM
           else
-            Decouplio::Const::PASS
+            Decouplio::Const::Results::PASS
           end
         end
       end

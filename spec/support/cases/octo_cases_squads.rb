@@ -1,21 +1,21 @@
 # frozen_string_literal: true
 
-module OctoCasesSquads
-  def strategy_squads
+module OctoCasesPalps
+  def strategy_palps
     lambda do |_klass|
       logic do
-        squad :squad_one do
+        palp :palp_one do
           step :step_one
           step :step_three, if: :process_step_three?
           step :step_four
         end
 
-        squad :squad_two do
+        palp :palp_two do
           step :step_two
           step :step_three
         end
 
-        squad :squad_four do
+        palp :palp_four do
           step :step_five
           fail :step_four, if: :process_step_four?
         end
@@ -23,27 +23,27 @@ module OctoCasesSquads
         step :assign_strategy_one_key
         fail :assign_fail
 
-        strg :strategy_one, ctx_key: :strg_key do
-          on :strg_1, squad: :squad_one
-          on :strg_2, squad: :squad_two
-          on :strg_3, squad: :squad_three
+        octo :strategy_one, ctx_key: :octo_key do
+          on :octo_1, palp: :palp_one
+          on :octo_2, palp: :palp_two
+          on :octo_3, palp: :palp_three
         end
 
-        squad :squad_five do
+        palp :palp_five do
           step :step_five
           fail :step_six
           step :step_four
         end
 
-        strg :strategy_two, ctx_key: :strategy_two_key, if: :process_strategy_two? do
-          on :strg_4, squad: :squad_four
-          on :strg_5, squad: :squad_five
+        octo :strategy_two, ctx_key: :strategy_two_key, if: :process_strategy_two? do
+          on :octo_4, palp: :palp_four
+          on :octo_5, palp: :palp_five
         end
 
         step :final_step
         fail :strategy_failure
 
-        squad :squad_three do
+        palp :palp_three do
           step :step_one
           step :step_four
           step :assign_second_strategy
@@ -51,7 +51,7 @@ module OctoCasesSquads
       end
 
       def assign_strategy_one_key(strategy_one_key:, **)
-        ctx[:strg_key] = strategy_one_key
+        ctx[:octo_key] = strategy_one_key
       end
 
       def assign_fail(**)

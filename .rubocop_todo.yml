@@ -72,10 +72,10 @@ Metrics/PerceivedComplexity:
 Naming/VariableNumber:
   Exclude:
     - 'spec/resq_spec.rb'
-    - 'spec/strategy_squads_spec.rb'
+    - 'spec/strategy_palps_spec.rb'
     - 'spec/strategy_step_spec.rb'
     - 'spec/support/cases/resq_cases.rb'
-    - 'spec/support/cases/strategy_cases_squads.rb'
+    - 'spec/support/cases/strategy_cases_palps.rb'
     - 'spec/support/cases/strategy_cases_steps.rb'
 
 # Offense count: 139

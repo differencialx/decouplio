@@ -7,29 +7,29 @@ module OctoCasesSteps
         step :assign_strategy_one_key
         fail :assign_fail, finish_him: true
 
-        strg :strategy_one, ctx_key: :strategy_one_key do
-          on :strg_1, step: :step_one
-          on :strg_2, step: :step_two
-          on :strg_3, step: :step_three
+        octo :strategy_one, ctx_key: :strategy_one_key do
+          on :octo_1, step: :step_one
+          on :octo_2, step: :step_two
+          on :octo_3, step: :step_three
         end
 
         step :assign_strategy_two_key
 
-        strg :strategy_two, ctx_key: :strategy_two_key do
-          on :strg_4, step: :step_four
-          on :strg_5, step: :step_five
+        octo :strategy_two, ctx_key: :strategy_two_key do
+          on :octo_4, step: :step_four
+          on :octo_5, step: :step_five
         end
 
         step :final_step
         fail :strategy_failure
       end
 
-      def assign_strategy_one_key(strg_1:, **)
-        ctx[:strategy_one_key] = strg_1
+      def assign_strategy_one_key(octo_1:, **)
+        ctx[:strategy_one_key] = octo_1
       end
 
-      def assign_strategy_two_key(strg_2:, **)
-        ctx[:strategy_two_key] = strg_2
+      def assign_strategy_two_key(octo_2:, **)
+        ctx[:strategy_two_key] = octo_2
       end
 
       def assign_fail(**)

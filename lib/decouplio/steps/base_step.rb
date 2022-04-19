@@ -1,4 +1,4 @@
-require_relative '../const/const'
+require_relative '../const/results'
 
 module Decouplio
   module Steps

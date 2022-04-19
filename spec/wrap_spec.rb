@@ -280,21 +280,21 @@ RSpec.describe 'Decouplio::Action wrap cases' do
       let(:action_block) { when_wrap_inner_on_success_to_outer_step }
       let(:interpolation_values) do
         [
-          Decouplio::OptionsValidator::YELLOW,
+          Decouplio::Const::Colors::YELLOW,
           '{:on_success=>:step_one}',
           'Step "step_one" is not defined',
-          Decouplio::OptionsValidator::STEP_ALLOWED_OPTIONS_MESSAGE,
-          Decouplio::OptionsValidator::STEP_MANUAL_URL,
-          Decouplio::OptionsValidator::NO_COLOR
+          Decouplio::Const::Validations::Step::ALLOWED_OPTIONS_MESSAGE,
+          Decouplio::Const::Validations::Step::MANUAL_URL,
+          Decouplio::Const::Colors::NO_COLOR
         ]
       end
       let(:expected_message) do
-        Decouplio::OptionsValidator::STEP_VALIDATION_ERROR_MESSAGE % interpolation_values
+        Decouplio::Const::Validations::Step::VALIDATION_ERROR_MESSAGE % interpolation_values
       end
 
       it 'raises an error' do
         expect { action }.to raise_error(
-          Decouplio::Errors::OptionsValidationError,
+          Decouplio::Errors::StepIsNotDefinedError,
           expected_message
         )
       end
@@ -304,21 +304,21 @@ RSpec.describe 'Decouplio::Action wrap cases' do
       let(:action_block) { when_wrap_inner_on_failure_to_outer_step }
       let(:interpolation_values) do
         [
-          Decouplio::OptionsValidator::YELLOW,
+          Decouplio::Const::Colors::YELLOW,
           '{:on_failure=>:step_one}',
           'Step "step_one" is not defined',
-          Decouplio::OptionsValidator::STEP_ALLOWED_OPTIONS_MESSAGE,
-          Decouplio::OptionsValidator::STEP_MANUAL_URL,
-          Decouplio::OptionsValidator::NO_COLOR
+          Decouplio::Const::Validations::Step::ALLOWED_OPTIONS_MESSAGE,
+          Decouplio::Const::Validations::Step::MANUAL_URL,
+          Decouplio::Const::Colors::NO_COLOR
         ]
       end
       let(:expected_message) do
-        Decouplio::OptionsValidator::STEP_VALIDATION_ERROR_MESSAGE % interpolation_values
+        Decouplio::Const::Validations::Step::VALIDATION_ERROR_MESSAGE % interpolation_values
       end
 
       it 'raises an error' do
         expect { action }.to raise_error(
-          Decouplio::Errors::OptionsValidationError,
+          Decouplio::Errors::StepIsNotDefinedError,
           expected_message
         )
       end

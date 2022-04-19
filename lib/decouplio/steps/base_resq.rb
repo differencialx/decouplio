@@ -19,7 +19,7 @@ module Decouplio
         instance.public_send(handler_method, e, **instance.ctx)
 
         instance.fail_action
-        Decouplio::Const::FAIL
+        Decouplio::Const::Results::FAIL
       else
         result
       end
