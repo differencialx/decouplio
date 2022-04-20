@@ -80,9 +80,8 @@ module Decouplio
       when Decouplio::Const::Types::STEP_TYPE
         Decouplio::Steps::Step.new(
           name: stp[:name],
-          finish_him: finish_him(stp),
-          on_success_type: Decouplio::Const::Types::PASS_FLOW.include?(flow[stp.dig(:flow, Decouplio::Const::Results::PASS)]&.[](:type)),
-          on_failure_type: Decouplio::Const::Types::FAIL_FLOW.include?(flow[stp.dig(:flow, Decouplio::Const::Results::FAIL)]&.[](:type))
+          on_success_type: success_type(flow, stp),
+          on_failure_type: failure_type(flow, stp)
         )
       when Decouplio::Const::Types::FAIL_TYPE
         Decouplio::Steps::Fail.new(
@@ -137,9 +136,8 @@ module Decouplio
         Decouplio::Steps::InnerAction.new(
           name: stp[:name],
           action: stp[:action],
-          finish_him: finish_him(stp),
-          on_success_type: Decouplio::Const::Types::PASS_FLOW.include?(flow[stp.dig(:flow, Decouplio::Const::Results::PASS)]&.[](:type)),
-          on_failure_type: Decouplio::Const::Types::FAIL_FLOW.include?(flow[stp.dig(:flow, Decouplio::Const::Results::FAIL)]&.[](:type))
+          on_success_type: success_type(flow, stp),
+          on_failure_type: failure_type(flow, stp)
         )
       end
     end
@@ -189,6 +187,24 @@ module Decouplio
           end
         end
       end
+    end
+
+    def self.success_type(flow, stp)
+      return :finish_him if finish_him(stp) == :on_success
+
+      step_id = stp.dig(:flow, Decouplio::Const::Results::PASS)
+      Decouplio::Const::Types::PASS_FLOW.include?(
+        flow[step_id]&.[](:type)
+      )
+    end
+
+    def self.failure_type(flow, stp)
+      return :finish_him if finish_him(stp) == :on_failure
+
+      step_id = stp.dig(:flow, Decouplio::Const::Results::FAIL)
+      Decouplio::Const::Types::FAIL_FLOW.include?(
+        flow[step_id]&.[](:type)
+      )
     end
 
     def self.compose_condition(stp, palp_prefix)

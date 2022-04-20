@@ -265,7 +265,7 @@ RSpec.describe 'Decouplio::Action wrap cases' do
 
       # TODO: it's not clear should this action be success or failure
       # if inner block fails or add errors
-      xit 'success' do # Tricky shit
+      it 'success' do # Tricky shit
         expect(action).to be_success
         expect(action.railway_flow).to eq railway_flow
         expect(action[:wrapper_step_one]).to eq 'Success'

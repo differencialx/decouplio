@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe 'Decouplio::Action strategy palp' do
+RSpec.describe 'Decouplio::Action strategy step' do
   include_context 'with basic spec setup'
 
   xdescribe '#call' do

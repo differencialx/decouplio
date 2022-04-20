@@ -82,14 +82,13 @@ RSpec.describe 'Decouplio::Action resq cases' do
         end
       end
 
-      # TODO: check this case, not sure it should be success
-      xcontext 'when single error class success case' do
+      context 'when single error class failure case' do
         let(:action_block) { step_resq_single_error_class_success }
         let(:error_class) { StandardError }
         let(:railway_flow) { %i[step_one error_handler] }
 
         it 'handles the error with out adding the error' do
-          expect(action).to be_success
+          expect(action).to be_failure
           expect(action[:result]).to eq error_message
           expect(action.railway_flow).to eq railway_flow
         end

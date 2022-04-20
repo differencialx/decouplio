@@ -3,10 +3,9 @@ require_relative 'base_step'
 module Decouplio
   module Steps
     class InnerAction < Decouplio::Steps::BaseStep
-      def initialize(name:, action:, finish_him:, on_success_type:, on_failure_type:)
+      def initialize(name:, action:, on_success_type:, on_failure_type:)
         @name = name
         @action = action
-        @finish_him = finish_him
         @on_success_type = on_success_type
         @on_failure_type = on_failure_type
       end
@@ -23,30 +22,29 @@ module Decouplio
       def resolve(outcome:, instance:)
         result = outcome.success?
 
-        unless @finish_him
-          unless result
-            unless @on_success_type
-              instance.errors.merge!(outcome.errors)
-              instance.fail_action
-            end
-          end
-          return result
-        end
+        instance.errors.merge!(outcome.errors)
 
-        if @finish_him == :on_success
-          if result
-            Decouplio::Const::Results::FINISH_HIM
-          else
-            instance.errors.merge!(outcome.errors)
-            Decouplio::Const::Results::FAIL
-          end
-        elsif @finish_him == :on_failure
-          unless result
-            instance.fail_action
-            instance.errors.merge!(outcome.errors)
-            Decouplio::Const::Results::FINISH_HIM
-          else
+        if result
+          if @on_success_type == Decouplio::Const::Results::PASS
+            instance.pass_action
             Decouplio::Const::Results::PASS
+          elsif @on_success_type == Decouplio::Const::Results::FAIL
+            instance.pass_action
+            Decouplio::Const::Results::PASS
+          elsif @on_success_type == Decouplio::Const::Results::FINISH_HIM
+            instance.pass_action
+            Decouplio::Const::Results::FINISH_HIM
+          end
+        else
+          if @on_failure_type == Decouplio::Const::Results::PASS
+            instance.pass_action
+            Decouplio::Const::Results::FAIL
+          elsif @on_failure_type == Decouplio::Const::Results::FAIL
+            instance.fail_action
+            Decouplio::Const::Results::FAIL
+          elsif @on_failure_type == Decouplio::Const::Results::FINISH_HIM
+            instance.fail_action
+            Decouplio::Const::Results::FINISH_HIM
           end
         end
       end

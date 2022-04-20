@@ -19,7 +19,6 @@ module Decouplio
       @ctx = parent_ctx || params
       @railway_flow = parent_railway_flow || []
       @failure = false
-      @wrap_inner_action_failure = false
       @instance = parent_instance || self
     end
 
@@ -28,11 +27,10 @@ module Decouplio
     end
 
     def success?
-      !failure?
+      !@failure
     end
 
     def failure?
-      # TODO: if errors is present then action is still success
       @failure
     end
 
@@ -42,10 +40,6 @@ module Decouplio
 
     def pass_action
       @failure = false
-    end
-
-    def fail_wrap_inner_action
-      @wrap_inner_action_failure = true
     end
 
     def invoke_step(method_name)
