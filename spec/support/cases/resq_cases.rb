@@ -254,80 +254,91 @@ module ResqCases
   def strategy_resq_single_error_class
     lambda do |_klass|
       logic do
-        strg :strg_one, ctx_key: :strg_1 do
-          on :stp1, step: :step_one
-          on :stp2, step: :step_two
-        end
-        resq error_handler: StandardError
-      end
-
-      def step_one(**)
-        StubDummy.call
-      end
-
-      def step_two(**)
-        StubDummy.call
-      end
-
-      def error_handler(error, **)
-        add_error(:step_one_error, error.message)
-      end
-    end
-  end
-
-  def strategy_resq_several_error_classes
-    lambda do |_klass|
-      logic do
-        squad :squad_one do
+        palp :palp_name do
           step :step_one
         end
 
-        strg :strg_one, ctx_key: :strg_1 do
-          on :stp1, squad: :squad_one
-          on :stp2, step: :step_two
+        octo :octo_name, ctx_key: :key do
+          on :key_1, palp: :palp_one
         end
-        resq error_handler: [StandardError, ArgumentError]
+        resq handler_method: StandardError
       end
 
       def step_one(**)
-        StubDummy.call
-      end
-
-      def step_two(**)
-        StubDummy.call
-      end
-
-      def error_handler(error, **)
-        add_error(:step_one_error, error.message)
+        ctx[:result] = 'Result'
       end
     end
   end
 
-  def strategy_resq_inner_squad_resq
+  def when_resq_for_step_with_condition_success_track
     lambda do |_klass|
       logic do
-        squad :squad_one do
-          step :step_two
-          resq inner_rescue: ArgumentError
-        end
+        step :step_one, if: :do_step_one?, on_failure: :success_step
+        resq handle_error: ArgumentError
+        step :step_two
+        fail :fail_step
+        step :success_step
+      end
 
-        strg :strg_one, ctx_key: :strg_1 do
-          on :stp1, squad: :squad_one
-          on :stp2, step: :step_two
-        end
-        resq error_handler: ArgumentError
+      def step_one(**)
+        ctx[:step_one] = 'Success'
       end
 
       def step_two(**)
+        ctx[:step_two] = 'Success'
+      end
+
+      def fail_step(**)
+        ctx[:fail_step] = 'Failed step'
+      end
+
+      def success_step(**)
+        ctx[:success_step] = 'Success step'
+      end
+
+      def do_step_one?(**)
         StubDummy.call
       end
 
-      def error_handler(error, **)
-        add_error(:step_one_error, error.message)
+      def handle_error(error, **)
+        add_error(handled_error: error.message)
+      end
+    end
+  end
+
+  def when_resq_for_step_with_condition_failure_track
+    lambda do |_klass|
+      logic do
+        step :step_one, if: :do_step_one?, on_failure: :final_fail_step
+        resq handle_error: ArgumentError
+        step :step_two
+        fail :fail_step
+        step :success_step
+        fail :final_fail_step
       end
 
-      def inner_rescue(error, **)
-        add_error(:inner_rescue, error.message)
+      def step_one(**)
+        ctx[:step_one] = 'Success'
+      end
+
+      def step_two(**)
+        ctx[:step_two] = 'Success'
+      end
+
+      def fail_step(**)
+        ctx[:fail_step] = 'Failed step'
+      end
+
+      def success_step(**)
+        ctx[:success_step] = 'Success step'
+      end
+
+      def do_step_one?(**)
+        StubDummy.call
+      end
+
+      def handle_error(error, **)
+        add_error(handled_error: error.message)
       end
     end
   end

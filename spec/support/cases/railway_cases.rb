@@ -12,8 +12,8 @@ module RailwayCases
         ctx[:model] = param1
       end
 
-      def assign_result(model:, **)
-        ctx[:result] = model
+      def assign_result(param2:, **)
+        ctx[:result] = param2
       end
     end
   end

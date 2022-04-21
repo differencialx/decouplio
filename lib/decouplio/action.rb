@@ -2,48 +2,44 @@
 
 require 'pry' # TODO: remove
 require_relative 'flow'
-require_relative 'logic_processor'
-require_relative 'errors/step_argument_error'
+require_relative 'processor'
 require_relative 'default_error_handler'
 require 'forwardable'
 
 module Decouplio
   class Action
-    PASS = true
-
     extend Forwardable
     def_delegators :@error_store, :errors, :add_error
-    attr_reader :railway_flow, :context
+    attr_reader :railway_flow, :ctx
 
     def initialize(
       parent_railway_flow: nil, parent_ctx: nil, parent_instance: nil, wrapper: false, error_store:, **params
     )
       @error_store = error_store
-      @context = parent_ctx || params
+      @ctx = parent_ctx || params
       @railway_flow = parent_railway_flow || []
       @failure = false
-      @wrap_inner_action_failure = false
       @instance = parent_instance || self
     end
 
     def [](key)
-      context[key]
+      @ctx[key]
     end
 
     def success?
-      !failure?
+      !@failure
     end
 
     def failure?
-      (@failure || !errors.empty?) && !@wrap_inner_action_failure
+      @failure
     end
 
     def fail_action
       @failure = true
     end
 
-    def fail_wrap_inner_action
-      @wrap_inner_action_failure = true
+    def pass_action
+      @failure = false
     end
 
     def invoke_step(method_name)
@@ -52,10 +48,6 @@ module Decouplio
 
     def append_railway_flow(stp)
       @instance.railway_flow << stp
-    end
-
-    def ctx
-      @instance.context
     end
 
     # def inspect
@@ -67,11 +59,15 @@ module Decouplio
       attr_accessor :error_store
 
       # TODO: remove Debug accessors
-      attr_reader :squads, :main_flow
+      attr_reader :palps, :main_flow
+
+      def error_store_instance(handler_class)
+        self.error_store = handler_class
+      end
 
       def call(**params)
         instance = new(error_store: error_store.new, **params)
-        Decouplio::LogicProcessor.call(flow: @flow, instance: instance)
+        Decouplio::Processor.call(instance: instance, **@flow)
         # TODO: process block with after actions
         instance
       end
@@ -89,7 +85,7 @@ module Decouplio
       def logic(&block)
         # TODO: raise error if @main flow is not empty, check the case when several logic block are difined
         if block_given?
-          @flow = Flow.call(logic: block, action_class: self)
+          @flow = Decouplio::Flow.call(logic: block)
         else
           # TODO: rails error if no logic is provided
         end

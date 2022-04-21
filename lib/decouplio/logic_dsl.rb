@@ -1,16 +1,18 @@
 # frozen_string_literal: true
 
-require_relative 'step'
-require_relative 'options_composer'
-require_relative 'strategy_hash_case'
+require_relative 'flow'
+require_relative 'const/types'
+require_relative 'octo_hash_case'
 require_relative 'errors/options_validation_error'
+require_relative 'errors/palp_validation_error'
+require_relative 'errors/resq_definition_error'
 
 module Decouplio
   class LogicDsl
     DEFAULT_WRAP_NAME = 'wrap'
 
     class << self
-      attr_reader :steps, :squads
+      attr_reader :steps, :palps
 
       def inherited(subclass)
         subclass.init_steps
@@ -18,21 +20,19 @@ module Decouplio
 
       def init_steps
         @steps = []
-        @squads = {}
+        @palps = {}
       end
 
-      # option - may contain { on_success:, on_failure:, squad:, if:, unless: }
+      # option - may contain { on_success:, on_failure:, palp:, if:, unless: }
       # stp - step symbol
       def step(stp, **options)
         # raise StepNameIsReservedError
         # if stp.is_a?(Symbol)
         # raise StepMethodIsNotDefined unless self.instance_public_methods.include?(stp)
         # end
-        # raise StepNameIsReserved [finish_him, on_success, on_failure, squad, if, unless]
+        # raise StepNameIsReserved [finish_him, on_success, on_failure, palp, if, unless]
 
-        # composed_options = OptionsComposer.call(name: stp, options: options, type: Decouplio::Step::STEP_TYPE)
-        # @steps << composed_options[:options]
-        @steps << options.merge(type: Decouplio::Step::STEP_TYPE, name: stp)
+        @steps << options.merge(type: Decouplio::Const::Types::STEP_TYPE, name: stp)
       end
 
       # TODO: use another name, currently it redefines Kernel#fail method
@@ -40,67 +40,49 @@ module Decouplio
         # raise StepNameIsReservedError
         # raise FailCantBeFirstStepError, "'fail' can't be a first step, please use 'step'"
 
-        # composed_options = OptionsComposer.call(name: stp, options: options, type: Decouplio::Step::FAIL_TYPE)
-        # @steps << composed_options[:options]
-        @steps << options.merge(type: Decouplio::Step::FAIL_TYPE, name: stp)
+        @steps << options.merge(type: Decouplio::Const::Types::FAIL_TYPE, name: stp)
       end
 
       def pass(stp, **options)
         # raise StepNameIsReservedError
-        # composed_options = OptionsComposer.call(name: stp, options: options, type: Decouplio::Step::PASS_TYPE)
-        # @steps << composed_options[:options]
-        @steps << options.merge(type: Decouplio::Step::PASS_TYPE, name: stp)
+        @steps << options.merge(type: Decouplio::Const::Types::PASS_TYPE, name: stp)
       end
 
-      def strg(strategy_name, **options, &block)
-        hash_case = Class.new(Decouplio::StrategyHashCase, &block).hash_case
+      def octo(strategy_name, **options, &block)
+        hash_case = Class.new(Decouplio::OctoHashCase, &block).hash_case
         options[:hash_case] = hash_case
-        # composed_options = OptionsComposer.call(
-        #   name: strategy_name,
-        #   options: options,
-        #   type: Decouplio::Step::STRATEGY_TYPE
-        # )
-        # @steps << composed_options[:options]
-        @steps << options.merge(type: Decouplio::Step::STRATEGY_TYPE, name: strategy_name)
+        @steps << options.merge(type: Decouplio::Const::Types::OCTO_TYPE, name: strategy_name)
       end
 
-      def squad(squad_name, **options, &block)
+      def palp(palp_name, **options, &block)
         if block_given?
-          unless options.empty?
-            raise Decouplio::Errors::OptionsValidationError,
-                  "\033[1;33m Squad does not allow any options \033[0m"
-          end
+          options.empty? || raise(Decouplio::Errors::PalpValidationError)
 
-          @squads[squad_name] = Decouplio::Step.new(
-            steps: Class.new(self, &block),
-            type: Decouplio::Step::SQUAD_TYPE
-          )
+          @palps[palp_name] = Class.new(self, &block)
         else
           # TODO: raise an error if no block given
         end
       end
 
-      def resq(**options)
-        unless Decouplio::Step::MAIN_FLOW_TYPES.include?(@steps.last&.[](:type))
-          raise Decouplio::Errors::OptionsValidationError,
-                <<~ERROR
-                  \033[1;33m
-                  "resq" should be defined only after:
-                  #{Decouplio::Step::MAIN_FLOW_TYPES.join("\n")}
-                  \033[0m
-                ERROR
-
+      def resq(name = :resq, **options)
+        unless Decouplio::Const::Types::MAIN_FLOW_TYPES.include?(@steps.last&.[](:type))
+          raise Decouplio::Errors::ResqDefinitionError
         end
 
-        @steps << options.merge(type: Decouplio::Step::RESQ_TYPE)
+        @steps << {
+          name: name,
+          type: Decouplio::Const::Types::RESQ_TYPE,
+          step_to_resq: @steps.delete(@steps.last),
+          handler_hash: options
+        }
       end
 
       def wrap(name, **options, &block)
         if block_given?
           @steps << options.merge(
-            type: Decouplio::Step::WRAP_TYPE,
+            type: Decouplio::Const::Types::WRAP_TYPE,
             name: name,
-            wrap_inner_block: block
+            wrap_flow: Flow.call(logic: block)
           )
         else
           # TODO: raise an error

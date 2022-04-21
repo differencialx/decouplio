@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module OptionsValidationsCasesForStep
+module OptionsValidationsCasesForWrap
   def when_wrap_on_success_method_not_defined
     lambda do |_klass|
       logic do

@@ -15,16 +15,55 @@ class MutationTest < Mutations::Command
   end
 
   def execute
-    context = {}
-    context[:step_one] = param1
-    context[:step_two] = context[:step_one]
-    context[:step_three] = context[:step_two]
-    context[:step_four] = context[:step_three]
-    context[:step_five] = context[:step_four]
-    context[:step_six] = context[:step_five]
-    context[:step_seven] = context[:step_six]
-    context[:step_eight] = context[:step_seven]
-    context[:step_nine] = context[:step_eight]
+    @param1 = 'param1'
+    @context = {}
+    step_one
+    step_two
+    step_three
+    step_four
+    step_five
+    step_six
+    step_seven
+    step_eight
+    step_nine
+
+    @context
+  end
+
+  def step_one
+    @context[:step_one] = @param1
+  end
+
+  def step_two
+    @context[:step_two] = @context[:step_one]
+  end
+
+  def step_three
+    @context[:step_three] = @context[:step_two]
+  end
+
+  def step_four
+    @context[:step_four] = @context[:step_three]
+  end
+
+  def step_five
+    @context[:step_five] = @context[:step_four]
+  end
+
+  def step_six
+    @context[:step_six] = @context[:step_five]
+  end
+
+  def step_seven
+    @context[:step_seven] = @context[:step_six]
+  end
+
+  def step_eight
+    @context[:step_eight] = @context[:step_seven]
+  end
+
+  def step_nine
+    @context[:step_nine] = @context[:step_eight]
   end
 end
 
@@ -32,16 +71,54 @@ class ActiveInteractionTest < ActiveInteraction::Base
   string :param1
 
   def execute
-    context = {}
-    context[:step_one] = param1
-    context[:step_two] = context[:step_one]
-    context[:step_three] = context[:step_two]
-    context[:step_four] = context[:step_three]
-    context[:step_five] = context[:step_four]
-    context[:step_six] = context[:step_five]
-    context[:step_seven] = context[:step_six]
-    context[:step_eight] = context[:step_seven]
-    context[:step_nine] = context[:step_eight]
+    @context = {}
+    step_one
+    step_two
+    step_three
+    step_four
+    step_five
+    step_six
+    step_seven
+    step_eight
+    step_nine
+
+    @context
+  end
+
+  def step_one
+    @context[:step_one] = param1
+  end
+
+  def step_two
+    @context[:step_two] = @context[:step_one]
+  end
+
+  def step_three
+    @context[:step_three] = @context[:step_two]
+  end
+
+  def step_four
+    @context[:step_four] = @context[:step_three]
+  end
+
+  def step_five
+    @context[:step_five] = @context[:step_four]
+  end
+
+  def step_six
+    @context[:step_six] = @context[:step_five]
+  end
+
+  def step_seven
+    @context[:step_seven] = @context[:step_six]
+  end
+
+  def step_eight
+    @context[:step_eight] = @context[:step_seven]
+  end
+
+  def step_nine
+    @context[:step_nine] = @context[:step_eight]
   end
 end
 
@@ -334,6 +411,9 @@ iteration_count = 100_000
 # iteration_count.times { DecouplioTest.call(param1: 'param1') }
 # end
 # result = RubyProf.profile do
+#   iteration_count.times { RegularServiceTest.call(param1: 'param1') }
+# end
+# result = RubyProf.profile do
 #   iteration_count.times { TrailblazerTest.call(param1: 'param1') }
 # end
 # result = RubyProf.profile do
@@ -348,9 +428,9 @@ iteration_count = 100_000
 
 Benchmark.bmbm do |x|
   x.report('RegularService') { iteration_count.times { RegularServiceTest.call(param1: 'param1') } }
+  x.report('Trailblazer') { iteration_count.times { TrailblazerTest.call(param1: 'param1') } }
   x.report('ActiveInteraction') { iteration_count.times { ActiveInteractionTest.run(param1: 'param1') } }
   x.report('Mutation') { iteration_count.times { MutationTest.run(param1: 'param1') } }
-  x.report('Interactor') { iteration_count.times { InteractorTestOrganizer.call(param1: 'param1') } }
-  x.report('Trailblazer') { iteration_count.times { TrailblazerTest.call(param1: 'param1') } }
   x.report('Decouplio') { iteration_count.times { DecouplioTest.call(param1: 'param1') } }
+  x.report('Interactor') { iteration_count.times { InteractorTestOrganizer.call(param1: 'param1') } }
 end

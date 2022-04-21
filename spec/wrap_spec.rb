@@ -13,6 +13,55 @@ RSpec.describe 'Decouplio::Action wrap cases' do
     let(:string_param) { '1' }
     let(:integer_param) { 2 }
 
+    context 'when wrap without resq with klass method' do
+      context 'when success' do
+        let(:action_block) { wrap_without_resq_with_klass_method }
+
+        before do
+          allow(BeforeTransactionAction).to receive(:call)
+          allow(AfterTransactionAction).to receive(:call)
+          allow(ClassWithWrapperMethod).to receive(:transaction)
+            .and_call_original
+          allow(StubDummy).to receive(:call)
+            .and_call_original
+        end
+
+        context 'when success' do
+          let(:railway_flow) { %i[step_one wrap_name transaction_step_one transaction_step_two step_two] }
+
+          it 'success' do
+            expect(action).to be_success
+            expect(action[:result]).to eq 7
+            expect(action.railway_flow).to eq railway_flow
+            expect(ClassWithWrapperMethod).to have_received(:transaction)
+            expect(BeforeTransactionAction).to have_received(:call)
+            expect(AfterTransactionAction).to have_received(:call)
+            expect(StubDummy).to have_received(:call)
+          end
+        end
+
+        context 'when failure' do
+          let(:railway_flow) { %i[step_one wrap_name transaction_step_one transaction_step_two] }
+
+          before do
+            allow(StubDummy).to receive(:call)
+              .and_return(false)
+          end
+
+          it 'fails' do
+            expect(action).to be_failure
+            expect(action[:result]).to eq 5
+            expect(action.railway_flow).to eq railway_flow
+            expect(action.errors).to be_empty
+            expect(ClassWithWrapperMethod).to have_received(:transaction)
+            expect(BeforeTransactionAction).to have_received(:call)
+            expect(AfterTransactionAction).to have_received(:call)
+            expect(StubDummy).to have_received(:call)
+          end
+        end
+      end
+    end
+
     context 'when wrap with klass method' do
       context 'when success' do
         let(:action_block) { when_wrap_with_klass_method }
@@ -214,6 +263,8 @@ RSpec.describe 'Decouplio::Action wrap cases' do
           .and_return(false)
       end
 
+      # TODO: it's not clear should this action be success or failure
+      # if inner block fails or add errors
       it 'success' do # Tricky shit
         expect(action).to be_success
         expect(action.railway_flow).to eq railway_flow
@@ -229,21 +280,21 @@ RSpec.describe 'Decouplio::Action wrap cases' do
       let(:action_block) { when_wrap_inner_on_success_to_outer_step }
       let(:interpolation_values) do
         [
-          Decouplio::OptionsValidator::YELLOW,
+          Decouplio::Const::Colors::YELLOW,
           '{:on_success=>:step_one}',
           'Step "step_one" is not defined',
-          Decouplio::OptionsValidator::STEP_ALLOWED_OPTIONS_MESSAGE,
-          Decouplio::OptionsValidator::STEP_MANUAL_URL,
-          Decouplio::OptionsValidator::NO_COLOR
+          Decouplio::Const::Validations::Step::ALLOWED_OPTIONS_MESSAGE,
+          Decouplio::Const::Validations::Step::MANUAL_URL,
+          Decouplio::Const::Colors::NO_COLOR
         ]
       end
       let(:expected_message) do
-        Decouplio::OptionsValidator::STEP_VALIDATION_ERROR_MESSAGE % interpolation_values
+        Decouplio::Const::Validations::Step::VALIDATION_ERROR_MESSAGE % interpolation_values
       end
 
       it 'raises an error' do
         expect { action }.to raise_error(
-          Decouplio::Errors::OptionsValidationError,
+          Decouplio::Errors::StepIsNotDefinedError,
           expected_message
         )
       end
@@ -253,21 +304,21 @@ RSpec.describe 'Decouplio::Action wrap cases' do
       let(:action_block) { when_wrap_inner_on_failure_to_outer_step }
       let(:interpolation_values) do
         [
-          Decouplio::OptionsValidator::YELLOW,
+          Decouplio::Const::Colors::YELLOW,
           '{:on_failure=>:step_one}',
           'Step "step_one" is not defined',
-          Decouplio::OptionsValidator::STEP_ALLOWED_OPTIONS_MESSAGE,
-          Decouplio::OptionsValidator::STEP_MANUAL_URL,
-          Decouplio::OptionsValidator::NO_COLOR
+          Decouplio::Const::Validations::Step::ALLOWED_OPTIONS_MESSAGE,
+          Decouplio::Const::Validations::Step::MANUAL_URL,
+          Decouplio::Const::Colors::NO_COLOR
         ]
       end
       let(:expected_message) do
-        Decouplio::OptionsValidator::STEP_VALIDATION_ERROR_MESSAGE % interpolation_values
+        Decouplio::Const::Validations::Step::VALIDATION_ERROR_MESSAGE % interpolation_values
       end
 
       it 'raises an error' do
         expect { action }.to raise_error(
-          Decouplio::Errors::OptionsValidationError,
+          Decouplio::Errors::StepIsNotDefinedError,
           expected_message
         )
       end

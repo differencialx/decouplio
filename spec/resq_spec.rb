@@ -6,10 +6,10 @@ RSpec.describe 'Decouplio::Action resq cases' do
   describe '#call' do
     let(:input_params) do
       {
-        strg_1: strg_1
+        octo1: octo1
       }
     end
-    let(:strg_1) { nil }
+    let(:octo1) { nil }
     let(:error_message) { 'Some error message' }
     let(:error_class) { NoMethodError }
     let(:error_to_raise) { [error_class, error_message] }
@@ -19,46 +19,21 @@ RSpec.describe 'Decouplio::Action resq cases' do
         .and_raise(*error_to_raise)
     end
 
-    xcontext 'when handler method is not defined' do
-      let(:action_block) { resq_undefined_handler_method }
-      let(:interpolation_values) do
-        [
-          Decouplio::OptionsValidator::YELLOW,
-          'Method "another_error_handler" is not defined',
-          'Please define "another_error_handler" method',
-          Decouplio::OptionsValidator::RESQ_ALLOWED_OPTIONS_MESSAGE,
-          Decouplio::OptionsValidator::RESQ_MANUAL_URL,
-          Decouplio::OptionsValidator::NO_COLOR
-        ]
-      end
-      let(:expected_message) do
-        Decouplio::OptionsValidator::RESQ_VALIDATION_ERROR_MESSAGE % interpolation_values
-      end
-
-      it 'raises an Decouplio::Errors::OptionsValidationError' do
-        # binding.pry
-
-        expect { action }.to raise_error(
-          Decouplio::Errors::OptionsValidationError,
-          expected_message
-        )
-      end
-    end
-
     context 'when there is no step' do
       let(:action_block) { resq_without_step }
       let(:expected_message) do
-        <<~ERROR
-          \033[1;33m
-          "resq" should be defined only after:
-          #{Decouplio::Step::MAIN_FLOW_TYPES.join("\n")}
-          \033[0m
-        ERROR
+        format(
+          Decouplio::Const::Validations::Resq::DEFINITION_ERROR_MESSAGE,
+          Decouplio::Const::Colors::YELLOW,
+          Decouplio::Const::Types::MAIN_FLOW_TYPES.join("\n"),
+          Decouplio::Const::Validations::Resq::MANUAL_URL,
+          Decouplio::Const::Colors::NO_COLOR
+        )
       end
 
       it 'raises Decouplio::Errors::OptionsValidationError' do
         expect { action }.to raise_error(
-          Decouplio::Errors::OptionsValidationError,
+          Decouplio::Errors::ResqDefinitionError,
           expected_message
         )
       end
@@ -107,13 +82,13 @@ RSpec.describe 'Decouplio::Action resq cases' do
         end
       end
 
-      context 'when single error class success case' do
+      context 'when single error class failure case' do
         let(:action_block) { step_resq_single_error_class_success }
         let(:error_class) { StandardError }
         let(:railway_flow) { %i[step_one error_handler] }
 
         it 'handles the error with out adding the error' do
-          expect(action).to be_success
+          expect(action).to be_failure
           expect(action[:result]).to eq error_message
           expect(action.railway_flow).to eq railway_flow
         end
@@ -432,137 +407,25 @@ RSpec.describe 'Decouplio::Action resq cases' do
     end
 
     context 'when strategy' do
-      context 'when single error class' do
+      context 'when simple wrap inner on_failure firward to outer wrap step' do
         let(:action_block) { strategy_resq_single_error_class }
-        let(:error_class) { StandardError }
-        let(:error_message) { 'StandardError error message' }
-        let(:expected_errors) do
-          {
-            step_one_error: [error_message]
-          }
+        let(:interpolation_values) do
+          [
+            Decouplio::Const::Colors::YELLOW,
+            Decouplio::Const::Types::MAIN_FLOW_TYPES.join("\n"),
+            Decouplio::Const::Validations::Resq::MANUAL_URL,
+            Decouplio::Const::Colors::NO_COLOR
+          ]
+        end
+        let(:expected_message) do
+          Decouplio::Const::Validations::Resq::DEFINITION_ERROR_MESSAGE % interpolation_values
         end
 
-        context 'when strg_1 => stp1' do
-          let(:strg_1) { :stp1 }
-          let(:railway_flow) { %i[step_one error_handler] }
-
-          it 'handles the error' do
-            expect(action).to be_failure
-            expect(action.errors).to eq expected_errors
-            expect(action.railway_flow).to eq railway_flow
-          end
-        end
-
-        context 'when strg_1 => stp2' do
-          let(:strg_1) { :stp2 }
-          let(:railway_flow) { %i[step_two error_handler] }
-
-          it 'handles the error' do
-            expect(action).to be_failure
-            expect(action.errors).to eq expected_errors
-            expect(action.railway_flow).to eq railway_flow
-          end
-        end
-      end
-
-      context 'when several error classes' do
-        let(:action_block) { strategy_resq_several_error_classes }
-        let(:expected_errors) do
-          {
-            step_one_error: [error_message]
-          }
-        end
-
-        context 'when StandardError' do
-          let(:error_class) { StandardError }
-          let(:error_message) { 'StandardError error message' }
-
-          context 'when strg_1 => stp1' do
-            let(:strg_1) { :stp1 }
-            let(:railway_flow) { %i[step_one error_handler] }
-
-            it 'handles the error' do
-              expect(action).to be_failure
-              expect(action.errors).to eq expected_errors
-              expect(action.railway_flow).to eq railway_flow
-            end
-          end
-
-          context 'when strg_1 => stp2' do
-            let(:strg_1) { :stp2 }
-            let(:railway_flow) { %i[step_two error_handler] }
-
-            it 'handles the error' do
-              expect(action).to be_failure
-              expect(action.errors).to eq expected_errors
-              expect(action.railway_flow).to eq railway_flow
-            end
-          end
-        end
-
-        context 'when ArgumentError' do
-          let(:error_class) { ArgumentError }
-          let(:error_message) { 'ArgumentError error message' }
-
-          context 'when strg_1 => stp1' do
-            let(:strg_1) { :stp1 }
-            let(:railway_flow) { %i[step_one error_handler] }
-
-            it 'handles the error' do
-              expect(action).to be_failure
-              expect(action.errors).to eq expected_errors
-              expect(action.railway_flow).to eq railway_flow
-            end
-          end
-
-          context 'when strg_1 => stp2' do
-            let(:strg_1) { :stp2 }
-            let(:railway_flow) { %i[step_two error_handler] }
-
-            it 'handles the error' do
-              expect(action).to be_failure
-              expect(action.errors).to eq expected_errors
-              expect(action.railway_flow).to eq railway_flow
-            end
-          end
-        end
-      end
-
-      context 'when squad inner resq' do
-        let(:action_block) { strategy_resq_inner_squad_resq }
-        let(:error_class) { ArgumentError }
-        let(:error_message) { 'ArgumentError error message' }
-
-        context 'when strg_1 => stp1' do
-          let(:strg_1) { :stp1 }
-          let(:railway_flow) { %i[step_two inner_rescue] }
-          let(:expected_errors) do
-            {
-              inner_rescue: [error_message]
-            }
-          end
-
-          it 'handles the error' do
-            expect(action).to be_failure
-            expect(action.errors).to eq expected_errors
-            expect(action.railway_flow).to eq railway_flow
-          end
-        end
-
-        context 'when strg_1 => stp2' do
-          let(:strg_1) { :stp2 }
-          let(:railway_flow) { %i[step_two error_handler] }
-          let(:expected_errors) do
-            {
-              step_one_error: [error_message]
-            }
-          end
-
-          it 'handles the error' do
-            expect(action).to be_failure
-            expect(action.errors).to eq expected_errors
-            expect(action.railway_flow).to eq railway_flow
-          end
+        it 'raises an error' do
+          expect { action }.to raise_error(
+            Decouplio::Errors::ResqDefinitionError,
+            expected_message
+          )
         end
       end
     end

@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-module OptionsValidationsCasesForPass
+module OptionsValidationsCasesForResq
   def when_resq_not_allowed_option_is_passed
     lambda do |_klass|
       logic do
         step :step_one
-        resq on_success: :pass_step
+        resq on_success: Exception
       end
 
       def step_one(**)
