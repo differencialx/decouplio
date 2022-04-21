@@ -1,0 +1,18 @@
+version: "3.7"
+
+services:
+  benchmark:
+    build:
+      dockerfile: benchmarks/Dockerfile
+      context: .
+    command: "ruby benchmarks.rb"
+    deploy:
+      resources:
+        limits:
+          cpus: 1
+          memory: 400M
+  test:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    command: "rspec"
