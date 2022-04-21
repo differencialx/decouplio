@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../const/results'
 
 module Decouplio
@@ -5,7 +7,7 @@ module Decouplio
     class BaseStep
       attr_reader :name
 
-      def process(instance:)
+      def process(*)
         raise NotImplementedError,
               'Please implement process method'
       end

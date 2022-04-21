@@ -56,9 +56,7 @@ module Decouplio
 
       def palp(palp_name, **options, &block)
         if block_given?
-          unless options.empty?
-            raise Decouplio::Errors::PalpValidationError
-          end
+          options.empty? || raise(Decouplio::Errors::PalpValidationError)
 
           @palps[palp_name] = Class.new(self, &block)
         else
@@ -66,7 +64,7 @@ module Decouplio
         end
       end
 
-      def resq(name=:resq, **options)
+      def resq(name = :resq, **options)
         unless Decouplio::Const::Types::MAIN_FLOW_TYPES.include?(@steps.last&.[](:type))
           raise Decouplio::Errors::ResqDefinitionError
         end
@@ -84,7 +82,7 @@ module Decouplio
           @steps << options.merge(
             type: Decouplio::Const::Types::WRAP_TYPE,
             name: name,
-            wrap_flow: Flow.call(logic: block, action_class: self)
+            wrap_flow: Flow.call(logic: block)
           )
         else
           # TODO: raise an error

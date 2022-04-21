@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'base_step'
 
 module Decouplio
@@ -8,6 +10,7 @@ module Decouplio
       def initialize(name:, ctx_key:)
         @name = name
         @ctx_key = ctx_key
+        super()
       end
 
       def process(instance:)

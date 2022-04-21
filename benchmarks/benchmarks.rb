@@ -408,7 +408,7 @@ iteration_count = 100_000
 # end
 
 # result = RubyProf.profile do
-  # iteration_count.times { DecouplioTest.call(param1: 'param1') }
+# iteration_count.times { DecouplioTest.call(param1: 'param1') }
 # end
 # result = RubyProf.profile do
 #   iteration_count.times { RegularServiceTest.call(param1: 'param1') }

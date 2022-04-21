@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'base_step'
 
 module Decouplio
@@ -6,6 +8,7 @@ module Decouplio
       def initialize(name:, finish_him:)
         @name = name
         @finish_him = finish_him
+        super()
       end
 
       def process(instance:)

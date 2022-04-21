@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../const/colors'
 require_relative '../const/validations/common'
 

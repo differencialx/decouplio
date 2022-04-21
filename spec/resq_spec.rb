@@ -6,10 +6,10 @@ RSpec.describe 'Decouplio::Action resq cases' do
   describe '#call' do
     let(:input_params) do
       {
-        octo_1: octo_1
+        octo1: octo1
       }
     end
-    let(:octo_1) { nil }
+    let(:octo1) { nil }
     let(:error_message) { 'Some error message' }
     let(:error_class) { NoMethodError }
     let(:error_to_raise) { [error_class, error_message] }
@@ -22,13 +22,13 @@ RSpec.describe 'Decouplio::Action resq cases' do
     context 'when there is no step' do
       let(:action_block) { resq_without_step }
       let(:expected_message) do
-        Decouplio::Const::Validations::Resq::DEFINITION_ERROR_MESSAGE %
-          [
-            Decouplio::Const::Colors::YELLOW,
-            Decouplio::Const::Types::MAIN_FLOW_TYPES.join("\n"),
-            Decouplio::Const::Validations::Resq::MANUAL_URL,
-            Decouplio::Const::Colors::NO_COLOR
-          ]
+        format(
+          Decouplio::Const::Validations::Resq::DEFINITION_ERROR_MESSAGE,
+          Decouplio::Const::Colors::YELLOW,
+          Decouplio::Const::Types::MAIN_FLOW_TYPES.join("\n"),
+          Decouplio::Const::Validations::Resq::MANUAL_URL,
+          Decouplio::Const::Colors::NO_COLOR
+        )
       end
 
       it 'raises Decouplio::Errors::OptionsValidationError' do

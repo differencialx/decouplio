@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'base_step'
 
 module Decouplio
@@ -7,6 +9,7 @@ module Decouplio
         @name = name
         @on_success_type = on_success_type
         @on_failure_type = on_failure_type
+        super()
       end
 
       def process(instance:)
@@ -16,30 +19,23 @@ module Decouplio
       end
 
       def resolve(result:, instance:)
-        result = !!result
-
         if result
-          if @on_success_type == Decouplio::Const::Results::PASS
-            instance.pass_action
-            Decouplio::Const::Results::PASS
-          elsif @on_success_type == Decouplio::Const::Results::FAIL
+          if [Decouplio::Const::Results::PASS, Decouplio::Const::Results::FAIL].include?(@on_success_type)
             instance.pass_action
             Decouplio::Const::Results::PASS
           elsif @on_success_type == Decouplio::Const::Results::FINISH_HIM
             instance.pass_action
             Decouplio::Const::Results::FINISH_HIM
           end
-        else
-          if @on_failure_type == Decouplio::Const::Results::PASS
-            instance.pass_action
-            Decouplio::Const::Results::FAIL
-          elsif @on_failure_type == Decouplio::Const::Results::FAIL
-            instance.fail_action
-            Decouplio::Const::Results::FAIL
-          elsif @on_failure_type == Decouplio::Const::Results::FINISH_HIM
-            instance.fail_action
-            Decouplio::Const::Results::FINISH_HIM
-          end
+        elsif @on_failure_type == Decouplio::Const::Results::PASS
+          instance.pass_action
+          Decouplio::Const::Results::FAIL
+        elsif @on_failure_type == Decouplio::Const::Results::FAIL
+          instance.fail_action
+          Decouplio::Const::Results::FAIL
+        elsif @on_failure_type == Decouplio::Const::Results::FINISH_HIM
+          instance.fail_action
+          Decouplio::Const::Results::FINISH_HIM
         end
       end
     end

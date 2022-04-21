@@ -16,7 +16,6 @@ RSpec.configure do |config|
   config.include OnSuccessFailureCases
   config.include RailwayCases
   config.include OctoCasesPalps
-  config.include OctoCasesSteps
   config.include OptionsValidationsCasesForFail
   config.include OptionsValidationsCasesForPass
   config.include OptionsValidationsCasesForPalp

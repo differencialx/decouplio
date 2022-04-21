@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Decouplio
   class Processor
     class << self
@@ -8,8 +10,7 @@ module Decouplio
       private
 
       def process(next_step_name, instance, steps_pool, steps_flow)
-        while next_step_name do
-          # binding.pry
+        while next_step_name
           result = steps_pool[next_step_name].process(instance: instance)
           next_step_name = steps_flow[next_step_name][result]
         end

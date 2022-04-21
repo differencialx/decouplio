@@ -51,11 +51,6 @@ module Decouplio
     end
 
     # def inspect
-        # if ENV['POX']
-
-        # else
-
-        # end
     # TODO: Redefine to show only useful information
     # super
     # end
@@ -90,7 +85,7 @@ module Decouplio
       def logic(&block)
         # TODO: raise error if @main flow is not empty, check the case when several logic block are difined
         if block_given?
-          @flow = Decouplio::Flow.call(logic: block, action_class: self)
+          @flow = Decouplio::Flow.call(logic: block)
         else
           # TODO: rails error if no logic is provided
         end

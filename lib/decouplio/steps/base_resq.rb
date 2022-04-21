@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'base_step'
 
 module Decouplio
@@ -6,6 +8,7 @@ module Decouplio
       def initialize(handler_hash:, step_to_resq:)
         @handler_hash = handler_hash
         @step_to_resq = step_to_resq
+        super()
       end
 
       def process(instance:)

@@ -9,6 +9,7 @@ module Decouplio
 
       def inherited(subclass)
         subclass.init_hash_case
+        super(subclass)
       end
 
       def init_hash_case

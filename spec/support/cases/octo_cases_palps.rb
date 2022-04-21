@@ -24,9 +24,9 @@ module OctoCasesPalps
         fail :assign_fail
 
         octo :strategy_one, ctx_key: :octo_key do
-          on :octo_1, palp: :palp_one
-          on :octo_2, palp: :palp_two
-          on :octo_3, palp: :palp_three
+          on :octo1, palp: :palp_one
+          on :octo2, palp: :palp_two
+          on :octo3, palp: :palp_three
         end
 
         palp :palp_five do
@@ -36,8 +36,8 @@ module OctoCasesPalps
         end
 
         octo :strategy_two, ctx_key: :strategy_two_key, if: :process_strategy_two? do
-          on :octo_4, palp: :palp_four
-          on :octo_5, palp: :palp_five
+          on :octo4, palp: :palp_four
+          on :octo5, palp: :palp_five
         end
 
         step :final_step

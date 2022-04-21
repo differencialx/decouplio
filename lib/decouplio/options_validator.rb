@@ -29,7 +29,7 @@ module Decouplio
     end
 
     def call
-      @flow.each do |step_id, options|
+      @flow.each do |_step_id, options|
         validate(options: options)
       end
     end
@@ -37,7 +37,7 @@ module Decouplio
     private
 
     def validate(options:)
-      filtered_options = options.reject { |key, val| [:step_id, :flow, :name, :type, :hash_case, :wrap_flow, :step_to_resq].include?(key) }
+      filtered_options = options.reject { |key, _val| OPTIONS_TO_FILTER.include?(key) }
       case options[:type]
       when Decouplio::Const::Types::STEP_TYPE
         validate_step(options: filtered_options)
@@ -78,7 +78,7 @@ module Decouplio
     end
 
     def validate_wrap(options:, name:)
-      check_wrap_name(options: options, name: name)
+      check_wrap_name(name: name)
       check_wrap_step_presence(options: options)
       check_wrap_extra_keys(options: options)
       check_wrap_finish_him(options: options)
@@ -241,7 +241,7 @@ module Decouplio
       )
     end
 
-    def check_wrap_name(options:, name:)
+    def check_wrap_name(name:)
       return if name.is_a?(Symbol)
 
       raise Decouplio::Errors::InvalidWrapNameError
@@ -287,16 +287,26 @@ module Decouplio
 
         raise Decouplio::Errors::InvalidErrorClassError.new(
           errored_option: klass.to_s,
-          details:  klass.to_s
+          details: klass.to_s
         )
       end
     end
 
     def extract_step_names(flow:)
-      flow.map do |(_step_id, stp)|
+      flow.to_h do |_step_id, stp|
         [stp[:name], stp[:type]]
-      end.to_h
+      end
     end
+
+    OPTIONS_TO_FILTER = %i[
+      step_id
+      flow
+      name
+      type
+      hash_case
+      wrap_flow
+      step_to_resq
+    ].freeze
 
     # *************************************************
     # STEP

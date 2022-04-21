@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'base_step'
 require_relative '../processor'
 
@@ -10,11 +12,12 @@ module Decouplio
         @method = method
         @wrap_flow = wrap_flow
         @finish_him = finish_him
+        super()
       end
 
       def process(instance:)
         instance.append_railway_flow(@name)
-        if has_specific_wrap?
+        if specific_wrap?
           @klass.public_send(@method) do
             Decouplio::Processor.call(instance: instance, **@wrap_flow)
           end
@@ -27,7 +30,7 @@ module Decouplio
 
       private
 
-      def has_specific_wrap?
+      def specific_wrap?
         @klass && @method
       end
 
@@ -39,18 +42,19 @@ module Decouplio
 
         return result unless @finish_him
 
-        if @finish_him == :on_success
+        case @finish_him
+        when :on_success
           if result
             Decouplio::Const::Results::FINISH_HIM
           else
             Decouplio::Const::Results::FAIL
           end
-        elsif @finish_him == :on_failure
-          unless result
+        when :on_failure
+          if result
+            Decouplio::Const::Results::PASS
+          else
             instance.fail_action
             Decouplio::Const::Results::FINISH_HIM
-          else
-            Decouplio::Const::Results::PASS
           end
         end
       end
