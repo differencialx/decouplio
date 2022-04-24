@@ -5,30 +5,43 @@ require_relative 'base_step'
 module Decouplio
   module Steps
     class Fail < BaseStep
-      def initialize(name:, finish_him:)
-        @name = name
-        @finish_him = finish_him
+      def initialize(name:, on_success_type:, on_failure_type:)
         super()
+        @name = name
+        @on_success_type = on_success_type
+        @on_failure_type = on_failure_type
       end
 
       def process(instance:)
         instance.append_railway_flow(@name)
-        instance.send(@name, **instance.ctx)
+        result = instance.send(@name, **instance.ctx)
 
-        resolve(instance: instance)
+        resolve(result: result, instance: instance)
       end
 
       private
 
-      def resolve(instance:)
-        instance.fail_action
-
-        return Decouplio::Const::Results::FAIL unless @finish_him
-
-        if @finish_him == true
-          Decouplio::Const::Results::FINISH_HIM
-        else
+      def resolve(result:, instance:)
+        if result
+          if @on_success_type == Decouplio::Const::Results::PASS
+            instance.pass_action
+            Decouplio::Const::Results::PASS
+          elsif @on_success_type == Decouplio::Const::Results::FAIL
+            instance.fail_action
+            Decouplio::Const::Results::PASS
+          elsif @on_success_type == Decouplio::Const::Results::FINISH_HIM
+            instance.fail_action
+            Decouplio::Const::Results::FINISH_HIM
+          end
+        elsif @on_failure_type == Decouplio::Const::Results::PASS
+          instance.pass_action
           Decouplio::Const::Results::FAIL
+        elsif @on_failure_type == Decouplio::Const::Results::FAIL
+          instance.fail_action
+          Decouplio::Const::Results::FAIL
+        elsif @on_failure_type == Decouplio::Const::Results::FINISH_HIM
+          instance.fail_action
+          Decouplio::Const::Results::FINISH_HIM
         end
       end
     end

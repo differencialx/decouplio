@@ -82,9 +82,9 @@ module Decouplio
         when Decouplio::Const::Types::STEP_TYPE
           create_step(stp, flow)
         when Decouplio::Const::Types::FAIL_TYPE
-          create_fail(stp)
+          create_fail(stp, flow)
         when Decouplio::Const::Types::PASS_TYPE
-          create_pass(stp)
+          create_pass(stp, flow)
         when Decouplio::Const::Types::IF_TYPE_PASS
           create_if_condition_pass(stp)
         when Decouplio::Const::Types::IF_TYPE_FAIL
@@ -101,7 +101,9 @@ module Decouplio
           create_resq_pass(stp, flow)
         when Decouplio::Const::Types::RESQ_TYPE_FAIL
           create_resq_fail(stp, flow)
-        when Decouplio::Const::Types::ACTION_TYPE
+        when Decouplio::Const::Types::ACTION_TYPE_PASS
+          create_inner_action(stp, flow)
+        when Decouplio::Const::Types::ACTION_TYPE_FAIL
           create_inner_action(stp, flow)
         end
       end
@@ -114,17 +116,18 @@ module Decouplio
         )
       end
 
-      def create_fail(stp)
+      def create_fail(stp, flow)
         Decouplio::Steps::Fail.new(
           name: stp[:name],
-          finish_him: finish_him(stp)
+          on_success_type: success_type(flow, stp),
+          on_failure_type: failure_type(flow, stp)
         )
       end
 
-      def create_pass(stp)
+      def create_pass(stp, flow)
         Decouplio::Steps::Pass.new(
           name: stp[:name],
-          finish_him: finish_him(stp)
+          on_success_type: success_type(flow, stp)
         )
       end
 
@@ -198,10 +201,12 @@ module Decouplio
           when Decouplio::Const::Types::STEP_TYPE,
                Decouplio::Const::Types::PASS_TYPE,
                Decouplio::Const::Types::WRAP_TYPE,
-               Decouplio::Const::Types::ACTION_TYPE,
+               Decouplio::Const::Types::ACTION_TYPE_PASS,
                Decouplio::Const::Types::RESQ_TYPE_PASS
             compose_step_flow(stp, step_id, flow, idx, flow_hash)
-          when Decouplio::Const::Types::FAIL_TYPE, Decouplio::Const::Types::RESQ_TYPE_FAIL
+          when Decouplio::Const::Types::FAIL_TYPE,
+               Decouplio::Const::Types::RESQ_TYPE_FAIL,
+               Decouplio::Const::Types::ACTION_TYPE_PASS
             compose_fail_flow(stp, step_id, flow, idx, flow_hash)
           when Decouplio::Const::Types::IF_TYPE_PASS, Decouplio::Const::Types::UNLESS_TYPE_PASS
             compose_pass_condition_flow(stp, flow, idx, flow_hash)
@@ -230,11 +235,17 @@ module Decouplio
       end
 
       def compose_fail_flow(stp, step_id, flow, idx, flow_hash)
+        stp[:flow][Decouplio::Const::Results::PASS] = next_failure_step(
+          flow.values,
+          idx,
+          flow[step_id][:on_success]
+        )
         stp[:flow][Decouplio::Const::Results::FAIL] = next_failure_step(
           flow.values,
           idx,
           flow[step_id][:on_failure]
         )
+        stp[:flow][Decouplio::Const::Results::PASS] ||= flow_hash[Decouplio::Const::Results::FAIL]
         stp[:flow][Decouplio::Const::Results::FAIL] ||= flow_hash[Decouplio::Const::Results::FAIL]
         stp[:flow][Decouplio::Const::Results::FINISH_HIM] = Decouplio::Const::Results::NO_STEP
       end
@@ -272,7 +283,7 @@ module Decouplio
       end
 
       def success_type(flow, stp)
-        return :finish_him if finish_him(stp) == :on_success
+        return :finish_him if [:on_success, true].include?(finish_him(stp))
 
         step_id = stp.dig(:flow, Decouplio::Const::Results::PASS)
         Decouplio::Const::Types::PASS_FLOW.include?(
@@ -281,12 +292,22 @@ module Decouplio
       end
 
       def failure_type(flow, stp)
-        return :finish_him if finish_him(stp) == :on_failure
+        return :finish_him if [:on_failure, true].include?(finish_him(stp))
 
         step_id = stp.dig(:flow, Decouplio::Const::Results::FAIL)
         Decouplio::Const::Types::FAIL_FLOW.include?(
           flow[step_id]&.[](:type)
         )
+      end
+
+      def finish_him(stp)
+        if stp[:on_success] == :finish_him
+          :on_success
+        elsif stp[:on_failure] == :finish_him
+          :on_failure
+        elsif stp.key?(:finish_him)
+          stp[:finish_him]
+        end
       end
 
       def compose_condition(stp, palp_prefix)
@@ -307,10 +328,15 @@ module Decouplio
 
         return stp unless stp.key?(:action) || stp.dig(:step_to_resq, :action)
 
-        if stp[:type] == Decouplio::Const::Types::RESQ_TYPE
-          stp[:step_to_resq][:type] = Decouplio::Const::Types::ACTION_TYPE
-        else
-          stp[:type] = Decouplio::Const::Types::ACTION_TYPE
+        case stp[:type]
+        when Decouplio::Const::Types::RESQ_TYPE_PASS
+          stp[:step_to_resq][:type] = Decouplio::Const::Types::ACTION_TYPE_PASS
+        when Decouplio::Const::Types::RESQ_TYPE_FAIL
+          stp[:step_to_resq][:type] = Decouplio::Const::Types::ACTION_TYPE_FAIL
+        when *Decouplio::Const::Types::PASS_FLOW
+          stp[:type] = Decouplio::Const::Types::ACTION_TYPE_PASS
+        when *Decouplio::Const::Types::FAIL_FLOW
+          stp[:type] = Decouplio::Const::Types::ACTION_TYPE_FAIL
         end
 
         stp
@@ -355,16 +381,6 @@ module Decouplio
         stp.merge(options_for_resq)
       end
 
-      def finish_him(stp)
-        if stp[:on_success] == :finish_him
-          :on_success
-        elsif stp[:on_failure] == :finish_him
-          :on_failure
-        elsif stp.key?(:finish_him)
-          stp[:finish_him]
-        end
-      end
-
       def next_success_step(steps, idx, value)
         steps_slice = steps[(idx + 1)..]
         steps_slice.each_with_index do |stp, index|
@@ -384,7 +400,7 @@ module Decouplio
             Decouplio::Const::Types::IF_TYPE_PASS,
             Decouplio::Const::Types::UNLESS_TYPE_PASS,
             Decouplio::Const::Types::WRAP_TYPE,
-            Decouplio::Const::Types::ACTION_TYPE,
+            Decouplio::Const::Types::ACTION_TYPE_PASS,
             Decouplio::Const::Types::RESQ_TYPE_PASS,
             Decouplio::Const::Types::OCTO_TYPE
           ].include?(stp[:type])
@@ -413,7 +429,8 @@ module Decouplio
             Decouplio::Const::Types::FAIL_TYPE,
             Decouplio::Const::Types::IF_TYPE_FAIL,
             Decouplio::Const::Types::UNLESS_TYPE_FAIL,
-            Decouplio::Const::Types::RESQ_TYPE_FAIL
+            Decouplio::Const::Types::RESQ_TYPE_FAIL,
+            Decouplio::Const::Types::ACTION_TYPE_FAIL
           ].include?(stp[:type])
             return stp[:step_id]
           end

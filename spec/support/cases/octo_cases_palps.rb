@@ -15,9 +15,21 @@ module OctoCasesPalps
           step :step_three
         end
 
+        palp :palp_three do
+          step :step_one
+          step :step_four
+          step :assign_second_strategy
+        end
+
         palp :palp_four do
           step :step_five
           fail :step_four, if: :process_step_four?
+        end
+
+        palp :palp_five do
+          step :step_five
+          fail :step_six
+          step :step_four
         end
 
         step :assign_strategy_one_key
@@ -29,12 +41,6 @@ module OctoCasesPalps
           on :octo3, palp: :palp_three
         end
 
-        palp :palp_five do
-          step :step_five
-          fail :step_six
-          step :step_four
-        end
-
         octo :strategy_two, ctx_key: :strategy_two_key, if: :process_strategy_two? do
           on :octo4, palp: :palp_four
           on :octo5, palp: :palp_five
@@ -42,12 +48,6 @@ module OctoCasesPalps
 
         step :final_step
         fail :strategy_failure
-
-        palp :palp_three do
-          step :step_one
-          step :step_four
-          step :assign_second_strategy
-        end
       end
 
       def assign_strategy_one_key(strategy_one_key:, **)

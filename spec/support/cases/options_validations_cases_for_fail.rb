@@ -1,40 +1,6 @@
 # frozen_string_literal: true
 
 module OptionsValidationsCasesForFail
-  def when_fail_on_succes_is_not_allowed
-    lambda do |_klass|
-      logic do
-        step :step_one
-        fail :handle_step_one, on_success: :step_one
-      end
-
-      def step_one(**)
-        ctx[:result] = 'result'
-      end
-
-      def handle_step_one(**)
-        add_error(:step_one, 'Error')
-      end
-    end
-  end
-
-  def when_fail_on_failure_is_not_allowed
-    lambda do |_klass|
-      logic do
-        step :step_one
-        fail :handle_step_one, on_failure: :step_one
-      end
-
-      def step_one(**)
-        ctx[:result] = 'result'
-      end
-
-      def handle_step_one(**)
-        add_error(:step_one, 'Error')
-      end
-    end
-  end
-
   def when_fail_finish_him_is_not_a_boolean
     lambda do |_klass|
       logic do

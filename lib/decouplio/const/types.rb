@@ -13,7 +13,8 @@ module Decouplio
       IF_TYPE_FAIL = :if_fail
       UNLESS_TYPE_FAIL = :unless_fail
       OCTO_TYPE = :octo
-      ACTION_TYPE = :action
+      ACTION_TYPE_PASS = :action_pass
+      ACTION_TYPE_FAIL = :action_fail
       WRAP_TYPE = :wrap
       RESQ_TYPE = :resq
       RESQ_TYPE_PASS = :resq_pass
@@ -49,7 +50,9 @@ module Decouplio
         IF_TYPE_PASS => RESQ_TYPE_PASS,
         UNLESS_TYPE_PASS => RESQ_TYPE_PASS,
         IF_TYPE_FAIL => RESQ_TYPE_FAIL,
-        UNLESS_TYPE_FAIL => RESQ_TYPE_FAIL
+        UNLESS_TYPE_FAIL => RESQ_TYPE_FAIL,
+        ACTION_TYPE_PASS => RESQ_TYPE_PASS,
+        ACTION_TYPE_FAIL => RESQ_TYPE_FAIL
       }.freeze
       PASS_FLOW = [
         STEP_TYPE,
@@ -57,12 +60,14 @@ module Decouplio
         OCTO_TYPE,
         WRAP_TYPE,
         IF_TYPE_PASS,
-        UNLESS_TYPE_PASS
+        UNLESS_TYPE_PASS,
+        ACTION_TYPE_PASS
       ].freeze
       FAIL_FLOW = [
         FAIL_TYPE,
         IF_TYPE_FAIL,
-        UNLESS_TYPE_FAIL
+        UNLESS_TYPE_FAIL,
+        ACTION_TYPE_FAIL
       ].freeze
 
       MAIN_FLOW_TYPES = [

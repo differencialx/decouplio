@@ -7,12 +7,12 @@ module Decouplio
   module Steps
     class Wrap < Decouplio::Steps::BaseStep
       def initialize(name:, klass:, method:, wrap_flow:, finish_him:)
+        super()
         @name = name
         @klass = klass
         @method = method
         @wrap_flow = wrap_flow
         @finish_him = finish_him
-        super()
       end
 
       def process(instance:)
@@ -37,7 +37,6 @@ module Decouplio
       def resolve(instance:)
         # The same as for step, but instead of result
         # instance.success? is used
-        # binding.pry
         result = instance.success?
 
         return result unless @finish_him

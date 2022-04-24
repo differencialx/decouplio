@@ -6,10 +6,10 @@ module Decouplio
   module Steps
     class Step < Decouplio::Steps::BaseStep
       def initialize(name:, on_success_type:, on_failure_type:)
+        super()
         @name = name
         @on_success_type = on_success_type
         @on_failure_type = on_failure_type
-        super()
       end
 
       def process(instance:)
