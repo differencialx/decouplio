@@ -13,7 +13,9 @@ require_relative 'steps/if_condition_pass'
 require_relative 'steps/if_condition_fail'
 require_relative 'steps/unless_condition_pass'
 require_relative 'steps/unless_condition_fail'
-require_relative 'steps/inner_action'
+require_relative 'steps/inner_action_step'
+require_relative 'steps/inner_action_fail'
+require_relative 'steps/inner_action_pass'
 require_relative 'options_validator'
 
 module Decouplio
@@ -101,10 +103,12 @@ module Decouplio
           create_resq_pass(stp, flow)
         when Decouplio::Const::Types::RESQ_TYPE_FAIL
           create_resq_fail(stp, flow)
-        when Decouplio::Const::Types::ACTION_TYPE_PASS
-          create_inner_action(stp, flow)
+        when Decouplio::Const::Types::ACTION_TYPE_STEP
+          create_inner_action_step(stp, flow)
         when Decouplio::Const::Types::ACTION_TYPE_FAIL
-          create_inner_action(stp, flow)
+          create_inner_action_fail(stp, flow)
+        when Decouplio::Const::Types::ACTION_TYPE_PASS
+          create_inner_action_pass(stp, flow)
         end
       end
 
@@ -186,8 +190,26 @@ module Decouplio
         )
       end
 
-      def create_inner_action(stp, flow)
-        Decouplio::Steps::InnerAction.new(
+      def create_inner_action_step(stp, flow)
+        Decouplio::Steps::InnerActionStep.new(
+          name: stp[:name],
+          action: stp[:action],
+          on_success_type: success_type(flow, stp),
+          on_failure_type: failure_type(flow, stp)
+        )
+      end
+
+      def create_inner_action_fail(stp, flow)
+        Decouplio::Steps::InnerActionFail.new(
+          name: stp[:name],
+          action: stp[:action],
+          on_success_type: success_type(flow, stp),
+          on_failure_type: failure_type(flow, stp)
+        )
+      end
+
+      def create_inner_action_pass(stp, flow)
+        Decouplio::Steps::InnerActionPass.new(
           name: stp[:name],
           action: stp[:action],
           on_success_type: success_type(flow, stp),
@@ -201,12 +223,13 @@ module Decouplio
           when Decouplio::Const::Types::STEP_TYPE,
                Decouplio::Const::Types::PASS_TYPE,
                Decouplio::Const::Types::WRAP_TYPE,
+               Decouplio::Const::Types::ACTION_TYPE_STEP,
                Decouplio::Const::Types::ACTION_TYPE_PASS,
                Decouplio::Const::Types::RESQ_TYPE_PASS
             compose_step_flow(stp, step_id, flow, idx, flow_hash)
           when Decouplio::Const::Types::FAIL_TYPE,
                Decouplio::Const::Types::RESQ_TYPE_FAIL,
-               Decouplio::Const::Types::ACTION_TYPE_PASS
+               Decouplio::Const::Types::ACTION_TYPE_FAIL
             compose_fail_flow(stp, step_id, flow, idx, flow_hash)
           when Decouplio::Const::Types::IF_TYPE_PASS, Decouplio::Const::Types::UNLESS_TYPE_PASS
             compose_pass_condition_flow(stp, flow, idx, flow_hash)
@@ -326,17 +349,10 @@ module Decouplio
         # TODO: && stp is_a_step_type, means that wrap, strategy, palp, resq
         # does not accept action: key, add validations and tests
 
-        return stp unless stp.key?(:action) || stp.dig(:step_to_resq, :action)
-
-        case stp[:type]
-        when Decouplio::Const::Types::RESQ_TYPE_PASS
-          stp[:step_to_resq][:type] = Decouplio::Const::Types::ACTION_TYPE_PASS
-        when Decouplio::Const::Types::RESQ_TYPE_FAIL
-          stp[:step_to_resq][:type] = Decouplio::Const::Types::ACTION_TYPE_FAIL
-        when *Decouplio::Const::Types::PASS_FLOW
-          stp[:type] = Decouplio::Const::Types::ACTION_TYPE_PASS
-        when *Decouplio::Const::Types::FAIL_FLOW
-          stp[:type] = Decouplio::Const::Types::ACTION_TYPE_FAIL
+        if stp.key?(:action)
+          stp[:type] = Decouplio::Const::Types::STEP_TYPE_TO_INNER_TYPE[stp[:type]]
+        elsif stp.dig(:step_to_resq, :action)
+          stp[:step_to_resq][:type] = Decouplio::Const::Types::STEP_TYPE_TO_INNER_TYPE[stp[:type]]
         end
 
         stp
@@ -400,6 +416,7 @@ module Decouplio
             Decouplio::Const::Types::IF_TYPE_PASS,
             Decouplio::Const::Types::UNLESS_TYPE_PASS,
             Decouplio::Const::Types::WRAP_TYPE,
+            Decouplio::Const::Types::ACTION_TYPE_STEP,
             Decouplio::Const::Types::ACTION_TYPE_PASS,
             Decouplio::Const::Types::RESQ_TYPE_PASS,
             Decouplio::Const::Types::OCTO_TYPE

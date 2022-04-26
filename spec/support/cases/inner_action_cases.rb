@@ -120,4 +120,246 @@ module InnerActionCases
       end
     end
   end
+
+  def when_inner_action_as_fail_step
+    lambda do |_klass|
+      logic do
+        step :assign_inner_action_param
+        step :step_one
+        fail :fail_one, action: InnerAction
+        step :step_two
+        fail :fail_two
+      end
+
+      def assign_inner_action_param(param1:, **)
+        ctx[:inner_action_param] = param1
+      end
+
+      def step_one(param2:, **)
+        ctx[:step_one] = param2
+      end
+
+      def step_two(*)
+        ctx[:step_two] = 'Success'
+      end
+
+      def fail_two(*)
+        ctx[:fail_two] = 'Failure'
+      end
+    end
+  end
+
+  def when_inner_action_as_fail_step_on_success
+    lambda do |_klass|
+      logic do
+        step :assign_inner_action_param
+        step :step_one
+        fail :fail_one, action: InnerAction, on_success: :step_two
+        step :step_two
+        fail :fail_two
+      end
+
+      def assign_inner_action_param(param1:, **)
+        ctx[:inner_action_param] = param1
+      end
+
+      def step_one(param2:, **)
+        ctx[:step_one] = param2
+      end
+
+      def step_two(*)
+        ctx[:step_two] = 'Success'
+      end
+
+      def fail_two(*)
+        ctx[:fail_two] = 'Failure'
+      end
+    end
+  end
+
+  def when_inner_action_as_fail_step_on_failure
+    lambda do |_klass|
+      logic do
+        step :assign_inner_action_param
+        step :step_one
+        fail :fail_one, action: InnerAction, on_failure: :step_two
+        step :step_two
+        fail :fail_two
+      end
+
+      def assign_inner_action_param(param1:, **)
+        ctx[:inner_action_param] = param1
+      end
+
+      def step_one(param2:, **)
+        ctx[:step_one] = param2
+      end
+
+      def step_two(*)
+        ctx[:step_two] = 'Success'
+      end
+
+      def fail_two(*)
+        ctx[:fail_two] = 'Failure'
+      end
+    end
+  end
+
+  def when_inner_action_as_fail_step_on_success_finish_him
+    lambda do |_klass|
+      logic do
+        step :assign_inner_action_param
+        step :step_one
+        fail :fail_one, action: InnerAction, on_success: :finish_him
+        step :step_two
+        fail :fail_two
+      end
+
+      def assign_inner_action_param(param1:, **)
+        ctx[:inner_action_param] = param1
+      end
+
+      def step_one(param2:, **)
+        ctx[:step_one] = param2
+      end
+
+      def step_two(*)
+        ctx[:step_two] = 'Success'
+      end
+
+      def fail_two(*)
+        ctx[:fail_two] = 'Failure'
+      end
+    end
+  end
+
+  def when_inner_action_as_fail_step_on_failure_finish_him
+    lambda do |_klass|
+      logic do
+        step :assign_inner_action_param
+        step :step_one
+        fail :fail_one, action: InnerAction, on_failure: :finish_him
+        step :step_two
+        fail :fail_two
+      end
+
+      def assign_inner_action_param(param1:, **)
+        ctx[:inner_action_param] = param1
+      end
+
+      def step_one(param2:, **)
+        ctx[:step_one] = param2
+      end
+
+      def step_two(*)
+        ctx[:step_two] = 'Success'
+      end
+
+      def fail_two(*)
+        ctx[:fail_two] = 'Failure'
+      end
+    end
+  end
+
+  def when_inner_action_as_fail_step_finish_him_on_success
+    lambda do |_klass|
+      logic do
+        step :assign_inner_action_param
+        step :step_one
+        fail :fail_one, action: InnerAction, finish_him: :on_success
+        step :step_two
+        fail :fail_two
+      end
+
+      def assign_inner_action_param(param1:, **)
+        ctx[:inner_action_param] = param1
+      end
+
+      def step_one(param2:, **)
+        ctx[:step_one] = param2
+      end
+
+      def step_two(*)
+        ctx[:step_two] = 'Success'
+      end
+
+      def fail_two(*)
+        ctx[:fail_two] = 'Failure'
+      end
+    end
+  end
+
+  def when_inner_action_as_fail_step_finish_him_on_failure
+    lambda do |_klass|
+      logic do
+        step :assign_inner_action_param
+        step :step_one
+        fail :fail_one, action: InnerAction, finish_him: :on_failure
+        step :step_two
+        fail :fail_two
+      end
+
+      def assign_inner_action_param(param1:, **)
+        ctx[:inner_action_param] = param1
+      end
+
+      def step_one(param2:, **)
+        ctx[:step_one] = param2
+      end
+
+      def step_two(*)
+        ctx[:step_two] = 'Success'
+      end
+
+      def fail_two(*)
+        ctx[:fail_two] = 'Failure'
+      end
+    end
+  end
+
+  def when_inner_action_as_pass
+    lambda do |_klass|
+      logic do
+        step :assign_inner_action_param
+        step :step_one
+        pass :pass_one, action: InnerAction
+        step :step_two
+      end
+
+      def assign_inner_action_param(param1:, **)
+        ctx[:inner_action_param] = param1
+      end
+
+      def step_one(*)
+        ctx[:step_one] = 'Success'
+      end
+
+      def step_two(*)
+        ctx[:step_two] = 'Success'
+      end
+    end
+  end
+
+  def when_inner_action_as_pass_finish_him
+    lambda do |_klass|
+      logic do
+        step :assign_inner_action_param
+        step :step_one
+        pass :pass_one, action: InnerAction, finish_him: true
+        step :step_two
+      end
+
+      def assign_inner_action_param(param1:, **)
+        ctx[:inner_action_param] = param1
+      end
+
+      def step_one(*)
+        ctx[:step_one] = 'Success'
+      end
+
+      def step_two(*)
+        ctx[:step_two] = 'Success'
+      end
+    end
+  end
 end
