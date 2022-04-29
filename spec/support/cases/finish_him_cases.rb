@@ -110,38 +110,4 @@ module FinishHimCases
       end
     end
   end
-
-  def finish_him_on_failure_for_fail
-    lambda do |_klass|
-      logic do
-        step :step_one
-        fail :fail_one, finish_him: :on_failure
-        step :step_two
-      end
-
-      def step_one(**)
-        ctx[:step_one] = 'Success'
-      end
-
-      def fail_one(**)
-        StubDummy.call
-      end
-
-      def step_two(**)
-        ctx[:step_two] = 'Success'
-      end
-    end
-  end
-
-  def when_fail_on_success_finish_him
-    lambda do |_klass|
-      logic do
-        step :step_one
-        step
-      end
-    end
-  end
-
-  def when_fail_on_failure_finish_him
-  end
 end

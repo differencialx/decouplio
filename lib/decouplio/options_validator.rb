@@ -49,7 +49,7 @@ module Decouplio
         validate_octo(options: filtered_options)
       when Decouplio::Const::Types::WRAP_TYPE
         validate_wrap(options: filtered_options, name: options[:name])
-      when Decouplio::Const::Types::RESQ_TYPE_PASS, Decouplio::Const::Types::RESQ_TYPE_FAIL
+      when Decouplio::Const::Types::RESQ_TYPE_STEP, Decouplio::Const::Types::RESQ_TYPE_FAIL
         validate(options: options[:step_to_resq])
         validate_resq(options: filtered_options)
       end

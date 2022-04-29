@@ -55,6 +55,7 @@ module Decouplio
           stp = compose_resq(stp, palp_prefix)
           stp = compose_action(stp)
           condition = compose_condition(stp, palp_prefix)
+
           [condition, stp].compact
         end.flatten
 
@@ -99,7 +100,7 @@ module Decouplio
           create_octo(stp)
         when Decouplio::Const::Types::WRAP_TYPE
           create_wrap(stp)
-        when Decouplio::Const::Types::RESQ_TYPE_PASS
+        when Decouplio::Const::Types::RESQ_TYPE_STEP, Decouplio::Const::Types::RESQ_TYPE_PASS
           create_resq_pass(stp, flow)
         when Decouplio::Const::Types::RESQ_TYPE_FAIL
           create_resq_fail(stp, flow)
@@ -225,6 +226,7 @@ module Decouplio
                Decouplio::Const::Types::WRAP_TYPE,
                Decouplio::Const::Types::ACTION_TYPE_STEP,
                Decouplio::Const::Types::ACTION_TYPE_PASS,
+               Decouplio::Const::Types::RESQ_TYPE_STEP,
                Decouplio::Const::Types::RESQ_TYPE_PASS
             compose_step_flow(stp, step_id, flow, idx, flow_hash)
           when Decouplio::Const::Types::FAIL_TYPE,
@@ -252,8 +254,14 @@ module Decouplio
           idx,
           flow[step_id][:on_failure]
         )
+        stp[:flow][Decouplio::Const::Results::ERROR] = next_failure_step(
+          flow.values,
+          idx,
+          flow[step_id][:on_error]
+        )
         stp[:flow][Decouplio::Const::Results::PASS] ||= flow_hash[Decouplio::Const::Results::PASS]
         stp[:flow][Decouplio::Const::Results::FAIL] ||= flow_hash[Decouplio::Const::Results::FAIL]
+        stp[:flow][Decouplio::Const::Results::ERROR] ||= flow_hash[Decouplio::Const::Results::ERROR]
         stp[:flow][Decouplio::Const::Results::FINISH_HIM] = Decouplio::Const::Results::NO_STEP
       end
 
@@ -268,8 +276,14 @@ module Decouplio
           idx,
           flow[step_id][:on_failure]
         )
+        stp[:flow][Decouplio::Const::Results::ERROR] = next_failure_step(
+          flow.values,
+          idx,
+          flow[step_id][:on_error]
+        )
         stp[:flow][Decouplio::Const::Results::PASS] ||= flow_hash[Decouplio::Const::Results::FAIL]
         stp[:flow][Decouplio::Const::Results::FAIL] ||= flow_hash[Decouplio::Const::Results::FAIL]
+        stp[:flow][Decouplio::Const::Results::ERROR] ||= flow_hash[Decouplio::Const::Results::ERROR]
         stp[:flow][Decouplio::Const::Results::FINISH_HIM] = Decouplio::Const::Results::NO_STEP
       end
 
@@ -418,6 +432,7 @@ module Decouplio
             Decouplio::Const::Types::WRAP_TYPE,
             Decouplio::Const::Types::ACTION_TYPE_STEP,
             Decouplio::Const::Types::ACTION_TYPE_PASS,
+            Decouplio::Const::Types::RESQ_TYPE_STEP,
             Decouplio::Const::Types::RESQ_TYPE_PASS,
             Decouplio::Const::Types::OCTO_TYPE
           ].include?(stp[:type])

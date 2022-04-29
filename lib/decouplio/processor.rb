@@ -11,7 +11,6 @@ module Decouplio
 
       def process(next_step_name, instance, steps_pool, steps_flow)
         while next_step_name
-          # binding.pry
           result = steps_pool[next_step_name].process(instance: instance)
           next_step_name = steps_flow[next_step_name][result]
         end

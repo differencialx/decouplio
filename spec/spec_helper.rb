@@ -11,6 +11,7 @@ RSpec.configure do |config|
   config.include GendalfCases
   config.include ResqCases
   config.include InnerActionCases
+  config.include ResqInnerActionCases
   config.include WrapCases
   config.include FinishHimCases
   config.include OnSuccessFailureCases
