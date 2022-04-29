@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec::Matchers.define :have_a_state do |state_hash|
   match do |actual|
     state_matches?(state_hash[:state]) &&
@@ -30,8 +32,9 @@ RSpec::Matchers.define :have_a_state do |state_hash|
           key,
           { expected: value, got: got_hash[key] }
         ]
-      end.select do |key, diff_hash|
-        diff_hash[:expected] != diff_hash[:got]
+      end
+      diff = diff.reject do |_key, diff_hash|
+        diff_hash[:expected] == diff_hash[:got]
       end
       return <<~MESSAGE
         Context keys does not match:

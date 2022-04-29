@@ -30,7 +30,7 @@ RSpec.describe 'Resq with inner action cases' do
             state: {
               result: true,
               step_two: 'Success',
-              fail_one: nil,
+              fail_one: nil
             },
             errors: {}
           }
@@ -49,7 +49,7 @@ RSpec.describe 'Resq with inner action cases' do
             state: {
               result: false,
               step_two: nil,
-              fail_one: 'Failure',
+              fail_one: 'Failure'
             },
             errors: {}
           }
@@ -74,7 +74,7 @@ RSpec.describe 'Resq with inner action cases' do
             state: {
               result: nil,
               step_two: nil,
-              fail_one: 'Failure',
+              fail_one: 'Failure'
             },
             errors: {
               error_handler: [error_message]
@@ -264,7 +264,7 @@ RSpec.describe 'Resq with inner action cases' do
               result: true,
               step_two: nil,
               fail_one: 'Failure',
-              step_three: nil,
+              step_three: nil
             },
             errors: {}
           }
@@ -284,7 +284,7 @@ RSpec.describe 'Resq with inner action cases' do
               result: false,
               step_two: nil,
               fail_one: 'Failure',
-              step_three: nil,
+              step_three: nil
             },
             errors: {}
           }
@@ -343,7 +343,7 @@ RSpec.describe 'Resq with inner action cases' do
               step_two: 'Success',
               fail_one: nil,
               step_three: 'Success',
-              fail_two: nil,
+              fail_two: nil
             },
             errors: {}
           }
@@ -425,7 +425,7 @@ RSpec.describe 'Resq with inner action cases' do
               step_two: 'Success',
               fail_one: nil,
               step_three: 'Success',
-              fail_two: nil,
+              fail_two: nil
             },
             errors: {}
           }

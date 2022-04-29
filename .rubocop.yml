@@ -18,6 +18,15 @@ Style/SignalException:
 Layout/LineLength:
   Max: 120
 
+Lint/Void:
+  Exclude:
+    - spec/support/matchers/error_matcher.rb
+
+Lint/UnusedBlockArgument:
+  Exclude:
+    - spec/support/matchers/error_matcher.rb
+    - spec/support/matchers/decouplio_action_matcher.rb
+
 Lint/NestedMethodDefinition:
   Exclude:
     - spec/**/*
@@ -30,7 +39,7 @@ Style/FrozenStringLiteralComment:
   Enabled: true
 
 Metrics/BlockLength:
-  IgnoredMethods: ['describe','context', 'lambda', 'logic']
+  IgnoredMethods: ['describe','context', 'lambda', 'logic', 'define']
 
 Metrics/ModuleLength:
   Exclude:

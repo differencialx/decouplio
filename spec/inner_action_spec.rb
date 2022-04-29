@@ -290,7 +290,7 @@ RSpec.describe 'Use Decouplio::Action as a step' do
           expect(action[:inner_action_param]).to eq param1
           expect(action[:step_one]).to eq param2
           expect(action[:step_two]).to be_nil
-          expect(action[:fail_two]).to eq  'Failure'
+          expect(action[:fail_two]).to eq 'Failure'
           expect(action.errors).to eq expected_errors
         end
       end

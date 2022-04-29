@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 RSpec::Matchers.define :raise_proper_error do |error_class, error_message|
   match do |actual|
     actual.call
-  rescue => e
+  rescue StandardError => e
     error_class == e.class
     error_message == e.message
   end
@@ -9,7 +11,7 @@ RSpec::Matchers.define :raise_proper_error do |error_class, error_message|
   failure_message do |actual|
     actual.call
 
-  rescue => e
+  rescue StandardError => e
     if error_class != e.class
       <<~MESSAGE
         expected: #{error_class}

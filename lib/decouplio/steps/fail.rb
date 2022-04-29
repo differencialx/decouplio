@@ -23,13 +23,14 @@ module Decouplio
 
       def resolve(result:, instance:)
         if result
-          if @on_success_type == Decouplio::Const::Results::PASS
+          case @on_success_type
+          when Decouplio::Const::Results::PASS
             instance.pass_action
             Decouplio::Const::Results::PASS
-          elsif @on_success_type == Decouplio::Const::Results::FAIL
+          when Decouplio::Const::Results::FAIL
             instance.fail_action
             Decouplio::Const::Results::PASS
-          elsif @on_success_type == Decouplio::Const::Results::FINISH_HIM
+          when Decouplio::Const::Results::FINISH_HIM
             instance.fail_action
             Decouplio::Const::Results::FINISH_HIM
           end
