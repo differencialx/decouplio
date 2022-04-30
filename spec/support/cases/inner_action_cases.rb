@@ -16,7 +16,7 @@ module InnerActionCases
     end
   end
 
-  def inner_action
+  def when_inner_action
     lambda do |_klass|
       logic do
         step :assign_inner_action_param
@@ -34,7 +34,7 @@ module InnerActionCases
     end
   end
 
-  def inner_action_on_success
+  def when_inner_action_on_success
     lambda do |_klass|
       logic do
         step :assign_inner_action_param
@@ -52,7 +52,7 @@ module InnerActionCases
     end
   end
 
-  def inner_action_on_failure
+  def when_inner_action_on_failure
     lambda do |_klass|
       logic do
         step :assign_inner_action_param
@@ -75,7 +75,7 @@ module InnerActionCases
     end
   end
 
-  def inner_action_finish_him_on_success
+  def when_inner_action_finish_him_on_success
     lambda do |_klass|
       logic do
         step :assign_inner_action_param
@@ -98,7 +98,7 @@ module InnerActionCases
     end
   end
 
-  def inner_action_finish_him_on_failure
+  def when_inner_action_finish_him_on_failure
     lambda do |_klass|
       logic do
         step :assign_inner_action_param
