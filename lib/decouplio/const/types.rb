@@ -77,6 +77,11 @@ module Decouplio
         RESQ_TYPE_FAIL => ACTION_TYPE_FAIL,
         RESQ_TYPE_PASS => ACTION_TYPE_PASS
       }.freeze
+      ACTION_NOT_ALLOWED_STEPS = [
+        OCTO_TYPE,
+        WRAP_TYPE,
+        RESQ_TYPE
+      ].freeze
       PASS_FLOW = [
         STEP_TYPE,
         PASS_TYPE,

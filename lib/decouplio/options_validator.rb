@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'const/types'
+require_relative 'errors/action_option_not_allowed_error'
 require_relative 'errors/extra_key_for_step_error'
 require_relative 'errors/extra_key_for_fail_error'
 require_relative 'errors/extra_key_for_octo_error'
@@ -49,7 +50,9 @@ module Decouplio
         validate_octo(options: filtered_options)
       when Decouplio::Const::Types::WRAP_TYPE
         validate_wrap(options: filtered_options, name: options[:name])
-      when Decouplio::Const::Types::RESQ_TYPE_STEP, Decouplio::Const::Types::RESQ_TYPE_FAIL
+      when Decouplio::Const::Types::RESQ_TYPE_STEP,
+           Decouplio::Const::Types::RESQ_TYPE_FAIL,
+           Decouplio::Const::Types::RESQ_TYPE_PASS
         validate(options: options[:step_to_resq])
         validate_resq(options: filtered_options)
       end

@@ -7,8 +7,6 @@ require 'pry'
 Dir[Dir.pwd + '/spec/support/**/*.rb'].sort.each { |f| require f }
 
 RSpec.configure do |config|
-  config.include AfterBlockCases
-  config.include GendalfCases
   config.include ResqCases
   config.include InnerActionCases
   config.include ResqInnerActionCases
@@ -24,6 +22,7 @@ RSpec.configure do |config|
   config.include OptionsValidationsCasesForOcto
   config.include OptionsValidationsCasesForResq
   config.include OptionsValidationsCasesForWrap
+  config.include DoNotAllowActionOptionCases
   config.example_status_persistence_file_path = '.rspec_status'
 
   config.disable_monkey_patching!

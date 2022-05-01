@@ -360,8 +360,7 @@ module Decouplio
       end
 
       def compose_action(stp)
-        # TODO: && stp is_a_step_type, means that wrap, strategy, palp, resq
-        # does not accept action: key, add validations and tests
+        return stp if Decouplio::Const::Types::ACTION_NOT_ALLOWED_STEPS.include?(stp[:type])
 
         if stp.key?(:action)
           stp[:type] = Decouplio::Const::Types::STEP_TYPE_TO_INNER_TYPE[stp[:type]]
