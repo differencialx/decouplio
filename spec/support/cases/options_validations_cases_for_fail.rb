@@ -52,40 +52,6 @@ module OptionsValidationsCasesForFail
     end
   end
 
-  def when_fail_finish_him_is_on_success_symbol
-    lambda do |_klass|
-      logic do
-        step :step_one
-        fail :handle_step_one, finish_him: :on_success
-      end
-
-      def step_one(**)
-        ctx[:result] = 'result'
-      end
-
-      def handle_step_one(**)
-        add_error(:step_one, 'Error')
-      end
-    end
-  end
-
-  def when_fail_finish_him_is_on_failure_symbol
-    lambda do |_klass|
-      logic do
-        step :step_one
-        fail :handle_step_one, finish_him: :on_failure
-      end
-
-      def step_one(**)
-        ctx[:result] = 'result'
-      end
-
-      def handle_step_one(**)
-        add_error(:step_one, 'Error')
-      end
-    end
-  end
-
   def when_fail_not_allowed_option_provided
     lambda do |_klass|
       logic do

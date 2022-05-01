@@ -76,7 +76,7 @@ module OptionsValidationsCasesForPass
         pass :handle_step_one, finish_him: :some_step
       end
 
-      def step_one(string_param:, **)
+      def step_one(**)
         ctx[:result] = string_param
       end
 
@@ -93,8 +93,8 @@ module OptionsValidationsCasesForPass
         pass :handle_step_one, finish_him: :on_success
       end
 
-      def step_one(string_param:, **)
-        ctx[:result] = string_param
+      def step_one(**)
+        ctx[:result] = 'Success'
       end
 
       def handle_step_one(**)

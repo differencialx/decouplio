@@ -16,6 +16,35 @@ module InnerActionCases
     end
   end
 
+  def when_inner_action_for_step_is_string_class
+    lambda do |_klass|
+      logic do
+        step :step_one, action: String
+      end
+    end
+  end
+
+  def when_inner_action_for_fail_is_string_class
+    lambda do |_klass|
+      logic do
+        step :step_one
+        fail :fail_one, action: String
+      end
+
+      def step_one(*)
+        ctx[:step_one] = 'Success'
+      end
+    end
+  end
+
+  def when_inner_action_for_pass_is_string_class
+    lambda do |_klass|
+      logic do
+        pass :step_one, action: String
+      end
+    end
+  end
+
   def when_inner_action
     lambda do |_klass|
       logic do

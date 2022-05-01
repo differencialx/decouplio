@@ -46,42 +46,6 @@ RSpec.describe 'Fail options validations' do
                       message: message
     end
 
-    context 'when finish_him is on_success symbol' do
-      let(:action_block) { when_fail_finish_him_is_on_success_symbol }
-
-      interpolation_values = [
-        Decouplio::Const::Colors::YELLOW,
-        '{:finish_him=>:on_success}',
-        '"finish_him" does not allow "on_success" value',
-        Decouplio::Const::Validations::Fail::ALLOWED_OPTIONS_MESSAGE,
-        Decouplio::Const::Validations::Fail::MANUAL_URL,
-        Decouplio::Const::Colors::NO_COLOR
-      ]
-      message = Decouplio::Const::Validations::Fail::VALIDATION_ERROR_MESSAGE % interpolation_values
-
-      it_behaves_like 'raises option validation error',
-                      error_class: Decouplio::Errors::FailFinishHimError,
-                      message: message
-    end
-
-    context 'when finish_him is on_failure symbol' do
-      let(:action_block) { when_fail_finish_him_is_on_failure_symbol }
-
-      interpolation_values = [
-        Decouplio::Const::Colors::YELLOW,
-        '{:finish_him=>:on_failure}',
-        '"finish_him" does not allow "on_failure" value',
-        Decouplio::Const::Validations::Fail::ALLOWED_OPTIONS_MESSAGE,
-        Decouplio::Const::Validations::Fail::MANUAL_URL,
-        Decouplio::Const::Colors::NO_COLOR
-      ]
-      message = Decouplio::Const::Validations::Fail::VALIDATION_ERROR_MESSAGE % interpolation_values
-
-      it_behaves_like 'raises option validation error',
-                      error_class: Decouplio::Errors::FailFinishHimError,
-                      message: message
-    end
-
     context 'when not allowed option is provided for step' do
       let(:action_block) { when_fail_not_allowed_option_provided }
 

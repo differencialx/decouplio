@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 
 require_relative 'base_error'
-require_relative '../const/validations/action_option'
+require_relative '../const/validations/action_option_class'
 
 module Decouplio
   module Errors
-    class ActionOptionNotAllowedError < Decouplio::Errors::BaseError
+    class ActionClassError < Decouplio::Errors::BaseError
       def initialize(step_type:, errored_option:)
         super(errored_option: errored_option)
         @step_type = step_type
       end
 
       def template
-        Decouplio::Const::Validations::ActionOption::VALIDATION_ERROR_MESSAGE
+        Decouplio::Const::Validations::ActionOptionClass::VALIDATION_ERROR_MESSAGE
       end
 
       def interpolation_values

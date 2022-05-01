@@ -13,6 +13,56 @@ RSpec.describe 'Use Decouplio::Action as a step' do
     let(:param1) { nil }
     let(:param2) { nil }
 
+    context 'when inner action for step is not a Decouplio::Action' do
+      let(:action_block) { when_inner_action_for_step_is_string_class }
+
+      interpolation_values = [
+        Decouplio::Const::Colors::YELLOW,
+        'step',
+        'action: String',
+        Decouplio::Const::Colors::NO_COLOR
+      ]
+
+      message = Decouplio::Const::Validations::ActionOptionClass::VALIDATION_ERROR_MESSAGE % interpolation_values
+
+      it_behaves_like 'raises option validation error',
+                      error_class: Decouplio::Errors::StepIsNotDefinedError,
+                      message: message
+    end
+
+    context 'when inner action for fail is not a Decouplio::Action' do
+      let(:action_block) { when_inner_action_for_fail_is_string_class }
+
+      interpolation_values = [
+        Decouplio::Const::Colors::YELLOW,
+        'fail',
+        'action: String',
+        Decouplio::Const::Colors::NO_COLOR
+      ]
+      message = Decouplio::Const::Validations::ActionOptionClass::VALIDATION_ERROR_MESSAGE % interpolation_values
+
+      it_behaves_like 'raises option validation error',
+                      error_class: Decouplio::Errors::FailFinishHimError,
+                      message: message
+    end
+
+    context 'when inner action for pass is not a Decouplio::Action' do
+      let(:action_block) { when_inner_action_for_pass_is_string_class }
+
+      interpolation_values = [
+        Decouplio::Const::Colors::YELLOW,
+        'pass',
+        'action: String',
+        Decouplio::Const::Colors::NO_COLOR
+      ]
+
+      message = Decouplio::Const::Validations::ActionOptionClass::VALIDATION_ERROR_MESSAGE % interpolation_values
+
+      it_behaves_like 'raises option validation error',
+                      error_class: Decouplio::Errors::ExtraKeyForPassError,
+                      message: message
+    end
+
     context 'when inner action pass' do
       let(:action_block) { when_inner_action }
       let(:param1) { 'pass' }
