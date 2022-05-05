@@ -854,7 +854,7 @@ module WrapCases
     lambda do |_klass|
       logic do
         step :step_one
-        resq  error_handler_step: ArgumentError
+        resq error_handler_step: ArgumentError
 
         wrap :wrap_name do
           step :wrap_step_one

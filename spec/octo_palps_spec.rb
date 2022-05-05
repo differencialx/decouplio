@@ -1604,7 +1604,17 @@ RSpec.describe 'Decouplio::Action octo palps' do
 
           context 'when palp_step raises an error' do
             context 'when palp_fail success' do
-              let(:railway_flow) { %i[step_one octo_name palp_pass palp_step error_handler_palp_step palp_fail fail_two] }
+              let(:railway_flow) do
+                %i[
+                  step_one
+                  octo_name
+                  palp_pass
+                  palp_step
+                  error_handler_palp_step
+                  palp_fail
+                  fail_two
+                ]
+              end
               let(:param1) { -> { true } }
               let(:param2) { -> { true } }
               let(:param3) { -> { raise ArgumentError, step_error_message } }
@@ -1638,7 +1648,18 @@ RSpec.describe 'Decouplio::Action octo palps' do
             end
 
             context 'when palp_fail failure' do
-              let(:railway_flow) { %i[step_one octo_name palp_pass palp_step error_handler_palp_step palp_fail step_two pass_one] }
+              let(:railway_flow) do
+                %i[
+                  step_one
+                  octo_name
+                  palp_pass
+                  palp_step
+                  error_handler_palp_step
+                  palp_fail
+                  step_two
+                  pass_one
+                ]
+              end
               let(:param1) { -> { true } }
               let(:param2) { -> { true } }
               let(:param3) { -> { raise ArgumentError, step_error_message } }
@@ -1780,7 +1801,17 @@ RSpec.describe 'Decouplio::Action octo palps' do
 
           context 'when palp_step raises an error' do
             context 'when palp_fail success' do
-              let(:railway_flow) { %i[step_one octo_name palp_pass palp_step error_handler_palp_step palp_fail fail_two] }
+              let(:railway_flow) do
+                %i[
+                  step_one
+                  octo_name
+                  palp_pass
+                  palp_step
+                  error_handler_palp_step
+                  palp_fail
+                  fail_two
+                ]
+              end
               let(:param1) { -> { true } }
               let(:param2) { -> { true } }
               let(:param3) { -> { raise ArgumentError, step_error_message } }
@@ -1814,7 +1845,18 @@ RSpec.describe 'Decouplio::Action octo palps' do
             end
 
             context 'when palp_fail failure' do
-              let(:railway_flow) { %i[step_one octo_name palp_pass palp_step error_handler_palp_step palp_fail step_two pass_one] }
+              let(:railway_flow) do
+                %i[
+                  step_one
+                  octo_name
+                  palp_pass
+                  palp_step
+                  error_handler_palp_step
+                  palp_fail
+                  step_two
+                  pass_one
+                ]
+              end
               let(:param1) { -> { true } }
               let(:param2) { -> { true } }
               let(:param3) { -> { raise ArgumentError, step_error_message } }
@@ -2068,7 +2110,18 @@ RSpec.describe 'Decouplio::Action octo palps' do
 
           context 'when palp_fail failure' do
             context 'when step_two success' do
-              let(:railway_flow) { %i[step_one octo_name palp_pass error_handler_palp_pass palp_fail palp_step step_two pass_one] }
+              let(:railway_flow) do
+                %i[
+                  step_one
+                  octo_name
+                  palp_pass
+                  error_handler_palp_pass
+                  palp_fail
+                  palp_step
+                  step_two
+                  pass_one
+                ]
+              end
               let(:param1) { -> { true } }
               let(:param2) { -> { true } }
               let(:param3) { -> { true } }
@@ -2102,7 +2155,18 @@ RSpec.describe 'Decouplio::Action octo palps' do
             end
 
             context 'when step_two failure' do
-              let(:railway_flow) { %i[step_one octo_name palp_pass error_handler_palp_pass palp_fail palp_step step_two fail_two] }
+              let(:railway_flow) do
+                %i[
+                  step_one
+                  octo_name
+                  palp_pass
+                  error_handler_palp_pass
+                  palp_fail
+                  palp_step
+                  step_two
+                  fail_two
+                ]
+              end
               let(:param1) { -> { true } }
               let(:param2) { -> { true } }
               let(:param3) { -> { true } }
@@ -2142,17 +2206,141 @@ RSpec.describe 'Decouplio::Action octo palps' do
     context 'when step_one failure' do
       context 'when fail_one success' do
         context 'when fail_two success' do
+          let(:railway_flow) { %i[step_one fail_one fail_two] }
+          let(:param1) { -> { false } }
+          let(:param2) { -> { true } }
+          let(:param3) { -> { true } }
+          let(:param4) { -> { true } }
+          let(:param5) { -> { true } }
+          let(:param6) { -> { true } }
+          let(:param7) { -> { true } }
+          let(:param8) { -> { true } }
+          let(:expected_state) do
+            {
+              action_status: :failure,
+              railway_flow: railway_flow,
+              errors: {},
+              state: {
+                step_one: false,
+                fail_one: true,
+                palp_step: nil,
+                palp_fail: nil,
+                palp_pass: nil,
+                step_two: nil,
+                pass_one: nil,
+                fail_two: true,
+                error_handler_palp_step: nil,
+                error_handler_palp_fail: nil,
+                error_handler_palp_pass: nil
+              }
+            }
+          end
+
+          it_behaves_like 'check action state'
         end
 
         context 'when fail_two failure' do
+          let(:railway_flow) { %i[step_one fail_one fail_two] }
+          let(:param1) { -> { false } }
+          let(:param2) { -> { true } }
+          let(:param3) { -> { true } }
+          let(:param4) { -> { true } }
+          let(:param5) { -> { true } }
+          let(:param6) { -> { true } }
+          let(:param7) { -> { true } }
+          let(:param8) { -> { false } }
+          let(:expected_state) do
+            {
+              action_status: :failure,
+              railway_flow: railway_flow,
+              errors: {},
+              state: {
+                step_one: false,
+                fail_one: true,
+                palp_step: nil,
+                palp_fail: nil,
+                palp_pass: nil,
+                step_two: nil,
+                pass_one: nil,
+                fail_two: false,
+                error_handler_palp_step: nil,
+                error_handler_palp_fail: nil,
+                error_handler_palp_pass: nil
+              }
+            }
+          end
+
+          it_behaves_like 'check action state'
         end
       end
 
       context 'when fail_one failure' do
         context 'when pass_one success' do
+          let(:railway_flow) { %i[step_one fail_one pass_one] }
+          let(:param1) { -> { false } }
+          let(:param2) { -> { false } }
+          let(:param3) { -> { true } }
+          let(:param4) { -> { true } }
+          let(:param5) { -> { true } }
+          let(:param6) { -> { true } }
+          let(:param7) { -> { true } }
+          let(:param8) { -> { true } }
+          let(:expected_state) do
+            {
+              action_status: :success,
+              railway_flow: railway_flow,
+              errors: {},
+              state: {
+                step_one: false,
+                fail_one: false,
+                palp_step: nil,
+                palp_fail: nil,
+                palp_pass: nil,
+                step_two: nil,
+                pass_one: true,
+                fail_two: nil,
+                error_handler_palp_step: nil,
+                error_handler_palp_fail: nil,
+                error_handler_palp_pass: nil
+              }
+            }
+          end
+
+          it_behaves_like 'check action state'
         end
 
         context 'when pass_one failure' do
+          let(:railway_flow) { %i[step_one fail_one pass_one] }
+          let(:param1) { -> { false } }
+          let(:param2) { -> { false } }
+          let(:param3) { -> { true } }
+          let(:param4) { -> { true } }
+          let(:param5) { -> { true } }
+          let(:param6) { -> { true } }
+          let(:param7) { -> { false } }
+          let(:param8) { -> { true } }
+          let(:expected_state) do
+            {
+              action_status: :success,
+              railway_flow: railway_flow,
+              errors: {},
+              state: {
+                step_one: false,
+                fail_one: false,
+                palp_step: nil,
+                palp_fail: nil,
+                palp_pass: nil,
+                step_two: nil,
+                pass_one: false,
+                fail_two: nil,
+                error_handler_palp_step: nil,
+                error_handler_palp_fail: nil,
+                error_handler_palp_pass: nil
+              }
+            }
+          end
+
+          it_behaves_like 'check action state'
         end
       end
     end

@@ -62,6 +62,10 @@ RSpec/ExampleLength:
 RSpec/MultipleExpectations:
   Enabled: false
 
+RSpec/MultipleMemoizedHelpers:
+  Exclude:
+    - spec/**/*
+
 Naming/PredicateName:
   Exclude:
     - lib/decouplio/step.rb

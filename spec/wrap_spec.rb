@@ -79,7 +79,7 @@ RSpec.describe 'Decouplio::Action wrap cases' do
 
           before do
             allow(StubDummy).to receive(:call)
-            .and_return(false)
+              .and_return(false)
           end
 
           it_behaves_like 'check action state'
@@ -1325,12 +1325,12 @@ RSpec.describe 'Decouplio::Action wrap cases' do
             context 'when some_wrap failure' do
               context 'when step_three success' do
                 let(:railway_flow) { %i[step_one octo_name step_palp1 some_wrap wrapper_step_one step_three] }
-                let(:param1) { -> {true } }
-                let(:param2) { -> {true } }
-                let(:param3) { -> {true } }
-                let(:param4) { -> {true } }
-                let(:param5) { -> {false } }
-                let(:param6) { -> {true } }
+                let(:param1) { -> { true } }
+                let(:param2) { -> { true } }
+                let(:param3) { -> { true } }
+                let(:param4) { -> { true } }
+                let(:param5) { -> { false } }
+                let(:param6) { -> { true } }
                 let(:expected_state) do
                   {
                     action_status: :success,
@@ -1415,12 +1415,12 @@ RSpec.describe 'Decouplio::Action wrap cases' do
 
             context 'when step_three failure' do
               let(:railway_flow) { %i[step_one octo_name step_palp1 step_three fail_two] }
-              let(:param1) { -> { true }  }
-              let(:param2) { -> { true }  }
-              let(:param3) { -> { false }  }
-              let(:param4) { -> { true }  }
-              let(:param5) { -> { true }  }
-              let(:param6) { -> { false }  }
+              let(:param1) { -> { true } }
+              let(:param2) { -> { true } }
+              let(:param3) { -> { false } }
+              let(:param4) { -> { true } }
+              let(:param5) { -> { true } }
+              let(:param6) { -> { false } }
               let(:expected_state) do
                 {
                   action_status: :failure,
@@ -1635,7 +1635,17 @@ RSpec.describe 'Decouplio::Action wrap cases' do
 
               context 'when some_wrap failure' do
                 context 'when step_three success' do
-                  let(:railway_flow) { %i[step_one fail_one octo_name step_palp1 some_wrap wrapper_step_one step_three] }
+                  let(:railway_flow) do
+                    %i[
+                      step_one
+                      fail_one
+                      octo_name
+                      step_palp1
+                      some_wrap
+                      wrapper_step_one
+                      step_three
+                    ]
+                  end
                   let(:param1) { -> { false } }
                   let(:param2) { -> { false } }
                   let(:param3) { -> { true } }
@@ -1664,7 +1674,18 @@ RSpec.describe 'Decouplio::Action wrap cases' do
                 end
 
                 context 'when step_three failure' do
-                  let(:railway_flow) { %i[step_one fail_one octo_name step_palp1 some_wrap wrapper_step_one step_three fail_two] }
+                  let(:railway_flow) do
+                    %i[
+                      step_one
+                      fail_one
+                      octo_name
+                      step_palp1
+                      some_wrap
+                      wrapper_step_one
+                      step_three
+                      fail_two
+                    ]
+                  end
                   let(:param1) { -> { false } }
                   let(:param2) { -> { false } }
                   let(:param3) { -> { true } }
@@ -1819,7 +1840,17 @@ RSpec.describe 'Decouplio::Action wrap cases' do
 
               context 'when some_wrap failure' do
                 context 'when step_three success' do
-                  let(:railway_flow) { %i[step_one fail_one octo_name step_palp2 some_wrap wrapper_step_one step_three] }
+                  let(:railway_flow) do
+                    %i[
+                      step_one
+                      fail_one
+                      octo_name
+                      step_palp2
+                      some_wrap
+                      wrapper_step_one
+                      step_three
+                    ]
+                  end
                   let(:param1) { -> { false } }
                   let(:param2) { -> { false } }
                   let(:param3) { -> { true } }
@@ -1848,7 +1879,18 @@ RSpec.describe 'Decouplio::Action wrap cases' do
                 end
 
                 context 'when step_three failure' do
-                  let(:railway_flow) { %i[step_one fail_one octo_name step_palp2 some_wrap wrapper_step_one step_three fail_two] }
+                  let(:railway_flow) do
+                    %i[
+                      step_one
+                      fail_one
+                      octo_name
+                      step_palp2
+                      some_wrap
+                      wrapper_step_one
+                      step_three
+                      fail_two
+                    ]
+                  end
                   let(:param1) { -> { false } }
                   let(:param2) { -> { false } }
                   let(:param3) { -> { true } }
