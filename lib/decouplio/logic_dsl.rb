@@ -77,7 +77,7 @@ module Decouplio
         }
       end
 
-      def wrap(name, **options, &block)
+      def wrap(name = nil, **options, &block)
         if block_given?
           @steps << options.merge(
             type: Decouplio::Const::Types::WRAP_TYPE,

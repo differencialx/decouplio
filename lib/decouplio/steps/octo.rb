@@ -8,9 +8,9 @@ module Decouplio
       attr_accessor :hash_case
 
       def initialize(name:, ctx_key:)
+        super()
         @name = name
         @ctx_key = ctx_key
-        super()
       end
 
       def process(instance:)

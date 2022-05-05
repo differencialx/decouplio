@@ -5,6 +5,7 @@ module Decouplio
     module Results
       PASS = true
       FAIL = false
+      ERROR = :error
       FINISH_HIM = :finish_him
       NO_STEP = nil
     end

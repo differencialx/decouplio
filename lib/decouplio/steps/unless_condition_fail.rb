@@ -6,8 +6,8 @@ module Decouplio
   module Steps
     class UnlessConditionFail < Decouplio::Steps::BaseStep
       def initialize(name:)
-        @name = name
         super()
+        @name = name
       end
 
       def process(instance:)

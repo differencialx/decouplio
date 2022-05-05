@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'const/types'
+require_relative 'errors/action_class_error'
 require_relative 'errors/extra_key_for_step_error'
 require_relative 'errors/extra_key_for_fail_error'
 require_relative 'errors/extra_key_for_octo_error'
@@ -22,10 +23,10 @@ require_relative 'errors/wrap_klass_method_error'
 
 module Decouplio
   class OptionsValidator
-    def initialize(flow:, palps:)
+    def initialize(flow:, palps:, next_steps:)
       @flow = flow
       @palps = palps
-      @step_names = extract_step_names(flow: @flow)
+      @step_names = extract_step_names(flow: @flow.merge(next_steps || {}))
     end
 
     def call
@@ -49,10 +50,30 @@ module Decouplio
         validate_octo(options: filtered_options)
       when Decouplio::Const::Types::WRAP_TYPE
         validate_wrap(options: filtered_options, name: options[:name])
-      when Decouplio::Const::Types::RESQ_TYPE_PASS, Decouplio::Const::Types::RESQ_TYPE_FAIL
+      when Decouplio::Const::Types::ACTION_TYPE_STEP
+        validate_action(action_class: options[:action], type: Decouplio::Const::Types::STEP_TYPE)
+        validate_step(options: filtered_options)
+      when Decouplio::Const::Types::ACTION_TYPE_FAIL
+        validate_action(action_class: options[:action], type: Decouplio::Const::Types::FAIL_TYPE)
+        validate_fail(options: filtered_options)
+      when Decouplio::Const::Types::ACTION_TYPE_PASS
+        validate_action(action_class: options[:action], type: Decouplio::Const::Types::PASS_TYPE)
+        validate_pass(options: filtered_options)
+      when Decouplio::Const::Types::RESQ_TYPE_STEP,
+           Decouplio::Const::Types::RESQ_TYPE_FAIL,
+           Decouplio::Const::Types::RESQ_TYPE_PASS
         validate(options: options[:step_to_resq])
         validate_resq(options: filtered_options)
       end
+    end
+
+    def validate_action(action_class:, type:)
+      return if action_class.is_a?(Class) && action_class <= Decouplio::Action
+
+      raise Decouplio::Errors::ActionClassError.new(
+        step_type: type,
+        errored_option: "action: #{action_class}"
+      )
     end
 
     def validate_step(options:)
@@ -196,6 +217,7 @@ module Decouplio
       finish_him_value = options.dig(:finish_him)
 
       return unless options.key?(:finish_him)
+
       return if ALLOWED_FAIL_FINISH_HIM_VALUES.include?(finish_him_value)
 
       raise Decouplio::Errors::FailFinishHimError.new(
@@ -209,7 +231,7 @@ module Decouplio
 
       return unless finish_him_value && options.key?(:finish_him)
 
-      unless ALLOWED_FAIL_FINISH_HIM_VALUES.include?(finish_him_value)
+      unless ALLOWED_PASS_FINISH_HIM_VALUES.include?(finish_him_value)
         raise Decouplio::Errors::PassFinishHimError.new(
           errored_option: options.slice(:finish_him).to_s,
           details: finish_him_value
@@ -344,11 +366,14 @@ module Decouplio
       unless
     ].freeze
     FAIL_ALLOWED_OPTIONS = %i[
+      on_success
+      on_failure
       finish_him
       if
       unless
+      action
     ].freeze
-    ALLOWED_FAIL_FINISH_HIM_VALUES = [true].freeze
+    ALLOWED_FAIL_FINISH_HIM_VALUES = [true, :on_success, :on_failure].freeze
 
     # *************************************************
     # PASS
@@ -358,12 +383,14 @@ module Decouplio
       finish_him
       if
       unless
+      action
     ].freeze
 
     PASS_CHECK_METHOD_EXISTENCE_OPTIONS = %i[
       if
       unless
     ].freeze
+    ALLOWED_PASS_FINISH_HIM_VALUES = [true].freeze
 
     # *************************************************
     # OCTO

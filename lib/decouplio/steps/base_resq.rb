@@ -6,9 +6,9 @@ module Decouplio
   module Steps
     class BaseResq < BaseStep
       def initialize(handler_hash:, step_to_resq:)
+        super()
         @handler_hash = handler_hash
         @step_to_resq = step_to_resq
-        super()
       end
 
       def process(instance:)
@@ -22,7 +22,7 @@ module Decouplio
         instance.public_send(handler_method, e, **instance.ctx)
 
         instance.fail_action
-        Decouplio::Const::Results::FAIL
+        Decouplio::Const::Results::ERROR
       else
         result
       end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module FinishHimCases
-  def finish_him_on_success
+  def when_finish_him_on_success
     lambda do |_klass|
       logic do
         step :step_one
@@ -23,7 +23,7 @@ module FinishHimCases
     end
   end
 
-  def finish_him_on_failure
+  def when_finish_him_on_failure
     lambda do |_klass|
       logic do
         step :step_one
@@ -45,7 +45,7 @@ module FinishHimCases
     end
   end
 
-  def finish_him_true_for_fail
+  def when_finish_him_true_for_fail
     lambda do |_klass|
       logic do
         step :step_one
@@ -67,7 +67,7 @@ module FinishHimCases
     end
   end
 
-  def finish_him_true_for_pass
+  def when_finish_him_true_for_pass
     lambda do |_klass|
       logic do
         step :step_one

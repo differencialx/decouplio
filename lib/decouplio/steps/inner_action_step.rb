@@ -4,13 +4,13 @@ require_relative 'base_step'
 
 module Decouplio
   module Steps
-    class InnerAction < Decouplio::Steps::BaseStep
+    class InnerActionStep < Decouplio::Steps::BaseStep
       def initialize(name:, action:, on_success_type:, on_failure_type:)
+        super()
         @name = name
         @action = action
         @on_success_type = on_success_type
         @on_failure_type = on_failure_type
-        super()
       end
 
       def process(instance:)
