@@ -6,13 +6,14 @@ require_relative '../processor'
 module Decouplio
   module Steps
     class Wrap < Decouplio::Steps::BaseStep
-      def initialize(name:, klass:, method:, wrap_flow:, finish_him:)
+      def initialize(name:, klass:, method:, wrap_flow:, on_success_type:, on_failure_type:)
         super()
         @name = name
         @klass = klass
         @method = method
         @wrap_flow = wrap_flow
-        @finish_him = finish_him
+        @on_success_type = on_success_type
+        @on_failure_type = on_failure_type
       end
 
       def process(instance:)
@@ -35,26 +36,25 @@ module Decouplio
       end
 
       def resolve(instance:)
-        # The same as for step, but instead of result
-        # instance.success? is used
         result = instance.success?
 
-        return result unless @finish_him
-
-        case @finish_him
-        when :on_success
-          if result
-            Decouplio::Const::Results::FINISH_HIM
-          else
-            Decouplio::Const::Results::FAIL
-          end
-        when :on_failure
-          if result
+        if result
+          if [Decouplio::Const::Results::PASS, Decouplio::Const::Results::FAIL].include?(@on_success_type)
+            instance.pass_action
             Decouplio::Const::Results::PASS
-          else
-            instance.fail_action
+          elsif @on_success_type == Decouplio::Const::Results::FINISH_HIM
+            instance.pass_action
             Decouplio::Const::Results::FINISH_HIM
           end
+        elsif @on_failure_type == Decouplio::Const::Results::PASS
+          instance.pass_action
+          Decouplio::Const::Results::FAIL
+        elsif @on_failure_type == Decouplio::Const::Results::FAIL
+          instance.fail_action
+          Decouplio::Const::Results::FAIL
+        elsif @on_failure_type == Decouplio::Const::Results::FINISH_HIM
+          instance.fail_action
+          Decouplio::Const::Results::FINISH_HIM
         end
       end
     end

@@ -23,10 +23,10 @@ require_relative 'errors/wrap_klass_method_error'
 
 module Decouplio
   class OptionsValidator
-    def initialize(flow:, palps:)
+    def initialize(flow:, palps:, next_steps:)
       @flow = flow
       @palps = palps
-      @step_names = extract_step_names(flow: @flow)
+      @step_names = extract_step_names(flow: @flow.merge(next_steps || {}))
     end
 
     def call
