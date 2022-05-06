@@ -173,7 +173,7 @@ module Decouplio
       elsif !if_condition.empty? && !unless_condition.empty?
         raise Decouplio::Errors::StepControversialKeysError.new(
           errored_option: if_condition.merge(unless_condition).to_s,
-          details: [:if, :unless]
+          details: %i[if unless]
         )
       end
     end
@@ -203,7 +203,7 @@ module Decouplio
       elsif !if_condition.empty? && !unless_condition.empty?
         raise Decouplio::Errors::FailControversialKeysError.new(
           errored_option: if_condition.merge(unless_condition).to_s,
-          details: [:if, :unless]
+          details: %i[if unless]
         )
       end
     end
@@ -226,7 +226,7 @@ module Decouplio
       if !if_condition.empty? && !unless_condition.empty?
         raise Decouplio::Errors::PassControversialKeysError.new(
           errored_option: if_condition.merge(unless_condition).to_s,
-          details: [:if, :unless]
+          details: %i[if unless]
         )
       end
     end
@@ -249,7 +249,7 @@ module Decouplio
       if !if_condition.empty? && !unless_condition.empty?
         raise Decouplio::Errors::OctoControversialKeysError.new(
           errored_option: if_condition.merge(unless_condition).to_s,
-          details: [:if, :unless]
+          details: %i[if unless]
         )
       end
     end
@@ -278,7 +278,7 @@ module Decouplio
       elsif !if_condition.empty? && !unless_condition.empty?
         raise Decouplio::Errors::WrapControversialKeysError.new(
           errored_option: if_condition.merge(unless_condition).to_s,
-          details: [:if, :unless]
+          details: %i[if unless]
         )
       end
     end
