@@ -26,7 +26,7 @@ RSpec.describe 'Use Decouplio::Action as a step' do
       message = Decouplio::Const::Validations::ActionOptionClass::VALIDATION_ERROR_MESSAGE % interpolation_values
 
       it_behaves_like 'raises option validation error',
-                      error_class: Decouplio::Errors::StepIsNotDefinedError,
+                      error_class: Decouplio::Errors::ActionClassError,
                       message: message
     end
 
@@ -42,7 +42,7 @@ RSpec.describe 'Use Decouplio::Action as a step' do
       message = Decouplio::Const::Validations::ActionOptionClass::VALIDATION_ERROR_MESSAGE % interpolation_values
 
       it_behaves_like 'raises option validation error',
-                      error_class: Decouplio::Errors::FailFinishHimError,
+                      error_class: Decouplio::Errors::ActionClassError,
                       message: message
     end
 
@@ -59,7 +59,7 @@ RSpec.describe 'Use Decouplio::Action as a step' do
       message = Decouplio::Const::Validations::ActionOptionClass::VALIDATION_ERROR_MESSAGE % interpolation_values
 
       it_behaves_like 'raises option validation error',
-                      error_class: Decouplio::Errors::ExtraKeyForPassError,
+                      error_class: Decouplio::Errors::ActionClassError,
                       message: message
     end
 

@@ -1,32 +1,6 @@
 # frozen_string_literal: true
 
 module OptionsValidationsCasesForStep
-  def when_step_on_success_step_method_not_defined
-    lambda do |_klass|
-      logic do
-        step :step_one, on_success: :step_two
-        step :step_two
-      end
-
-      def step_one(**)
-        ctx[:result] = 'result'
-      end
-    end
-  end
-
-  def when_step_on_failure_step_method_not_defined
-    lambda do |_klass|
-      logic do
-        step :step_one, on_failure: :step_two
-        step :step_two
-      end
-
-      def step_one(**)
-        ctx[:result] = 'result'
-      end
-    end
-  end
-
   def when_step_on_success_step_not_defined
     lambda do |_klass|
       logic do
@@ -99,34 +73,120 @@ module OptionsValidationsCasesForStep
     end
   end
 
-  def when_step_if_method_is_not_defined
+  def when_step_on_success_and_finish_him_present
     lambda do |_klass|
       logic do
-        step :step_one, if: :some_undefined_method
+        step :step_one, on_success: :step_two, finish_him: :on_failure
+        step :step_two
       end
 
       def step_one(**)
-        ctx[:result] = 'result'
+        ctx[:step_one] = 'Success'
+      end
+
+      def step_two(**)
+        ctx[:step_two] = 'Success'
       end
     end
   end
 
-  def when_step_unless_method_is_not_defined
+  def when_step_on_failure_and_finish_him_present
     lambda do |_klass|
       logic do
-        step :step_one, unless: :some_undefined_method
+        step :step_one, on_failure: :step_two, finish_him: :on_success
+        step :step_two
       end
 
       def step_one(**)
-        ctx[:result] = 'result'
+        ctx[:step_one] = 'Success'
+      end
+
+      def step_two(**)
+        ctx[:step_two] = 'Success'
       end
     end
   end
 
-  def when_step_method_is_not_defined
+  def when_step_if_and_unless_is_present
     lambda do |_klass|
       logic do
-        step :step_one
+        step :step_one, if: :some_condition?, unless: :some_condition?
+        step :step_two
+      end
+
+      def step_one(**)
+        ctx[:step_one] = 'Success'
+      end
+
+      def step_two(**)
+        ctx[:step_two] = 'Success'
+      end
+
+      def some_condition?(**)
+        false
+      end
+    end
+  end
+
+  def when_step_on_success_if_and_unless_is_present
+    lambda do |_klass|
+      logic do
+        step :step_one, on_success: :step_two, if: :some_condition?, unless: :some_condition?
+        step :step_two
+      end
+
+      def step_one(**)
+        ctx[:step_one] = 'Success'
+      end
+
+      def step_two(**)
+        ctx[:step_two] = 'Success'
+      end
+
+      def some_condition?(**)
+        false
+      end
+    end
+  end
+
+  def when_step_on_failure_if_and_unless_is_present
+    lambda do |_klass|
+      logic do
+        step :step_one, on_failure: :step_two, if: :some_condition?, unless: :some_condition?
+        step :step_two
+      end
+
+      def step_one(**)
+        ctx[:step_one] = 'Success'
+      end
+
+      def step_two(**)
+        ctx[:step_two] = 'Success'
+      end
+
+      def some_condition?(**)
+        false
+      end
+    end
+  end
+
+  def when_step_finish_him_if_and_unless_is_present
+    lambda do |_klass|
+      logic do
+        step :step_one, finish_him: :on_success, if: :some_condition?, unless: :some_condition?
+        step :step_two
+      end
+
+      def step_one(**)
+        ctx[:step_one] = 'Success'
+      end
+
+      def step_two(**)
+        ctx[:step_two] = 'Success'
+      end
+
+      def some_condition?(**)
+        false
       end
     end
   end

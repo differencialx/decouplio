@@ -5,7 +5,10 @@ RSpec::Matchers.define :raise_proper_error do |error_class, error_message|
     actual.call
     false
   rescue Decouplio::Errors::BaseError => e
-    error_class == e.class
+    error_class_success = error_class == e.class
+
+    return unless error_class_success
+
     error_message == e.message
   end
 

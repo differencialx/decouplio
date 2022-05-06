@@ -30,6 +30,7 @@ module Decouplio
         MANUAL_URL = 'https://stub.step.manual.url'
         EXTRA_KEYS_ARE_NOT_ALLOWED = 'Please check if step option is allowed'
         METHOD_NOT_DEFINED = 'step :%s'
+        CONTROVERSIAL_KEYS = '"%s" option(s) is not allowed along with "%s" option(s)'
       end
     end
   end

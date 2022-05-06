@@ -38,5 +38,23 @@ RSpec.describe 'Octo options validations' do
                       error_class: Decouplio::Errors::RequiredOptionsIsMissingForOctoError,
                       message: message
     end
+
+    context 'when octo if and unless present' do
+      let(:action_block) { when_octo_if_and_unless_is_present }
+
+      interpolation_values = [
+        Decouplio::Const::Colors::YELLOW,
+        '{:if=>:some_condition?, :unless=>:some_condition?}',
+        '"if" option(s) is not allowed along with "unless" option(s)',
+        Decouplio::Const::Validations::Octo::ALLOWED_OPTIONS_MESSAGE,
+        Decouplio::Const::Validations::Octo::MANUAL_URL,
+        Decouplio::Const::Colors::NO_COLOR
+      ]
+      message = Decouplio::Const::Validations::Octo::VALIDATION_ERROR_MESSAGE % interpolation_values
+
+      it_behaves_like 'raises option validation error',
+                      error_class: Decouplio::Errors::OctoControversialKeysError,
+                      message: message
+    end
   end
 end

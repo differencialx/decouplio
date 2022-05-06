@@ -137,49 +137,44 @@ module OptionsValidationsCasesForPass
     end
   end
 
-  def when_pass_if_method_is_not_defined
+  def when_pass_if_and_unless_is_present
     lambda do |_klass|
       logic do
-        step :step_one
-        pass :pass_step, if: :some_undefined_method
+        pass :step_one, if: :some_condition?, unless: :some_condition?
+        step :step_two
       end
 
       def step_one(**)
-        ctx[:result] = 'result'
+        ctx[:step_one] = 'Success'
       end
 
-      def pass_step(**)
-        ctx[:pass_step] = 'pass'
+      def step_two(**)
+        ctx[:step_two] = 'Success'
+      end
+
+      def some_condition?(**)
+        false
       end
     end
   end
 
-  def when_pass_unless_method_is_not_defined
+  def when_pass_finish_him_if_and_unless_is_present
     lambda do |_klass|
       logic do
-        step :step_one
-        pass :pass_step, unless: :some_undefined_method
+        pass :step_one, finish_him: :on_success, if: :some_condition?, unless: :some_condition?
+        step :step_two
       end
 
       def step_one(**)
-        ctx[:result] = 'result'
+        ctx[:step_one] = 'Success'
       end
 
-      def pass_step(**)
-        ctx[:pass_step] = 'pass'
-      end
-    end
-  end
-
-  def when_pass_method_is_not_defined
-    lambda do |_klass|
-      logic do
-        step :step_one
-        pass :step_two
+      def step_two(**)
+        ctx[:step_two] = 'Success'
       end
 
-      def step_one(**)
-        ctx[:result] = 'result'
+      def some_condition?(**)
+        false
       end
     end
   end
