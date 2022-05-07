@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module OnSuccessFailureCases
-  def on_failure_finish_him
+  def when_step_on_failure_finish_him
     lambda do |_klass|
       logic do
         step :step_one
@@ -23,7 +23,7 @@ module OnSuccessFailureCases
     end
   end
 
-  def on_failure_custom_step
+  def when_step_on_failure_custom_step
     lambda do |_klass|
       logic do
         step :step_one
@@ -60,7 +60,7 @@ module OnSuccessFailureCases
     end
   end
 
-  def on_success_finish_him
+  def when_step_on_success_finish_him
     lambda do |_klass|
       logic do
         step :step_one
@@ -82,7 +82,7 @@ module OnSuccessFailureCases
     end
   end
 
-  def on_success_custom_step
+  def when_step_on_success_custom_step
     lambda do |_klass|
       logic do
         step :step_one
@@ -119,7 +119,7 @@ module OnSuccessFailureCases
     end
   end
 
-  def on_failure_custom_step_with_if
+  def when_step_on_failure_custom_step_with_if
     lambda do |_klass|
       logic do
         step :step_one
