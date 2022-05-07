@@ -1,14 +1,13 @@
 # frozen_string_literal: true
 
 require_relative 'base_error'
-require_relative '../const/validations/step'
-require_relative '../const/validations/common'
+require_relative '../const/validations/fail'
 
 module Decouplio
   module Errors
-    class StepIsNotDefinedError < Decouplio::Errors::BaseError
+    class StepIsNotDefinedForFailError < Decouplio::Errors::BaseError
       def template
-        Decouplio::Const::Validations::Step::VALIDATION_ERROR_MESSAGE
+        Decouplio::Const::Validations::Fail::VALIDATION_ERROR_MESSAGE
       end
 
       def interpolation_values
@@ -19,8 +18,8 @@ module Decouplio
             Decouplio::Const::Validations::Common::STEP_IS_NOT_DEFINED,
             @details
           ),
-          Decouplio::Const::Validations::Step::ALLOWED_OPTIONS_MESSAGE,
-          Decouplio::Const::Validations::Step::MANUAL_URL,
+          Decouplio::Const::Validations::Fail::ALLOWED_OPTIONS_MESSAGE,
+          Decouplio::Const::Validations::Fail::MANUAL_URL,
           Decouplio::Const::Colors::NO_COLOR
         ]
       end

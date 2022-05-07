@@ -171,5 +171,41 @@ RSpec.describe 'Fail options validations' do
                       error_class: Decouplio::Errors::FailControversialKeysError,
                       message: message
     end
+
+    context 'when fail on_success is not defined after fail step' do
+      let(:action_block) { when_fail_on_success_step_is_not_defined }
+
+      interpolation_values = [
+        Decouplio::Const::Colors::YELLOW,
+        '{:on_success=>:step_one}',
+        'Step "step_one" is not defined',
+        Decouplio::Const::Validations::Fail::ALLOWED_OPTIONS_MESSAGE,
+        Decouplio::Const::Validations::Fail::MANUAL_URL,
+        Decouplio::Const::Colors::NO_COLOR
+      ]
+      message = Decouplio::Const::Validations::Fail::VALIDATION_ERROR_MESSAGE % interpolation_values
+
+      it_behaves_like 'raises option validation error',
+                      error_class: Decouplio::Errors::StepIsNotDefinedForFailError,
+                      message: message
+    end
+
+    context 'when fail on_failure is not defined after fail step' do
+      let(:action_block) { when_fail_on_failure_step_is_not_defined }
+
+      interpolation_values = [
+        Decouplio::Const::Colors::YELLOW,
+        '{:on_failure=>:step_one}',
+        'Step "step_one" is not defined',
+        Decouplio::Const::Validations::Fail::ALLOWED_OPTIONS_MESSAGE,
+        Decouplio::Const::Validations::Fail::MANUAL_URL,
+        Decouplio::Const::Colors::NO_COLOR
+      ]
+      message = Decouplio::Const::Validations::Fail::VALIDATION_ERROR_MESSAGE % interpolation_values
+
+      it_behaves_like 'raises option validation error',
+                      error_class: Decouplio::Errors::StepIsNotDefinedForFailError,
+                      message: message
+    end
   end
 end

@@ -16,7 +16,8 @@ require_relative 'errors/required_options_is_missing_for_octo_error'
 require_relative 'errors/resq_error_class_error'
 require_relative 'errors/resq_handler_method_error'
 require_relative 'errors/step_finish_him_error'
-require_relative 'errors/step_is_not_defined_error'
+require_relative 'errors/step_is_not_defined_for_step_error'
+require_relative 'errors/step_is_not_defined_for_fail_error'
 require_relative 'errors/step_is_not_defined_for_wrap_error'
 require_relative 'errors/wrap_finish_him_error'
 require_relative 'errors/wrap_klass_method_error'
@@ -31,43 +32,45 @@ module Decouplio
     def initialize(flow:, palps:, next_steps:)
       @flow = flow
       @palps = palps
-      @step_names = extract_step_names(flow: @flow.merge(next_steps || {}))
+      @next_steps = next_steps
     end
 
     def call
-      @flow.each do |_step_id, options|
-        validate(options: options)
+      @flow.each_with_index do |(_step_id, options), index|
+        step_names = extract_step_names(flow: @flow.to_a[index..].to_h.merge(@next_steps || {}))
+
+        validate(options: options, step_names: step_names)
       end
     end
 
     private
 
-    def validate(options:)
+    def validate(options:, step_names:)
       filtered_options = options.reject { |key, _val| OPTIONS_TO_FILTER.include?(key) }
       case options[:type]
       when Decouplio::Const::Types::STEP_TYPE
-        validate_step(options: filtered_options)
+        validate_step(options: filtered_options, step_names: step_names)
       when Decouplio::Const::Types::FAIL_TYPE
-        validate_fail(options: filtered_options)
+        validate_fail(options: filtered_options, step_names: step_names)
       when Decouplio::Const::Types::PASS_TYPE
         validate_pass(options: filtered_options)
       when Decouplio::Const::Types::OCTO_TYPE
         validate_octo(options: filtered_options)
       when Decouplio::Const::Types::WRAP_TYPE
-        validate_wrap(options: filtered_options, name: options[:name])
+        validate_wrap(options: filtered_options, name: options[:name], step_names: step_names)
       when Decouplio::Const::Types::ACTION_TYPE_STEP
         validate_action(action_class: options[:action], type: Decouplio::Const::Types::STEP_TYPE)
-        validate_step(options: filtered_options)
+        validate_step(options: filtered_options, step_names: step_names)
       when Decouplio::Const::Types::ACTION_TYPE_FAIL
         validate_action(action_class: options[:action], type: Decouplio::Const::Types::FAIL_TYPE)
-        validate_fail(options: filtered_options)
+        validate_fail(options: filtered_options, step_names: step_names)
       when Decouplio::Const::Types::ACTION_TYPE_PASS
         validate_action(action_class: options[:action], type: Decouplio::Const::Types::PASS_TYPE)
         validate_pass(options: filtered_options)
       when Decouplio::Const::Types::RESQ_TYPE_STEP,
            Decouplio::Const::Types::RESQ_TYPE_FAIL,
            Decouplio::Const::Types::RESQ_TYPE_PASS
-        validate(options: options[:step_to_resq])
+        validate(options: options[:step_to_resq], step_names: step_names)
         validate_resq(options: filtered_options)
       end
     end
@@ -81,15 +84,16 @@ module Decouplio
       )
     end
 
-    def validate_step(options:)
-      check_step_presence(options: options)
+    def validate_step(options:, step_names:)
+      check_step_presence_for_step(options: options, step_names: step_names)
       check_step_controversial_keys(options: options)
       check_step_extra_keys(options: options)
       check_step_finish_him(options: options)
       # TODO: check reccursion call for on_success and on_failure
     end
 
-    def validate_fail(options:)
+    def validate_fail(options:, step_names:)
+      check_step_presence_for_fail(options: options, step_names: step_names)
       check_fail_controversial_keys(options: options)
       check_fail_extra_keys(options: options)
       check_fail_finish_him(options: options)
@@ -107,10 +111,10 @@ module Decouplio
       check_octo_extra_keys(options: options)
     end
 
-    def validate_wrap(options:, name:)
+    def validate_wrap(options:, name:, step_names:)
       check_wrap_name(name: name)
       check_wrap_controversial_keys(options: options)
-      check_wrap_step_presence(options: options)
+      check_step_presence_for_wrap(options: options, step_names: step_names)
       check_wrap_extra_keys(options: options)
       check_wrap_finish_him(options: options)
       check_wrap_klass_method_presence(options: options)
@@ -123,24 +127,37 @@ module Decouplio
       check_resq_exception_classes_inheritance(options: options)
     end
 
-    def check_step_presence(options:)
+    def check_step_presence_for_step(options:, step_names:)
       options.slice(*STEP_CHECK_STEP_PRESENCE).each do |option_key, option_value|
         next if %i[on_success on_failure].include?(option_key) && option_value == :finish_him
 
-        next if @step_names.keys.include?(option_value)
+        next if step_names.keys.include?(option_value)
 
-        raise Decouplio::Errors::StepIsNotDefinedError.new(
+        raise Decouplio::Errors::StepIsNotDefinedForStepError.new(
           errored_option: options.slice(option_key).to_s,
           details: option_value
         )
       end
     end
 
-    def check_wrap_step_presence(options:)
+    def check_step_presence_for_fail(options:, step_names:)
+      options.slice(*STEP_CHECK_STEP_PRESENCE).each do |option_key, option_value|
+        next if %i[on_success on_failure].include?(option_key) && option_value == :finish_him
+
+        next if step_names.keys.include?(option_value)
+
+        raise Decouplio::Errors::StepIsNotDefinedForFailError.new(
+          errored_option: options.slice(option_key).to_s,
+          details: option_value
+        )
+      end
+    end
+
+    def check_step_presence_for_wrap(options:, step_names:)
       options.slice(*WRAP_CHECK_STEP_PRESENCE).each do |option_key, option_value|
         next if %i[on_success on_failure].include?(option_key) && option_value == :finish_him
 
-        next if @step_names.keys.include?(option_value)
+        next if step_names.keys.include?(option_value)
 
         raise Decouplio::Errors::StepIsNotDefinedForWrapError.new(
           errored_option: options.slice(option_key).to_s,

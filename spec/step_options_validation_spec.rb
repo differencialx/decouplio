@@ -19,7 +19,7 @@ RSpec.describe 'Step options validations' do
       message = Decouplio::Const::Validations::Step::VALIDATION_ERROR_MESSAGE % interpolation_values
 
       it_behaves_like 'raises option validation error',
-                      error_class: Decouplio::Errors::StepIsNotDefinedError,
+                      error_class: Decouplio::Errors::StepIsNotDefinedForStepError,
                       message: message
     end
 
@@ -38,7 +38,45 @@ RSpec.describe 'Step options validations' do
       message = Decouplio::Const::Validations::Step::VALIDATION_ERROR_MESSAGE % interpolation_values
 
       it_behaves_like 'raises option validation error',
-                      error_class: Decouplio::Errors::StepIsNotDefinedError,
+                      error_class: Decouplio::Errors::StepIsNotDefinedForStepError,
+                      message: message
+    end
+
+    context 'when on_success step is not defined after current step' do
+      let(:action_block) { when_step_on_success_step_is_not_defined }
+
+      interpolation_values = [
+        Decouplio::Const::Colors::YELLOW,
+        '{:on_success=>:step_one}',
+        'Step "step_one" is not defined',
+        Decouplio::Const::Validations::Step::ALLOWED_OPTIONS_MESSAGE,
+        Decouplio::Const::Validations::Step::MANUAL_URL,
+        Decouplio::Const::Colors::NO_COLOR
+      ]
+
+      message = Decouplio::Const::Validations::Step::VALIDATION_ERROR_MESSAGE % interpolation_values
+
+      it_behaves_like 'raises option validation error',
+                      error_class: Decouplio::Errors::StepIsNotDefinedForStepError,
+                      message: message
+    end
+
+    context 'when on_failure step is not defined after current step' do
+      let(:action_block) { when_step_on_failure_step_is_not_defined }
+
+      interpolation_values = [
+        Decouplio::Const::Colors::YELLOW,
+        '{:on_failure=>:step_one}',
+        'Step "step_one" is not defined',
+        Decouplio::Const::Validations::Step::ALLOWED_OPTIONS_MESSAGE,
+        Decouplio::Const::Validations::Step::MANUAL_URL,
+        Decouplio::Const::Colors::NO_COLOR
+      ]
+
+      message = Decouplio::Const::Validations::Step::VALIDATION_ERROR_MESSAGE % interpolation_values
+
+      it_behaves_like 'raises option validation error',
+                      error_class: Decouplio::Errors::StepIsNotDefinedForStepError,
                       message: message
     end
 

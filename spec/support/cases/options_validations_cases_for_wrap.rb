@@ -268,4 +268,42 @@ module OptionsValidationsCasesForWrap
       end
     end
   end
+
+  def when_wrap_on_success_step_is_not_defined
+    lambda do |_klass|
+      logic do
+        step :step_three
+        wrap :some_wrap, on_success: :step_three do
+          step :step_one
+        end
+      end
+
+      def step_one(**)
+        ctx[:step_one] = 'Success'
+      end
+
+      def step_three(**)
+        ctx[:step_two] = 'Success'
+      end
+    end
+  end
+
+  def when_wrap_on_failure_step_is_not_defined
+    lambda do |_klass|
+      logic do
+        step :step_threee
+        wrap :some_wrap, on_failure: :step_three do
+          step :step_one
+        end
+      end
+
+      def step_one(**)
+        ctx[:step_one] = 'Success'
+      end
+
+      def step_three(**)
+        ctx[:step_two] = 'Success'
+      end
+    end
+  end
 end
