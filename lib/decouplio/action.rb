@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 require 'pry' # TODO: remove
+require 'forwardable'
 require_relative 'flow'
 require_relative 'processor'
 require_relative 'default_error_handler'
-require 'forwardable'
+require_relative 'errors/action_redefinition_error'
 
 module Decouplio
   class Action
@@ -84,6 +85,12 @@ module Decouplio
 
       def logic(&block)
         # TODO: raise error if @main flow is not empty, check the case when several logic block are difined
+
+        if @flow && !@flow.empty?
+          raise Decouplio::Errors::ActionRedefinitionError.new(
+            errored_option: self.to_s
+          )
+        end
         if block_given?
           @flow = Decouplio::Flow.call(logic: block)
         else
