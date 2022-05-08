@@ -10,7 +10,6 @@ jobs:
   build:
     environment:
       RUBY_VERSION: << parameters.ruby_version >>
-      BUNDLER_VERSION: << parameters.bundler_version >>
     working_directory: ~/decouplio
     executor: test_executor
     parameters:
@@ -20,6 +19,10 @@ jobs:
         type: string
     steps:
       - checkout
+
+      - run:
+          name: Install bundler
+          command: gem install bundler:<< parameters.bundler_version >>
 
       - run:
           name: Install dependencies
@@ -41,8 +44,8 @@ workflows:
           ruby_version: 2.7.0
           bundler_version: 2.1.4
       - build:
-          name: 'ruby 2.7.6'
-          ruby_version: 2.7.6
+          name: 'ruby 2.7.5'
+          ruby_version: 2.7.5
           bundler_version: 2.1.4
       - build:
           name: 'ruby 3.0.3'
