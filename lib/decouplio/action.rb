@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
-require 'pry' # TODO: remove
+require 'forwardable'
 require_relative 'flow'
 require_relative 'processor'
 require_relative 'default_error_handler'
-require 'forwardable'
+require_relative 'errors/logic_redefinition_error'
+require_relative 'errors/logic_is_not_defined_error'
 
 module Decouplio
   class Action
@@ -50,16 +51,23 @@ module Decouplio
       @instance.railway_flow << stp
     end
 
-    # def inspect
-    # TODO: Redefine to show only useful information
-    # super
-    # end
+    def inspect
+      <<~INSPECT
+        Result: #{success? ? 'success' : 'failure'}
+
+        Railway Flow:
+          #{railway_flow.join(' -> ')}
+
+        Context:
+          #{ctx}
+
+        Errors:
+          #{errors}
+      INSPECT
+    end
 
     class << self
       attr_accessor :error_store
-
-      # TODO: remove Debug accessors
-      attr_reader :palps, :main_flow
 
       def error_store_instance(handler_class)
         self.error_store = handler_class
@@ -72,10 +80,6 @@ module Decouplio
         instance
       end
 
-      def call!(**params)
-        # TODO: raises an error if instance failed
-      end
-
       private
 
       def inherited(child_class)
@@ -83,11 +87,23 @@ module Decouplio
       end
 
       def logic(&block)
-        # TODO: raise error if @main flow is not empty, check the case when several logic block are difined
+        if @flow && !@flow[:first_step].nil?
+          raise Decouplio::Errors::LogicRedefinitionError.new(
+            errored_option: to_s
+          )
+        end
         if block_given?
           @flow = Decouplio::Flow.call(logic: block)
+
+          if @flow && @flow[:first_step].nil?
+            raise Decouplio::Errors::LogicIsNotDefinedError.new(
+              errored_option: to_s
+            )
+          end
         else
-          # TODO: rails error if no logic is provided
+          raise Decouplio::Errors::LogicIsNotDefinedError.new(
+            errored_option: to_s
+          )
         end
       end
     end
