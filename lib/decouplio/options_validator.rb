@@ -26,6 +26,7 @@ require_relative 'errors/fail_controversial_keys_error'
 require_relative 'errors/pass_controversial_keys_error'
 require_relative 'errors/octo_controversial_keys_error'
 require_relative 'errors/wrap_controversial_keys_error'
+require_relative 'errors/palp_is_not_defined_error'
 
 module Decouplio
   class OptionsValidator
@@ -55,7 +56,7 @@ module Decouplio
       when Decouplio::Const::Types::PASS_TYPE
         validate_pass(options: filtered_options)
       when Decouplio::Const::Types::OCTO_TYPE
-        validate_octo(options: filtered_options)
+        validate_octo(options: filtered_options, hash_case: options[:hash_case])
       when Decouplio::Const::Types::WRAP_TYPE
         validate_wrap(options: filtered_options, name: options[:name], step_names: step_names)
       when Decouplio::Const::Types::ACTION_TYPE_STEP
@@ -105,10 +106,11 @@ module Decouplio
       check_pass_finish_him(options: options)
     end
 
-    def validate_octo(options:)
+    def validate_octo(options:, hash_case:)
       check_octo_controversial_keys(options: options)
       check_octo_required_keys(options: options)
       check_octo_extra_keys(options: options)
+      check_octo_palps(hash_case: hash_case)
     end
 
     def validate_wrap(options:, name:, step_names:)
@@ -298,6 +300,25 @@ module Decouplio
           details: %i[if unless]
         )
       end
+    end
+
+    def check_octo_palps(hash_case:)
+      hash_casse_palps = hash_case.map { |_octo_key, hash| hash[:palp] }.compact
+      undefined_palps = hash_casse_palps - @palps.keys
+
+      return if undefined_palps.empty?
+
+      errored_options = hash_case.select do |_key, val|
+        undefined_palps.include?(val[:palp])
+      end
+      errored_options = errored_options.map do |key, val|
+        "\"on :#{key}, palp: :#{val[:palp]}\""
+      end
+
+      raise Decouplio::Errors::PalpIsNotDefinedError.new(
+        errored_option: errored_options,
+        details: undefined_palps
+      )
     end
 
     def check_octo_required_keys(options:)

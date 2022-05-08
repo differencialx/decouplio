@@ -40,6 +40,7 @@ module Decouplio
         MANUAL_URL = 'https://stub.strategy.manual.url'
         OPTIONS_IS_REQUIRED = 'Next option(s) "%s" are required for "octo"'
         CONTROVERSIAL_KEYS = '"%s" option(s) is not allowed along with "%s" option(s)'
+        PALPS_IS_NOT_DEFINED = 'Next palp(s): "%s" is not difined'
       end
     end
   end
