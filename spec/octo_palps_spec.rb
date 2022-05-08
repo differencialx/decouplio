@@ -50,21 +50,28 @@ RSpec.describe 'Decouplio::Action octo palps' do
               strategy_failure
             ]
           end
-
-          it 'sets params to ctx' do
-            expect(action).to be_failure
-            expect(action.railway_flow).to eq railway_flow
-            expect(action[:octo_key]).to eq strategy_one_key
-            expect(action[:step_one]).to eq param1
-            expect(action[:step_two]).to be_nil
-            expect(action[:step_three]).to eq param3
-            expect(action[:step_four]).to be_nil
-            expect(action[:step_five]).to be_nil
-            expect(action[:step_six]).to be_nil
-            expect(action[:process_strategy_two]).to be false
-            expect(action[:result]).to be_nil
-            expect(action[:strategy_failure_handled]).to be true
+          let(:expected_state) do
+            {
+              action_status: :failure,
+              railway_flow: railway_flow,
+              errors: {},
+              state: {
+                octo_key: strategy_one_key,
+                strategy_two_key: strategy_two_key,
+                step_one: param1,
+                step_two: nil,
+                step_three: param3,
+                step_four: nil,
+                step_five: nil,
+                step_six: nil,
+                process_strategy_two: false,
+                result: nil,
+                strategy_failure_handled: true
+              }
+            }
           end
+
+          it_behaves_like 'check action state'
         end
 
         context 'when octo1 passes and strategy two should not be processed' do
@@ -80,21 +87,28 @@ RSpec.describe 'Decouplio::Action octo palps' do
               final_step
             ]
           end
-
-          it 'sets params to ctx' do
-            expect(action).to be_success
-            expect(action.railway_flow).to eq railway_flow
-            expect(action[:octo_key]).to eq strategy_one_key
-            expect(action[:step_one]).to eq param1
-            expect(action[:step_two]).to be_nil
-            expect(action[:step_three]).to be_nil
-            expect(action[:step_four]).to eq param4
-            expect(action[:step_five]).to be_nil
-            expect(action[:step_six]).to be_nil
-            expect(action[:process_strategy_two]).to be false
-            expect(action[:result]).to eq final
-            expect(action[:strategy_failure_handled]).to be_nil
+          let(:expected_state) do
+            {
+              action_status: :success,
+              railway_flow: railway_flow,
+              errors: {},
+              state: {
+                octo_key: strategy_one_key,
+                strategy_two_key: strategy_two_key,
+                step_one: param1,
+                step_two: nil,
+                step_three: nil,
+                step_four: param4,
+                step_five: nil,
+                step_six: nil,
+                process_strategy_two: false,
+                result: final,
+                strategy_failure_handled: nil
+              }
+            }
           end
+
+          it_behaves_like 'check action state'
         end
 
         context 'when strategy two should be processed' do
@@ -113,21 +127,28 @@ RSpec.describe 'Decouplio::Action octo palps' do
                 strategy_failure
               ]
             end
-
-            it 'sets params to ctx' do
-              expect(action).to be_failure
-              expect(action.railway_flow).to eq railway_flow
-              expect(action[:octo_key]).to eq strategy_one_key
-              expect(action[:step_one]).to eq param1
-              expect(action[:step_two]).to be_nil
-              expect(action[:step_three]).to eq param3
-              expect(action[:step_four]).to be_nil
-              expect(action[:step_five]).to be_nil
-              expect(action[:step_six]).to be_nil
-              expect(action[:process_strategy_two]).to be true
-              expect(action[:result]).to be_nil
-              expect(action[:strategy_failure_handled]).to be true
+            let(:expected_state) do
+              {
+                action_status: :failure,
+                railway_flow: railway_flow,
+                errors: {},
+                state: {
+                  octo_key: strategy_one_key,
+                  strategy_two_key: strategy_two_key,
+                  step_one: param1,
+                  step_two: nil,
+                  step_three: param3,
+                  step_four: nil,
+                  step_five: nil,
+                  step_six: nil,
+                  process_strategy_two: true,
+                  result: nil,
+                  strategy_failure_handled: true
+                }
+              }
             end
+
+            it_behaves_like 'check action state'
           end
 
           context 'when octo1 passes' do
@@ -150,22 +171,28 @@ RSpec.describe 'Decouplio::Action octo palps' do
                     final_step
                   ]
                 end
-
-                it 'sets params to ctx' do
-                  expect(action).to be_success
-                  expect(action.railway_flow).to eq railway_flow
-                  expect(action[:octo_key]).to eq strategy_one_key
-                  expect(action[:strategy_two_key]).to eq strategy_two_key
-                  expect(action[:step_one]).to eq param1
-                  expect(action[:step_two]).to be_nil
-                  expect(action[:step_three]).to be_nil
-                  expect(action[:step_four]).to eq param4
-                  expect(action[:step_five]).to eq param5
-                  expect(action[:step_six]).to be_nil
-                  expect(action[:process_strategy_two]).to be true
-                  expect(action[:result]).to eq final
-                  expect(action[:strategy_failure_handled]).to be_nil
+                let(:expected_state) do
+                  {
+                    action_status: :success,
+                    railway_flow: railway_flow,
+                    errors: {},
+                    state: {
+                      octo_key: strategy_one_key,
+                      strategy_two_key: strategy_two_key,
+                      step_one: param1,
+                      step_two: nil,
+                      step_three: nil,
+                      step_four: param4,
+                      step_five: param5,
+                      step_six: nil,
+                      process_strategy_two: true,
+                      result: final,
+                      strategy_failure_handled: nil
+                    }
+                  }
                 end
+
+                it_behaves_like 'check action state'
               end
 
               context 'when step_five fails' do
@@ -186,22 +213,28 @@ RSpec.describe 'Decouplio::Action octo palps' do
                       strategy_failure
                     ]
                   end
-
-                  it 'sets params to ctx' do
-                    expect(action).to be_failure
-                    expect(action.railway_flow).to eq railway_flow
-                    expect(action[:octo_key]).to eq strategy_one_key
-                    expect(action[:strategy_two_key]).to eq strategy_two_key
-                    expect(action[:step_one]).to eq param1
-                    expect(action[:step_two]).to be_nil
-                    expect(action[:step_three]).to eq param3
-                    expect(action[:step_four]).to eq(param4 + param4)
-                    expect(action[:step_five]).to eq param5
-                    expect(action[:step_six]).to be_nil
-                    expect(action[:process_strategy_two]).to be true
-                    expect(action[:result]).to be_nil
-                    expect(action[:strategy_failure_handled]).to be true
+                  let(:expected_state) do
+                    {
+                      action_status: :failure,
+                      railway_flow: railway_flow,
+                      errors: {},
+                      state: {
+                        octo_key: strategy_one_key,
+                        strategy_two_key: strategy_two_key,
+                        step_one: param1,
+                        step_two: nil,
+                        step_three: param3,
+                        step_four: param4 * 2,
+                        step_five: param5,
+                        step_six: nil,
+                        process_strategy_two: true,
+                        result: nil,
+                        strategy_failure_handled: true
+                      }
+                    }
                   end
+
+                  it_behaves_like 'check action state'
                 end
 
                 context 'when step_four should not be processed' do
@@ -220,22 +253,28 @@ RSpec.describe 'Decouplio::Action octo palps' do
                       strategy_failure
                     ]
                   end
-
-                  it 'sets params to ctx' do
-                    expect(action).to be_failure
-                    expect(action.railway_flow).to eq railway_flow
-                    expect(action[:octo_key]).to eq strategy_one_key
-                    expect(action[:strategy_two_key]).to eq strategy_two_key
-                    expect(action[:step_one]).to eq param1
-                    expect(action[:step_two]).to be_nil
-                    expect(action[:step_three]).to eq param3
-                    expect(action[:step_four]).to eq param4
-                    expect(action[:step_five]).to eq param5
-                    expect(action[:step_six]).to be_nil
-                    expect(action[:process_strategy_two]).to be true
-                    expect(action[:result]).to be_nil
-                    expect(action[:strategy_failure_handled]).to be true
+                  let(:expected_state) do
+                    {
+                      action_status: :failure,
+                      railway_flow: railway_flow,
+                      errors: {},
+                      state: {
+                        octo_key: strategy_one_key,
+                        strategy_two_key: strategy_two_key,
+                        step_one: param1,
+                        step_two: nil,
+                        step_three: param3,
+                        step_four: param4,
+                        step_five: param5,
+                        step_six: nil,
+                        process_strategy_two: true,
+                        result: nil,
+                        strategy_failure_handled: true
+                      }
+                    }
                   end
+
+                  it_behaves_like 'check action state'
                 end
               end
             end
@@ -260,22 +299,28 @@ RSpec.describe 'Decouplio::Action octo palps' do
                     strategy_failure
                   ]
                 end
-
-                it 'sets params to ctx' do
-                  expect(action).to be_failure
-                  expect(action.railway_flow).to eq railway_flow
-                  expect(action[:octo_key]).to eq strategy_one_key
-                  expect(action[:strategy_two_key]).to eq strategy_two_key
-                  expect(action[:step_one]).to eq param1
-                  expect(action[:step_two]).to be_nil
-                  expect(action[:step_three]).to be_nil
-                  expect(action[:step_four]).to eq param4
-                  expect(action[:step_five]).to eq param5
-                  expect(action[:step_six]).to eq param6
-                  expect(action[:process_strategy_two]).to be true
-                  expect(action[:result]).to be_nil
-                  expect(action[:strategy_failure_handled]).to be true
+                let(:expected_state) do
+                  {
+                    action_status: :failure,
+                    railway_flow: railway_flow,
+                    errors: {},
+                    state: {
+                      octo_key: strategy_one_key,
+                      strategy_two_key: strategy_two_key,
+                      step_one: param1,
+                      step_two: nil,
+                      step_three: nil,
+                      step_four: param4,
+                      step_five: param5,
+                      step_six: param6,
+                      process_strategy_two: true,
+                      result: nil,
+                      strategy_failure_handled: true
+                    }
+                  }
                 end
+
+                it_behaves_like 'check action state'
               end
 
               context 'when step five pass' do
@@ -292,22 +337,28 @@ RSpec.describe 'Decouplio::Action octo palps' do
                     final_step
                   ]
                 end
-
-                it 'sets params to ctx' do
-                  expect(action).to be_success
-                  expect(action.railway_flow).to eq railway_flow
-                  expect(action[:octo_key]).to eq strategy_one_key
-                  expect(action[:strategy_two_key]).to eq strategy_two_key
-                  expect(action[:step_one]).to eq param1
-                  expect(action[:step_two]).to be_nil
-                  expect(action[:step_three]).to be_nil
-                  expect(action[:step_four]).to eq param4 * 2
-                  expect(action[:step_five]).to eq param5
-                  expect(action[:step_six]).to be_nil
-                  expect(action[:process_strategy_two]).to be true
-                  expect(action[:result]).to eq final
-                  expect(action[:strategy_failure_handled]).to be_nil
+                let(:expected_state) do
+                  {
+                    action_status: :success,
+                    railway_flow: railway_flow,
+                    errors: {},
+                    state: {
+                      octo_key: strategy_one_key,
+                      strategy_two_key: strategy_two_key,
+                      step_one: param1,
+                      step_two: nil,
+                      step_three: nil,
+                      step_four: param4 * 2,
+                      step_five: param5,
+                      step_six: nil,
+                      process_strategy_two: true,
+                      result: final,
+                      strategy_failure_handled: nil
+                    }
+                  }
                 end
+
+                it_behaves_like 'check action state'
               end
             end
           end
@@ -329,22 +380,28 @@ RSpec.describe 'Decouplio::Action octo palps' do
                 strategy_failure
               ]
             end
-
-            it 'sets params to ctx' do
-              expect(action).to be_failure
-              expect(action.railway_flow).to eq railway_flow
-              expect(action[:octo_key]).to eq strategy_one_key
-              expect(action[:strategy_two_key]).to eq 'not_existing_strategy'
-              expect(action[:step_one]).to be_nil
-              expect(action[:step_two]).to be_nil
-              expect(action[:step_three]).to be_nil
-              expect(action[:step_four]).to be_nil
-              expect(action[:step_five]).to be_nil
-              expect(action[:step_six]).to be_nil
-              expect(action[:process_strategy_two]).to be false
-              expect(action[:result]).to be_nil
-              expect(action[:strategy_failure_handled]).to be true
+            let(:expected_state) do
+              {
+                action_status: :failure,
+                railway_flow: railway_flow,
+                errors: {},
+                state: {
+                  octo_key: strategy_one_key,
+                  strategy_two_key: 'not_existing_strategy',
+                  step_one: nil,
+                  step_two: nil,
+                  step_three: nil,
+                  step_four: nil,
+                  step_five: nil,
+                  step_six: nil,
+                  process_strategy_two: false,
+                  result: nil,
+                  strategy_failure_handled: true
+                }
+              }
             end
+
+            it_behaves_like 'check action state'
           end
 
           context 'when step_three fails' do
@@ -359,22 +416,28 @@ RSpec.describe 'Decouplio::Action octo palps' do
                 strategy_failure
               ]
             end
-
-            it 'sets params to ctx' do
-              expect(action).to be_failure
-              expect(action.railway_flow).to eq railway_flow
-              expect(action[:octo_key]).to eq strategy_one_key
-              expect(action[:strategy_two_key]).to eq 'not_existing_strategy'
-              expect(action[:step_one]).to be_nil
-              expect(action[:step_two]).to eq param2
-              expect(action[:step_three]).to be_nil
-              expect(action[:step_four]).to be_nil
-              expect(action[:step_five]).to be_nil
-              expect(action[:step_six]).to be_nil
-              expect(action[:process_strategy_two]).to be false
-              expect(action[:result]).to be_nil
-              expect(action[:strategy_failure_handled]).to be true
+            let(:expected_state) do
+              {
+                action_status: :failure,
+                railway_flow: railway_flow,
+                errors: {},
+                state: {
+                  octo_key: strategy_one_key,
+                  strategy_two_key: 'not_existing_strategy',
+                  step_one: nil,
+                  step_two: param2,
+                  step_three: nil,
+                  step_four: nil,
+                  step_five: nil,
+                  step_six: nil,
+                  process_strategy_two: false,
+                  result: nil,
+                  strategy_failure_handled: true
+                }
+              }
             end
+
+            it_behaves_like 'check action state'
           end
         end
 
@@ -390,21 +453,28 @@ RSpec.describe 'Decouplio::Action octo palps' do
               final_step
             ]
           end
-
-          it 'sets params to ctx' do
-            expect(action.success?).to be true
-            expect(action.railway_flow).to eq railway_flow
-            expect(action[:octo_key]).to eq strategy_one_key
-            expect(action[:step_one]).to be_nil
-            expect(action[:step_two]).to eq param2
-            expect(action[:step_three]).to eq param3
-            expect(action[:step_four]).to be_nil
-            expect(action[:step_five]).to be_nil
-            expect(action[:step_six]).to be_nil
-            expect(action[:process_strategy_two]).to be false
-            expect(action[:result]).to eq final
-            expect(action[:strategy_failure_handled]).to be_nil
+          let(:expected_state) do
+            {
+              action_status: :success,
+              railway_flow: railway_flow,
+              errors: {},
+              state: {
+                octo_key: strategy_one_key,
+                strategy_two_key: 'not_existing_strategy',
+                step_one: nil,
+                step_two: param2,
+                step_three: param3,
+                step_four: nil,
+                step_five: nil,
+                step_six: nil,
+                process_strategy_two: false,
+                result: final,
+                strategy_failure_handled: nil
+              }
+            }
           end
+
+          it_behaves_like 'check action state'
         end
 
         context 'when strategy two should be processed' do
@@ -423,21 +493,28 @@ RSpec.describe 'Decouplio::Action octo palps' do
                 strategy_failure
               ]
             end
-
-            it 'sets params to ctx' do
-              expect(action.failure?).to be true
-              expect(action.railway_flow).to eq railway_flow
-              expect(action[:octo_key]).to eq strategy_one_key
-              expect(action[:step_one]).to be_nil
-              expect(action[:step_two]).to eq param2
-              expect(action[:step_three]).to be_nil
-              expect(action[:step_four]).to be_nil
-              expect(action[:step_five]).to be_nil
-              expect(action[:step_six]).to be_nil
-              expect(action[:process_strategy_two]).to be true
-              expect(action[:result]).to be_nil
-              expect(action[:strategy_failure_handled]).to be true
+            let(:expected_state) do
+              {
+                action_status: :failure,
+                railway_flow: railway_flow,
+                errors: {},
+                state: {
+                  octo_key: strategy_one_key,
+                  strategy_two_key: strategy_two_key,
+                  step_one: nil,
+                  step_two: param2,
+                  step_three: nil,
+                  step_four: nil,
+                  step_five: nil,
+                  step_six: nil,
+                  process_strategy_two: true,
+                  result: nil,
+                  strategy_failure_handled: true
+                }
+              }
             end
+
+            it_behaves_like 'check action state'
           end
 
           context 'when octo2 passes' do
@@ -459,22 +536,28 @@ RSpec.describe 'Decouplio::Action octo palps' do
                     final_step
                   ]
                 end
-
-                it 'sets params to ctx' do
-                  expect(action).to be_success
-                  expect(action.railway_flow).to eq railway_flow
-                  expect(action[:octo_key]).to eq strategy_one_key
-                  expect(action[:strategy_two_key]).to eq strategy_two_key
-                  expect(action[:step_one]).to be_nil
-                  expect(action[:step_two]).to eq param2
-                  expect(action[:step_three]).to eq param3
-                  expect(action[:step_four]).to be_nil
-                  expect(action[:step_five]).to eq param5
-                  expect(action[:step_six]).to be_nil
-                  expect(action[:process_strategy_two]).to be true
-                  expect(action[:result]).to eq final
-                  expect(action[:strategy_failure_handled]).to be_nil
+                let(:expected_state) do
+                  {
+                    action_status: :success,
+                    railway_flow: railway_flow,
+                    errors: {},
+                    state: {
+                      octo_key: strategy_one_key,
+                      strategy_two_key: strategy_two_key,
+                      step_one: nil,
+                      step_two: param2,
+                      step_three: param3,
+                      step_four: nil,
+                      step_five: param5,
+                      step_six: nil,
+                      process_strategy_two: true,
+                      result: final,
+                      strategy_failure_handled: nil
+                    }
+                  }
                 end
+
+                it_behaves_like 'check action state'
               end
 
               context 'when step_five fails' do
@@ -494,22 +577,28 @@ RSpec.describe 'Decouplio::Action octo palps' do
                       strategy_failure
                     ]
                   end
-
-                  it 'sets params to ctx' do
-                    expect(action.failure?).to be true
-                    expect(action.railway_flow).to eq railway_flow
-                    expect(action[:octo_key]).to eq strategy_one_key
-                    expect(action[:strategy_two_key]).to eq strategy_two_key
-                    expect(action[:step_one]).to be_nil
-                    expect(action[:step_two]).to eq param2
-                    expect(action[:step_three]).to eq param3
-                    expect(action[:step_four]).to eq param4
-                    expect(action[:step_five]).to be_nil
-                    expect(action[:step_six]).to be_nil
-                    expect(action[:process_strategy_two]).to be true
-                    expect(action[:result]).to be_nil
-                    expect(action[:strategy_failure_handled]).to be true
+                  let(:expected_state) do
+                    {
+                      action_status: :failure,
+                      railway_flow: railway_flow,
+                      errors: {},
+                      state: {
+                        octo_key: strategy_one_key,
+                        strategy_two_key: strategy_two_key,
+                        step_one: nil,
+                        step_two: param2,
+                        step_three: param3,
+                        step_four: param4,
+                        step_five: nil,
+                        step_six: nil,
+                        process_strategy_two: true,
+                        result: nil,
+                        strategy_failure_handled: true
+                      }
+                    }
                   end
+
+                  it_behaves_like 'check action state'
                 end
 
                 context 'when step_four should not be processed' do
@@ -526,22 +615,28 @@ RSpec.describe 'Decouplio::Action octo palps' do
                       strategy_failure
                     ]
                   end
-
-                  it 'sets params to ctx' do
-                    expect(action).to be_failure
-                    expect(action.railway_flow).to eq railway_flow
-                    expect(action[:octo_key]).to eq strategy_one_key
-                    expect(action[:strategy_two_key]).to eq strategy_two_key
-                    expect(action[:step_one]).to be_nil
-                    expect(action[:step_two]).to eq param2
-                    expect(action[:step_three]).to eq param3
-                    expect(action[:step_four]).to be_nil
-                    expect(action[:step_five]).to be_nil
-                    expect(action[:step_six]).to be_nil
-                    expect(action[:process_strategy_two]).to be true
-                    expect(action[:result]).to be_nil
-                    expect(action[:strategy_failure_handled]).to be true
+                  let(:expected_state) do
+                    {
+                      action_status: :failure,
+                      railway_flow: railway_flow,
+                      errors: {},
+                      state: {
+                        octo_key: strategy_one_key,
+                        strategy_two_key: strategy_two_key,
+                        step_one: nil,
+                        step_two: param2,
+                        step_three: param3,
+                        step_four: nil,
+                        step_five: nil,
+                        step_six: nil,
+                        process_strategy_two: true,
+                        result: nil,
+                        strategy_failure_handled: true
+                      }
+                    }
                   end
+
+                  it_behaves_like 'check action state'
                 end
               end
             end
@@ -565,22 +660,28 @@ RSpec.describe 'Decouplio::Action octo palps' do
                     strategy_failure
                   ]
                 end
-
-                it 'sets params to ctx' do
-                  expect(action).to be_failure
-                  expect(action.railway_flow).to eq railway_flow
-                  expect(action[:octo_key]).to eq strategy_one_key
-                  expect(action[:strategy_two_key]).to eq strategy_two_key
-                  expect(action[:step_one]).to be_nil
-                  expect(action[:step_two]).to eq param2
-                  expect(action[:step_three]).to eq param3
-                  expect(action[:step_four]).to be_nil
-                  expect(action[:step_five]).to eq param5
-                  expect(action[:step_six]).to eq param6
-                  expect(action[:process_strategy_two]).to be true
-                  expect(action[:result]).to be_nil
-                  expect(action[:strategy_failure_handled]).to be true
+                let(:expected_state) do
+                  {
+                    action_status: :failure,
+                    railway_flow: railway_flow,
+                    errors: {},
+                    state: {
+                      octo_key: strategy_one_key,
+                      strategy_two_key: strategy_two_key,
+                      step_one: nil,
+                      step_two: param2,
+                      step_three: param3,
+                      step_four: nil,
+                      step_five: param5,
+                      step_six: param6,
+                      process_strategy_two: true,
+                      result: nil,
+                      strategy_failure_handled: true
+                    }
+                  }
                 end
+
+                it_behaves_like 'check action state'
               end
 
               context 'when step five pass' do
@@ -596,22 +697,28 @@ RSpec.describe 'Decouplio::Action octo palps' do
                     final_step
                   ]
                 end
-
-                it 'sets params to ctx' do
-                  expect(action).to be_success
-                  expect(action.railway_flow).to eq railway_flow
-                  expect(action[:octo_key]).to eq strategy_one_key
-                  expect(action[:strategy_two_key]).to eq strategy_two_key
-                  expect(action[:step_one]).to be_nil
-                  expect(action[:step_two]).to eq param2
-                  expect(action[:step_three]).to eq param3
-                  expect(action[:step_four]).to eq param4
-                  expect(action[:step_five]).to eq param5
-                  expect(action[:step_six]).to be_nil
-                  expect(action[:process_strategy_two]).to be true
-                  expect(action[:result]).to eq final
-                  expect(action[:strategy_failure_handled]).to be_nil
+                let(:expected_state) do
+                  {
+                    action_status: :success,
+                    railway_flow: railway_flow,
+                    errors: {},
+                    state: {
+                      octo_key: strategy_one_key,
+                      strategy_two_key: strategy_two_key,
+                      step_one: nil,
+                      step_two: param2,
+                      step_three: param3,
+                      step_four: param4,
+                      step_five: param5,
+                      step_six: nil,
+                      process_strategy_two: true,
+                      result: final,
+                      strategy_failure_handled: nil
+                    }
+                  }
                 end
+
+                it_behaves_like 'check action state'
               end
             end
           end
@@ -633,22 +740,28 @@ RSpec.describe 'Decouplio::Action octo palps' do
                 strategy_failure
               ]
             end
-
-            it 'sets params to ctx' do
-              expect(action).to be_failure
-              expect(action.railway_flow).to eq railway_flow
-              expect(action[:octo_key]).to eq strategy_one_key
-              expect(action[:strategy_two_key]).to eq 'not_existing_strategy'
-              expect(action[:step_one]).to be_nil
-              expect(action[:step_two]).to be_nil
-              expect(action[:step_three]).to be_nil
-              expect(action[:step_four]).to be_nil
-              expect(action[:step_five]).to be_nil
-              expect(action[:step_six]).to be_nil
-              expect(action[:process_strategy_two]).to be false
-              expect(action[:result]).to be_nil
-              expect(action[:strategy_failure_handled]).to be true
+            let(:expected_state) do
+              {
+                action_status: :failure,
+                railway_flow: railway_flow,
+                errors: {},
+                state: {
+                  octo_key: strategy_one_key,
+                  strategy_two_key: 'not_existing_strategy',
+                  step_one: nil,
+                  step_two: nil,
+                  step_three: nil,
+                  step_four: nil,
+                  step_five: nil,
+                  step_six: nil,
+                  process_strategy_two: false,
+                  result: nil,
+                  strategy_failure_handled: true
+                }
+              }
             end
+
+            it_behaves_like 'check action state'
           end
 
           context 'when step_four fails' do
@@ -663,22 +776,28 @@ RSpec.describe 'Decouplio::Action octo palps' do
                 strategy_failure
               ]
             end
-
-            it 'sets params to ctx' do
-              expect(action).to be_failure
-              expect(action.railway_flow).to eq railway_flow
-              expect(action[:octo_key]).to eq strategy_one_key
-              expect(action[:strategy_two_key]).to eq 'not_existing_strategy'
-              expect(action[:step_one]).to eq param1
-              expect(action[:step_two]).to be_nil
-              expect(action[:step_three]).to be_nil
-              expect(action[:step_four]).to be_nil
-              expect(action[:step_five]).to be_nil
-              expect(action[:step_six]).to be_nil
-              expect(action[:process_strategy_two]).to be false
-              expect(action[:result]).to be_nil
-              expect(action[:strategy_failure_handled]).to be true
+            let(:expected_state) do
+              {
+                action_status: :failure,
+                railway_flow: railway_flow,
+                errors: {},
+                state: {
+                  octo_key: strategy_one_key,
+                  strategy_two_key: 'not_existing_strategy',
+                  step_one: param1,
+                  step_two: nil,
+                  step_three: nil,
+                  step_four: nil,
+                  step_five: nil,
+                  step_six: nil,
+                  process_strategy_two: false,
+                  result: nil,
+                  strategy_failure_handled: true
+                }
+              }
             end
+
+            it_behaves_like 'check action state'
           end
 
           context 'when assign_second_strategy fails' do
@@ -694,22 +813,28 @@ RSpec.describe 'Decouplio::Action octo palps' do
                 strategy_failure
               ]
             end
-
-            it 'sets params to ctx' do
-              expect(action).to be_failure
-              expect(action.railway_flow).to eq railway_flow
-              expect(action[:octo_key]).to eq strategy_one_key
-              expect(action[:strategy_two_key]).to be_nil
-              expect(action[:step_one]).to eq param1
-              expect(action[:step_two]).to be_nil
-              expect(action[:step_three]).to be_nil
-              expect(action[:step_four]).to eq param4
-              expect(action[:step_five]).to be_nil
-              expect(action[:step_six]).to be_nil
-              expect(action[:process_strategy_two]).to be false
-              expect(action[:result]).to be_nil
-              expect(action[:strategy_failure_handled]).to be true
+            let(:expected_state) do
+              {
+                action_status: :failure,
+                railway_flow: railway_flow,
+                errors: {},
+                state: {
+                  octo_key: strategy_one_key,
+                  strategy_two_key: nil,
+                  step_one: param1,
+                  step_two: nil,
+                  step_three: nil,
+                  step_four: param4,
+                  step_five: nil,
+                  step_six: nil,
+                  process_strategy_two: false,
+                  result: nil,
+                  strategy_failure_handled: true
+                }
+              }
             end
+
+            it_behaves_like 'check action state'
           end
         end
 
@@ -727,22 +852,28 @@ RSpec.describe 'Decouplio::Action octo palps' do
               final_step
             ]
           end
-
-          it 'sets params to ctx' do
-            expect(action).to be_success
-            expect(action.railway_flow).to eq railway_flow
-            expect(action[:octo_key]).to eq strategy_one_key
-            expect(action[:strategy_two_key]).to eq :octo4
-            expect(action[:step_one]).to eq param1
-            expect(action[:step_two]).to be_nil
-            expect(action[:step_three]).to be_nil
-            expect(action[:step_four]).to eq param4
-            expect(action[:step_five]).to be_nil
-            expect(action[:step_six]).to be_nil
-            expect(action[:process_strategy_two]).to be false
-            expect(action[:result]).to eq final
-            expect(action[:strategy_failure_handled]).to be_nil
+          let(:expected_state) do
+            {
+              action_status: :success,
+              railway_flow: railway_flow,
+              errors: {},
+              state: {
+                octo_key: strategy_one_key,
+                strategy_two_key: strategy_two_key,
+                step_one: param1,
+                step_two: nil,
+                step_three: nil,
+                step_four: param4,
+                step_five: nil,
+                step_six: nil,
+                process_strategy_two: false,
+                result: final,
+                strategy_failure_handled: nil
+              }
+            }
           end
+
+          it_behaves_like 'check action state'
         end
 
         context 'when strategy two should be processed' do
@@ -761,22 +892,28 @@ RSpec.describe 'Decouplio::Action octo palps' do
                 strategy_failure
               ]
             end
-
-            it 'sets params to ctx' do
-              expect(action).to be_failure
-              expect(action.railway_flow).to eq railway_flow
-              expect(action[:octo_key]).to eq strategy_one_key
-              expect(action[:strategy_two_key]).to eq :octo4
-              expect(action[:step_one]).to eq param1
-              expect(action[:step_two]).to be_nil
-              expect(action[:step_three]).to be_nil
-              expect(action[:step_four]).to be_nil
-              expect(action[:step_five]).to be_nil
-              expect(action[:step_six]).to be_nil
-              expect(action[:process_strategy_two]).to be true
-              expect(action[:result]).to be_nil
-              expect(action[:strategy_failure_handled]).to be true
+            let(:expected_state) do
+              {
+                action_status: :failure,
+                railway_flow: railway_flow,
+                errors: {},
+                state: {
+                  octo_key: strategy_one_key,
+                  strategy_two_key: strategy_two_key,
+                  step_one: param1,
+                  step_two: nil,
+                  step_three: nil,
+                  step_four: nil,
+                  step_five: nil,
+                  step_six: nil,
+                  process_strategy_two: true,
+                  result: nil,
+                  strategy_failure_handled: true
+                }
+              }
             end
+
+            it_behaves_like 'check action state'
           end
 
           context 'when octo3 passes' do
@@ -798,22 +935,28 @@ RSpec.describe 'Decouplio::Action octo palps' do
                     final_step
                   ]
                 end
-
-                it 'sets params to ctx' do
-                  expect(action).to be_success
-                  expect(action.railway_flow).to eq railway_flow
-                  expect(action[:octo_key]).to eq strategy_one_key
-                  expect(action[:strategy_two_key]).to eq :octo4
-                  expect(action[:step_one]).to eq param1
-                  expect(action[:step_two]).to be_nil
-                  expect(action[:step_three]).to be_nil
-                  expect(action[:step_four]).to eq param4
-                  expect(action[:step_five]).to eq param5
-                  expect(action[:step_six]).to be_nil
-                  expect(action[:process_strategy_two]).to be true
-                  expect(action[:result]).to eq final
-                  expect(action[:strategy_failure_handled]).to be_nil
+                let(:expected_state) do
+                  {
+                    action_status: :success,
+                    railway_flow: railway_flow,
+                    errors: {},
+                    state: {
+                      octo_key: strategy_one_key,
+                      strategy_two_key: strategy_two_key,
+                      step_one: param1,
+                      step_two: nil,
+                      step_three: nil,
+                      step_four: param4,
+                      step_five: param5,
+                      step_six: nil,
+                      process_strategy_two: true,
+                      result: final,
+                      strategy_failure_handled: nil
+                    }
+                  }
                 end
+
+                it_behaves_like 'check action state'
               end
 
               context 'when step_five fails' do
@@ -833,22 +976,28 @@ RSpec.describe 'Decouplio::Action octo palps' do
                       strategy_failure
                     ]
                   end
-
-                  it 'sets params to ctx' do
-                    expect(action).to be_failure
-                    expect(action.railway_flow).to eq railway_flow
-                    expect(action[:octo_key]).to eq strategy_one_key
-                    expect(action[:strategy_two_key]).to eq strategy_two_key
-                    expect(action[:step_one]).to eq param1
-                    expect(action[:step_two]).to be_nil
-                    expect(action[:step_three]).to be_nil
-                    expect(action[:step_four]).to eq param4 * 2
-                    expect(action[:step_five]).to eq param5
-                    expect(action[:step_six]).to be_nil
-                    expect(action[:process_strategy_two]).to be true
-                    expect(action[:result]).to be_nil
-                    expect(action[:strategy_failure_handled]).to be true
+                  let(:expected_state) do
+                    {
+                      action_status: :failure,
+                      railway_flow: railway_flow,
+                      errors: {},
+                      state: {
+                        octo_key: strategy_one_key,
+                        strategy_two_key: strategy_two_key,
+                        step_one: param1,
+                        step_two: nil,
+                        step_three: nil,
+                        step_four: param4 * 2,
+                        step_five: param5,
+                        step_six: nil,
+                        process_strategy_two: true,
+                        result: nil,
+                        strategy_failure_handled: true
+                      }
+                    }
                   end
+
+                  it_behaves_like 'check action state'
                 end
 
                 context 'when step_four should not be processed' do
@@ -866,22 +1015,28 @@ RSpec.describe 'Decouplio::Action octo palps' do
                       strategy_failure
                     ]
                   end
-
-                  it 'sets params to ctx' do
-                    expect(action).to be_failure
-                    expect(action.railway_flow).to eq railway_flow
-                    expect(action[:octo_key]).to eq strategy_one_key
-                    expect(action[:strategy_two_key]).to eq strategy_two_key
-                    expect(action[:step_one]).to eq param1
-                    expect(action[:step_two]).to be_nil
-                    expect(action[:step_three]).to be_nil
-                    expect(action[:step_four]).to eq param4
-                    expect(action[:step_five]).to be_nil
-                    expect(action[:step_six]).to be_nil
-                    expect(action[:process_strategy_two]).to be true
-                    expect(action[:result]).to be_nil
-                    expect(action[:strategy_failure_handled]).to be true
+                  let(:expected_state) do
+                    {
+                      action_status: :failure,
+                      railway_flow: railway_flow,
+                      errors: {},
+                      state: {
+                        octo_key: strategy_one_key,
+                        strategy_two_key: strategy_two_key,
+                        step_one: param1,
+                        step_two: nil,
+                        step_three: nil,
+                        step_four: param4,
+                        step_five: nil,
+                        step_six: nil,
+                        process_strategy_two: true,
+                        result: nil,
+                        strategy_failure_handled: true
+                      }
+                    }
                   end
+
+                  it_behaves_like 'check action state'
                 end
               end
             end
@@ -906,22 +1061,28 @@ RSpec.describe 'Decouplio::Action octo palps' do
                     strategy_failure
                   ]
                 end
-
-                it 'sets params to ctx' do
-                  expect(action).to be_failure
-                  expect(action.railway_flow).to eq railway_flow
-                  expect(action[:octo_key]).to eq strategy_one_key
-                  expect(action[:strategy_two_key]).to eq strategy_two_key
-                  expect(action[:step_one]).to eq param1
-                  expect(action[:step_two]).to be_nil
-                  expect(action[:step_three]).to be_nil
-                  expect(action[:step_four]).to eq param4
-                  expect(action[:step_five]).to eq param5
-                  expect(action[:step_six]).to eq param6
-                  expect(action[:process_strategy_two]).to be true
-                  expect(action[:result]).to be_nil
-                  expect(action[:strategy_failure_handled]).to be true
+                let(:expected_state) do
+                  {
+                    action_status: :failure,
+                    railway_flow: railway_flow,
+                    errors: {},
+                    state: {
+                      octo_key: strategy_one_key,
+                      strategy_two_key: strategy_two_key,
+                      step_one: param1,
+                      step_two: nil,
+                      step_three: nil,
+                      step_four: param4,
+                      step_five: param5,
+                      step_six: param6,
+                      process_strategy_two: true,
+                      result: nil,
+                      strategy_failure_handled: true
+                    }
+                  }
                 end
+
+                it_behaves_like 'check action state'
               end
 
               context 'when step five pass' do
@@ -938,22 +1099,28 @@ RSpec.describe 'Decouplio::Action octo palps' do
                     final_step
                   ]
                 end
-
-                it 'sets params to ctx' do
-                  expect(action).to be_success
-                  expect(action.railway_flow).to eq railway_flow
-                  expect(action[:octo_key]).to eq strategy_one_key
-                  expect(action[:strategy_two_key]).to eq strategy_two_key
-                  expect(action[:step_one]).to eq param1
-                  expect(action[:step_two]).to be_nil
-                  expect(action[:step_three]).to be_nil
-                  expect(action[:step_four]).to eq param4 * 2
-                  expect(action[:step_five]).to eq param5
-                  expect(action[:step_six]).to be_nil
-                  expect(action[:process_strategy_two]).to be true
-                  expect(action[:result]).to eq final
-                  expect(action[:strategy_failure_handled]).to be_nil
+                let(:expected_state) do
+                  {
+                    action_status: :success,
+                    railway_flow: railway_flow,
+                    errors: {},
+                    state: {
+                      octo_key: strategy_one_key,
+                      strategy_two_key: strategy_two_key,
+                      step_one: param1,
+                      step_two: nil,
+                      step_three: nil,
+                      step_four: param4 * 2,
+                      step_five: param5,
+                      step_six: nil,
+                      process_strategy_two: true,
+                      result: final,
+                      strategy_failure_handled: nil
+                    }
+                  }
                 end
+
+                it_behaves_like 'check action state'
               end
             end
           end
