@@ -51,10 +51,20 @@ module Decouplio
       @instance.railway_flow << stp
     end
 
-    # def inspect
-    # TODO: Redefine to show only useful information
-    # super
-    # end
+    def inspect
+      <<~INSPECT
+        Result: #{self.success? ? 'success' : 'failure'}
+
+        Railway Flow:
+          #{ railway_flow.join(' -> ') }
+
+        Context:
+          #{ctx}
+
+        Errors:
+          #{errors}
+      INSPECT
+    end
 
     class << self
       attr_accessor :error_store
