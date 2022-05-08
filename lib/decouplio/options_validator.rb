@@ -90,7 +90,6 @@ module Decouplio
       check_step_controversial_keys(options: options)
       check_step_extra_keys(options: options)
       check_step_finish_him(options: options)
-      # TODO: check reccursion call for on_success and on_failure
     end
 
     def validate_fail(options:, step_names:)

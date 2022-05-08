@@ -6,6 +6,9 @@ require_relative 'octo_hash_case'
 require_relative 'errors/options_validation_error'
 require_relative 'errors/palp_validation_error'
 require_relative 'errors/resq_definition_error'
+require_relative 'errors/wrap_block_is_not_defined_error'
+require_relative 'errors/palp_block_is_not_defined_error'
+require_relative 'errors/fail_is_first_step_error'
 
 module Decouplio
   class LogicDsl
@@ -23,28 +26,17 @@ module Decouplio
         @palps = {}
       end
 
-      # option - may contain { on_success:, on_failure:, palp:, if:, unless: }
-      # stp - step symbol
       def step(stp, **options)
-        # raise StepNameIsReservedError
-        # if stp.is_a?(Symbol)
-        # raise StepMethodIsNotDefined unless self.instance_public_methods.include?(stp)
-        # end
-        # raise StepNameIsReserved [finish_him, on_success, on_failure, palp, if, unless]
-
         @steps << options.merge(type: Decouplio::Const::Types::STEP_TYPE, name: stp)
       end
 
-      # TODO: use another name, currently it redefines Kernel#fail method
       def fail(stp, **options)
-        # raise StepNameIsReservedError
-        # raise FailCantBeFirstStepError, "'fail' can't be a first step, please use 'step'"
+        raise Decouplio::Errors::FailBlockIsNotDefinedError if @steps.empty?
 
         @steps << options.merge(type: Decouplio::Const::Types::FAIL_TYPE, name: stp)
       end
 
       def pass(stp, **options)
-        # raise StepNameIsReservedError
         @steps << options.merge(type: Decouplio::Const::Types::PASS_TYPE, name: stp)
       end
 
@@ -60,7 +52,7 @@ module Decouplio
 
           @palps[palp_name] = Class.new(self, &block)
         else
-          # TODO: raise an error if no block given
+          raise Decouplio::Errors::PalpBlockIsNotDefinedError
         end
       end
 
@@ -85,7 +77,7 @@ module Decouplio
             wrap_flow: Flow.call(logic: block)
           )
         else
-          # TODO: raise an error
+          raise Decouplio::Errors::WrapBlockIsNotDefinedError
         end
       end
     end

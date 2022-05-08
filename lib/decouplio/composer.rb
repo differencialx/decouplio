@@ -50,11 +50,11 @@ module Decouplio
 
       def prepare_raw_data(flow, palp_prefix)
         flow = flow.map do |stp|
-          stp[:step_id] = random_id(name: stp[:name], palp_prefix: palp_prefix)
+          stp[:step_id] = random_id(name: stp[:name], palp_prefix: palp_prefix, flow: flow)
           stp[:flow] = {}
-          stp = compose_resq(stp, palp_prefix)
+          stp = compose_resq(stp, palp_prefix, flow)
           stp = compose_action(stp)
-          condition = compose_condition(stp, palp_prefix)
+          condition = compose_condition(stp, palp_prefix, flow)
 
           [condition, stp].compact
         end.flatten
@@ -350,13 +350,13 @@ module Decouplio
         end
       end
 
-      def compose_condition(stp, palp_prefix)
+      def compose_condition(stp, palp_prefix, flow)
         condition_options = stp.slice(:if, :unless)
 
         return if condition_options.empty?
 
         condition = ([%i[name type]] + condition_options.invert.to_a).transpose.to_h
-        condition[:step_id] = random_id(name: condition[:name], palp_prefix: palp_prefix)
+        condition[:step_id] = random_id(name: condition[:name], palp_prefix: palp_prefix, flow: flow)
         condition[:type] = Decouplio::Const::Types::STEP_TYPE_TO_CONDITION_TYPE.dig(stp[:type], condition[:type])
         condition[:flow] = {}
         condition
@@ -392,7 +392,7 @@ module Decouplio
         stp
       end
 
-      def compose_resq(stp, palp_prefix)
+      def compose_resq(stp, palp_prefix, flow)
         return stp unless stp[:type] == Decouplio::Const::Types::RESQ_TYPE
 
         options_for_resq = stp[:step_to_resq].slice(
@@ -402,7 +402,7 @@ module Decouplio
           :if,
           :unless
         )
-        stp[:step_id] = random_id(name: stp[:name], palp_prefix: palp_prefix)
+        stp[:step_id] = random_id(name: stp[:name], palp_prefix: palp_prefix, flow: flow)
         stp[:flow] = {}
         handler_hash = {}
         stp[:handler_hash].each do |handler_method, error_classes|
@@ -475,15 +475,16 @@ module Decouplio
         Decouplio::Const::Results::NO_STEP
       end
 
-      def random_id(name:, palp_prefix:)
-        # TODO: invent new approach for random step id generation
-        # because there may be issues with stub rand method in specs
-        # and also still there may be a case with id colission
-        "#{palp_prefix}_#{name}_#{random_value}#{random_value}#{random_value}#{random_value}#{random_value}".to_sym
+      def random_id(name:, palp_prefix:, flow:)
+        loop do
+          random_step_id = "#{palp_prefix}_#{name}_#{random_value}#{random_value}#{random_value}#{random_value}#{random_value}".to_sym
+
+          break random_step_id if flow.select { |stp| stp[:step_id] == random_step_id }.empty?
+        end
       end
 
       def random_value
-        rand(10..99)
+        (10..99).to_a.sample
       end
     end
   end

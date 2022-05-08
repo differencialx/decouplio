@@ -36,6 +36,7 @@ module Decouplio
         NAME_IS_EMPTY = 'wrap name is empty'
         SPECIFY_NAME = 'Please specify name for "wrap"'
         CONTROVERSIAL_KEYS = '"%s" option(s) is not allowed along with "%s" option(s)'
+        NOT_DEFINED = 'The wrap block is not defined'
       end
     end
   end
