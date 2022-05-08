@@ -28,6 +28,7 @@ module Decouplio
         MANUAL_URL = 'https://stub.fail.manual.url'
         OPTIONS_IS_NOT_ALLOWED = '"%s" option(s) is not allowed for "fail"'
         METHOD_NOT_DEFINED = 'fail :%s'
+        CONTROVERSIAL_KEYS = '"%s" option(s) is not allowed along with "%s" option(s)'
       end
     end
   end

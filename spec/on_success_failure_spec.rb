@@ -32,110 +32,158 @@ RSpec.describe 'Decouplio::Action on_success on_failure' do
     let(:process_fail_custom_fail_step) { true }
 
     context 'when finish_him on_success' do
-      let(:action_block) { on_success_finish_him }
+      let(:action_block) { when_step_on_success_finish_him }
       let(:railway_flow) { %i[step_one step_two] }
       let(:param2) { true }
-
-      it 'success' do
-        expect(action).to be_success
-        expect(action.railway_flow).to eq railway_flow
-        expect(action[:result]).to eq param1
+      let(:expected_state) do
+        {
+          action_status: :success,
+          railway_flow: railway_flow,
+          errors: {},
+          state: {
+            result: param1
+          }
+        }
       end
+
+      it_behaves_like 'check action state'
     end
 
     context 'when finish_him on_failure' do
-      let(:action_block) { on_failure_finish_him }
+      let(:action_block) { when_step_on_failure_finish_him }
       let(:railway_flow) { %i[step_one step_two] }
       let(:param2) { false }
-
-      it 'success' do
-        expect(action).to be_failure
-        expect(action.railway_flow).to eq railway_flow
-        expect(action[:result]).to eq param1
+      let(:expected_state) do
+        {
+          action_status: :failure,
+          railway_flow: railway_flow,
+          errors: {},
+          state: {
+            result: param1
+          }
+        }
       end
+
+      it_behaves_like 'check action state'
     end
 
     context 'when custom step on_success' do
-      let(:action_block) { on_success_custom_step }
+      let(:action_block) { when_step_on_success_custom_step }
       let(:param2) { true }
 
       context 'when custom method moves on success track' do
         let(:railway_flow) { %i[step_one step_two custom_step custom_pass_step] }
         let(:custom_param) { true }
-
-        it 'success' do
-          expect(action).to be_success
-          expect(action.railway_flow).to eq railway_flow
-          expect(action[:result]).to eq 'Custom pass step'
+        let(:expected_state) do
+          {
+            action_status: :success,
+            railway_flow: railway_flow,
+            errors: {},
+            state: {
+              result: 'Custom pass step'
+            }
+          }
         end
+
+        it_behaves_like 'check action state'
       end
 
       context 'when custom method moves on failure track' do
         let(:railway_flow) { %i[step_one step_two custom_step custom_fail_step] }
         let(:custom_param) { false }
-
-        it 'success' do
-          expect(action).to be_failure
-          expect(action.railway_flow).to eq railway_flow
-          expect(action[:result]).to eq 'Custom fail step'
+        let(:expected_state) do
+          {
+            action_status: :failure,
+            railway_flow: railway_flow,
+            errors: {},
+            state: {
+              result: 'Custom fail step'
+            }
+          }
         end
+
+        it_behaves_like 'check action state'
       end
     end
 
     context 'when custom step on_failure' do
-      let(:action_block) { on_failure_custom_step }
+      let(:action_block) { when_step_on_failure_custom_step }
       let(:param2) { false }
 
       context 'when custom method moves on success track' do
         let(:railway_flow) { %i[step_one step_two custom_step custom_pass_step] }
         let(:custom_param) { true }
-
-        it 'success' do
-          expect(action).to be_success
-          expect(action.railway_flow).to eq railway_flow
-          expect(action[:result]).to eq 'Custom pass step'
+        let(:expected_state) do
+          {
+            action_status: :success,
+            railway_flow: railway_flow,
+            errors: {},
+            state: {
+              result: 'Custom pass step'
+            }
+          }
         end
+
+        it_behaves_like 'check action state'
       end
 
       context 'when custom method moves on failure track' do
         let(:railway_flow) { %i[step_one step_two custom_step custom_fail_step] }
         let(:custom_param) { false }
-
-        it 'success' do
-          expect(action).to be_failure
-          expect(action.railway_flow).to eq railway_flow
-          expect(action[:result]).to eq 'Custom fail step'
+        let(:expected_state) do
+          {
+            action_status: :failure,
+            railway_flow: railway_flow,
+            errors: {},
+            state: {
+              result: 'Custom fail step'
+            }
+          }
         end
+
+        it_behaves_like 'check action state'
       end
     end
 
     context 'when custom step with if on_failure' do
-      let(:action_block) { on_failure_custom_step_with_if }
+      let(:action_block) { when_step_on_failure_custom_step_with_if }
 
       context 'when process_fail_custom_fail_step is true' do
         let(:process_fail_custom_fail_step) { true }
         let(:railway_flow) { %i[step_one step_two custom_fail_step] }
         let(:param2) { false }
-
-        it 'fails' do
-          expect(action).to be_failure
-          expect(action.railway_flow).to eq railway_flow
-          expect(action[:step_one]).to eq param1
-          expect(action[:result]).to eq 'Custom fail step'
+        let(:expected_state) do
+          {
+            action_status: :failure,
+            railway_flow: railway_flow,
+            errors: {},
+            state: {
+              step_one: param1,
+              result: 'Custom fail step'
+            }
+          }
         end
+
+        it_behaves_like 'check action state'
       end
 
       context 'when process_fail_custom_fail_step is false' do
         let(:process_fail_custom_fail_step) { false }
         let(:railway_flow) { %i[step_one step_two] }
         let(:param2) { false }
-
-        it 'fails' do
-          expect(action).to be_failure
-          expect(action.railway_flow).to eq railway_flow
-          expect(action[:step_one]).to eq param1
-          expect(action[:result]).to be_nil
+        let(:expected_state) do
+          {
+            action_status: :failure,
+            railway_flow: railway_flow,
+            errors: {},
+            state: {
+              step_one: param1,
+              result: nil
+            }
+          }
         end
+
+        it_behaves_like 'check action state'
       end
     end
 
@@ -151,31 +199,44 @@ RSpec.describe 'Decouplio::Action on_success on_failure' do
         let(:action_block) { when_both_options_present_from_failure_to_success_track_on_success }
 
         context 'when fail step success' do
-          let(:expected_railway_flow) { %i[step_one fail_one step_two] }
+          let(:railway_flow) { %i[step_one fail_one step_two] }
           let(:stub_dummy_value) { true }
-
-          it 'success' do
-            expect(action).to be_success
-            expect(action.railway_flow).to eq expected_railway_flow
-            expect(action[:step_one]).to eq param1
-            expect(action[:step_two]).to eq 'Success'
-            expect(action[:fail_two]).to be_nil
-            expect(StubDummy).to have_received(:call)
+          let(:expected_state) do
+            {
+              action_status: :success,
+              railway_flow: railway_flow,
+              errors: {},
+              state: {
+                step_one: param1,
+                step_two: 'Success',
+                fail_two: nil
+              }
+            }
           end
+
+          it_behaves_like 'check action state'
+          it_behaves_like 'stub dummy was called'
         end
 
         context 'when fail step failure' do
-          let(:expected_railway_flow) { %i[step_one fail_one fail_two] }
+          let(:railway_flow) { %i[step_one fail_one fail_two] }
           let(:stub_dummy_value) { false }
 
-          it 'failure' do
-            expect(action).to be_failure
-            expect(action.railway_flow).to eq expected_railway_flow
-            expect(action[:step_one]).to eq param1
-            expect(action[:step_two]).to be_nil
-            expect(action[:fail_two]).to eq 'Failure'
-            expect(StubDummy).to have_received(:call)
+          let(:expected_state) do
+            {
+              action_status: :failure,
+              railway_flow: railway_flow,
+              errors: {},
+              state: {
+                step_one: param1,
+                step_two: nil,
+                fail_two: 'Failure'
+              }
+            }
           end
+
+          it_behaves_like 'check action state'
+          it_behaves_like 'stub dummy was called'
         end
       end
 
@@ -183,31 +244,43 @@ RSpec.describe 'Decouplio::Action on_success on_failure' do
         let(:action_block) { when_one_option_present_from_failure_to_success_track_on_success }
 
         context 'when fail step success' do
-          let(:expected_railway_flow) { %i[step_one fail_one step_two] }
+          let(:railway_flow) { %i[step_one fail_one step_two] }
           let(:stub_dummy_value) { true }
-
-          it 'success' do
-            expect(action).to be_success
-            expect(action.railway_flow).to eq expected_railway_flow
-            expect(action[:step_one]).to eq param1
-            expect(action[:step_two]).to eq 'Success'
-            expect(action[:fail_two]).to be_nil
-            expect(StubDummy).to have_received(:call)
+          let(:expected_state) do
+            {
+              action_status: :success,
+              railway_flow: railway_flow,
+              errors: {},
+              state: {
+                step_one: param1,
+                step_two: 'Success',
+                fail_two: nil
+              }
+            }
           end
+
+          it_behaves_like 'check action state'
+          it_behaves_like 'stub dummy was called'
         end
 
         context 'when fail step failure' do
-          let(:expected_railway_flow) { %i[step_one fail_one fail_two] }
+          let(:railway_flow) { %i[step_one fail_one fail_two] }
           let(:stub_dummy_value) { false }
-
-          it 'failure' do
-            expect(action).to be_failure
-            expect(action.railway_flow).to eq expected_railway_flow
-            expect(action[:step_one]).to eq param1
-            expect(action[:step_two]).to be_nil
-            expect(action[:fail_two]).to eq 'Failure'
-            expect(StubDummy).to have_received(:call)
+          let(:expected_state) do
+            {
+              action_status: :failure,
+              railway_flow: railway_flow,
+              errors: {},
+              state: {
+                step_one: param1,
+                step_two: nil,
+                fail_two: 'Failure'
+              }
+            }
           end
+
+          it_behaves_like 'check action state'
+          it_behaves_like 'stub dummy was called'
         end
       end
     end
@@ -224,31 +297,43 @@ RSpec.describe 'Decouplio::Action on_success on_failure' do
         let(:action_block) { when_both_options_present_from_failure_to_success_track_on_failure }
 
         context 'when fail step success' do
-          let(:expected_railway_flow) { %i[step_one fail_one fail_two] }
+          let(:railway_flow) { %i[step_one fail_one fail_two] }
           let(:stub_dummy_value) { true }
-
-          it 'failure' do
-            # expect(action).to be_failure
-            expect(action.railway_flow).to eq expected_railway_flow
-            expect(action[:step_one]).to eq param1
-            expect(action[:step_two]).to be_nil
-            expect(action[:fail_two]).to eq 'Failure'
-            expect(StubDummy).to have_received(:call)
+          let(:expected_state) do
+            {
+              action_status: :failure,
+              railway_flow: railway_flow,
+              errors: {},
+              state: {
+                step_one: param1,
+                step_two: nil,
+                fail_two: 'Failure'
+              }
+            }
           end
+
+          it_behaves_like 'check action state'
+          it_behaves_like 'stub dummy was called'
         end
 
         context 'when fail step failure' do
-          let(:expected_railway_flow) { %i[step_one fail_one step_two] }
+          let(:railway_flow) { %i[step_one fail_one step_two] }
           let(:stub_dummy_value) { false }
-
-          it 'success' do
-            expect(action).to be_success
-            expect(action.railway_flow).to eq expected_railway_flow
-            expect(action[:step_one]).to eq param1
-            expect(action[:step_two]).to eq 'Success'
-            expect(action[:fail_two]).to be_nil
-            expect(StubDummy).to have_received(:call)
+          let(:expected_state) do
+            {
+              action_status: :success,
+              railway_flow: railway_flow,
+              errors: {},
+              state: {
+                step_one: param1,
+                step_two: 'Success',
+                fail_two: nil
+              }
+            }
           end
+
+          it_behaves_like 'check action state'
+          it_behaves_like 'stub dummy was called'
         end
       end
 
@@ -256,31 +341,43 @@ RSpec.describe 'Decouplio::Action on_success on_failure' do
         let(:action_block) { when_one_option_present_from_failure_to_success_track_on_failure }
 
         context 'when fail step success' do
-          let(:expected_railway_flow) { %i[step_one fail_one fail_two] }
+          let(:railway_flow) { %i[step_one fail_one fail_two] }
           let(:stub_dummy_value) { true }
-
-          it 'failure' do
-            expect(action).to be_failure
-            expect(action.railway_flow).to eq expected_railway_flow
-            expect(action[:step_one]).to eq param1
-            expect(action[:step_two]).to be_nil
-            expect(action[:fail_two]).to eq 'Failure'
-            expect(StubDummy).to have_received(:call)
+          let(:expected_state) do
+            {
+              action_status: :failure,
+              railway_flow: railway_flow,
+              errors: {},
+              state: {
+                step_one: param1,
+                step_two: nil,
+                fail_two: 'Failure'
+              }
+            }
           end
+
+          it_behaves_like 'check action state'
+          it_behaves_like 'stub dummy was called'
         end
 
         context 'when fail step failure' do
-          let(:expected_railway_flow) { %i[step_one fail_one step_two] }
+          let(:railway_flow) { %i[step_one fail_one step_two] }
           let(:stub_dummy_value) { false }
-
-          it 'success' do
-            expect(action).to be_success
-            expect(action.railway_flow).to eq expected_railway_flow
-            expect(action[:step_one]).to eq param1
-            expect(action[:step_two]).to eq 'Success'
-            expect(action[:fail_two]).to be_nil
-            expect(StubDummy).to have_received(:call)
+          let(:expected_state) do
+            {
+              action_status: :success,
+              railway_flow: railway_flow,
+              errors: {},
+              state: {
+                step_one: param1,
+                step_two: 'Success',
+                fail_two: nil
+              }
+            }
           end
+
+          it_behaves_like 'check action state'
+          it_behaves_like 'stub dummy was called'
         end
       end
     end
@@ -295,31 +392,43 @@ RSpec.describe 'Decouplio::Action on_success on_failure' do
       end
 
       context 'when fail step success' do
-        let(:expected_railway_flow) { %i[step_one fail_one] }
+        let(:railway_flow) { %i[step_one fail_one] }
         let(:stub_dummy_value) { true }
-
-        it 'fails' do
-          expect(action).to be_failure
-          expect(action.railway_flow).to eq expected_railway_flow
-          expect(action[:step_one]).to eq param1
-          expect(action[:step_two]).to be_nil
-          expect(action[:fail_two]).to be_nil
-          expect(StubDummy).to have_received(:call)
+        let(:expected_state) do
+          {
+            action_status: :failure,
+            railway_flow: railway_flow,
+            errors: {},
+            state: {
+              step_one: param1,
+              step_two: nil,
+              fail_two: nil
+            }
+          }
         end
+
+        it_behaves_like 'check action state'
+        it_behaves_like 'stub dummy was called'
       end
 
       context 'when fail step failure' do
-        let(:expected_railway_flow) { %i[step_one fail_one fail_two] }
+        let(:railway_flow) { %i[step_one fail_one fail_two] }
         let(:stub_dummy_value) { false }
-
-        it 'fails' do
-          expect(action).to be_failure
-          expect(action.railway_flow).to eq expected_railway_flow
-          expect(action[:step_one]).to eq param1
-          expect(action[:step_two]).to be_nil
-          expect(action[:fail_two]).to eq 'Failure'
-          expect(StubDummy).to have_received(:call)
+        let(:expected_state) do
+          {
+            action_status: :failure,
+            railway_flow: railway_flow,
+            errors: {},
+            state: {
+              step_one: param1,
+              step_two: nil,
+              fail_two: 'Failure'
+            }
+          }
         end
+
+        it_behaves_like 'check action state'
+        it_behaves_like 'stub dummy was called'
       end
     end
 
@@ -333,31 +442,43 @@ RSpec.describe 'Decouplio::Action on_success on_failure' do
       end
 
       context 'when fail step success' do
-        let(:expected_railway_flow) { %i[step_one fail_one fail_two] }
+        let(:railway_flow) { %i[step_one fail_one fail_two] }
         let(:stub_dummy_value) { true }
-
-        it 'fails' do
-          expect(action).to be_failure
-          expect(action.railway_flow).to eq expected_railway_flow
-          expect(action[:step_one]).to eq param1
-          expect(action[:step_two]).to be_nil
-          expect(action[:fail_two]).to eq 'Failure'
-          expect(StubDummy).to have_received(:call)
+        let(:expected_state) do
+          {
+            action_status: :failure,
+            railway_flow: railway_flow,
+            errors: {},
+            state: {
+              step_one: param1,
+              step_two: nil,
+              fail_two: 'Failure'
+            }
+          }
         end
+
+        it_behaves_like 'check action state'
+        it_behaves_like 'stub dummy was called'
       end
 
       context 'when fail step failure' do
-        let(:expected_railway_flow) { %i[step_one fail_one] }
+        let(:railway_flow) { %i[step_one fail_one] }
         let(:stub_dummy_value) { false }
-
-        it 'fails' do
-          expect(action).to be_failure
-          expect(action.railway_flow).to eq expected_railway_flow
-          expect(action[:step_one]).to eq param1
-          expect(action[:step_two]).to be_nil
-          expect(action[:fail_two]).to be_nil
-          expect(StubDummy).to have_received(:call)
+        let(:expected_state) do
+          {
+            action_status: :failure,
+            railway_flow: railway_flow,
+            errors: {},
+            state: {
+              step_one: param1,
+              step_two: nil,
+              fail_two: nil
+            }
+          }
         end
+
+        it_behaves_like 'check action state'
+        it_behaves_like 'stub dummy was called'
       end
     end
 
@@ -371,31 +492,43 @@ RSpec.describe 'Decouplio::Action on_success on_failure' do
       end
 
       context 'when fail step success' do
-        let(:expected_railway_flow) { %i[step_one fail_one] }
+        let(:railway_flow) { %i[step_one fail_one] }
         let(:stub_dummy_value) { true }
-
-        it 'fails' do
-          expect(action).to be_failure
-          expect(action.railway_flow).to eq expected_railway_flow
-          expect(action[:step_one]).to eq param1
-          expect(action[:step_two]).to be_nil
-          expect(action[:fail_two]).to be_nil
-          expect(StubDummy).to have_received(:call)
+        let(:expected_state) do
+          {
+            action_status: :failure,
+            railway_flow: railway_flow,
+            errors: {},
+            state: {
+              step_one: param1,
+              step_two: nil,
+              fail_two: nil
+            }
+          }
         end
+
+        it_behaves_like 'check action state'
+        it_behaves_like 'stub dummy was called'
       end
 
       context 'when fail step failure' do
-        let(:expected_railway_flow) { %i[step_one fail_one step_two] }
+        let(:railway_flow) { %i[step_one fail_one step_two] }
         let(:stub_dummy_value) { false }
-
-        it 'success' do
-          expect(action).to be_success
-          expect(action.railway_flow).to eq expected_railway_flow
-          expect(action[:step_one]).to eq param1
-          expect(action[:step_two]).to eq 'Success'
-          expect(action[:fail_two]).to be_nil
-          expect(StubDummy).to have_received(:call)
+        let(:expected_state) do
+          {
+            action_status: :success,
+            railway_flow: railway_flow,
+            errors: {},
+            state: {
+              step_one: param1,
+              step_two: 'Success',
+              fail_two: nil
+            }
+          }
         end
+
+        it_behaves_like 'check action state'
+        it_behaves_like 'stub dummy was called'
       end
     end
 
@@ -409,31 +542,43 @@ RSpec.describe 'Decouplio::Action on_success on_failure' do
       end
 
       context 'when fail step success' do
-        let(:expected_railway_flow) { %i[step_one fail_one fail_two] }
+        let(:railway_flow) { %i[step_one fail_one fail_two] }
         let(:stub_dummy_value) { true }
-
-        it 'fails' do
-          expect(action).to be_failure
-          expect(action.railway_flow).to eq expected_railway_flow
-          expect(action[:step_one]).to eq param1
-          expect(action[:step_two]).to be_nil
-          expect(action[:fail_two]).to eq 'Failure'
-          expect(StubDummy).to have_received(:call)
+        let(:expected_state) do
+          {
+            action_status: :failure,
+            railway_flow: railway_flow,
+            errors: {},
+            state: {
+              step_one: param1,
+              step_two: nil,
+              fail_two: 'Failure'
+            }
+          }
         end
+
+        it_behaves_like 'check action state'
+        it_behaves_like 'stub dummy was called'
       end
 
       context 'when fail step failure' do
-        let(:expected_railway_flow) { %i[step_one fail_one] }
+        let(:railway_flow) { %i[step_one fail_one] }
         let(:stub_dummy_value) { false }
-
-        it 'fails' do
-          expect(action).to be_failure
-          expect(action.railway_flow).to eq expected_railway_flow
-          expect(action[:step_one]).to eq param1
-          expect(action[:step_two]).to be_nil
-          expect(action[:fail_two]).to be_nil
-          expect(StubDummy).to have_received(:call)
+        let(:expected_state) do
+          {
+            action_status: :failure,
+            railway_flow: railway_flow,
+            errors: {},
+            state: {
+              step_one: param1,
+              step_two: nil,
+              fail_two: nil
+            }
+          }
         end
+
+        it_behaves_like 'check action state'
+        it_behaves_like 'stub dummy was called'
       end
     end
   end

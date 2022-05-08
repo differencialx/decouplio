@@ -27,6 +27,7 @@ module Decouplio
         MANUAL_URL = 'https://stub.pass.manual.url'
         OPTIONS_IS_NOT_ALLOWED = '"%s" option(s) is not allowed for "pass"'
         METHOD_NOT_DEFINED = 'pass :%s'
+        CONTROVERSIAL_KEYS = '"%s" option(s) is not allowed along with "%s" option(s)'
       end
     end
   end

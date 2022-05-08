@@ -35,6 +35,7 @@ module Decouplio
         METHOD_IS_NOT_DEFINED_FOR_KLASS = 'Method "%s" is not defined for "%s" class'
         NAME_IS_EMPTY = 'wrap name is empty'
         SPECIFY_NAME = 'Please specify name for "wrap"'
+        CONTROVERSIAL_KEYS = '"%s" option(s) is not allowed along with "%s" option(s)'
       end
     end
   end

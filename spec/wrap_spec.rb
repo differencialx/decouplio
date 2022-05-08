@@ -365,50 +365,39 @@ RSpec.describe 'Decouplio::Action wrap cases' do
 
     context 'when simple wrap inner on_success forward to outer wrap step' do
       let(:action_block) { when_wrap_inner_on_success_to_outer_step }
-      let(:interpolation_values) do
-        [
-          Decouplio::Const::Colors::YELLOW,
-          '{:on_success=>:step_one}',
-          'Step "step_one" is not defined',
-          Decouplio::Const::Validations::Step::ALLOWED_OPTIONS_MESSAGE,
-          Decouplio::Const::Validations::Step::MANUAL_URL,
-          Decouplio::Const::Colors::NO_COLOR
-        ]
-      end
-      let(:expected_message) do
-        Decouplio::Const::Validations::Step::VALIDATION_ERROR_MESSAGE % interpolation_values
-      end
 
-      it 'raises an error' do
-        expect { action }.to raise_error(
-          Decouplio::Errors::StepIsNotDefinedError,
-          expected_message
-        )
-      end
+      interpolation_values = [
+        Decouplio::Const::Colors::YELLOW,
+        '{:on_success=>:step_one}',
+        'Step "step_one" is not defined',
+        Decouplio::Const::Validations::Step::ALLOWED_OPTIONS_MESSAGE,
+        Decouplio::Const::Validations::Step::MANUAL_URL,
+        Decouplio::Const::Colors::NO_COLOR
+      ]
+      expected_message = Decouplio::Const::Validations::Step::VALIDATION_ERROR_MESSAGE % interpolation_values
+
+      it_behaves_like 'raises option validation error',
+                      error_class: Decouplio::Errors::StepIsNotDefinedForStepError,
+                      message: expected_message
     end
 
-    context 'when simple wrap inner on_failure firward to outer wrap step' do
+    context 'when simple wrap inner on_failure forward to outer wrap step' do
       let(:action_block) { when_wrap_inner_on_failure_to_outer_step }
-      let(:interpolation_values) do
-        [
-          Decouplio::Const::Colors::YELLOW,
-          '{:on_failure=>:step_one}',
-          'Step "step_one" is not defined',
-          Decouplio::Const::Validations::Step::ALLOWED_OPTIONS_MESSAGE,
-          Decouplio::Const::Validations::Step::MANUAL_URL,
-          Decouplio::Const::Colors::NO_COLOR
-        ]
-      end
-      let(:expected_message) do
-        Decouplio::Const::Validations::Step::VALIDATION_ERROR_MESSAGE % interpolation_values
-      end
 
-      it 'raises an error' do
-        expect { action }.to raise_error(
-          Decouplio::Errors::StepIsNotDefinedError,
-          expected_message
-        )
-      end
+      interpolation_values = [
+        Decouplio::Const::Colors::YELLOW,
+        '{:on_failure=>:step_one}',
+        'Step "step_one" is not defined',
+        Decouplio::Const::Validations::Step::ALLOWED_OPTIONS_MESSAGE,
+        Decouplio::Const::Validations::Step::MANUAL_URL,
+        Decouplio::Const::Colors::NO_COLOR
+      ]
+
+      expected_message = Decouplio::Const::Validations::Step::VALIDATION_ERROR_MESSAGE % interpolation_values
+
+      it_behaves_like 'raises option validation error',
+                      error_class: Decouplio::Errors::StepIsNotDefinedForStepError,
+                      message: expected_message
     end
 
     context 'when simple wrap finish_him on_success' do

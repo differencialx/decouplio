@@ -46,6 +46,10 @@ Metrics/ModuleLength:
     - lib/decouplio/const/types.rb
     - spec/**/*
 
+Lint/NonLocalExitFromIterator:
+  Exclude:
+    - spec/support/matchers/error_matcher.rb
+
 Metrics/MethodLength:
   Exclude:
     - spec/**/*

@@ -42,6 +42,44 @@ RSpec.describe 'Wrap options validations' do
                       message: message
     end
 
+    context 'when wrap on_success step is not defined after wrap' do
+      let(:action_block) { when_wrap_on_success_step_is_not_defined }
+
+      interpolation_values = [
+        Decouplio::Const::Colors::YELLOW,
+        '{:on_success=>:step_three}',
+        'Step "step_three" is not defined',
+        Decouplio::Const::Validations::Wrap::ALLOWED_OPTIONS_MESSAGE,
+        Decouplio::Const::Validations::Wrap::MANUAL_URL,
+        Decouplio::Const::Colors::NO_COLOR
+      ]
+
+      message = Decouplio::Const::Validations::Wrap::VALIDATION_ERROR_MESSAGE % interpolation_values
+
+      it_behaves_like 'raises option validation error',
+                      error_class: Decouplio::Errors::StepIsNotDefinedForWrapError,
+                      message: message
+    end
+
+    context 'when wrap on_failure step is not defined after wrap' do
+      let(:action_block) { when_wrap_on_failure_step_is_not_defined }
+
+      interpolation_values = [
+        Decouplio::Const::Colors::YELLOW,
+        '{:on_failure=>:step_three}',
+        'Step "step_three" is not defined',
+        Decouplio::Const::Validations::Wrap::ALLOWED_OPTIONS_MESSAGE,
+        Decouplio::Const::Validations::Wrap::MANUAL_URL,
+        Decouplio::Const::Colors::NO_COLOR
+      ]
+
+      message = Decouplio::Const::Validations::Wrap::VALIDATION_ERROR_MESSAGE % interpolation_values
+
+      it_behaves_like 'raises option validation error',
+                      error_class: Decouplio::Errors::StepIsNotDefinedForWrapError,
+                      message: message
+    end
+
     context 'when wrap finish_him is not a boolean' do
       let(:action_block) { when_wrap_finish_him_is_not_a_boolean }
 
@@ -165,6 +203,114 @@ RSpec.describe 'Wrap options validations' do
 
       it_behaves_like 'raises option validation error',
                       error_class: Decouplio::Errors::InvalidWrapNameError,
+                      message: message
+    end
+
+    context 'when wrap on_success and finish_him present' do
+      let(:action_block) { when_wrap_on_success_and_finish_him_present }
+
+      interpolation_values = [
+        Decouplio::Const::Colors::YELLOW,
+        '{:on_success=>:step_two, :finish_him=>:on_failure}',
+        '"on_success" option(s) is not allowed along with "finish_him" option(s)',
+        Decouplio::Const::Validations::Wrap::ALLOWED_OPTIONS_MESSAGE,
+        Decouplio::Const::Validations::Wrap::MANUAL_URL,
+        Decouplio::Const::Colors::NO_COLOR
+      ]
+      message = Decouplio::Const::Validations::Wrap::VALIDATION_ERROR_MESSAGE % interpolation_values
+
+      it_behaves_like 'raises option validation error',
+                      error_class: Decouplio::Errors::WrapControversialKeysError,
+                      message: message
+    end
+
+    context 'when wrap on_failure and finish_him present' do
+      let(:action_block) { when_wrap_on_failure_and_finish_him_present }
+
+      interpolation_values = [
+        Decouplio::Const::Colors::YELLOW,
+        '{:on_failure=>:step_two, :finish_him=>:on_success}',
+        '"on_failure" option(s) is not allowed along with "finish_him" option(s)',
+        Decouplio::Const::Validations::Wrap::ALLOWED_OPTIONS_MESSAGE,
+        Decouplio::Const::Validations::Wrap::MANUAL_URL,
+        Decouplio::Const::Colors::NO_COLOR
+      ]
+      message = Decouplio::Const::Validations::Wrap::VALIDATION_ERROR_MESSAGE % interpolation_values
+
+      it_behaves_like 'raises option validation error',
+                      error_class: Decouplio::Errors::WrapControversialKeysError,
+                      message: message
+    end
+
+    context 'when wrap if and unless present' do
+      let(:action_block) { when_wrap_if_and_unless_is_present }
+
+      interpolation_values = [
+        Decouplio::Const::Colors::YELLOW,
+        '{:if=>:some_condition?, :unless=>:some_condition?}',
+        '"if" option(s) is not allowed along with "unless" option(s)',
+        Decouplio::Const::Validations::Wrap::ALLOWED_OPTIONS_MESSAGE,
+        Decouplio::Const::Validations::Wrap::MANUAL_URL,
+        Decouplio::Const::Colors::NO_COLOR
+      ]
+      message = Decouplio::Const::Validations::Wrap::VALIDATION_ERROR_MESSAGE % interpolation_values
+
+      it_behaves_like 'raises option validation error',
+                      error_class: Decouplio::Errors::WrapControversialKeysError,
+                      message: message
+    end
+
+    context 'when wrap on_success/if/unless present' do
+      let(:action_block) { when_wrap_on_success_if_and_unless_is_present }
+
+      interpolation_values = [
+        Decouplio::Const::Colors::YELLOW,
+        '{:if=>:some_condition?, :unless=>:some_condition?}',
+        '"if" option(s) is not allowed along with "unless" option(s)',
+        Decouplio::Const::Validations::Wrap::ALLOWED_OPTIONS_MESSAGE,
+        Decouplio::Const::Validations::Wrap::MANUAL_URL,
+        Decouplio::Const::Colors::NO_COLOR
+      ]
+      message = Decouplio::Const::Validations::Wrap::VALIDATION_ERROR_MESSAGE % interpolation_values
+
+      it_behaves_like 'raises option validation error',
+                      error_class: Decouplio::Errors::WrapControversialKeysError,
+                      message: message
+    end
+
+    context 'when wrap on_failure/if/unless present' do
+      let(:action_block) { when_wrap_on_failure_if_and_unless_is_present }
+
+      interpolation_values = [
+        Decouplio::Const::Colors::YELLOW,
+        '{:if=>:some_condition?, :unless=>:some_condition?}',
+        '"if" option(s) is not allowed along with "unless" option(s)',
+        Decouplio::Const::Validations::Wrap::ALLOWED_OPTIONS_MESSAGE,
+        Decouplio::Const::Validations::Wrap::MANUAL_URL,
+        Decouplio::Const::Colors::NO_COLOR
+      ]
+      message = Decouplio::Const::Validations::Wrap::VALIDATION_ERROR_MESSAGE % interpolation_values
+
+      it_behaves_like 'raises option validation error',
+                      error_class: Decouplio::Errors::WrapControversialKeysError,
+                      message: message
+    end
+
+    context 'when wrap finish_him/if/unless present' do
+      let(:action_block) { when_wrap_finish_him_if_and_unless_is_present }
+
+      interpolation_values = [
+        Decouplio::Const::Colors::YELLOW,
+        '{:if=>:some_condition?, :unless=>:some_condition?}',
+        '"if" option(s) is not allowed along with "unless" option(s)',
+        Decouplio::Const::Validations::Wrap::ALLOWED_OPTIONS_MESSAGE,
+        Decouplio::Const::Validations::Wrap::MANUAL_URL,
+        Decouplio::Const::Colors::NO_COLOR
+      ]
+      message = Decouplio::Const::Validations::Wrap::VALIDATION_ERROR_MESSAGE % interpolation_values
+
+      it_behaves_like 'raises option validation error',
+                      error_class: Decouplio::Errors::WrapControversialKeysError,
                       message: message
     end
   end

@@ -69,49 +69,184 @@ module OptionsValidationsCasesForFail
     end
   end
 
-  def when_fail_if_method_is_not_defined
+  def when_fail_on_success_and_finish_him_present
     lambda do |_klass|
       logic do
         step :step_one
-        fail :handle_step_one, if: :some_undefined_method
+        fail :fail_one, on_success: :step_two, finish_him: :on_failure
+        step :step_two
       end
 
       def step_one(**)
-        ctx[:result] = 'result'
+        ctx[:step_one] = 'Success'
       end
 
-      def handle_step_one(**)
-        add_error(:step_one, 'Error')
+      def step_two(**)
+        ctx[:step_two] = 'Success'
+      end
+
+      def fail_one(**)
+        ctx[:fail_one] = 'Failure'
       end
     end
   end
 
-  def when_fail_unless_method_is_not_defined
+  def when_fail_on_failure_and_finish_him_present
     lambda do |_klass|
       logic do
         step :step_one
-        fail :handle_step_one, unless: :some_undefined_method
+        fail :fail_one, on_failure: :step_two, finish_him: :on_success
+        step :step_two
       end
 
       def step_one(**)
-        ctx[:result] = 'result'
+        ctx[:step_one] = 'Success'
       end
 
-      def handle_step_one(**)
-        add_error(:step_one, 'Error')
+      def step_two(**)
+        ctx[:step_two] = 'Success'
+      end
+
+      def fail_one(**)
+        ctx[:fail_one] = 'Failure'
       end
     end
   end
 
-  def when_fail_method_is_not_defined
+  def when_fail_if_and_unless_is_present
     lambda do |_klass|
       logic do
         step :step_one
-        fail :step_two
+        fail :fail_one, if: :some_condition?, unless: :some_condition?
+        step :step_two
       end
 
       def step_one(**)
-        ctx[:result] = 'result'
+        ctx[:step_one] = 'Success'
+      end
+
+      def step_two(**)
+        ctx[:step_two] = 'Success'
+      end
+
+      def some_condition?(**)
+        false
+      end
+
+      def fail_one(**)
+        ctx[:fail_one] = 'Failure'
+      end
+    end
+  end
+
+  def when_fail_on_success_if_and_unless_is_present
+    lambda do |_klass|
+      logic do
+        step :step_one
+        fail :fail_one, on_success: :step_two, if: :some_condition?, unless: :some_condition?
+        step :step_two
+      end
+
+      def step_one(**)
+        ctx[:step_one] = 'Success'
+      end
+
+      def step_two(**)
+        ctx[:step_two] = 'Success'
+      end
+
+      def some_condition?(**)
+        false
+      end
+
+      def fail_one(**)
+        ctx[:fail_one] = 'Failure'
+      end
+    end
+  end
+
+  def when_fail_on_failure_if_and_unless_is_present
+    lambda do |_klass|
+      logic do
+        step :step_one
+        fail :fail_one, on_failure: :step_two, if: :some_condition?, unless: :some_condition?
+        step :step_two
+      end
+
+      def step_one(**)
+        ctx[:step_one] = 'Success'
+      end
+
+      def step_two(**)
+        ctx[:step_two] = 'Success'
+      end
+
+      def some_condition?(**)
+        false
+      end
+
+      def fail_one(**)
+        ctx[:fail_one] = 'Failure'
+      end
+    end
+  end
+
+  def when_fail_finish_him_if_and_unless_is_present
+    lambda do |_klass|
+      logic do
+        step :step_one
+        fail :fail_one, finish_him: :on_success, if: :some_condition?, unless: :some_condition?
+        step :step_two
+      end
+
+      def step_one(**)
+        ctx[:step_one] = 'Success'
+      end
+
+      def step_two(**)
+        ctx[:step_two] = 'Success'
+      end
+
+      def some_condition?(**)
+        false
+      end
+
+      def fail_one(**)
+        ctx[:fail_one] = 'Failure'
+      end
+    end
+  end
+
+  def when_fail_on_success_step_is_not_defined
+    lambda do |_klass|
+      logic do
+        step :step_one
+        fail :fail_two, on_success: :step_one
+      end
+
+      def step_one(**)
+        ctx[:step_one] = 'Success'
+      end
+
+      def fail_two(**)
+        ctx[:fail_two] = 'Failure'
+      end
+    end
+  end
+
+  def when_fail_on_failure_step_is_not_defined
+    lambda do |_klass|
+      logic do
+        step :step_one
+        fail :fail_two, on_failure: :step_one
+      end
+
+      def step_one(**)
+        ctx[:step_one] = 'Success'
+      end
+
+      def fail_two(**)
+        ctx[:fail_two] = 'Failure'
       end
     end
   end
