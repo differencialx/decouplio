@@ -63,14 +63,23 @@ RSpec/NestedGroups:
 Lint/EmptyBlock:
   Exclude:
     - spec/action_logic_block_spec.rb
+    - spec/fail_spec.rb
+    - spec/palp_block_spec.rb
+    - spec/wrap_block_spec.rb
 
 Lint/ConstantDefinitionInBlock:
   Exclude:
     - spec/action_logic_block_spec.rb
+    - spec/fail_spec.rb
+    - spec/palp_block_spec.rb
+    - spec/wrap_block_spec.rb
 
 RSpec/LeakyConstantDeclaration:
   Exclude:
     - spec/action_logic_block_spec.rb
+    - spec/fail_spec.rb
+    - spec/palp_block_spec.rb
+    - spec/wrap_block_spec.rb
 
 RSpec/ExampleLength:
   Max: 15

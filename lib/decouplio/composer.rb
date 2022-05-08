@@ -477,7 +477,8 @@ module Decouplio
 
       def random_id(name:, palp_prefix:, flow:)
         loop do
-          random_step_id = "#{palp_prefix}_#{name}_#{random_value}#{random_value}#{random_value}#{random_value}#{random_value}".to_sym
+          random_step_id =
+            "#{palp_prefix}_#{name}_#{random_value}#{random_value}#{random_value}#{random_value}#{random_value}".to_sym
 
           break random_step_id if flow.select { |stp| stp[:step_id] == random_step_id }.empty?
         end

@@ -53,10 +53,10 @@ module Decouplio
 
     def inspect
       <<~INSPECT
-        Result: #{self.success? ? 'success' : 'failure'}
+        Result: #{success? ? 'success' : 'failure'}
 
         Railway Flow:
-          #{ railway_flow.join(' -> ') }
+          #{railway_flow.join(' -> ')}
 
         Context:
           #{ctx}

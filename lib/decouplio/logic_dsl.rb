@@ -47,13 +47,11 @@ module Decouplio
       end
 
       def palp(palp_name, **options, &block)
-        if block_given?
-          options.empty? || raise(Decouplio::Errors::PalpValidationError)
+        raise Decouplio::Errors::PalpBlockIsNotDefinedError unless block_given?
 
-          @palps[palp_name] = Class.new(self, &block)
-        else
-          raise Decouplio::Errors::PalpBlockIsNotDefinedError
-        end
+        options.empty? || raise(Decouplio::Errors::PalpValidationError)
+
+        @palps[palp_name] = Class.new(self, &block)
       end
 
       def resq(name = :resq, **options)
@@ -70,15 +68,13 @@ module Decouplio
       end
 
       def wrap(name = nil, **options, &block)
-        if block_given?
-          @steps << options.merge(
-            type: Decouplio::Const::Types::WRAP_TYPE,
-            name: name,
-            wrap_flow: Flow.call(logic: block)
-          )
-        else
-          raise Decouplio::Errors::WrapBlockIsNotDefinedError
-        end
+        raise Decouplio::Errors::WrapBlockIsNotDefinedError unless block_given?
+
+        @steps << options.merge(
+          type: Decouplio::Const::Types::WRAP_TYPE,
+          name: name,
+          wrap_flow: Flow.call(logic: block)
+        )
       end
     end
   end
