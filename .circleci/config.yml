@@ -9,8 +9,8 @@ executors:
 jobs:
   build:
     environment:
-        RUBY_VERSION: << parameters.ruby_version >>
-        BUNDLER_VERSION: 2.1.4
+      RUBY_VERSION: << parameters.ruby_version >>
+      BUNDLER_VERSION: 2.1.4
     working_directory: ~/decouplio
     executor: test_executor
     parameters:
@@ -26,11 +26,6 @@ jobs:
       - run:
           name: Install dependencies
           command: bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs 4 --retry 3
-
-      - save_cache:
-          key: decouplio-{{ checksum "Gemfile.lock" }}
-          paths:
-            - vendor/bundle
 
       - run:
           name: Run Rubocop
