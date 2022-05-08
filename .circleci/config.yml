@@ -1,9 +1,21 @@
 version: 2
+
+executors:
+  test_executor:
+    docker:
+      - image: circleci/ruby:${RUBY_VERSION}
+    working_directory: ~/decouplio
+
 jobs:
   build:
+    environment:
+        RUBY_VERSION: << parameters.ruby_version >>
+        BUNDLER_VERSION: 2.1.4
     working_directory: ~/decouplio
-    docker:
-      - image: ruby:2.7.0
+    executor: test_executor
+    parameters:
+      ruby_version:
+        type: string
     steps:
       - checkout
 
@@ -27,3 +39,19 @@ jobs:
       - run:
           name: Run Tests
           command: bundle exec rspec
+
+workflows:
+  build_and_test:
+    jobs:
+      - build:
+          name: 'ruby 2.5.9'
+          ruby_version: 2.5.9
+      - build:
+          name: 'ruby 2.6.8'
+          ruby_version: 2.6.8
+      - build:
+          name: 'ruby 2.7.0'
+          ruby_version: 2.7.0
+      - build:
+          name: 'ruby 3.0.3'
+          ruby_version: 3.0.3
