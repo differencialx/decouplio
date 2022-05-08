@@ -1,24 +1,32 @@
-version: 2
+version: 2.1
+
+executors:
+  test_executor:
+    docker:
+      - image: circleci/ruby:${RUBY_VERSION}
+    working_directory: ~/decouplio
+
 jobs:
   build:
+    environment:
+      RUBY_VERSION: << parameters.ruby_version >>
     working_directory: ~/decouplio
-    docker:
-      - image: ruby:2.7.0
+    executor: test_executor
+    parameters:
+      ruby_version:
+        type: string
+      bundler_version:
+        type: string
     steps:
       - checkout
 
       - run:
           name: Install bundler
-          command: gem install bundler:2.1.2
+          command: gem install bundler:<< parameters.bundler_version >>
 
       - run:
           name: Install dependencies
           command: bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs 4 --retry 3
-
-      - save_cache:
-          key: decouplio-{{ checksum "Gemfile.lock" }}
-          paths:
-            - vendor/bundle
 
       - run:
           name: Run Rubocop
@@ -27,3 +35,19 @@ jobs:
       - run:
           name: Run Tests
           command: bundle exec rspec
+
+workflows:
+  build_and_test:
+    jobs:
+      - build:
+          name: 'ruby 2.7.0'
+          ruby_version: 2.7.0
+          bundler_version: 2.1.4
+      - build:
+          name: 'ruby 2.7.5'
+          ruby_version: 2.7.5
+          bundler_version: 2.1.4
+      - build:
+          name: 'ruby 3.0.3'
+          ruby_version: 3.0.3
+          bundler_version: 2.2.32
