@@ -3,12 +3,14 @@
 module Decouplio
   module Const
     module Validations
-      module Action
+      module Logic
         VALIDATION_ERROR_MESSAGE = <<~ERROR_MESSAGE
           %s
-          The "%s" class has already been defined. Please use different class name.
+          %s
           %s
         ERROR_MESSAGE
+        REDEFINITION = 'The logic for "%s" class has already been defined.'
+        NOT_DEFINED = 'The logic for "%s" class is not define'
       end
     end
   end
