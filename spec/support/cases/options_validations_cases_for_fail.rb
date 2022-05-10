@@ -117,7 +117,7 @@ module OptionsValidationsCasesForFail
     lambda do |_klass|
       logic do
         step :step_one
-        fail :fail_one, if: :some_condition?, unless: :some_condition?
+        fail :fail_one, if: :some_condition?, unless: :condition?
         step :step_two
       end
 
@@ -131,6 +131,10 @@ module OptionsValidationsCasesForFail
 
       def some_condition?(**)
         false
+      end
+
+      def condtion?(**)
+        true
       end
 
       def fail_one(**)

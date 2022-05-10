@@ -100,13 +100,11 @@ module Decouplio
     end
 
     def validate_pass(options:)
-      check_pass_controversial_keys(options: options)
       check_pass_extra_keys(options: options)
       check_pass_finish_him(options: options)
     end
 
     def validate_octo(options:, hash_case:)
-      check_octo_controversial_keys(options: options)
       check_octo_required_keys(options: options)
       check_octo_extra_keys(options: options)
       check_octo_palps(hash_case: hash_case)
@@ -180,18 +178,11 @@ module Decouplio
     def check_step_controversial_keys(options:)
       on_success_on_failure = options.slice(:on_success, :on_failure)
       finish_him = options.slice(:finish_him)
-      if_condition = options.slice(:if)
-      unless_condition = options.slice(:unless)
 
       if !on_success_on_failure.empty? && !finish_him.empty?
         raise Decouplio::Errors::StepControversialKeysError.new(
           errored_option: on_success_on_failure.merge(finish_him).to_s,
           details: [on_success_on_failure.keys.join(', '), :finish_him]
-        )
-      elsif !if_condition.empty? && !unless_condition.empty?
-        raise Decouplio::Errors::StepControversialKeysError.new(
-          errored_option: if_condition.merge(unless_condition).to_s,
-          details: %i[if unless]
         )
       end
     end
@@ -210,18 +201,11 @@ module Decouplio
     def check_fail_controversial_keys(options:)
       on_success_on_failure = options.slice(:on_success, :on_failure)
       finish_him = options.slice(:finish_him)
-      if_condition = options.slice(:if)
-      unless_condition = options.slice(:unless)
 
       if !on_success_on_failure.empty? && !finish_him.empty?
         raise Decouplio::Errors::FailControversialKeysError.new(
           errored_option: on_success_on_failure.merge(finish_him).to_s,
           details: [on_success_on_failure.keys.join(', '), :finish_him]
-        )
-      elsif !if_condition.empty? && !unless_condition.empty?
-        raise Decouplio::Errors::FailControversialKeysError.new(
-          errored_option: if_condition.merge(unless_condition).to_s,
-          details: %i[if unless]
         )
       end
     end
@@ -237,18 +221,6 @@ module Decouplio
       end
     end
 
-    def check_pass_controversial_keys(options:)
-      if_condition = options.slice(:if)
-      unless_condition = options.slice(:unless)
-
-      if !if_condition.empty? && !unless_condition.empty?
-        raise Decouplio::Errors::PassControversialKeysError.new(
-          errored_option: if_condition.merge(unless_condition).to_s,
-          details: %i[if unless]
-        )
-      end
-    end
-
     def check_octo_extra_keys(options:)
       extra_keys = options.keys - OCTO_ALLOWED_OPTIONS
 
@@ -256,18 +228,6 @@ module Decouplio
         raise Decouplio::Errors::ExtraKeyForOctoError.new(
           errored_option: options.slice(*extra_keys).to_s,
           details: extra_keys.join(', ')
-        )
-      end
-    end
-
-    def check_octo_controversial_keys(options:)
-      if_condition = options.slice(:if)
-      unless_condition = options.slice(:unless)
-
-      if !if_condition.empty? && !unless_condition.empty?
-        raise Decouplio::Errors::OctoControversialKeysError.new(
-          errored_option: if_condition.merge(unless_condition).to_s,
-          details: %i[if unless]
         )
       end
     end
@@ -285,18 +245,11 @@ module Decouplio
     def check_wrap_controversial_keys(options:)
       on_success_on_failure = options.slice(:on_success, :on_failure)
       finish_him = options.slice(:finish_him)
-      if_condition = options.slice(:if)
-      unless_condition = options.slice(:unless)
 
       if !on_success_on_failure.empty? && !finish_him.empty?
         raise Decouplio::Errors::WrapControversialKeysError.new(
           errored_option: on_success_on_failure.merge(finish_him).to_s,
           details: [on_success_on_failure.keys.join(', '), :finish_him]
-        )
-      elsif !if_condition.empty? && !unless_condition.empty?
-        raise Decouplio::Errors::WrapControversialKeysError.new(
-          errored_option: if_condition.merge(unless_condition).to_s,
-          details: %i[if unless]
         )
       end
     end

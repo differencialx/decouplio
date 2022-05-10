@@ -66,6 +66,10 @@ module Decouplio
       INSPECT
     end
 
+    def to_s
+      inspect
+    end
+
     class << self
       attr_accessor :error_store
 

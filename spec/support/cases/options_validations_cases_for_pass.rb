@@ -140,7 +140,7 @@ module OptionsValidationsCasesForPass
   def when_pass_if_and_unless_is_present
     lambda do |_klass|
       logic do
-        pass :step_one, if: :some_condition?, unless: :some_condition?
+        pass :step_one, if: :some_condition?, unless: :condition?
         step :step_two
       end
 
@@ -154,6 +154,10 @@ module OptionsValidationsCasesForPass
 
       def some_condition?(**)
         false
+      end
+
+      def condition?(**)
+        true
       end
     end
   end

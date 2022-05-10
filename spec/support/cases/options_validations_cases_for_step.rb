@@ -110,7 +110,7 @@ module OptionsValidationsCasesForStep
   def when_step_if_and_unless_is_present
     lambda do |_klass|
       logic do
-        step :step_one, if: :some_condition?, unless: :some_condition?
+        step :step_one, if: :some_condition?, unless: :condition?
         step :step_two
       end
 
@@ -124,6 +124,10 @@ module OptionsValidationsCasesForStep
 
       def some_condition?(**)
         false
+      end
+
+      def condition?(**)
+        true
       end
     end
   end

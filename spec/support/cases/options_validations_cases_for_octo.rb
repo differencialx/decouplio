@@ -44,7 +44,7 @@ module OptionsValidationsCasesForOcto
           step :step_one
         end
 
-        octo :strategy_one, if: :some_condition?, unless: :some_condition? do
+        octo :strategy_one, if: :some_condition?, unless: :condition? do
           on :what_ever_you_want, palp: :palp_one
         end
       end
@@ -55,6 +55,10 @@ module OptionsValidationsCasesForOcto
 
       def some_condition?(**)
         false
+      end
+
+      def condition?(**)
+        true
       end
     end
   end
