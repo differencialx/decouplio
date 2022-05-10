@@ -17,6 +17,7 @@ require_relative 'steps/inner_action_step'
 require_relative 'steps/inner_action_fail'
 require_relative 'steps/inner_action_pass'
 require_relative 'options_validator'
+require_relative 'validators/condition'
 
 module Decouplio
   class Composer
@@ -354,6 +355,11 @@ module Decouplio
         condition_options = stp.slice(:if, :unless)
 
         return if condition_options.empty?
+
+        Decouplio::Validators::Condition.validate(
+          condition_options: condition_options,
+          type: stp[:type]
+        )
 
         condition = ([%i[name type]] + condition_options.invert.to_a).transpose.to_h
         condition[:step_id] = random_id(name: condition[:name], palp_prefix: palp_prefix, flow: flow)

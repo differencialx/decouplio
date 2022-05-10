@@ -105,7 +105,7 @@ RSpec.describe 'Fail options validations' do
 
       interpolation_values = [
         Decouplio::Const::Colors::YELLOW,
-        '{:if=>:some_condition?, :unless=>:some_condition?}',
+        '{:if=>:some_condition?, :unless=>:condition?}',
         '"if" option(s) is not allowed along with "unless" option(s)',
         Decouplio::Const::Validations::Fail::ALLOWED_OPTIONS_MESSAGE,
         Decouplio::Const::Validations::Fail::MANUAL_URL,

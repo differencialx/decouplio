@@ -247,7 +247,7 @@ RSpec.describe 'Wrap options validations' do
 
       interpolation_values = [
         Decouplio::Const::Colors::YELLOW,
-        '{:if=>:some_condition?, :unless=>:some_condition?}',
+        '{:if=>:some_condition?, :unless=>:condition?}',
         '"if" option(s) is not allowed along with "unless" option(s)',
         Decouplio::Const::Validations::Wrap::ALLOWED_OPTIONS_MESSAGE,
         Decouplio::Const::Validations::Wrap::MANUAL_URL,

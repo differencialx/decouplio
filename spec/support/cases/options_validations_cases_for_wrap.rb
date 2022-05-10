@@ -180,7 +180,7 @@ module OptionsValidationsCasesForWrap
   def when_wrap_if_and_unless_is_present
     lambda do |_klass|
       logic do
-        wrap :some_wrap, if: :some_condition?, unless: :some_condition? do
+        wrap :some_wrap, if: :some_condition?, unless: :condition? do
           step :step_one
         end
         step :step_two
@@ -196,6 +196,10 @@ module OptionsValidationsCasesForWrap
 
       def some_condition?(**)
         false
+      end
+
+      def condition?(**)
+        true
       end
     end
   end

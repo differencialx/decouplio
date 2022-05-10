@@ -8,6 +8,7 @@ AllCops:
   Exclude:
     - 'decouplio.gemspec'
     - vendor/**/*
+    - docs/**/*
 
 Style/Documentation:
   Enabled: false
