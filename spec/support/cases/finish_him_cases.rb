@@ -1,25 +1,91 @@
 # frozen_string_literal: true
 
-# rubocop:disable Lint/NestedMethodDefinition
 module FinishHimCases
-  def finish_him
+  def when_finish_him_on_success
     lambda do |_klass|
-      step :step_one
-      step :step_two, finish_him: true
-      step :step_three
-
-      def step_one(string_param:, **)
-        ctx[:result] = string_param
+      logic do
+        step :step_one
+        step :step_two, finish_him: :on_success
+        step :step_three
       end
 
-      def step_two(string_param:, **)
-        add_error(:something_wrong, 'Something went wrong')
+      def step_one(param1:, **)
+        ctx[:result] = param1
       end
 
-      def step_three(string_param:, **)
+      def step_two(param2:, **)
+        param2
+      end
+
+      def step_three(**)
+        ctx[:result] = 'Done'
+      end
+    end
+  end
+
+  def when_finish_him_on_failure
+    lambda do |_klass|
+      logic do
+        step :step_one
+        step :step_two, finish_him: :on_failure
+        step :step_three
+      end
+
+      def step_one(param1:, **)
+        ctx[:result] = param1
+      end
+
+      def step_two(param2:, **)
+        param2
+      end
+
+      def step_three(**)
+        ctx[:result] = 'Done'
+      end
+    end
+  end
+
+  def when_finish_him_true_for_fail
+    lambda do |_klass|
+      logic do
+        step :step_one
+        fail :step_two, finish_him: true
+        step :step_three
+      end
+
+      def step_one(param1:, **)
+        ctx[:result] = param1
+      end
+
+      def step_two(param2:, **)
+        ctx[:step_two] = param2
+      end
+
+      def step_three(**)
+        ctx[:result] = 'Done'
+      end
+    end
+  end
+
+  def when_finish_him_true_for_pass
+    lambda do |_klass|
+      logic do
+        step :step_one
+        pass :step_two, finish_him: true
+        step :step_three
+      end
+
+      def step_one(param1:, **)
+        ctx[:result] = param1
+      end
+
+      def step_two(param2:, **)
+        ctx[:step_two] = param2
+      end
+
+      def step_three(**)
         ctx[:result] = 'Done'
       end
     end
   end
 end
-# rubocop:enable Lint/NestedMethodDefinition

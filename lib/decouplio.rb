@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
-require 'decouplio/version'
-require 'decouplio/action'
-require 'decouplio/wrapper'
-require 'decouplio/iterator'
+require_relative 'decouplio/version'
+require_relative 'decouplio/action'
 
 module Decouplio
 end

@@ -1,23 +1,97 @@
+inherit_from: .rubocop_todo.yml
+
 require: rubocop-rspec
 
 AllCops:
+  NewCops: enable
+  SuggestExtensions: false
   Exclude:
     - 'decouplio.gemspec'
+    - vendor/**/*
+    - docs/**/*
 
 Style/Documentation:
   Enabled: false
 
-Metrics/LineLength:
-    Max: 120
+Style/SignalException:
+  Enabled: false
+
+Layout/LineLength:
+  Max: 120
+
+Lint/Void:
+  Exclude:
+    - spec/support/matchers/error_matcher.rb
+
+Lint/UnusedBlockArgument:
+  Exclude:
+    - spec/support/matchers/error_matcher.rb
+    - spec/support/matchers/decouplio_action_matcher.rb
+
+Lint/NestedMethodDefinition:
+  Exclude:
+    - spec/**/*
+
+Lint/UnreachableCode:
+  Exclude:
+    - spec/**/*
 
 Style/FrozenStringLiteralComment:
   Enabled: true
 
 Metrics/BlockLength:
-  ExcludedMethods: ['describe','context']
+  IgnoredMethods: ['describe','context', 'lambda', 'logic', 'define']
+
+Metrics/ModuleLength:
+  Exclude:
+    - lib/decouplio/const/types.rb
+    - spec/**/*
+
+Lint/NonLocalExitFromIterator:
+  Exclude:
+    - spec/support/matchers/error_matcher.rb
+
+Metrics/MethodLength:
+  Exclude:
+    - spec/**/*
 
 RSpec/DescribeClass:
   Enabled: false
 
 RSpec/NestedGroups:
-  Max: 4
+  Max: 10
+
+Lint/EmptyBlock:
+  Exclude:
+    - spec/action_logic_block_spec.rb
+    - spec/fail_spec.rb
+    - spec/palp_block_spec.rb
+    - spec/wrap_block_spec.rb
+
+Lint/ConstantDefinitionInBlock:
+  Exclude:
+    - spec/action_logic_block_spec.rb
+    - spec/fail_spec.rb
+    - spec/palp_block_spec.rb
+    - spec/wrap_block_spec.rb
+
+RSpec/LeakyConstantDeclaration:
+  Exclude:
+    - spec/action_logic_block_spec.rb
+    - spec/fail_spec.rb
+    - spec/palp_block_spec.rb
+    - spec/wrap_block_spec.rb
+
+RSpec/ExampleLength:
+  Max: 15
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/MultipleMemoizedHelpers:
+  Exclude:
+    - spec/**/*
+
+Naming/PredicateName:
+  Exclude:
+    - lib/decouplio/step.rb

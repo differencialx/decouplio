@@ -1,175 +1,115 @@
 # frozen_string_literal: true
 
-require 'dry-schema'
-require_relative 'errors/no_step_error'
-require_relative 'errors/undefined_handler_method_error'
+require 'forwardable'
+require_relative 'flow'
+require_relative 'processor'
+require_relative 'default_error_handler'
+require_relative 'errors/logic_redefinition_error'
+require_relative 'errors/logic_is_not_defined_error'
 
-# rubocop:disable Metrics/ClassLength
 module Decouplio
   class Action
-    attr_reader :errors, :ctx, :wrapper, :parent_instance
+    extend Forwardable
+    def_delegators :@error_store, :errors, :add_error
+    attr_reader :railway_flow, :ctx
 
-    def initialize(parent_instance: nil, wrapper: false, **params)
-      @params = params
-      @errors = {}
-      @parent_instance = parent_instance
-      @ctx = @parent_instance&.ctx || {}
-      @wrapper = wrapper
+    def initialize(
+      parent_railway_flow: nil, parent_ctx: nil, parent_instance: nil, wrapper: false, error_store:, **params
+    )
+      @error_store = error_store
+      @ctx = parent_ctx || params
+      @railway_flow = parent_railway_flow || []
+      @failure = false
+      @instance = parent_instance || self
     end
 
     def [](key)
-      ctx[key]
-    end
-
-    def params
-      @params.clone
+      @ctx[key]
     end
 
     def success?
-      errors.empty?
+      !@failure
     end
 
     def failure?
-      !success?
+      @failure
     end
 
-    def add_error(key, message)
-      errors.store(key, [message].flatten)
+    def fail_action
+      @failure = true
+    end
+
+    def pass_action
+      @failure = false
+    end
+
+    def invoke_step(method_name)
+      @instance.send(method_name, **@instance.ctx)
+    end
+
+    def append_railway_flow(stp)
+      @instance.railway_flow << stp
+    end
+
+    def inspect
+      <<~INSPECT
+        Result: #{success? ? 'success' : 'failure'}
+
+        Railway Flow:
+          #{railway_flow.join(' -> ')}
+
+        Context:
+          #{ctx}
+
+        Errors:
+          #{errors}
+      INSPECT
+    end
+
+    def to_s
+      inspect
     end
 
     class << self
-      def call(**params)
-        @instance = new(params)
-        process_validations
-        return @instance unless @instance.success?
+      attr_accessor :error_store
 
-        process_steps
-        @instance
+      def error_store_instance(handler_class)
+        self.error_store = handler_class
+      end
+
+      def call(**params)
+        instance = new(error_store: error_store.new, **params)
+        Decouplio::Processor.call(instance: instance, **@flow)
+        # TODO: process block with after actions
+        instance
       end
 
       private
 
-      def process_validations
-        validation_result = @schema&.call(@instance.params)
-        @instance.errors.merge!(validation_result.errors.to_h) && return if validation_result&.failure?
-        @validations&.each do |validation|
-          @instance.public_send(validation, @instance.params)
+      def inherited(child_class)
+        child_class.error_store = error_store || Decouplio::DefaultErrorHandler
+      end
+
+      def logic(&block)
+        if @flow && !@flow[:first_step].nil?
+          raise Decouplio::Errors::LogicRedefinitionError.new(
+            errored_option: to_s
+          )
         end
-      end
+        if block_given?
+          @flow = Decouplio::Flow.call(logic: block)
 
-      def validate_inputs(&block)
-        @schema = Dry::Schema.Params(&block)
-      end
-
-      def validate(validation)
-        @validations ||= []
-        @validations << validation
-      end
-
-      def step(step, **options)
-        init_steps
-        @steps[step] = options
-      end
-
-      def rescue_for(**errors_to_handle)
-        init_steps
-        last_step = step_keys.last
-        raise Errors::NoStepError, 'rescue_for should be defined after step or wrapper or iterator' unless last_step
-
-        @rescue_steps[last_step] = {
-          error_classes: errors_to_handle.values.flatten,
-          handler_hash: handler_hash(errors_to_handle)
-        }
-      end
-
-      def init_steps
-        @steps ||= {}
-        @rescue_steps ||= {}
-      end
-
-      def check_handler_methods(handler_hash)
-        handler_hash.each_value do |handler_method|
-          next if @instance.respond_to?(handler_method)
-
-          raise Errors::UndefinedHandlerMethodError, "Please define #{handler_method} method"
-        end
-      end
-
-      def wrap(klass:, method:, **options, &block)
-        step = Decouplio::Wrapper.new(klass: klass, method: method, &block)
-        @steps[step] = options
-      end
-
-      def process_steps
-        step_keys.each do |step|
-          if step.is_a?(Symbol)
-            if @instance.wrapper
-              @instance.parent_instance.public_send(step, @instance.params)
-            else
-              check_handler_methods(@rescue_steps.dig(step, :handler_hash)) if @rescue_steps.dig(step, :handler_hash)
-              process_symbol_step(step) do
-                call_instance_method(step)
-              rescue *@rescue_steps[step][:error_classes] => e
-                @instance.public_send(@rescue_steps[step][:handler_hash][e.class], e, **@instance.params)
-              end
-            end
-          elsif step.class <= Decouplio::Wrapper
-            process_wrapper_step(step) do
-              step.call(@instance)
-            rescue *@rescue_steps[step][:error_classes] => e
-              @instance.public_send(@rescue_steps[step][:handler_hash][e.class], e, **@instance.params)
-            end
-          elsif step <= Decouplio::Iterator
-            step.call(@instance.params)
-          elsif step <= Decouplio::Action
-            outcome = step.call(@instance.params.merge(parent_instance: @instance))
-            @instance.errors.merge!(outcome.errors) && break if outcome.failure?
-          else
-            raise 'FUCK'
+          if @flow && @flow[:first_step].nil?
+            raise Decouplio::Errors::LogicIsNotDefinedError.new(
+              errored_option: to_s
+            )
           end
-          break if @steps.dig(step, :finish_him) && @instance.failure?
-        end
-      end
-
-      def process_symbol_step(step, &block)
-        if rescue_step?(step)
-          block.call
         else
-          call_instance_method(step)
+          raise Decouplio::Errors::LogicIsNotDefinedError.new(
+            errored_option: to_s
+          )
         end
-      end
-
-      def process_wrapper_step(step, &block)
-        if rescue_step?(step)
-          block.call
-        else
-          step.call(@instance)
-        end
-      end
-
-      def rescue_step?(step)
-        @rescue_steps[step]
-      end
-
-      def call_instance_method(step)
-        @instance.public_send(step, @instance.params)
-      end
-
-      def handler_hash(errors_to_handle)
-        hash_case = {}
-
-        errors_to_handle.each do |handler_method, error_classes|
-          [error_classes].flatten.each do |error_class|
-            hash_case[error_class] = handler_method
-          end
-        end
-        hash_case
-      end
-
-      def step_keys
-        @steps.keys
       end
     end
   end
 end
-# rubocop:enable Metrics/ClassLength
