@@ -84,10 +84,10 @@ step(step_name, **options)
 ## Options
 
 ### on_success:
-|Allowed values|Description|Example|
-|-|-|-|
-|:finish_him|action stops execution if step method returns truthy value|[Example]()|
-|symbol with next step name|step with specified symbol name performs if step method returns truthy value|[Example]()|
+|Allowed values|Description|
+|-|-|
+|:finish_him|action stops execution if `step` method returns truthy value|
+|symbol with next step name|step with specified symbol name performs if step method returns truthy value|
 
 ### on_success: :finish_him
 
@@ -313,10 +313,10 @@ Can be used if for some reason you need to jump to fail step
 ***
 
 ### on_failure:
-|Allowed values|Description|Example|
-|-|-|-|
-|:finish_him|action stops execution if step method returns falsy value|[Example]()|
-|symbol with next step name|step with specified symbol name performs if step method returns falsy value|[Example]()|
+|Allowed values|Description|
+|-|-|
+|:finish_him|action stops execution if `step` method returns falsy value|
+|symbol with next step name|step with specified symbol name performs if step method returns falsy value|
 
 ### on_failure: :finish_him
 
@@ -472,8 +472,6 @@ Can be used in case if you need to come back to success track
 ***
 
 ### on_failure: next failure track step
-
-Can be used in case if you need to come back to success track
 
 <details><summary><b>EXAMPLE (CLICK ME)</b></summary>
 <p>
