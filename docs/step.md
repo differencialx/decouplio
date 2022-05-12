@@ -729,3 +729,9 @@ Can be used in case if for some reason step shouldn't be executed
 </details>
 
 ***
+
+### finish_him: :on_success
+The same behavior as for `on_success: :finish_him`
+
+### finish_him: :on_failure
+The same behavior as for `on_failure: :finish_him`
