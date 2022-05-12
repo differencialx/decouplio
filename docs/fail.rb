@@ -684,3 +684,79 @@ puts fail_condition_negative  # =>
 
 # Errors:
 #   {}
+
+
+
+# finish_him: true
+class SomeActionFinishHimTrue < Decouplio::Action
+  logic do
+    step :step_one
+    fail :fail_one, finish_him: true
+    step :step_two
+    fail :fail_two
+  end
+
+  def step_one(param_for_step_one:, **)
+    param_for_step_one
+  end
+
+  def fail_one(fail_one_param:, **)
+    ctx[:action_failed] = fail_one_param
+  end
+
+  def step_two(**)
+    ctx[:step_two] = 'Success'
+  end
+
+  def fail_two(**)
+    ctx[:fail_two] = 'Failure'
+  end
+end
+
+success_action = SomeActionFinishHimTrue.call(
+  param_for_step_one: true
+)
+fail_step_success = SomeActionFinishHimTrue.call(
+  param_for_step_one: false,
+  fail_one_param: true
+)
+fail_step_failure = SomeActionFinishHimTrue.call(
+  param_for_step_one: false,
+  fail_one_param: false
+)
+
+puts success_action # =>
+# Result: success
+
+# Railway Flow:
+#   step_one -> step_two
+
+# Context:
+#   {:param_for_step_one=>true, :step_two=>"Success"}
+
+# Errors:
+#   {}
+
+puts fail_step_success # =>
+# Result: failure
+
+# Railway Flow:
+#   step_one -> fail_one
+
+# Context:
+#   {:param_for_step_one=>false, :fail_one_param=>true, :action_failed=>true}
+
+# Errors:
+#   {}
+
+puts fail_step_failure  # =>
+# Result: failure
+
+# Railway Flow:
+#   step_one -> fail_one
+
+# Context:
+#   {:param_for_step_one=>false, :fail_one_param=>false, :action_failed=>false}
+
+# Errors:
+#   {}

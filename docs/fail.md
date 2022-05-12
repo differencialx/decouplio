@@ -538,7 +538,7 @@ fail(step_name, **options)
       fail_one_param: false
     )
 
-    success_action # =>
+    puts success_action # =>
     # Result: success
 
     # Railway Flow:
@@ -550,7 +550,7 @@ fail(step_name, **options)
     # Errors:
     #   {}
 
-    fail_step_success # =>
+    puts fail_step_success # =>
     # Result: failure
 
     # Railway Flow:
@@ -563,7 +563,7 @@ fail(step_name, **options)
     #   {}
 
 
-    fail_step_failure  # =>
+    puts fail_step_failure  # =>
     # Result: success
 
     # Railway Flow:
@@ -904,6 +904,111 @@ Can be used in case if for some reason step shouldn't be executed
       6(fail_two)-->|failure track|7(fail_three);
       5(fail_one)-->|condition negative|7(fail_three);
       7(fail_three)-->|failure track|8(finish failure);
+  ```
+</p>
+</details>
+
+***
+
+### finish_him: :on_success
+The same behavior as for `on_success: :finish_him`
+
+### finish_him: :on_failure
+The same behavior as for `on_failure: :finish_him`
+
+### finish_him: true
+Will finish action execution anyway
+
+<details><summary><b>EXAMPLE (CLICK ME)</b></summary>
+<p>
+
+  ```ruby
+    require 'decouplio'
+
+    class SomeActionFinishHimTrue < Decouplio::Action
+      logic do
+        step :step_one
+        fail :fail_one, finish_him: true
+        step :step_two
+        fail :fail_two
+      end
+
+      def step_one(param_for_step_one:, **)
+        param_for_step_one
+      end
+
+      def fail_one(fail_one_param:, **)
+        ctx[:action_failed] = fail_one_param
+      end
+
+      def step_two(**)
+        ctx[:step_two] = 'Success'
+      end
+
+      def fail_two(**)
+        ctx[:fail_two] = 'Failure'
+      end
+    end
+
+    success_action = SomeActionFinishHimTrue.call(
+      param_for_step_one: true
+    )
+    fail_step_success = SomeActionFinishHimTrue.call(
+      param_for_step_one: false,
+      fail_one_param: true
+    )
+    fail_step_failure = SomeActionFinishHimTrue.call(
+      param_for_step_one: false,
+      fail_one_param: false
+    )
+
+    puts success_action # =>
+    # Result: success
+
+    # Railway Flow:
+    #   step_one -> step_two
+
+    # Context:
+    #   {:param_for_step_one=>true, :step_two=>"Success"}
+
+    # Errors:
+    #   {}
+
+    puts fail_step_success # =>
+    # Result: failure
+
+    # Railway Flow:
+    #   step_one -> fail_one
+
+    # Context:
+    #   {:param_for_step_one=>false, :fail_one_param=>true, :action_failed=>true}
+
+    # Errors:
+    #   {}
+
+    puts fail_step_failure  # =>
+    # Result: failure
+
+    # Railway Flow:
+    #   step_one -> fail_one
+
+    # Context:
+    #   {:param_for_step_one=>false, :fail_one_param=>false, :action_failed=>false}
+
+    # Errors:
+    #   {}
+  ```
+
+
+  ```mermaid
+  flowchart LR
+      1(start)-->2(step_one);
+      2(step_one)-->|success tack|3(step_two);
+      3(step_two)-->|success track|4(finish_success);
+      2(step_one)-->|failure track|5(fail_one success);
+      5(fail_one success)-->|failure track|6(finish failure);
+      2(step_one)-->|failure track|7(fail_one failure);
+      7(fail_one failure)-->|failure track|6(finish failure);
   ```
 </p>
 </details>
