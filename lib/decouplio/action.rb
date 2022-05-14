@@ -6,12 +6,13 @@ require_relative 'processor'
 require_relative 'default_error_handler'
 require_relative 'errors/logic_redefinition_error'
 require_relative 'errors/logic_is_not_defined_error'
+require_relative 'errors/error_store_error'
 
 module Decouplio
   class Action
     extend Forwardable
     def_delegators :@error_store, :errors, :add_error
-    attr_reader :railway_flow, :ctx
+    attr_reader :railway_flow, :ctx, :error_store
 
     def initialize(
       parent_railway_flow: nil, parent_ctx: nil, parent_instance: nil, wrapper: false, error_store:, **params
@@ -73,8 +74,8 @@ module Decouplio
     class << self
       attr_accessor :error_store
 
-      def error_store_instance(handler_class)
-        self.error_store = handler_class
+      def error_store_class(klass)
+        self.error_store = klass
       end
 
       def call(**params)
@@ -97,7 +98,7 @@ module Decouplio
           )
         end
         if block_given?
-          @flow = Decouplio::Flow.call(logic: block)
+          @flow = Decouplio::Flow.call(logic: block, action_class: self)
 
           if @flow && @flow[:first_step].nil?
             raise Decouplio::Errors::LogicIsNotDefinedError.new(

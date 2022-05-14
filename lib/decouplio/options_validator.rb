@@ -27,13 +27,15 @@ require_relative 'errors/pass_controversial_keys_error'
 require_relative 'errors/octo_controversial_keys_error'
 require_relative 'errors/wrap_controversial_keys_error'
 require_relative 'errors/palp_is_not_defined_error'
+require_relative 'errors/error_store_error'
 
 module Decouplio
   class OptionsValidator
-    def initialize(flow:, palps:, next_steps:)
+    def initialize(flow:, palps:, next_steps:, action_class:)
       @flow = flow
       @palps = palps
       @next_steps = next_steps
+      @action_class = action_class
     end
 
     def call
@@ -61,12 +63,15 @@ module Decouplio
         validate_wrap(options: filtered_options, name: options[:name], step_names: step_names)
       when Decouplio::Const::Types::ACTION_TYPE_STEP
         validate_action(action_class: options[:action], type: Decouplio::Const::Types::STEP_TYPE)
+        validate_error_store(parent_action_class: @action_class, child_action_class: options[:action])
         validate_step(options: filtered_options, step_names: step_names)
       when Decouplio::Const::Types::ACTION_TYPE_FAIL
         validate_action(action_class: options[:action], type: Decouplio::Const::Types::FAIL_TYPE)
+        validate_error_store(parent_action_class: @action_class, child_action_class: options[:action])
         validate_fail(options: filtered_options, step_names: step_names)
       when Decouplio::Const::Types::ACTION_TYPE_PASS
         validate_action(action_class: options[:action], type: Decouplio::Const::Types::PASS_TYPE)
+        validate_error_store(parent_action_class: @action_class, child_action_class: options[:action])
         validate_pass(options: filtered_options)
       when Decouplio::Const::Types::RESQ_TYPE_STEP,
            Decouplio::Const::Types::RESQ_TYPE_FAIL,
@@ -185,6 +190,12 @@ module Decouplio
           details: [on_success_on_failure.keys.join(', '), :finish_him]
         )
       end
+    end
+
+    def validate_error_store(parent_action_class:, child_action_class:)
+      return if parent_action_class.error_store == child_action_class.error_store
+
+      raise Decouplio::Errors::ErrorStoreError
     end
 
     def check_fail_extra_keys(options:)

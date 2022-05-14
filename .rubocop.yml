@@ -74,6 +74,7 @@ Lint/ConstantDefinitionInBlock:
     - spec/fail_spec.rb
     - spec/palp_block_spec.rb
     - spec/wrap_block_spec.rb
+    - spec/error_store_for_inner_step_spec.rb
 
 RSpec/LeakyConstantDeclaration:
   Exclude:
@@ -81,9 +82,16 @@ RSpec/LeakyConstantDeclaration:
     - spec/fail_spec.rb
     - spec/palp_block_spec.rb
     - spec/wrap_block_spec.rb
+    - spec/error_store_for_inner_step_spec.rb
+
+RSpec/FilePath:
+  Exclude:
+    - spec/default_error_handler_spec.rb
 
 RSpec/ExampleLength:
   Max: 15
+  Exclude:
+    - spec/default_error_handler_spec.rb
 
 RSpec/MultipleExpectations:
   Enabled: false
