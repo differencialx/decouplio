@@ -73,7 +73,7 @@ module Decouplio
         @steps << options.merge(
           type: Decouplio::Const::Types::WRAP_TYPE,
           name: name,
-          wrap_flow: Flow.call(logic: block)
+          wrap_flow: block
         )
       end
     end

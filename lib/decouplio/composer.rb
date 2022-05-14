@@ -22,16 +22,16 @@ require_relative 'validators/condition'
 module Decouplio
   class Composer
     class << self
-      def compose(logic_container_raw_data:, palp_prefix: :root, parent_flow: {}, next_steps: nil)
+      def compose(logic_container_raw_data:, action_class:, palp_prefix: :root, parent_flow: {}, next_steps: nil)
         flow = logic_container_raw_data.steps
         palps = logic_container_raw_data.palps
 
         steps_pool = {}
         steps_flow = {}
 
-        flow = prepare_raw_data(flow, palp_prefix)
-        validate_flow(flow, palps, next_steps)
-        flow = compose_flow(flow, palps, next_steps, parent_flow)
+        flow = prepare_raw_data(flow, palp_prefix, action_class)
+        validate_flow(flow, palps, next_steps, action_class)
+        flow = compose_flow(flow, palps, next_steps, action_class, parent_flow)
 
         flow.each do |step_id, stp|
           steps_flow[step_id] = stp[:flow]
@@ -49,12 +49,13 @@ module Decouplio
 
       private
 
-      def prepare_raw_data(flow, palp_prefix)
+      def prepare_raw_data(flow, palp_prefix, action_class)
         flow = flow.map do |stp|
           stp[:step_id] = random_id(name: stp[:name], palp_prefix: palp_prefix, flow: flow)
           stp[:flow] = {}
           stp = compose_resq(stp, palp_prefix, flow)
           stp = compose_action(stp)
+          stp = compose_wrap(stp, action_class)
           condition = compose_condition(stp, palp_prefix, flow)
 
           [condition, stp].compact
@@ -65,8 +66,13 @@ module Decouplio
         end
       end
 
-      def validate_flow(flow, palps, next_steps)
-        OptionsValidator.new(flow: flow, palps: palps, next_steps: next_steps).call
+      def validate_flow(flow, palps, next_steps, action_class)
+        OptionsValidator.new(
+          flow: flow,
+          palps: palps,
+          next_steps: next_steps,
+          action_class: action_class
+        ).call
       end
 
       def extract_palp_flow(stp)
@@ -220,7 +226,7 @@ module Decouplio
         )
       end
 
-      def compose_flow(flow, palps, next_steps, flow_hash = {})
+      def compose_flow(flow, palps, next_steps, action_class, flow_hash = {})
         flow.each_with_index do |(step_id, stp), idx|
           case stp[:type]
           when Decouplio::Const::Types::STEP_TYPE,
@@ -240,7 +246,7 @@ module Decouplio
           when Decouplio::Const::Types::IF_TYPE_FAIL, Decouplio::Const::Types::UNLESS_TYPE_FAIL
             compose_fail_condition_flow(stp, flow, idx, flow_hash)
           when Decouplio::Const::Types::OCTO_TYPE
-            compose_octo_flow(stp, step_id, idx, flow, palps, flow_hash)
+            compose_octo_flow(stp, step_id, idx, flow, palps, flow_hash, action_class)
           end
         end
       end
@@ -303,7 +309,7 @@ module Decouplio
         stp[:flow][Decouplio::Const::Results::FAIL] ||= flow_hash[Decouplio::Const::Results::FAIL]
       end
 
-      def compose_octo_flow(stp, step_id, idx, flow, palps, flow_hash)
+      def compose_octo_flow(stp, step_id, idx, flow, palps, flow_hash, action_class)
         stp[:flow][Decouplio::Const::Results::PASS] = next_success_step(
           flow.values,
           idx,
@@ -317,7 +323,7 @@ module Decouplio
         stp[:flow][Decouplio::Const::Results::PASS] ||= flow_hash[Decouplio::Const::Results::PASS]
         stp[:flow][Decouplio::Const::Results::FAIL] ||= flow_hash[Decouplio::Const::Results::FAIL]
         stp[:flow][Decouplio::Const::Results::FINISH_HIM] = Decouplio::Const::Results::NO_STEP
-        stp = compose_strategy(stp, palps, flow.to_a[(idx + 1)..].to_h)
+        stp = compose_strategy(stp, palps, flow.to_a[(idx + 1)..].to_h, action_class)
         stp[:hash_case].each do |strategy_key, strategy_raw_data|
           stp[:flow][strategy_key] = strategy_raw_data[:first_step]
         end
@@ -351,6 +357,16 @@ module Decouplio
         end
       end
 
+      def compose_wrap(stp, action_class)
+        if Decouplio::Const::Types::WRAP_TYPE == stp[:type]
+          stp[:wrap_flow] = Flow.call(logic: stp[:wrap_flow], action_class: action_class)
+        elsif Decouplio::Const::Types::WRAP_TYPE == stp.dig(:step_to_resq, :type)
+          stp[:step_to_resq][:wrap_flow] = Flow.call(logic: stp[:step_to_resq][:wrap_flow], action_class: action_class)
+        end
+
+        stp
+      end
+
       def compose_condition(stp, palp_prefix, flow)
         condition_options = stp.slice(:if, :unless)
 
@@ -380,12 +396,13 @@ module Decouplio
         stp
       end
 
-      def compose_strategy(stp, palps, next_steps)
+      def compose_strategy(stp, palps, next_steps, action_class)
         return stp unless stp[:type] == Decouplio::Const::Types::OCTO_TYPE
 
         stp[:hash_case] = stp[:hash_case].to_h do |strategy_key, options|
           strategy_flow = compose(
             logic_container_raw_data: palps[options[:palp]],
+            action_class: action_class,
             palp_prefix: options[:palp],
             parent_flow: stp[:flow],
             next_steps: next_steps

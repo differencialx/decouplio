@@ -25,7 +25,7 @@ module Decouplio
       def resolve(outcome:, instance:)
         result = outcome.success?
 
-        instance.errors.merge!(outcome.errors)
+        instance.error_store.merge(outcome.error_store)
 
         if result
           if [Decouplio::Const::Results::PASS, Decouplio::Const::Results::FAIL].include?(@on_success_type)

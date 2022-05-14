@@ -23,7 +23,7 @@ module Decouplio
       private
 
       def resolve(outcome:, instance:)
-        instance.errors.merge!(outcome.errors)
+        instance.error_store.merge(outcome.error_store)
 
         instance.pass_action
 
