@@ -5,7 +5,6 @@ module Decouplio
     module Validations
       module Octo
         VALIDATION_ERROR_MESSAGE = <<~ERROR_MESSAGE
-          %s
           Next options are not allowed for "octo":
           %s
 
@@ -17,10 +16,8 @@ module Decouplio
 
           Please read the manual about allowed options here:
           %s
-          %s
         ERROR_MESSAGE
         REQUIRED_VALIDATION_ERROR_MESSAGE = <<~ERROR_MESSAGE
-          %s
           Details:
           %s
 
@@ -28,7 +25,6 @@ module Decouplio
           %s
 
           Please read the manual about allowed options here:
-          %s
           %s
         ERROR_MESSAGE
         ALLOWED_OPTIONS_MESSAGE = <<~ALLOWED_OPTIONS
@@ -41,6 +37,7 @@ module Decouplio
         OPTIONS_IS_REQUIRED = 'Next option(s) "%s" are required for "octo"'
         CONTROVERSIAL_KEYS = '"%s" option(s) is not allowed along with "%s" option(s)'
         PALPS_IS_NOT_DEFINED = 'Next palp(s): "%s" is not difined'
+        OCTO_BLOCK = 'Block for "octo" is not defined'
       end
     end
   end

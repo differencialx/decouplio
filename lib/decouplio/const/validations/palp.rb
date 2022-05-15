@@ -5,11 +5,9 @@ module Decouplio
     module Validations
       module Palp
         VALIDATION_ERROR_MESSAGE = <<~ERROR_MESSAGE
-          %s
           Details:
           %s
           Please read the manual about allowed options here:
-          %s
           %s
         ERROR_MESSAGE
 

@@ -8,10 +8,8 @@ RSpec.describe 'Palp options validations' do
       let(:action_block) { when_palp_other_options_not_allowed }
 
       interpolation_values = [
-        Decouplio::Const::Colors::YELLOW,
         '"palp" does not allow any options',
-        Decouplio::Const::Validations::Palp::MANUAL_URL,
-        Decouplio::Const::Colors::NO_COLOR
+        Decouplio::Const::Validations::Palp::MANUAL_URL
       ]
       message = Decouplio::Const::Validations::Palp::VALIDATION_ERROR_MESSAGE % interpolation_values
 

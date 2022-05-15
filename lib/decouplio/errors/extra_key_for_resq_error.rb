@@ -12,7 +12,6 @@ module Decouplio
 
       def interpolation_values
         [
-          Decouplio::Const::Colors::YELLOW,
           format(
             Decouplio::Const::Validations::Resq::NOT_ALLOWED_HANDLER_METHOD_VALUE,
             @errored_option
@@ -22,8 +21,7 @@ module Decouplio
             @details
           ),
           Decouplio::Const::Validations::Resq::ALLOWED_OPTIONS_MESSAGE,
-          Decouplio::Const::Validations::Resq::MANUAL_URL,
-          Decouplio::Const::Colors::NO_COLOR
+          Decouplio::Const::Validations::Resq::MANUAL_URL
         ]
       end
     end

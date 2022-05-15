@@ -12,12 +12,10 @@ module Decouplio
 
       def interpolation_values
         [
-          Decouplio::Const::Colors::YELLOW,
           Decouplio::Const::Validations::Wrap::NAME_IS_EMPTY,
           Decouplio::Const::Validations::Wrap::SPECIFY_NAME,
           Decouplio::Const::Validations::Wrap::ALLOWED_OPTIONS_MESSAGE,
-          Decouplio::Const::Validations::Wrap::MANUAL_URL,
-          Decouplio::Const::Colors::NO_COLOR
+          Decouplio::Const::Validations::Wrap::MANUAL_URL
         ]
       end
     end

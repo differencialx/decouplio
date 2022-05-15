@@ -2512,4 +2512,28 @@ RSpec.describe 'Decouplio::Action octo palps' do
       end
     end
   end
+
+  describe 'when octo block is not defined' do
+    let(:action_block) { when_octo_block_is_not_defined }
+
+    message = format(
+      Decouplio::Const::Validations::Octo::OCTO_BLOCK
+    )
+
+    it_behaves_like 'raises option validation error',
+                    error_class: Decouplio::Errors::OctoBlockIsNotDefinedError,
+                    message: message
+  end
+
+  describe 'when octo block is empty' do
+    let(:action_block) { when_octo_block_is_empty }
+
+    message = format(
+      Decouplio::Const::Validations::Octo::OCTO_BLOCK
+    )
+
+    it_behaves_like 'raises option validation error',
+                    error_class: Decouplio::Errors::OctoBlockIsNotDefinedError,
+                    message: message
+  end
 end

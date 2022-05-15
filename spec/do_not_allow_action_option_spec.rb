@@ -8,12 +8,10 @@ RSpec.describe 'Decouplio::Action do not allow action option' do
       let(:action_block) { when_does_not_allow_action_option_for_wrap }
 
       interpolation_values = [
-        Decouplio::Const::Colors::YELLOW,
         '{:action=>:some_action_class}',
         'Please check if wrap option is allowed',
         Decouplio::Const::Validations::Wrap::ALLOWED_OPTIONS_MESSAGE,
-        Decouplio::Const::Validations::Wrap::MANUAL_URL,
-        Decouplio::Const::Colors::NO_COLOR
+        Decouplio::Const::Validations::Wrap::MANUAL_URL
       ]
 
       message = Decouplio::Const::Validations::Wrap::VALIDATION_ERROR_MESSAGE % interpolation_values
@@ -28,12 +26,10 @@ RSpec.describe 'Decouplio::Action do not allow action option' do
     let(:action_block) { when_does_not_allow_action_option_for_octo }
 
     interpolation_values = [
-      Decouplio::Const::Colors::YELLOW,
       '{:action=>:some_action_class}',
       '"action" option(s) is not allowed for "octo"',
       Decouplio::Const::Validations::Octo::ALLOWED_OPTIONS_MESSAGE,
-      Decouplio::Const::Validations::Octo::MANUAL_URL,
-      Decouplio::Const::Colors::NO_COLOR
+      Decouplio::Const::Validations::Octo::MANUAL_URL
     ]
 
     message = Decouplio::Const::Validations::Octo::VALIDATION_ERROR_MESSAGE % interpolation_values
@@ -47,12 +43,10 @@ RSpec.describe 'Decouplio::Action do not allow action option' do
     let(:action_block) { when_does_not_allow_action_option_for_resq }
 
     interpolation_values = [
-      Decouplio::Const::Colors::YELLOW,
       'Invalid handler class value "some_action_class"',
       'Please specify exception class(es) for "action"',
       Decouplio::Const::Validations::Resq::ALLOWED_OPTIONS_MESSAGE,
-      Decouplio::Const::Validations::Resq::MANUAL_URL,
-      Decouplio::Const::Colors::NO_COLOR
+      Decouplio::Const::Validations::Resq::MANUAL_URL
     ]
 
     message = Decouplio::Const::Validations::Resq::VALIDATION_ERROR_MESSAGE % interpolation_values
@@ -66,10 +60,8 @@ RSpec.describe 'Decouplio::Action do not allow action option' do
     let(:action_block) { when_does_not_allow_action_option_for_palp }
 
     interpolation_values = [
-      Decouplio::Const::Colors::YELLOW,
       '"palp" does not allow any options',
-      Decouplio::Const::Validations::Palp::MANUAL_URL,
-      Decouplio::Const::Colors::NO_COLOR
+      Decouplio::Const::Validations::Palp::MANUAL_URL
     ]
     message = Decouplio::Const::Validations::Palp::VALIDATION_ERROR_MESSAGE % interpolation_values
 

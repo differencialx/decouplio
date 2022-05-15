@@ -367,12 +367,10 @@ RSpec.describe 'Decouplio::Action wrap cases' do
       let(:action_block) { when_wrap_inner_on_success_to_outer_step }
 
       interpolation_values = [
-        Decouplio::Const::Colors::YELLOW,
         '{:on_success=>:step_one}',
         'Step "step_one" is not defined',
         Decouplio::Const::Validations::Step::ALLOWED_OPTIONS_MESSAGE,
-        Decouplio::Const::Validations::Step::MANUAL_URL,
-        Decouplio::Const::Colors::NO_COLOR
+        Decouplio::Const::Validations::Step::MANUAL_URL
       ]
       expected_message = Decouplio::Const::Validations::Step::VALIDATION_ERROR_MESSAGE % interpolation_values
 
@@ -385,12 +383,10 @@ RSpec.describe 'Decouplio::Action wrap cases' do
       let(:action_block) { when_wrap_inner_on_failure_to_outer_step }
 
       interpolation_values = [
-        Decouplio::Const::Colors::YELLOW,
         '{:on_failure=>:step_one}',
         'Step "step_one" is not defined',
         Decouplio::Const::Validations::Step::ALLOWED_OPTIONS_MESSAGE,
-        Decouplio::Const::Validations::Step::MANUAL_URL,
-        Decouplio::Const::Colors::NO_COLOR
+        Decouplio::Const::Validations::Step::MANUAL_URL
       ]
 
       expected_message = Decouplio::Const::Validations::Step::VALIDATION_ERROR_MESSAGE % interpolation_values

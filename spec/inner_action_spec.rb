@@ -17,10 +17,8 @@ RSpec.describe 'Use Decouplio::Action as a step' do
       let(:action_block) { when_inner_action_for_step_is_string_class }
 
       interpolation_values = [
-        Decouplio::Const::Colors::YELLOW,
         'step',
-        'action: String',
-        Decouplio::Const::Colors::NO_COLOR
+        'action: String'
       ]
 
       message = Decouplio::Const::Validations::ActionOptionClass::VALIDATION_ERROR_MESSAGE % interpolation_values
@@ -34,10 +32,8 @@ RSpec.describe 'Use Decouplio::Action as a step' do
       let(:action_block) { when_inner_action_for_fail_is_string_class }
 
       interpolation_values = [
-        Decouplio::Const::Colors::YELLOW,
         'fail',
-        'action: String',
-        Decouplio::Const::Colors::NO_COLOR
+        'action: String'
       ]
       message = Decouplio::Const::Validations::ActionOptionClass::VALIDATION_ERROR_MESSAGE % interpolation_values
 
@@ -50,10 +46,8 @@ RSpec.describe 'Use Decouplio::Action as a step' do
       let(:action_block) { when_inner_action_for_pass_is_string_class }
 
       interpolation_values = [
-        Decouplio::Const::Colors::YELLOW,
         'pass',
-        'action: String',
-        Decouplio::Const::Colors::NO_COLOR
+        'action: String'
       ]
 
       message = Decouplio::Const::Validations::ActionOptionClass::VALIDATION_ERROR_MESSAGE % interpolation_values

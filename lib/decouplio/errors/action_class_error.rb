@@ -17,10 +17,8 @@ module Decouplio
 
       def interpolation_values
         [
-          Decouplio::Const::Colors::YELLOW,
           @step_type,
-          @errored_option,
-          Decouplio::Const::Colors::NO_COLOR
+          @errored_option
         ]
       end
     end
