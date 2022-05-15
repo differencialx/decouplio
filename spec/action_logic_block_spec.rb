@@ -38,12 +38,10 @@ RSpec.describe 'Action logic block' do
     let(:expected_message) do
       format(
         Decouplio::Const::Validations::Logic::VALIDATION_ERROR_MESSAGE,
-        Decouplio::Const::Colors::YELLOW,
         format(
           Decouplio::Const::Validations::Logic::REDEFINITION,
           'One'
-        ),
-        Decouplio::Const::Colors::NO_COLOR
+        )
       )
     end
 
@@ -81,12 +79,10 @@ RSpec.describe 'Action logic block' do
       let(:expected_message) do
         format(
           Decouplio::Const::Validations::Logic::VALIDATION_ERROR_MESSAGE,
-          Decouplio::Const::Colors::YELLOW,
           format(
             Decouplio::Const::Validations::Logic::REDEFINITION,
             'Two'
-          ),
-          Decouplio::Const::Colors::NO_COLOR
+          )
         )
       end
 
@@ -117,12 +113,10 @@ RSpec.describe 'Action logic block' do
       let(:expected_message) do
         format(
           Decouplio::Const::Validations::Logic::VALIDATION_ERROR_MESSAGE,
-          Decouplio::Const::Colors::YELLOW,
           format(
             Decouplio::Const::Validations::Logic::REDEFINITION,
             'Three'
-          ),
-          Decouplio::Const::Colors::NO_COLOR
+          )
         )
       end
 
@@ -153,12 +147,10 @@ RSpec.describe 'Action logic block' do
       let(:expected_message) do
         format(
           Decouplio::Const::Validations::Logic::VALIDATION_ERROR_MESSAGE,
-          Decouplio::Const::Colors::YELLOW,
           format(
             Decouplio::Const::Validations::Logic::NOT_DEFINED,
             'Four'
-          ),
-          Decouplio::Const::Colors::NO_COLOR
+          )
         )
       end
 
@@ -189,12 +181,10 @@ RSpec.describe 'Action logic block' do
       let(:expected_message) do
         format(
           Decouplio::Const::Validations::Logic::VALIDATION_ERROR_MESSAGE,
-          Decouplio::Const::Colors::YELLOW,
           format(
             Decouplio::Const::Validations::Logic::NOT_DEFINED,
             'Five'
-          ),
-          Decouplio::Const::Colors::NO_COLOR
+          )
         )
       end
 
@@ -217,12 +207,10 @@ RSpec.describe 'Action logic block' do
       let(:expected_message) do
         format(
           Decouplio::Const::Validations::Logic::VALIDATION_ERROR_MESSAGE,
-          Decouplio::Const::Colors::YELLOW,
           format(
             Decouplio::Const::Validations::Logic::NOT_DEFINED,
             'Six'
-          ),
-          Decouplio::Const::Colors::NO_COLOR
+          )
         )
       end
 
@@ -244,12 +232,10 @@ RSpec.describe 'Action logic block' do
       let(:expected_message) do
         format(
           Decouplio::Const::Validations::Logic::VALIDATION_ERROR_MESSAGE,
-          Decouplio::Const::Colors::YELLOW,
           format(
             Decouplio::Const::Validations::Logic::NOT_DEFINED,
             'Seven'
-          ),
-          Decouplio::Const::Colors::NO_COLOR
+          )
         )
       end
 

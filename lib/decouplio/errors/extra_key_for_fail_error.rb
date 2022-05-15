@@ -12,15 +12,13 @@ module Decouplio
 
       def interpolation_values
         [
-          Decouplio::Const::Colors::YELLOW,
           @errored_option,
           format(
             Decouplio::Const::Validations::Fail::OPTIONS_IS_NOT_ALLOWED,
             @details
           ),
           Decouplio::Const::Validations::Fail::ALLOWED_OPTIONS_MESSAGE,
-          Decouplio::Const::Validations::Fail::MANUAL_URL,
-          Decouplio::Const::Colors::NO_COLOR
+          Decouplio::Const::Validations::Fail::MANUAL_URL
         ]
       end
     end

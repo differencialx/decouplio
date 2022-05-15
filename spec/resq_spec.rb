@@ -24,10 +24,8 @@ RSpec.describe 'Decouplio::Action resq cases' do
       let(:expected_message) do
         format(
           Decouplio::Const::Validations::Resq::DEFINITION_ERROR_MESSAGE,
-          Decouplio::Const::Colors::YELLOW,
           Decouplio::Const::Types::MAIN_FLOW_TYPES.join("\n"),
-          Decouplio::Const::Validations::Resq::MANUAL_URL,
-          Decouplio::Const::Colors::NO_COLOR
+          Decouplio::Const::Validations::Resq::MANUAL_URL
         )
       end
 
@@ -411,10 +409,8 @@ RSpec.describe 'Decouplio::Action resq cases' do
         let(:action_block) { strategy_resq_single_error_class }
         let(:interpolation_values) do
           [
-            Decouplio::Const::Colors::YELLOW,
             Decouplio::Const::Types::MAIN_FLOW_TYPES.join("\n"),
-            Decouplio::Const::Validations::Resq::MANUAL_URL,
-            Decouplio::Const::Colors::NO_COLOR
+            Decouplio::Const::Validations::Resq::MANUAL_URL
           ]
         end
         let(:expected_message) do

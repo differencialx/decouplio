@@ -8,12 +8,10 @@ RSpec.describe 'Fail options validations' do
       let(:action_block) { when_fail_finish_him_is_not_a_boolean }
 
       interpolation_values = [
-        Decouplio::Const::Colors::YELLOW,
         '{:finish_him=>123}',
         '"finish_him" does not allow "123" value',
         Decouplio::Const::Validations::Fail::ALLOWED_OPTIONS_MESSAGE,
-        Decouplio::Const::Validations::Fail::MANUAL_URL,
-        Decouplio::Const::Colors::NO_COLOR
+        Decouplio::Const::Validations::Fail::MANUAL_URL
       ]
       message = Decouplio::Const::Validations::Fail::VALIDATION_ERROR_MESSAGE % interpolation_values
 
@@ -32,12 +30,10 @@ RSpec.describe 'Fail options validations' do
       let(:action_block) { when_fail_finish_him_is_some_custom_symbol }
 
       interpolation_values = [
-        Decouplio::Const::Colors::YELLOW,
         '{:finish_him=>:some_step}',
         '"finish_him" does not allow "some_step" value',
         Decouplio::Const::Validations::Fail::ALLOWED_OPTIONS_MESSAGE,
-        Decouplio::Const::Validations::Fail::MANUAL_URL,
-        Decouplio::Const::Colors::NO_COLOR
+        Decouplio::Const::Validations::Fail::MANUAL_URL
       ]
       message = Decouplio::Const::Validations::Fail::VALIDATION_ERROR_MESSAGE % interpolation_values
 
@@ -50,12 +46,10 @@ RSpec.describe 'Fail options validations' do
       let(:action_block) { when_fail_not_allowed_option_provided }
 
       interpolation_values = [
-        Decouplio::Const::Colors::YELLOW,
         '{:not_allowed_option=>:some_option}',
         '"not_allowed_option" option(s) is not allowed for "fail"',
         Decouplio::Const::Validations::Fail::ALLOWED_OPTIONS_MESSAGE,
-        Decouplio::Const::Validations::Fail::MANUAL_URL,
-        Decouplio::Const::Colors::NO_COLOR
+        Decouplio::Const::Validations::Fail::MANUAL_URL
       ]
       message = Decouplio::Const::Validations::Fail::VALIDATION_ERROR_MESSAGE % interpolation_values
 
@@ -68,12 +62,10 @@ RSpec.describe 'Fail options validations' do
       let(:action_block) { when_fail_on_success_and_finish_him_present }
 
       interpolation_values = [
-        Decouplio::Const::Colors::YELLOW,
         '{:on_success=>:step_two, :finish_him=>:on_failure}',
         '"on_success" option(s) is not allowed along with "finish_him" option(s)',
         Decouplio::Const::Validations::Fail::ALLOWED_OPTIONS_MESSAGE,
-        Decouplio::Const::Validations::Fail::MANUAL_URL,
-        Decouplio::Const::Colors::NO_COLOR
+        Decouplio::Const::Validations::Fail::MANUAL_URL
       ]
       message = Decouplio::Const::Validations::Fail::VALIDATION_ERROR_MESSAGE % interpolation_values
 
@@ -86,12 +78,10 @@ RSpec.describe 'Fail options validations' do
       let(:action_block) { when_fail_on_failure_and_finish_him_present }
 
       interpolation_values = [
-        Decouplio::Const::Colors::YELLOW,
         '{:on_failure=>:step_two, :finish_him=>:on_success}',
         '"on_failure" option(s) is not allowed along with "finish_him" option(s)',
         Decouplio::Const::Validations::Fail::ALLOWED_OPTIONS_MESSAGE,
-        Decouplio::Const::Validations::Fail::MANUAL_URL,
-        Decouplio::Const::Colors::NO_COLOR
+        Decouplio::Const::Validations::Fail::MANUAL_URL
       ]
       message = Decouplio::Const::Validations::Fail::VALIDATION_ERROR_MESSAGE % interpolation_values
 
@@ -104,12 +94,10 @@ RSpec.describe 'Fail options validations' do
       let(:action_block) { when_fail_if_and_unless_is_present }
 
       interpolation_values = [
-        Decouplio::Const::Colors::YELLOW,
         '{:if=>:some_condition?, :unless=>:condition?}',
         '"if" option(s) is not allowed along with "unless" option(s)',
         Decouplio::Const::Validations::Fail::ALLOWED_OPTIONS_MESSAGE,
-        Decouplio::Const::Validations::Fail::MANUAL_URL,
-        Decouplio::Const::Colors::NO_COLOR
+        Decouplio::Const::Validations::Fail::MANUAL_URL
       ]
       message = Decouplio::Const::Validations::Fail::VALIDATION_ERROR_MESSAGE % interpolation_values
 
@@ -122,12 +110,10 @@ RSpec.describe 'Fail options validations' do
       let(:action_block) { when_fail_on_success_if_and_unless_is_present }
 
       interpolation_values = [
-        Decouplio::Const::Colors::YELLOW,
         '{:if=>:some_condition?, :unless=>:some_condition?}',
         '"if" option(s) is not allowed along with "unless" option(s)',
         Decouplio::Const::Validations::Fail::ALLOWED_OPTIONS_MESSAGE,
-        Decouplio::Const::Validations::Fail::MANUAL_URL,
-        Decouplio::Const::Colors::NO_COLOR
+        Decouplio::Const::Validations::Fail::MANUAL_URL
       ]
       message = Decouplio::Const::Validations::Fail::VALIDATION_ERROR_MESSAGE % interpolation_values
 
@@ -140,12 +126,10 @@ RSpec.describe 'Fail options validations' do
       let(:action_block) { when_fail_on_failure_if_and_unless_is_present }
 
       interpolation_values = [
-        Decouplio::Const::Colors::YELLOW,
         '{:if=>:some_condition?, :unless=>:some_condition?}',
         '"if" option(s) is not allowed along with "unless" option(s)',
         Decouplio::Const::Validations::Fail::ALLOWED_OPTIONS_MESSAGE,
-        Decouplio::Const::Validations::Fail::MANUAL_URL,
-        Decouplio::Const::Colors::NO_COLOR
+        Decouplio::Const::Validations::Fail::MANUAL_URL
       ]
       message = Decouplio::Const::Validations::Fail::VALIDATION_ERROR_MESSAGE % interpolation_values
 
@@ -158,12 +142,10 @@ RSpec.describe 'Fail options validations' do
       let(:action_block) { when_fail_finish_him_if_and_unless_is_present }
 
       interpolation_values = [
-        Decouplio::Const::Colors::YELLOW,
         '{:if=>:some_condition?, :unless=>:some_condition?}',
         '"if" option(s) is not allowed along with "unless" option(s)',
         Decouplio::Const::Validations::Fail::ALLOWED_OPTIONS_MESSAGE,
-        Decouplio::Const::Validations::Fail::MANUAL_URL,
-        Decouplio::Const::Colors::NO_COLOR
+        Decouplio::Const::Validations::Fail::MANUAL_URL
       ]
       message = Decouplio::Const::Validations::Fail::VALIDATION_ERROR_MESSAGE % interpolation_values
 
@@ -176,12 +158,10 @@ RSpec.describe 'Fail options validations' do
       let(:action_block) { when_fail_on_success_step_is_not_defined }
 
       interpolation_values = [
-        Decouplio::Const::Colors::YELLOW,
         '{:on_success=>:step_one}',
         'Step "step_one" is not defined',
         Decouplio::Const::Validations::Fail::ALLOWED_OPTIONS_MESSAGE,
-        Decouplio::Const::Validations::Fail::MANUAL_URL,
-        Decouplio::Const::Colors::NO_COLOR
+        Decouplio::Const::Validations::Fail::MANUAL_URL
       ]
       message = Decouplio::Const::Validations::Fail::VALIDATION_ERROR_MESSAGE % interpolation_values
 
@@ -194,12 +174,10 @@ RSpec.describe 'Fail options validations' do
       let(:action_block) { when_fail_on_failure_step_is_not_defined }
 
       interpolation_values = [
-        Decouplio::Const::Colors::YELLOW,
         '{:on_failure=>:step_one}',
         'Step "step_one" is not defined',
         Decouplio::Const::Validations::Fail::ALLOWED_OPTIONS_MESSAGE,
-        Decouplio::Const::Validations::Fail::MANUAL_URL,
-        Decouplio::Const::Colors::NO_COLOR
+        Decouplio::Const::Validations::Fail::MANUAL_URL
       ]
       message = Decouplio::Const::Validations::Fail::VALIDATION_ERROR_MESSAGE % interpolation_values
 
