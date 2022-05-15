@@ -15,13 +15,12 @@ module Decouplio
     attr_reader :railway_flow, :ctx, :error_store
 
     def initialize(
-      parent_railway_flow: nil, parent_ctx: nil, parent_instance: nil, wrapper: false, error_store:, **params
+      parent_railway_flow: nil, parent_ctx: nil, wrapper: false, error_store:, **params
     )
       @error_store = error_store
       @ctx = parent_ctx || params
       @railway_flow = parent_railway_flow || []
       @failure = false
-      @instance = parent_instance || self
     end
 
     def [](key)
@@ -44,12 +43,8 @@ module Decouplio
       @failure = false
     end
 
-    def invoke_step(method_name)
-      @instance.send(method_name, **@instance.ctx)
-    end
-
     def append_railway_flow(stp)
-      @instance.railway_flow << stp
+      railway_flow << stp
     end
 
     def inspect

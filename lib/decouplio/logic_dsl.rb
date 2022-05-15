@@ -9,6 +9,7 @@ require_relative 'errors/resq_definition_error'
 require_relative 'errors/wrap_block_is_not_defined_error'
 require_relative 'errors/palp_block_is_not_defined_error'
 require_relative 'errors/fail_is_first_step_error'
+require_relative 'errors/octo_block_is_not_defined_error'
 
 module Decouplio
   class LogicDsl
@@ -40,10 +41,15 @@ module Decouplio
         @steps << options.merge(type: Decouplio::Const::Types::PASS_TYPE, name: stp)
       end
 
-      def octo(strategy_name, **options, &block)
+      def octo(octo_name, **options, &block)
+        raise Decouplio::Errors::OctoBlockIsNotDefinedError unless block_given?
+
         hash_case = Class.new(Decouplio::OctoHashCase, &block).hash_case
+
+        raise Decouplio::Errors::OctoBlockIsNotDefinedError if hash_case.empty?
+
         options[:hash_case] = hash_case
-        @steps << options.merge(type: Decouplio::Const::Types::OCTO_TYPE, name: strategy_name)
+        @steps << options.merge(type: Decouplio::Const::Types::OCTO_TYPE, name: octo_name)
       end
 
       def palp(palp_name, **options, &block)

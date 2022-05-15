@@ -37,6 +37,7 @@ module Decouplio
         OPTIONS_IS_REQUIRED = 'Next option(s) "%s" are required for "octo"'
         CONTROVERSIAL_KEYS = '"%s" option(s) is not allowed along with "%s" option(s)'
         PALPS_IS_NOT_DEFINED = 'Next palp(s): "%s" is not difined'
+        OCTO_BLOCK = 'Block for "octo" is not defined'
       end
     end
   end

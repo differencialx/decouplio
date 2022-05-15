@@ -192,4 +192,21 @@ module OctoCasesPalps
       end
     end
   end
+
+  def when_octo_block_is_not_defined
+    lambda do |_klass|
+      logic do
+        octo :octo_name, ctx_key: :some_key
+      end
+    end
+  end
+
+  def when_octo_block_is_empty
+    lambda do |_klass|
+      logic do
+        octo :octo_name, ctx_key: :some_key do
+        end
+      end
+    end
+  end
 end

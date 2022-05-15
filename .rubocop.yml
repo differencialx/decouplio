@@ -67,6 +67,7 @@ Lint/EmptyBlock:
     - spec/fail_spec.rb
     - spec/palp_block_spec.rb
     - spec/wrap_block_spec.rb
+    - spec/support/cases/octo_cases_palps.rb
 
 Lint/ConstantDefinitionInBlock:
   Exclude:
