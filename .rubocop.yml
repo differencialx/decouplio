@@ -40,7 +40,7 @@ Style/FrozenStringLiteralComment:
   Enabled: true
 
 Metrics/BlockLength:
-  IgnoredMethods: ['describe','context', 'lambda', 'logic', 'define']
+  IgnoredMethods: ['describe','context', 'lambda', 'logic', 'define', 'it', 'let']
 
 Metrics/ModuleLength:
   Exclude:

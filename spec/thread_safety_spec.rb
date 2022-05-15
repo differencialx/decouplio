@@ -87,7 +87,7 @@ RSpec.describe 'Thread safety' do
         substract: 1,
         multiply: 10,
         divide: 5
-      ) #3 => 26
+      ) # => 26
     end
     threads[:eight] = Thread.new do
       ThreadSafeAction.call(
@@ -97,7 +97,7 @@ RSpec.describe 'Thread safety' do
         divide: 5
       ) # => 30
     end
-    threads[:nine] =  Thread.new do
+    threads[:nine] = Thread.new do
       ThreadSafeAction.call(
         concat: 9,
         substract: 1,
@@ -105,7 +105,7 @@ RSpec.describe 'Thread safety' do
         divide: 5
       ) # => 34
     end
-    threads[:ten] =  Thread.new do
+    threads[:ten] = Thread.new do
       ThreadSafeAction.call(
         concat: 10,
         substract: 1,
@@ -118,7 +118,6 @@ RSpec.describe 'Thread safety' do
   end
 
   it 'returns correct value' do
-
     threads.values.each(&:join)
 
     expect(threads[:one].value[:result]).to eq '2'
