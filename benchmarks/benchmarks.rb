@@ -520,6 +520,8 @@ Benchmark.bmbm do |x|
   x.report('Interactor one interactor') { iteration_count.times { InteractorWithoutOrganizer.call(param1: 'param1') } }
   x.report('Decouplio one step') { iteration_count.times { DecouplioTestOneStep.call(param1: 'param1') } }
   x.report('Trailblazer several steps') { iteration_count.times { TrailblazerTestSeveralSteps.call(param1: 'param1') } }
-  x.report('Interactor several interactions with organizer') { iteration_count.times { InteractorTestOrganizer.call(param1: 'param1') } }
+  x.report('Interactor several interactions with organizer') do
+    iteration_count.times { InteractorTestOrganizer.call(param1: 'param1') }
+  end
   x.report('Decouplio several steps') { iteration_count.times { DecouplioTestSeveralSteps.call(param1: 'param1') } }
 end
