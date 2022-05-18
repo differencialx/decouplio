@@ -1,6 +1,6 @@
 ## Decouplio
 
-Decouplio is a zero dependency and framework agnostic gem designed to encapsulate application business logic reverse engineered through BDD and inspired by such frameworks and gems like Trailblazer, Interactor, ActiveInteraction, Mutations.
+Decouplio is a zero dependency, thread safe and framework agnostic gem designed to encapsulate application business logic. It's reverse engineered through TDD and inspired by such frameworks and gems like Trailblazer, Interactor.
 
 ### Compatibility
   Ruby:
