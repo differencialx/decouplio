@@ -82,6 +82,15 @@ module Decouplio
           wrap_flow: block
         )
       end
+
+      def doby(doby_class, **options)
+        @steps << {
+          type: Decouplio::Const::Types::DOBY_TYPE,
+          name: doby_class.name.to_sym,
+          doby_class: doby_class,
+          doby_options: options
+        }
+      end
     end
   end
 end

@@ -60,7 +60,7 @@ RSpec.describe 'Use Decouplio::Action as a step' do
     context 'when inner action pass' do
       let(:action_block) { when_inner_action }
       let(:param1) { 'pass' }
-      let(:railway_flow) { %i[assign_inner_action_param process_inner_action inner_step] }
+      let(:railway_flow) { %i[assign_inner_action_param InnerActionCases::InnerAction inner_step] }
       let(:expected_state) do
         {
           action_status: :success,
@@ -79,7 +79,15 @@ RSpec.describe 'Use Decouplio::Action as a step' do
     context 'when inner action fails' do
       let(:action_block) { when_inner_action }
       let(:param1) { 'fail' }
-      let(:railway_flow) { %i[assign_inner_action_param process_inner_action inner_step handle_fail handle_fail] }
+      let(:railway_flow) do
+        %i[
+          assign_inner_action_param
+          InnerActionCases::InnerAction
+          inner_step
+          handle_fail
+          handle_fail
+        ]
+      end
       let(:expected_errors) do
         {
           inner_step_failed: ['Something went wrong inner'],
@@ -106,7 +114,7 @@ RSpec.describe 'Use Decouplio::Action as a step' do
 
       context 'when inner action success' do
         let(:param1) { 'pass' }
-        let(:railway_flow) { %i[assign_inner_action_param process_inner_action inner_step handle_fail] }
+        let(:railway_flow) { %i[assign_inner_action_param InnerActionCases::InnerAction inner_step handle_fail] }
         let(:expected_errors) do
           {
             outer_step_failed: ['Something went wrong outer']
@@ -129,7 +137,15 @@ RSpec.describe 'Use Decouplio::Action as a step' do
 
       context 'when inner action fails' do
         let(:param1) { 'fail' }
-        let(:railway_flow) { %i[assign_inner_action_param process_inner_action inner_step handle_fail handle_fail] }
+        let(:railway_flow) do
+          %i[
+            assign_inner_action_param
+            InnerActionCases::InnerAction
+            inner_step
+            handle_fail
+            handle_fail
+          ]
+        end
         let(:expected_errors) do
           {
             inner_step_failed: ['Something went wrong inner'],
@@ -157,7 +173,7 @@ RSpec.describe 'Use Decouplio::Action as a step' do
 
       context 'when inner action success' do
         let(:param1) { 'pass' }
-        let(:railway_flow) { %i[assign_inner_action_param process_inner_action inner_step step_one] }
+        let(:railway_flow) { %i[assign_inner_action_param InnerActionCases::InnerAction inner_step step_one] }
         let(:expected_state) do
           {
             action_status: :success,
@@ -176,7 +192,15 @@ RSpec.describe 'Use Decouplio::Action as a step' do
 
       context 'when inner action fails' do
         let(:param1) { 'fail' }
-        let(:railway_flow) { %i[assign_inner_action_param process_inner_action inner_step handle_fail step_one] }
+        let(:railway_flow) do
+          %i[
+            assign_inner_action_param
+            InnerActionCases::InnerAction
+            inner_step
+            handle_fail
+            step_one
+          ]
+        end
         let(:expected_errors) do
           {
             inner_step_failed: ['Something went wrong inner']
@@ -204,7 +228,7 @@ RSpec.describe 'Use Decouplio::Action as a step' do
 
       context 'when inner action success' do
         let(:param1) { 'pass' }
-        let(:railway_flow) { %i[assign_inner_action_param process_inner_action inner_step] }
+        let(:railway_flow) { %i[assign_inner_action_param InnerActionCases::InnerAction inner_step] }
         let(:expected_state) do
           {
             action_status: :success,
@@ -223,7 +247,15 @@ RSpec.describe 'Use Decouplio::Action as a step' do
 
       context 'when inner action fails' do
         let(:param1) { 'fail' }
-        let(:railway_flow) { %i[assign_inner_action_param process_inner_action inner_step handle_fail handle_fail] }
+        let(:railway_flow) do
+          %i[
+            assign_inner_action_param
+            InnerActionCases::InnerAction
+            inner_step
+            handle_fail
+            handle_fail
+          ]
+        end
         let(:expected_errors) do
           {
             inner_step_failed: ['Something went wrong inner'],
@@ -252,7 +284,7 @@ RSpec.describe 'Use Decouplio::Action as a step' do
 
       context 'when inner action success' do
         let(:param1) { 'pass' }
-        let(:railway_flow) { %i[assign_inner_action_param process_inner_action inner_step step_one] }
+        let(:railway_flow) { %i[assign_inner_action_param InnerActionCases::InnerAction inner_step step_one] }
         let(:expected_state) do
           {
             action_status: :success,
@@ -271,7 +303,7 @@ RSpec.describe 'Use Decouplio::Action as a step' do
 
       context 'when inner action fails' do
         let(:param1) { 'fail' }
-        let(:railway_flow) { %i[assign_inner_action_param process_inner_action inner_step handle_fail] }
+        let(:railway_flow) { %i[assign_inner_action_param InnerActionCases::InnerAction inner_step handle_fail] }
         let(:expected_errors) do
           {
             inner_step_failed: ['Something went wrong inner']
@@ -301,7 +333,7 @@ RSpec.describe 'Use Decouplio::Action as a step' do
 
       context 'when inner action success' do
         let(:inner_action_param) { 'pass' }
-        let(:railway_flow) { %i[assign_inner_action_param step_one fail_one inner_step fail_two] }
+        let(:railway_flow) { %i[assign_inner_action_param step_one InnerActionCases::InnerAction inner_step fail_two] }
         let(:expected_state) do
           {
             action_status: :failure,
@@ -322,7 +354,16 @@ RSpec.describe 'Use Decouplio::Action as a step' do
 
       context 'when inner action failure' do
         let(:inner_action_param) { 'fail' }
-        let(:railway_flow) { %i[assign_inner_action_param step_one fail_one inner_step handle_fail fail_two] }
+        let(:railway_flow) do
+          %i[
+            assign_inner_action_param
+            step_one
+            InnerActionCases::InnerAction
+            inner_step
+            handle_fail
+            fail_two
+          ]
+        end
         let(:expected_errors) do
           {
             inner_step_failed: ['Something went wrong inner']
@@ -354,7 +395,7 @@ RSpec.describe 'Use Decouplio::Action as a step' do
 
       context 'when inner action success' do
         let(:inner_action_param) { 'pass' }
-        let(:railway_flow) { %i[assign_inner_action_param step_one fail_one inner_step step_two] }
+        let(:railway_flow) { %i[assign_inner_action_param step_one InnerActionCases::InnerAction inner_step step_two] }
         let(:expected_state) do
           {
             action_status: :success,
@@ -375,7 +416,16 @@ RSpec.describe 'Use Decouplio::Action as a step' do
 
       context 'when inner action failure' do
         let(:inner_action_param) { 'fail' }
-        let(:railway_flow) { %i[assign_inner_action_param step_one fail_one inner_step handle_fail fail_two] }
+        let(:railway_flow) do
+          %i[
+            assign_inner_action_param
+            step_one
+            InnerActionCases::InnerAction
+            inner_step
+            handle_fail
+            fail_two
+          ]
+        end
         let(:expected_errors) do
           {
             inner_step_failed: ['Something went wrong inner']
@@ -407,7 +457,7 @@ RSpec.describe 'Use Decouplio::Action as a step' do
 
       context 'when inner action success' do
         let(:inner_action_param) { 'pass' }
-        let(:railway_flow) { %i[assign_inner_action_param step_one fail_one inner_step fail_two] }
+        let(:railway_flow) { %i[assign_inner_action_param step_one InnerActionCases::InnerAction inner_step fail_two] }
         let(:expected_state) do
           {
             action_status: :failure,
@@ -428,7 +478,16 @@ RSpec.describe 'Use Decouplio::Action as a step' do
 
       context 'when inner action failure' do
         let(:inner_action_param) { 'fail' }
-        let(:railway_flow) { %i[assign_inner_action_param step_one fail_one inner_step handle_fail step_two] }
+        let(:railway_flow) do
+          %i[
+            assign_inner_action_param
+            step_one
+            InnerActionCases::InnerAction
+            inner_step
+            handle_fail
+            step_two
+          ]
+        end
         let(:expected_errors) do
           {
             inner_step_failed: ['Something went wrong inner']
@@ -460,7 +519,7 @@ RSpec.describe 'Use Decouplio::Action as a step' do
 
       context 'when inner action success' do
         let(:inner_action_param) { 'pass' }
-        let(:railway_flow) { %i[assign_inner_action_param step_one fail_one inner_step] }
+        let(:railway_flow) { %i[assign_inner_action_param step_one InnerActionCases::InnerAction inner_step] }
         let(:expected_state) do
           {
             action_status: :failure,
@@ -481,7 +540,16 @@ RSpec.describe 'Use Decouplio::Action as a step' do
 
       context 'when inner action failure' do
         let(:inner_action_param) { 'fail' }
-        let(:railway_flow) { %i[assign_inner_action_param step_one fail_one inner_step handle_fail fail_two] }
+        let(:railway_flow) do
+          %i[
+            assign_inner_action_param
+            step_one
+            InnerActionCases::InnerAction
+            inner_step
+            handle_fail
+            fail_two
+          ]
+        end
         let(:expected_errors) do
           {
             inner_step_failed: ['Something went wrong inner']
@@ -513,7 +581,7 @@ RSpec.describe 'Use Decouplio::Action as a step' do
 
       context 'when inner action success' do
         let(:inner_action_param) { 'pass' }
-        let(:railway_flow) { %i[assign_inner_action_param step_one fail_one inner_step fail_two] }
+        let(:railway_flow) { %i[assign_inner_action_param step_one InnerActionCases::InnerAction inner_step fail_two] }
         let(:expected_state) do
           {
             action_status: :failure,
@@ -534,7 +602,15 @@ RSpec.describe 'Use Decouplio::Action as a step' do
 
       context 'when inner action failure' do
         let(:inner_action_param) { 'fail' }
-        let(:railway_flow) { %i[assign_inner_action_param step_one fail_one inner_step handle_fail] }
+        let(:railway_flow) do
+          %i[
+            assign_inner_action_param
+            step_one
+            InnerActionCases::InnerAction
+            inner_step
+            handle_fail
+          ]
+        end
         let(:expected_errors) do
           {
             inner_step_failed: ['Something went wrong inner']
@@ -566,7 +642,7 @@ RSpec.describe 'Use Decouplio::Action as a step' do
 
       context 'when inner action success' do
         let(:inner_action_param) { 'pass' }
-        let(:railway_flow) { %i[assign_inner_action_param step_one fail_one inner_step] }
+        let(:railway_flow) { %i[assign_inner_action_param step_one InnerActionCases::InnerAction inner_step] }
         let(:expected_state) do
           {
             action_status: :failure,
@@ -587,7 +663,16 @@ RSpec.describe 'Use Decouplio::Action as a step' do
 
       context 'when inner action failure' do
         let(:inner_action_param) { 'fail' }
-        let(:railway_flow) { %i[assign_inner_action_param step_one fail_one inner_step handle_fail fail_two] }
+        let(:railway_flow) do
+          %i[
+            assign_inner_action_param
+            step_one
+            InnerActionCases::InnerAction
+            inner_step
+            handle_fail
+            fail_two
+          ]
+        end
         let(:expected_errors) do
           {
             inner_step_failed: ['Something went wrong inner']
@@ -619,7 +704,7 @@ RSpec.describe 'Use Decouplio::Action as a step' do
 
       context 'when inner action success' do
         let(:inner_action_param) { 'pass' }
-        let(:railway_flow) { %i[assign_inner_action_param step_one fail_one inner_step fail_two] }
+        let(:railway_flow) { %i[assign_inner_action_param step_one InnerActionCases::InnerAction inner_step fail_two] }
         let(:expected_state) do
           {
             action_status: :failure,
@@ -640,7 +725,15 @@ RSpec.describe 'Use Decouplio::Action as a step' do
 
       context 'when inner action failure' do
         let(:inner_action_param) { 'fail' }
-        let(:railway_flow) { %i[assign_inner_action_param step_one fail_one inner_step handle_fail] }
+        let(:railway_flow) do
+          %i[
+            assign_inner_action_param
+            step_one
+            InnerActionCases::InnerAction
+            inner_step
+            handle_fail
+          ]
+        end
         let(:expected_errors) do
           {
             inner_step_failed: ['Something went wrong inner']
@@ -672,7 +765,7 @@ RSpec.describe 'Use Decouplio::Action as a step' do
 
       context 'when inner action success' do
         let(:inner_action_param) { 'pass' }
-        let(:railway_flow) { %i[assign_inner_action_param step_one pass_one inner_step step_two] }
+        let(:railway_flow) { %i[assign_inner_action_param step_one InnerActionCases::InnerAction inner_step step_two] }
         let(:expected_state) do
           {
             action_status: :success,
@@ -692,7 +785,16 @@ RSpec.describe 'Use Decouplio::Action as a step' do
 
       context 'when inner action failure' do
         let(:inner_action_param) { 'fail' }
-        let(:railway_flow) { %i[assign_inner_action_param step_one pass_one inner_step handle_fail step_two] }
+        let(:railway_flow) do
+          %i[
+            assign_inner_action_param
+            step_one
+            InnerActionCases::InnerAction
+            inner_step
+            handle_fail
+            step_two
+          ]
+        end
         let(:expected_errors) do
           {
             inner_step_failed: ['Something went wrong inner']
@@ -723,7 +825,7 @@ RSpec.describe 'Use Decouplio::Action as a step' do
 
       context 'when inner action success' do
         let(:inner_action_param) { 'pass' }
-        let(:railway_flow) { %i[assign_inner_action_param step_one pass_one inner_step] }
+        let(:railway_flow) { %i[assign_inner_action_param step_one InnerActionCases::InnerAction inner_step] }
         let(:expected_state) do
           {
             action_status: :success,
@@ -743,7 +845,15 @@ RSpec.describe 'Use Decouplio::Action as a step' do
 
       context 'when inner action failure' do
         let(:inner_action_param) { 'fail' }
-        let(:railway_flow) { %i[assign_inner_action_param step_one pass_one inner_step handle_fail] }
+        let(:railway_flow) do
+          %i[
+            assign_inner_action_param
+            step_one
+            InnerActionCases::InnerAction
+            inner_step
+            handle_fail
+          ]
+        end
         let(:expected_errors) do
           {
             inner_step_failed: ['Something went wrong inner']

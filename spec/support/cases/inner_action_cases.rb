@@ -19,7 +19,7 @@ module InnerActionCases
   def when_inner_action_for_step_is_string_class
     lambda do |_klass|
       logic do
-        step :step_one, action: String
+        step String
       end
     end
   end
@@ -28,7 +28,7 @@ module InnerActionCases
     lambda do |_klass|
       logic do
         step :step_one
-        fail :fail_one, action: String
+        fail String
       end
 
       def step_one(*)
@@ -40,7 +40,7 @@ module InnerActionCases
   def when_inner_action_for_pass_is_string_class
     lambda do |_klass|
       logic do
-        pass :step_one, action: String
+        pass String
       end
     end
   end
@@ -49,7 +49,7 @@ module InnerActionCases
     lambda do |_klass|
       logic do
         step :assign_inner_action_param
-        step :process_inner_action, action: InnerAction
+        step InnerAction
         fail :handle_fail
       end
 
@@ -67,7 +67,7 @@ module InnerActionCases
     lambda do |_klass|
       logic do
         step :assign_inner_action_param
-        step :process_inner_action, action: InnerAction, on_success: :handle_fail
+        step InnerAction, on_success: :handle_fail
         fail :handle_fail
       end
 
@@ -85,7 +85,7 @@ module InnerActionCases
     lambda do |_klass|
       logic do
         step :assign_inner_action_param
-        step :process_inner_action, action: InnerAction, on_failure: :step_one
+        step InnerAction, on_failure: :step_one
         fail :handle_fail
         step :step_one
       end
@@ -108,7 +108,7 @@ module InnerActionCases
     lambda do |_klass|
       logic do
         step :assign_inner_action_param
-        step :process_inner_action, action: InnerAction, finish_him: :on_success
+        step InnerAction, finish_him: :on_success
         fail :handle_fail
         step :step_one
       end
@@ -131,7 +131,7 @@ module InnerActionCases
     lambda do |_klass|
       logic do
         step :assign_inner_action_param
-        step :process_inner_action, action: InnerAction, finish_him: :on_failure
+        step InnerAction, finish_him: :on_failure
         fail :handle_fail
         step :step_one
       end
@@ -155,7 +155,7 @@ module InnerActionCases
       logic do
         step :assign_inner_action_param
         step :step_one
-        fail :fail_one, action: InnerAction
+        fail InnerAction
         step :step_two
         fail :fail_two
       end
@@ -183,7 +183,7 @@ module InnerActionCases
       logic do
         step :assign_inner_action_param
         step :step_one
-        fail :fail_one, action: InnerAction, on_success: :step_two
+        fail InnerAction, on_success: :step_two
         step :step_two
         fail :fail_two
       end
@@ -211,7 +211,7 @@ module InnerActionCases
       logic do
         step :assign_inner_action_param
         step :step_one
-        fail :fail_one, action: InnerAction, on_failure: :step_two
+        fail InnerAction, on_failure: :step_two
         step :step_two
         fail :fail_two
       end
@@ -239,7 +239,7 @@ module InnerActionCases
       logic do
         step :assign_inner_action_param
         step :step_one
-        fail :fail_one, action: InnerAction, on_success: :finish_him
+        fail InnerAction, on_success: :finish_him
         step :step_two
         fail :fail_two
       end
@@ -267,7 +267,7 @@ module InnerActionCases
       logic do
         step :assign_inner_action_param
         step :step_one
-        fail :fail_one, action: InnerAction, on_failure: :finish_him
+        fail InnerAction, on_failure: :finish_him
         step :step_two
         fail :fail_two
       end
@@ -295,7 +295,7 @@ module InnerActionCases
       logic do
         step :assign_inner_action_param
         step :step_one
-        fail :fail_one, action: InnerAction, finish_him: :on_success
+        fail InnerAction, finish_him: :on_success
         step :step_two
         fail :fail_two
       end
@@ -323,7 +323,7 @@ module InnerActionCases
       logic do
         step :assign_inner_action_param
         step :step_one
-        fail :fail_one, action: InnerAction, finish_him: :on_failure
+        fail InnerAction, finish_him: :on_failure
         step :step_two
         fail :fail_two
       end
@@ -351,7 +351,7 @@ module InnerActionCases
       logic do
         step :assign_inner_action_param
         step :step_one
-        pass :pass_one, action: InnerAction
+        pass InnerAction
         step :step_two
       end
 
@@ -374,8 +374,54 @@ module InnerActionCases
       logic do
         step :assign_inner_action_param
         step :step_one
-        pass :pass_one, action: InnerAction, finish_him: true
+        pass InnerAction, finish_him: true
         step :step_two
+      end
+
+      def assign_inner_action_param(param1:, **)
+        ctx[:inner_action_param] = param1
+      end
+
+      def step_one(*)
+        ctx[:step_one] = 'Success'
+      end
+
+      def step_two(*)
+        ctx[:step_two] = 'Success'
+      end
+    end
+  end
+
+  def when_inner_action_on_success_to_inner_action
+    lambda do |_klass|
+      logic do
+        step :assign_inner_action_param, on_success: :'InnerActionCases::InnerAction'
+        step :step_one
+        pass InnerActionCases::InnerAction, finish_him: true
+        step :step_two
+      end
+
+      def assign_inner_action_param(param1:, **)
+        ctx[:inner_action_param] = param1
+      end
+
+      def step_one(*)
+        ctx[:step_one] = 'Success'
+      end
+
+      def step_two(*)
+        ctx[:step_two] = 'Success'
+      end
+    end
+  end
+
+  def when_inner_action_on_failure_to_inner_action
+    lambda do |_klass|
+      logic do
+        step :step_one
+        fail :assign_inner_action_param, on_failure: :'InnerActionCases::InnerAction'
+        step :step_two
+        pass InnerActionCases::InnerAction, finish_him: true
       end
 
       def assign_inner_action_param(param1:, **)
