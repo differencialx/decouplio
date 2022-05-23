@@ -32,7 +32,7 @@ module Decouplio
       end
 
       def fail(stp, **options)
-        raise Decouplio::Errors::FailBlockIsNotDefinedError if @steps.empty?
+        raise Decouplio::Errors::FailCanNotBeTheFirstStepError if @steps.empty?
 
         @steps << options.merge(type: Decouplio::Const::Types::FAIL_TYPE, name: stp)
       end
