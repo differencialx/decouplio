@@ -1,6 +1,6 @@
 # Decouplio
 
-TODO: Delete this and the text above, and describe your gem
+Decouplio is a zero dependency, thread safe and framework agnostic gem designed to encapsulate application business logic. It's reverse engineered through TDD and inspired by such frameworks and gems like Trailblazer, Interactor.
 
 ## Installation
 
@@ -18,33 +18,11 @@ Or install it yourself as:
 
     $ gem install decouplio
 
-## Usage
-
-TODO: Write usage instructions here
-
-### Docker 
-
-Run benchmark:
-
-```shell
-docker-compose up benchmark
-```
-
-Run test:
-
-```shell
-docker-compose up test
-```
-
-## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+# [>>>>>>>DOCS HERE<<<<<<<](https://github.com/differencialx/decouplio/blob/master/docs/index.md)
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/decouplio.
+Bug reports and pull requests are welcome on GitHub at https://github.com/differencialx/decouplio.
 
 ## License
 
