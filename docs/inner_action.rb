@@ -1,7 +1,5 @@
 require_relative '../lib/decouplio'
 
-
-
 class InnerAction < Decouplio::Action
   logic do
     step :step_one
@@ -22,11 +20,11 @@ end
 
 class SomeAction < Decouplio::Action
   logic do
-    step :any_name, action: InnerAction
+    step InnerAction
     # OR
-    # fail :any_name, action: InnerAction
+    # fail InnerAction
     # OR
-    # pass :any_name, action: InnerAction
+    # pass InnerAction
   end
 end
 
@@ -36,7 +34,7 @@ puts action # =>
 # Result: success
 
 # Railway Flow:
-#   any_name -> step_one -> step_two
+#   InnerAction -> step_one -> step_two
 
 # Context:
 #   {:step_one=>"Success", :step_two=>"Success"}

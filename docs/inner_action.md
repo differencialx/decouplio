@@ -25,11 +25,11 @@ end
 
 class SomeAction < Decouplio::Action
   logic do
-    step :any_name, action: InnerAction
+    step InnerAction
     # OR
-    # fail :any_name, action: InnerAction
+    # fail InnerAction
     # OR
-    # pass :any_name, action: InnerAction
+    # pass InnerAction
   end
 end
 
@@ -39,7 +39,7 @@ action # =>
 # Result: success
 
 # Railway Flow:
-#   any_name -> step_one -> step_two
+#   InnerAction -> step_one -> step_two
 
 # Context:
 #   {:step_one=>"Success", :step_two=>"Success"}
