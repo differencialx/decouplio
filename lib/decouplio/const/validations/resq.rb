@@ -5,7 +5,6 @@ module Decouplio
     module Validations
       module Resq
         VALIDATION_ERROR_MESSAGE = <<~ERROR_MESSAGE
-          %s
           Next options are not allowed for "resq":
           %s
 
@@ -16,7 +15,6 @@ module Decouplio
           %s
 
           Please read the manual about allowed options here:
-          %s
           %s
         ERROR_MESSAGE
         ALLOWED_OPTIONS_MESSAGE = <<~ALLOWED_OPTIONS
@@ -46,13 +44,11 @@ module Decouplio
         ALLOWED_OPTIONS
 
         DEFINITION_ERROR_MESSAGE = <<~ERROR
-          %s
           Details:
           "resq" should be defined only after:
           %s
 
           Please read the manual about allowed options here:
-          %s
           %s
         ERROR
 

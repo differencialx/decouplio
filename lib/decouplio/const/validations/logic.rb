@@ -6,8 +6,6 @@ module Decouplio
       module Logic
         VALIDATION_ERROR_MESSAGE = <<~ERROR_MESSAGE
           %s
-          %s
-          %s
         ERROR_MESSAGE
         REDEFINITION = 'The logic for "%s" class has already been defined.'
         NOT_DEFINED = 'The logic for "%s" class is not define'

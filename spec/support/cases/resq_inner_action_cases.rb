@@ -20,7 +20,7 @@ module ResqInnerActionCases
   def when_resq_for_action_step
     lambda do |_klass|
       logic do
-        step :step_action, action: ResqInnerAction
+        step ResqInnerActionCases::ResqInnerAction
         resq error_handler: ArgumentError
         step :step_two
         fail :fail_one
@@ -43,7 +43,7 @@ module ResqInnerActionCases
   def when_resq_for_action_step_on_success_to_success_track
     lambda do |_klass|
       logic do
-        step :step_action, action: ResqInnerAction, on_success: :step_three
+        step ResqInnerActionCases::ResqInnerAction, on_success: :step_three
         resq error_handler: ArgumentError
         step :step_two
         fail :fail_one
@@ -71,7 +71,7 @@ module ResqInnerActionCases
   def when_resq_for_action_step_on_failure_to_success_track
     lambda do |_klass|
       logic do
-        step :step_action, action: ResqInnerAction, on_failure: :step_three
+        step ResqInnerActionCases::ResqInnerAction, on_failure: :step_three
         resq error_handler: ArgumentError
         step :step_two
         fail :fail_one
@@ -99,7 +99,7 @@ module ResqInnerActionCases
   def when_resq_for_action_step_on_success_to_failure_track
     lambda do |_klass|
       logic do
-        step :step_action, action: ResqInnerAction, on_success: :fail_one
+        step ResqInnerActionCases::ResqInnerAction, on_success: :fail_one
         resq error_handler: ArgumentError
         step :step_two
         fail :fail_one
@@ -127,7 +127,7 @@ module ResqInnerActionCases
   def when_resq_for_action_step_on_failure_to_failure_track
     lambda do |_klass|
       logic do
-        step :step_action, action: ResqInnerAction, on_failure: :fail_two
+        step ResqInnerActionCases::ResqInnerAction, on_failure: :fail_two
         resq error_handler: ArgumentError
         step :step_two
         fail :fail_one
@@ -160,7 +160,7 @@ module ResqInnerActionCases
   def when_resq_for_action_step_complicated_logic
     lambda do |_klass|
       logic do
-        step :step_action, action: ResqInnerAction, on_failure: :fail_two
+        step ResqInnerActionCases::ResqInnerAction, on_failure: :fail_two
         resq error_handler: ArgumentError
         step :step_two
         fail :fail_one, on_success: :fail_two, on_failure: :step_three
@@ -193,7 +193,7 @@ module ResqInnerActionCases
   def when_resq_for_action_step_on_success_finish_him
     lambda do |_klass|
       logic do
-        step :step_action, action: ResqInnerAction, on_success: :finish_him
+        step ResqInnerActionCases::ResqInnerAction, on_success: :finish_him
         resq error_handler: ArgumentError
         step :step_two
         fail :fail_one
@@ -216,7 +216,7 @@ module ResqInnerActionCases
   def when_resq_for_action_step_on_failure_finish_him
     lambda do |_klass|
       logic do
-        step :step_action, action: ResqInnerAction, on_failure: :finish_him
+        step ResqInnerActionCases::ResqInnerAction, on_failure: :finish_him
         resq error_handler: ArgumentError
         step :step_two
         fail :fail_one
@@ -239,7 +239,7 @@ module ResqInnerActionCases
   def when_resq_for_action_step_if_condition
     lambda do |_klass|
       logic do
-        step :step_action, action: ResqInnerAction, if: :some_condition?
+        step ResqInnerActionCases::ResqInnerAction, if: :some_condition?
         resq error_handler: ArgumentError
         step :step_two
         fail :fail_one
@@ -266,7 +266,7 @@ module ResqInnerActionCases
   def when_resq_for_action_step_unless_condition
     lambda do |_klass|
       logic do
-        step :step_action, action: ResqInnerAction, unless: :some_condition?
+        step ResqInnerActionCases::ResqInnerAction, unless: :some_condition?
         resq error_handler: ArgumentError
         step :step_two
         fail :fail_one
@@ -293,8 +293,7 @@ module ResqInnerActionCases
   def when_resq_for_action_step_on_failure_success_track_if_condition
     lambda do |_klass|
       logic do
-        step :step_action,
-             action: ResqInnerAction,
+        step ResqInnerActionCases::ResqInnerAction,
              if: :some_condition?,
              on_failure: :step_three
         resq error_handler: ArgumentError
@@ -333,8 +332,7 @@ module ResqInnerActionCases
   def when_resq_for_action_step_on_success_failure_track_unless_condition
     lambda do |_klass|
       logic do
-        step :step_action,
-             action: ResqInnerAction,
+        step ResqInnerActionCases::ResqInnerAction,
              unless: :some_condition?,
              on_success: :fail_two
         resq error_handler: ArgumentError
@@ -374,7 +372,7 @@ module ResqInnerActionCases
     lambda do |_klass|
       logic do
         step :step_one
-        fail :fail_one, action: ResqInnerAction
+        fail ResqInnerActionCases::ResqInnerAction
         resq error_handler: ArgumentError
         step :step_two
         fail :fail_two
@@ -407,8 +405,7 @@ module ResqInnerActionCases
     lambda do |_klass|
       logic do
         step :step_one
-        fail :fail_one,
-             action: ResqInnerAction,
+        fail ResqInnerActionCases::ResqInnerAction,
              on_success: :step_three
         resq error_handler: ArgumentError
         step :step_two
@@ -451,8 +448,7 @@ module ResqInnerActionCases
     lambda do |_klass|
       logic do
         step :step_one
-        fail :fail_one,
-             action: ResqInnerAction,
+        fail ResqInnerActionCases::ResqInnerAction,
              on_failure: :step_three
         resq error_handler: ArgumentError
         step :step_two
@@ -495,8 +491,7 @@ module ResqInnerActionCases
     lambda do |_klass|
       logic do
         step :step_one
-        fail :fail_one,
-             action: ResqInnerAction,
+        fail ResqInnerActionCases::ResqInnerAction,
              on_success: :fail_three
         resq error_handler: ArgumentError
         step :step_two
@@ -539,8 +534,7 @@ module ResqInnerActionCases
     lambda do |_klass|
       logic do
         step :step_one
-        fail :fail_one,
-             action: ResqInnerAction,
+        fail ResqInnerActionCases::ResqInnerAction,
              on_failure: :fail_three
         resq error_handler: ArgumentError
         step :step_two
@@ -583,8 +577,7 @@ module ResqInnerActionCases
     lambda do |_klass|
       logic do
         step :step_one
-        fail :fail_one,
-             action: ResqInnerAction,
+        fail ResqInnerActionCases::ResqInnerAction,
              on_success: :finish_him
         resq error_handler: ArgumentError
         step :step_two
@@ -627,8 +620,7 @@ module ResqInnerActionCases
     lambda do |_klass|
       logic do
         step :step_one
-        fail :fail_one,
-             action: ResqInnerAction,
+        fail ResqInnerActionCases::ResqInnerAction,
              on_failure: :finish_him
         resq error_handler: ArgumentError
         step :step_two
@@ -671,8 +663,7 @@ module ResqInnerActionCases
     lambda do |_klass|
       logic do
         step :step_one
-        fail :fail_one,
-             action: ResqInnerAction,
+        fail ResqInnerActionCases::ResqInnerAction,
              if: :some_condition?
         resq error_handler: ArgumentError
         step :step_two
@@ -719,8 +710,7 @@ module ResqInnerActionCases
     lambda do |_klass|
       logic do
         step :step_one
-        fail :fail_one,
-             action: ResqInnerAction,
+        fail ResqInnerActionCases::ResqInnerAction,
              unless: :some_condition?
         resq error_handler: ArgumentError
         step :step_two
@@ -767,8 +757,7 @@ module ResqInnerActionCases
     lambda do |_klass|
       logic do
         step :step_one
-        fail :fail_one,
-             action: ResqInnerAction,
+        fail ResqInnerActionCases::ResqInnerAction,
              on_failure: :step_three,
              if: :some_condition?
         resq error_handler: ArgumentError
@@ -816,8 +805,7 @@ module ResqInnerActionCases
     lambda do |_klass|
       logic do
         step :step_one
-        fail :fail_one,
-             action: ResqInnerAction,
+        fail ResqInnerActionCases::ResqInnerAction,
              on_success: :fail_three,
              unless: :some_condition?
         resq error_handler: ArgumentError
@@ -865,7 +853,7 @@ module ResqInnerActionCases
     lambda do |_klass|
       logic do
         step :step_one
-        pass :pass_one, action: ResqInnerAction
+        pass ResqInnerActionCases::ResqInnerAction
         resq error_handler: ArgumentError
         step :step_two
         fail :fail_one
@@ -893,7 +881,7 @@ module ResqInnerActionCases
     lambda do |_klass|
       logic do
         step :step_one
-        pass :pass_one, action: ResqInnerAction, finish_him: true
+        pass ResqInnerActionCases::ResqInnerAction, finish_him: true
         resq error_handler: ArgumentError
         step :step_two
         fail :fail_one
@@ -925,8 +913,7 @@ module ResqInnerActionCases
     lambda do |_klass|
       logic do
         step :step_one
-        pass :pass_one,
-             action: ResqInnerAction,
+        pass ResqInnerActionCases::ResqInnerAction,
              finish_him: true,
              if: :some_condition?
         resq error_handler: ArgumentError
@@ -960,8 +947,7 @@ module ResqInnerActionCases
     lambda do |_klass|
       logic do
         step :step_one
-        pass :pass_one,
-             action: ResqInnerAction,
+        pass ResqInnerActionCases::ResqInnerAction,
              finish_him: true,
              unless: :some_condition?
         resq error_handler: ArgumentError

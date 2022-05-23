@@ -12,10 +12,8 @@ module Decouplio
 
       def interpolation_values
         [
-          Decouplio::Const::Colors::YELLOW,
           Decouplio::Const::Types::MAIN_FLOW_TYPES.join("\n"),
-          Decouplio::Const::Validations::Resq::MANUAL_URL,
-          Decouplio::Const::Colors::NO_COLOR
+          Decouplio::Const::Validations::Resq::MANUAL_URL
         ]
       end
     end

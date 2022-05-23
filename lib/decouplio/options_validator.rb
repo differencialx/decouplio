@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'const/types'
+require_relative 'const/reserved_methods'
 require_relative 'errors/action_class_error'
 require_relative 'errors/extra_key_for_step_error'
 require_relative 'errors/extra_key_for_fail_error'
@@ -27,13 +28,16 @@ require_relative 'errors/pass_controversial_keys_error'
 require_relative 'errors/octo_controversial_keys_error'
 require_relative 'errors/wrap_controversial_keys_error'
 require_relative 'errors/palp_is_not_defined_error'
+require_relative 'errors/error_store_error'
+require_relative 'errors/step_name_error'
 
 module Decouplio
   class OptionsValidator
-    def initialize(flow:, palps:, next_steps:)
+    def initialize(flow:, palps:, next_steps:, action_class:)
       @flow = flow
       @palps = palps
       @next_steps = next_steps
+      @action_class = action_class
     end
 
     def call
@@ -48,6 +52,12 @@ module Decouplio
 
     def validate(options:, step_names:)
       filtered_options = options.reject { |key, _val| OPTIONS_TO_FILTER.include?(key) }
+
+      validate_name(name: options[:name])
+      @palps.each_key do |palp_name|
+        validate_name(name: palp_name)
+      end
+
       case options[:type]
       when Decouplio::Const::Types::STEP_TYPE
         validate_step(options: filtered_options, step_names: step_names)
@@ -61,12 +71,15 @@ module Decouplio
         validate_wrap(options: filtered_options, name: options[:name], step_names: step_names)
       when Decouplio::Const::Types::ACTION_TYPE_STEP
         validate_action(action_class: options[:action], type: Decouplio::Const::Types::STEP_TYPE)
+        validate_error_store(parent_action_class: @action_class, child_action_class: options[:action])
         validate_step(options: filtered_options, step_names: step_names)
       when Decouplio::Const::Types::ACTION_TYPE_FAIL
         validate_action(action_class: options[:action], type: Decouplio::Const::Types::FAIL_TYPE)
+        validate_error_store(parent_action_class: @action_class, child_action_class: options[:action])
         validate_fail(options: filtered_options, step_names: step_names)
       when Decouplio::Const::Types::ACTION_TYPE_PASS
         validate_action(action_class: options[:action], type: Decouplio::Const::Types::PASS_TYPE)
+        validate_error_store(parent_action_class: @action_class, child_action_class: options[:action])
         validate_pass(options: filtered_options)
       when Decouplio::Const::Types::RESQ_TYPE_STEP,
            Decouplio::Const::Types::RESQ_TYPE_FAIL,
@@ -120,10 +133,21 @@ module Decouplio
     end
 
     def validate_resq(options:)
+      options[:handler_hash].each_value do |error_handler_name|
+        validate_name(name: error_handler_name)
+      end
       check_resq_extra_keys(options: options)
       check_resq_handler_method_is_a_symbol(options: options)
       check_resq_error_classes(options: options)
       check_resq_exception_classes_inheritance(options: options)
+    end
+
+    def validate_name(name:)
+      return unless Decouplio::Const::ReservedMethods::NAMES.include?(name)
+
+      raise Decouplio::Errors::StepNameError.new(
+        errored_option: name
+      )
     end
 
     def check_step_presence_for_step(options:, step_names:)
@@ -185,6 +209,12 @@ module Decouplio
           details: [on_success_on_failure.keys.join(', '), :finish_him]
         )
       end
+    end
+
+    def validate_error_store(parent_action_class:, child_action_class:)
+      return if parent_action_class.error_store == child_action_class.error_store
+
+      raise Decouplio::Errors::ErrorStoreError
     end
 
     def check_fail_extra_keys(options:)

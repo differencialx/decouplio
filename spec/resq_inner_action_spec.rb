@@ -22,7 +22,7 @@ RSpec.describe 'Resq with inner action cases' do
       let(:action_block) { when_resq_for_action_step }
 
       context 'when inner action passes' do
-        let(:railway_flow) { %i[step_action inner_step_one step_two] }
+        let(:railway_flow) { %i[ResqInnerActionCases::ResqInnerAction inner_step_one step_two] }
         let(:expected_state) do
           {
             action_status: :success,
@@ -41,7 +41,7 @@ RSpec.describe 'Resq with inner action cases' do
       end
 
       context 'when inner action fails' do
-        let(:railway_flow) { %i[step_action inner_step_one fail_one] }
+        let(:railway_flow) { %i[ResqInnerActionCases::ResqInnerAction inner_step_one fail_one] }
         let(:expected_state) do
           {
             action_status: :failure,
@@ -65,7 +65,7 @@ RSpec.describe 'Resq with inner action cases' do
       end
 
       context 'when inner action raises an error' do
-        let(:railway_flow) { %i[step_action inner_step_one error_handler fail_one] }
+        let(:railway_flow) { %i[ResqInnerActionCases::ResqInnerAction inner_step_one error_handler fail_one] }
         let(:error_message) { 'Some error message' }
         let(:expected_state) do
           {
@@ -98,7 +98,7 @@ RSpec.describe 'Resq with inner action cases' do
       let(:action_block) { when_resq_for_action_step_on_success_to_success_track }
 
       context 'when inner action passes' do
-        let(:railway_flow) { %i[step_action inner_step_one step_three] }
+        let(:railway_flow) { %i[ResqInnerActionCases::ResqInnerAction inner_step_one step_three] }
         let(:expected_state) do
           {
             action_status: :success,
@@ -118,7 +118,7 @@ RSpec.describe 'Resq with inner action cases' do
       end
 
       context 'when inner action fails' do
-        let(:railway_flow) { %i[step_action inner_step_one fail_one] }
+        let(:railway_flow) { %i[ResqInnerActionCases::ResqInnerAction inner_step_one fail_one] }
         let(:expected_state) do
           {
             action_status: :failure,
@@ -143,7 +143,7 @@ RSpec.describe 'Resq with inner action cases' do
       end
 
       context 'when inner action raises an error' do
-        let(:railway_flow) { %i[step_action inner_step_one error_handler fail_one] }
+        let(:railway_flow) { %i[ResqInnerActionCases::ResqInnerAction inner_step_one error_handler fail_one] }
         let(:error_message) { 'Some error message' }
         let(:expected_state) do
           {
@@ -176,7 +176,7 @@ RSpec.describe 'Resq with inner action cases' do
       let(:action_block) { when_resq_for_action_step_on_failure_to_success_track }
 
       context 'when inner action passes' do
-        let(:railway_flow) { %i[step_action inner_step_one step_two step_three] }
+        let(:railway_flow) { %i[ResqInnerActionCases::ResqInnerAction inner_step_one step_two step_three] }
         let(:expected_state) do
           {
             action_status: :success,
@@ -196,7 +196,7 @@ RSpec.describe 'Resq with inner action cases' do
       end
 
       context 'when inner action fails' do
-        let(:railway_flow) { %i[step_action inner_step_one step_three] }
+        let(:railway_flow) { %i[ResqInnerActionCases::ResqInnerAction inner_step_one step_three] }
         let(:expected_state) do
           {
             action_status: :success,
@@ -221,7 +221,7 @@ RSpec.describe 'Resq with inner action cases' do
       end
 
       context 'when inner action raises an error' do
-        let(:railway_flow) { %i[step_action inner_step_one error_handler fail_one] }
+        let(:railway_flow) { %i[ResqInnerActionCases::ResqInnerAction inner_step_one error_handler fail_one] }
         let(:error_message) { 'Some error message' }
         let(:expected_state) do
           {
@@ -255,7 +255,7 @@ RSpec.describe 'Resq with inner action cases' do
       let(:action_block) { when_resq_for_action_step_on_success_to_failure_track }
 
       context 'when inner action passes' do
-        let(:railway_flow) { %i[step_action inner_step_one fail_one] }
+        let(:railway_flow) { %i[ResqInnerActionCases::ResqInnerAction inner_step_one fail_one] }
         let(:expected_state) do
           {
             action_status: :failure,
@@ -275,7 +275,7 @@ RSpec.describe 'Resq with inner action cases' do
       end
 
       context 'when inner action fails' do
-        let(:railway_flow) { %i[step_action inner_step_one fail_one] }
+        let(:railway_flow) { %i[ResqInnerActionCases::ResqInnerAction inner_step_one fail_one] }
         let(:expected_state) do
           {
             action_status: :failure,
@@ -300,7 +300,7 @@ RSpec.describe 'Resq with inner action cases' do
       end
 
       context 'when inner action raises an error' do
-        let(:railway_flow) { %i[step_action inner_step_one error_handler fail_one] }
+        let(:railway_flow) { %i[ResqInnerActionCases::ResqInnerAction inner_step_one error_handler fail_one] }
         let(:error_message) { 'Some error message' }
         let(:expected_state) do
           {
@@ -333,7 +333,7 @@ RSpec.describe 'Resq with inner action cases' do
       let(:action_block) { when_resq_for_action_step_on_failure_to_failure_track }
 
       context 'when inner action passes' do
-        let(:railway_flow) { %i[step_action inner_step_one step_two step_three] }
+        let(:railway_flow) { %i[ResqInnerActionCases::ResqInnerAction inner_step_one step_two step_three] }
         let(:expected_state) do
           {
             action_status: :success,
@@ -354,7 +354,7 @@ RSpec.describe 'Resq with inner action cases' do
       end
 
       context 'when inner action fails' do
-        let(:railway_flow) { %i[step_action inner_step_one fail_two] }
+        let(:railway_flow) { %i[ResqInnerActionCases::ResqInnerAction inner_step_one fail_two] }
         let(:expected_state) do
           {
             action_status: :failure,
@@ -380,7 +380,7 @@ RSpec.describe 'Resq with inner action cases' do
       end
 
       context 'when inner action raises an error' do
-        let(:railway_flow) { %i[step_action inner_step_one error_handler fail_one fail_two] }
+        let(:railway_flow) { %i[ResqInnerActionCases::ResqInnerAction inner_step_one error_handler fail_one fail_two] }
         let(:error_message) { 'Some error message' }
         let(:expected_state) do
           {
@@ -415,7 +415,7 @@ RSpec.describe 'Resq with inner action cases' do
       let(:action_block) { when_resq_for_action_step_complicated_logic }
 
       context 'when inner action passes' do
-        let(:railway_flow) { %i[step_action inner_step_one step_two step_three] }
+        let(:railway_flow) { %i[ResqInnerActionCases::ResqInnerAction inner_step_one step_two step_three] }
         let(:expected_state) do
           {
             action_status: :success,
@@ -436,7 +436,7 @@ RSpec.describe 'Resq with inner action cases' do
       end
 
       context 'when inner action fails' do
-        let(:railway_flow) { %i[step_action inner_step_one fail_two] }
+        let(:railway_flow) { %i[ResqInnerActionCases::ResqInnerAction inner_step_one fail_two] }
         let(:expected_state) do
           {
             action_status: :failure,
@@ -471,7 +471,15 @@ RSpec.describe 'Resq with inner action cases' do
         end
 
         context 'when fail_one step pass' do
-          let(:railway_flow) { %i[step_action inner_step_one error_handler fail_one fail_two] }
+          let(:railway_flow) do
+            %i[
+              ResqInnerActionCases::ResqInnerAction
+              inner_step_one
+              error_handler
+              fail_one
+              fail_two
+            ]
+          end
           let(:param2) { true }
           let(:error_message) { 'Some error message' }
           let(:expected_state) do
@@ -495,7 +503,15 @@ RSpec.describe 'Resq with inner action cases' do
         end
 
         context 'when fail_one step fail' do
-          let(:railway_flow) { %i[step_action inner_step_one error_handler fail_one step_three] }
+          let(:railway_flow) do
+            %i[
+              ResqInnerActionCases::ResqInnerAction
+              inner_step_one
+              error_handler
+              fail_one
+              step_three
+            ]
+          end
           let(:param2) { false }
           let(:error_message) { 'Some error message' }
           let(:expected_state) do
@@ -524,7 +540,7 @@ RSpec.describe 'Resq with inner action cases' do
       let(:action_block) { when_resq_for_action_step_on_success_finish_him }
 
       context 'when inner action passes' do
-        let(:railway_flow) { %i[step_action inner_step_one] }
+        let(:railway_flow) { %i[ResqInnerActionCases::ResqInnerAction inner_step_one] }
         let(:expected_state) do
           {
             action_status: :success,
@@ -543,7 +559,7 @@ RSpec.describe 'Resq with inner action cases' do
       end
 
       context 'when inner action fails' do
-        let(:railway_flow) { %i[step_action inner_step_one fail_one] }
+        let(:railway_flow) { %i[ResqInnerActionCases::ResqInnerAction inner_step_one fail_one] }
         let(:expected_state) do
           {
             action_status: :failure,
@@ -567,7 +583,7 @@ RSpec.describe 'Resq with inner action cases' do
       end
 
       context 'when inner action raises an error' do
-        let(:railway_flow) { %i[step_action inner_step_one error_handler fail_one] }
+        let(:railway_flow) { %i[ResqInnerActionCases::ResqInnerAction inner_step_one error_handler fail_one] }
         let(:error_message) { 'Some error message' }
         let(:expected_state) do
           {
@@ -600,7 +616,7 @@ RSpec.describe 'Resq with inner action cases' do
       let(:action_block) { when_resq_for_action_step_on_failure_finish_him }
 
       context 'when inner action passes' do
-        let(:railway_flow) { %i[step_action inner_step_one step_two] }
+        let(:railway_flow) { %i[ResqInnerActionCases::ResqInnerAction inner_step_one step_two] }
         let(:expected_state) do
           {
             action_status: :success,
@@ -619,7 +635,7 @@ RSpec.describe 'Resq with inner action cases' do
       end
 
       context 'when inner action fails' do
-        let(:railway_flow) { %i[step_action inner_step_one] }
+        let(:railway_flow) { %i[ResqInnerActionCases::ResqInnerAction inner_step_one] }
         let(:expected_state) do
           {
             action_status: :failure,
@@ -643,7 +659,7 @@ RSpec.describe 'Resq with inner action cases' do
       end
 
       context 'when inner action raises an error' do
-        let(:railway_flow) { %i[step_action inner_step_one error_handler fail_one] }
+        let(:railway_flow) { %i[ResqInnerActionCases::ResqInnerAction inner_step_one error_handler fail_one] }
         let(:error_message) { 'Some error message' }
         let(:expected_state) do
           {
@@ -679,7 +695,7 @@ RSpec.describe 'Resq with inner action cases' do
         let(:param2) { true }
 
         context 'when inner action passes' do
-          let(:railway_flow) { %i[step_action inner_step_one step_two] }
+          let(:railway_flow) { %i[ResqInnerActionCases::ResqInnerAction inner_step_one step_two] }
           let(:expected_state) do
             {
               action_status: :success,
@@ -698,7 +714,7 @@ RSpec.describe 'Resq with inner action cases' do
         end
 
         context 'when inner action fails' do
-          let(:railway_flow) { %i[step_action inner_step_one fail_one] }
+          let(:railway_flow) { %i[ResqInnerActionCases::ResqInnerAction inner_step_one fail_one] }
           let(:expected_state) do
             {
               action_status: :failure,
@@ -722,7 +738,7 @@ RSpec.describe 'Resq with inner action cases' do
         end
 
         context 'when inner action raises an error' do
-          let(:railway_flow) { %i[step_action inner_step_one error_handler fail_one] }
+          let(:railway_flow) { %i[ResqInnerActionCases::ResqInnerAction inner_step_one error_handler fail_one] }
           let(:error_message) { 'Some error message' }
           let(:expected_state) do
             {
@@ -778,7 +794,7 @@ RSpec.describe 'Resq with inner action cases' do
         let(:param2) { false }
 
         context 'when inner action passes' do
-          let(:railway_flow) { %i[step_action inner_step_one step_two] }
+          let(:railway_flow) { %i[ResqInnerActionCases::ResqInnerAction inner_step_one step_two] }
           let(:expected_state) do
             {
               action_status: :success,
@@ -797,7 +813,7 @@ RSpec.describe 'Resq with inner action cases' do
         end
 
         context 'when inner action fails' do
-          let(:railway_flow) { %i[step_action inner_step_one fail_one] }
+          let(:railway_flow) { %i[ResqInnerActionCases::ResqInnerAction inner_step_one fail_one] }
           let(:expected_state) do
             {
               action_status: :failure,
@@ -821,7 +837,7 @@ RSpec.describe 'Resq with inner action cases' do
         end
 
         context 'when inner action raises an error' do
-          let(:railway_flow) { %i[step_action inner_step_one error_handler fail_one] }
+          let(:railway_flow) { %i[ResqInnerActionCases::ResqInnerAction inner_step_one error_handler fail_one] }
           let(:error_message) { 'Some error message' }
           let(:expected_state) do
             {
@@ -877,7 +893,7 @@ RSpec.describe 'Resq with inner action cases' do
         let(:param2) { true }
 
         context 'when inner action passes' do
-          let(:railway_flow) { %i[step_action inner_step_one step_two step_three] }
+          let(:railway_flow) { %i[ResqInnerActionCases::ResqInnerAction inner_step_one step_two step_three] }
           let(:expected_state) do
             {
               action_status: :success,
@@ -898,7 +914,7 @@ RSpec.describe 'Resq with inner action cases' do
         end
 
         context 'when inner action fails' do
-          let(:railway_flow) { %i[step_action inner_step_one step_three] }
+          let(:railway_flow) { %i[ResqInnerActionCases::ResqInnerAction inner_step_one step_three] }
           let(:expected_state) do
             {
               action_status: :success,
@@ -924,7 +940,15 @@ RSpec.describe 'Resq with inner action cases' do
         end
 
         context 'when inner action raises an error' do
-          let(:railway_flow) { %i[step_action inner_step_one error_handler fail_one fail_two] }
+          let(:railway_flow) do
+            %i[
+              ResqInnerActionCases::ResqInnerAction
+              inner_step_one
+              error_handler
+              fail_one
+              fail_two
+            ]
+          end
           let(:error_message) { 'Some error message' }
           let(:expected_state) do
             {
@@ -984,7 +1008,7 @@ RSpec.describe 'Resq with inner action cases' do
         let(:param2) { false }
 
         context 'when inner action passes' do
-          let(:railway_flow) { %i[step_action inner_step_one fail_two] }
+          let(:railway_flow) { %i[ResqInnerActionCases::ResqInnerAction inner_step_one fail_two] }
           let(:expected_state) do
             {
               action_status: :failure,
@@ -1005,7 +1029,7 @@ RSpec.describe 'Resq with inner action cases' do
         end
 
         context 'when inner action fails' do
-          let(:railway_flow) { %i[step_action inner_step_one fail_one fail_two] }
+          let(:railway_flow) { %i[ResqInnerActionCases::ResqInnerAction inner_step_one fail_one fail_two] }
           let(:expected_state) do
             {
               action_status: :failure,
@@ -1031,7 +1055,15 @@ RSpec.describe 'Resq with inner action cases' do
         end
 
         context 'when inner action raises an error' do
-          let(:railway_flow) { %i[step_action inner_step_one error_handler fail_one fail_two] }
+          let(:railway_flow) do
+            %i[
+              ResqInnerActionCases::ResqInnerAction
+              inner_step_one
+              error_handler
+              fail_one
+              fail_two
+            ]
+          end
           let(:error_message) { 'Some error message' }
           let(:expected_state) do
             {
@@ -1089,7 +1121,7 @@ RSpec.describe 'Resq with inner action cases' do
       let(:param1) { false }
 
       context 'when inner action passes' do
-        let(:railway_flow) { %i[step_one fail_one inner_step_one fail_two fail_three] }
+        let(:railway_flow) { %i[step_one ResqInnerActionCases::ResqInnerAction inner_step_one fail_two fail_three] }
         let(:expected_state) do
           {
             action_status: :failure,
@@ -1110,7 +1142,7 @@ RSpec.describe 'Resq with inner action cases' do
       end
 
       context 'when inner action fails' do
-        let(:railway_flow) { %i[step_one fail_one inner_step_one fail_two fail_three] }
+        let(:railway_flow) { %i[step_one ResqInnerActionCases::ResqInnerAction inner_step_one fail_two fail_three] }
         let(:expected_state) do
           {
             action_status: :failure,
@@ -1136,7 +1168,16 @@ RSpec.describe 'Resq with inner action cases' do
       end
 
       context 'when inner action raises an error' do
-        let(:railway_flow) { %i[step_one fail_one inner_step_one error_handler fail_two fail_three] }
+        let(:railway_flow) do
+          %i[
+            step_one
+            ResqInnerActionCases::ResqInnerAction
+            inner_step_one
+            error_handler
+            fail_two
+            fail_three
+          ]
+        end
         let(:error_message) { 'Some error message' }
         let(:expected_state) do
           {
@@ -1172,7 +1213,7 @@ RSpec.describe 'Resq with inner action cases' do
       let(:param1) { false }
 
       context 'when inner action passes' do
-        let(:railway_flow) { %i[step_one fail_one inner_step_one step_three] }
+        let(:railway_flow) { %i[step_one ResqInnerActionCases::ResqInnerAction inner_step_one step_three] }
         let(:expected_state) do
           {
             action_status: :success,
@@ -1194,7 +1235,7 @@ RSpec.describe 'Resq with inner action cases' do
       end
 
       context 'when inner action fails' do
-        let(:railway_flow) { %i[step_one fail_one inner_step_one fail_two fail_three] }
+        let(:railway_flow) { %i[step_one ResqInnerActionCases::ResqInnerAction inner_step_one fail_two fail_three] }
         let(:expected_state) do
           {
             action_status: :failure,
@@ -1221,7 +1262,16 @@ RSpec.describe 'Resq with inner action cases' do
       end
 
       context 'when inner action raises an error' do
-        let(:railway_flow) { %i[step_one fail_one inner_step_one error_handler fail_two fail_three] }
+        let(:railway_flow) do
+          %i[
+            step_one
+            ResqInnerActionCases::ResqInnerAction
+            inner_step_one
+            error_handler
+            fail_two
+            fail_three
+          ]
+        end
         let(:error_message) { 'Some error message' }
         let(:expected_state) do
           {
@@ -1258,7 +1308,7 @@ RSpec.describe 'Resq with inner action cases' do
       let(:param1) { false }
 
       context 'when inner action passes' do
-        let(:railway_flow) { %i[step_one fail_one inner_step_one fail_two fail_three] }
+        let(:railway_flow) { %i[step_one ResqInnerActionCases::ResqInnerAction inner_step_one fail_two fail_three] }
         let(:expected_state) do
           {
             action_status: :failure,
@@ -1280,7 +1330,7 @@ RSpec.describe 'Resq with inner action cases' do
       end
 
       context 'when inner action fails' do
-        let(:railway_flow) { %i[step_one fail_one inner_step_one step_three] }
+        let(:railway_flow) { %i[step_one ResqInnerActionCases::ResqInnerAction inner_step_one step_three] }
         let(:expected_state) do
           {
             action_status: :success,
@@ -1307,7 +1357,16 @@ RSpec.describe 'Resq with inner action cases' do
       end
 
       context 'when inner action raises an error' do
-        let(:railway_flow) { %i[step_one fail_one inner_step_one error_handler fail_two fail_three] }
+        let(:railway_flow) do
+          %i[
+            step_one
+            ResqInnerActionCases::ResqInnerAction
+            inner_step_one
+            error_handler
+            fail_two
+            fail_three
+          ]
+        end
         let(:error_message) { 'Some error message' }
         let(:expected_state) do
           {
@@ -1344,7 +1403,7 @@ RSpec.describe 'Resq with inner action cases' do
       let(:param1) { false }
 
       context 'when inner action passes' do
-        let(:railway_flow) { %i[step_one fail_one inner_step_one fail_three] }
+        let(:railway_flow) { %i[step_one ResqInnerActionCases::ResqInnerAction inner_step_one fail_three] }
         let(:expected_state) do
           {
             action_status: :failure,
@@ -1366,7 +1425,7 @@ RSpec.describe 'Resq with inner action cases' do
       end
 
       context 'when inner action fails' do
-        let(:railway_flow) { %i[step_one fail_one inner_step_one fail_two fail_three] }
+        let(:railway_flow) { %i[step_one ResqInnerActionCases::ResqInnerAction inner_step_one fail_two fail_three] }
         let(:expected_state) do
           {
             action_status: :failure,
@@ -1393,7 +1452,16 @@ RSpec.describe 'Resq with inner action cases' do
       end
 
       context 'when inner action raises an error' do
-        let(:railway_flow) { %i[step_one fail_one inner_step_one error_handler fail_two fail_three] }
+        let(:railway_flow) do
+          %i[
+            step_one
+            ResqInnerActionCases::ResqInnerAction
+            inner_step_one
+            error_handler
+            fail_two
+            fail_three
+          ]
+        end
         let(:error_message) { 'Some error message' }
         let(:expected_state) do
           {
@@ -1430,7 +1498,7 @@ RSpec.describe 'Resq with inner action cases' do
       let(:param1) { false }
 
       context 'when inner action passes' do
-        let(:railway_flow) { %i[step_one fail_one inner_step_one fail_two fail_three] }
+        let(:railway_flow) { %i[step_one ResqInnerActionCases::ResqInnerAction inner_step_one fail_two fail_three] }
         let(:expected_state) do
           {
             action_status: :failure,
@@ -1452,7 +1520,7 @@ RSpec.describe 'Resq with inner action cases' do
       end
 
       context 'when inner action fails' do
-        let(:railway_flow) { %i[step_one fail_one inner_step_one fail_three] }
+        let(:railway_flow) { %i[step_one ResqInnerActionCases::ResqInnerAction inner_step_one fail_three] }
         let(:expected_state) do
           {
             action_status: :failure,
@@ -1479,7 +1547,16 @@ RSpec.describe 'Resq with inner action cases' do
       end
 
       context 'when inner action raises an error' do
-        let(:railway_flow) { %i[step_one fail_one inner_step_one error_handler fail_two fail_three] }
+        let(:railway_flow) do
+          %i[
+            step_one
+            ResqInnerActionCases::ResqInnerAction
+            inner_step_one
+            error_handler
+            fail_two
+            fail_three
+          ]
+        end
         let(:error_message) { 'Some error message' }
         let(:expected_state) do
           {
@@ -1516,7 +1593,7 @@ RSpec.describe 'Resq with inner action cases' do
       let(:param1) { false }
 
       context 'when inner action passes' do
-        let(:railway_flow) { %i[step_one fail_one inner_step_one] }
+        let(:railway_flow) { %i[step_one ResqInnerActionCases::ResqInnerAction inner_step_one] }
         let(:expected_state) do
           {
             action_status: :failure,
@@ -1538,7 +1615,7 @@ RSpec.describe 'Resq with inner action cases' do
       end
 
       context 'when inner action fails' do
-        let(:railway_flow) { %i[step_one fail_one inner_step_one fail_two fail_three] }
+        let(:railway_flow) { %i[step_one ResqInnerActionCases::ResqInnerAction inner_step_one fail_two fail_three] }
         let(:expected_state) do
           {
             action_status: :failure,
@@ -1565,7 +1642,16 @@ RSpec.describe 'Resq with inner action cases' do
       end
 
       context 'when inner action raises an error' do
-        let(:railway_flow) { %i[step_one fail_one inner_step_one error_handler fail_two fail_three] }
+        let(:railway_flow) do
+          %i[
+            step_one
+            ResqInnerActionCases::ResqInnerAction
+            inner_step_one
+            error_handler
+            fail_two
+            fail_three
+          ]
+        end
         let(:error_message) { 'Some error message' }
         let(:expected_state) do
           {
@@ -1602,7 +1688,7 @@ RSpec.describe 'Resq with inner action cases' do
       let(:param1) { false }
 
       context 'when inner action passes' do
-        let(:railway_flow) { %i[step_one fail_one inner_step_one fail_two fail_three] }
+        let(:railway_flow) { %i[step_one ResqInnerActionCases::ResqInnerAction inner_step_one fail_two fail_three] }
         let(:expected_state) do
           {
             action_status: :failure,
@@ -1624,7 +1710,7 @@ RSpec.describe 'Resq with inner action cases' do
       end
 
       context 'when inner action fails' do
-        let(:railway_flow) { %i[step_one fail_one inner_step_one] }
+        let(:railway_flow) { %i[step_one ResqInnerActionCases::ResqInnerAction inner_step_one] }
         let(:expected_state) do
           {
             action_status: :failure,
@@ -1651,7 +1737,16 @@ RSpec.describe 'Resq with inner action cases' do
       end
 
       context 'when inner action raises an error' do
-        let(:railway_flow) { %i[step_one fail_one inner_step_one error_handler fail_two fail_three] }
+        let(:railway_flow) do
+          %i[
+            step_one
+            ResqInnerActionCases::ResqInnerAction
+            inner_step_one
+            error_handler
+            fail_two
+            fail_three
+          ]
+        end
         let(:error_message) { 'Some error message' }
         let(:expected_state) do
           {
@@ -1691,7 +1786,7 @@ RSpec.describe 'Resq with inner action cases' do
         let(:param2) { true }
 
         context 'when inner action passes' do
-          let(:railway_flow) { %i[step_one fail_one inner_step_one fail_two fail_three] }
+          let(:railway_flow) { %i[step_one ResqInnerActionCases::ResqInnerAction inner_step_one fail_two fail_three] }
           let(:expected_state) do
             {
               action_status: :failure,
@@ -1713,7 +1808,7 @@ RSpec.describe 'Resq with inner action cases' do
         end
 
         context 'when inner action fails' do
-          let(:railway_flow) { %i[step_one fail_one inner_step_one fail_two fail_three] }
+          let(:railway_flow) { %i[step_one ResqInnerActionCases::ResqInnerAction inner_step_one fail_two fail_three] }
           let(:expected_state) do
             {
               action_status: :failure,
@@ -1740,7 +1835,16 @@ RSpec.describe 'Resq with inner action cases' do
         end
 
         context 'when inner action raises an error' do
-          let(:railway_flow) { %i[step_one fail_one inner_step_one error_handler fail_two fail_three] }
+          let(:railway_flow) do
+            %i[
+              step_one
+              ResqInnerActionCases::ResqInnerAction
+              inner_step_one
+              error_handler
+              fail_two
+              fail_three
+            ]
+          end
           let(:error_message) { 'Some error message' }
           let(:expected_state) do
             {
@@ -1804,7 +1908,7 @@ RSpec.describe 'Resq with inner action cases' do
         let(:param2) { false }
 
         context 'when inner action passes' do
-          let(:railway_flow) { %i[step_one fail_one inner_step_one fail_two fail_three] }
+          let(:railway_flow) { %i[step_one ResqInnerActionCases::ResqInnerAction inner_step_one fail_two fail_three] }
           let(:expected_state) do
             {
               action_status: :failure,
@@ -1826,7 +1930,7 @@ RSpec.describe 'Resq with inner action cases' do
         end
 
         context 'when inner action fails' do
-          let(:railway_flow) { %i[step_one fail_one inner_step_one fail_two fail_three] }
+          let(:railway_flow) { %i[step_one ResqInnerActionCases::ResqInnerAction inner_step_one fail_two fail_three] }
           let(:expected_state) do
             {
               action_status: :failure,
@@ -1853,7 +1957,16 @@ RSpec.describe 'Resq with inner action cases' do
         end
 
         context 'when inner action raises an error' do
-          let(:railway_flow) { %i[step_one fail_one inner_step_one error_handler fail_two fail_three] }
+          let(:railway_flow) do
+            %i[
+              step_one
+              ResqInnerActionCases::ResqInnerAction
+              inner_step_one
+              error_handler
+              fail_two
+              fail_three
+            ]
+          end
           let(:error_message) { 'Some error message' }
           let(:expected_state) do
             {
@@ -1917,7 +2030,7 @@ RSpec.describe 'Resq with inner action cases' do
         let(:param2) { true }
 
         context 'when inner action passes' do
-          let(:railway_flow) { %i[step_one fail_one inner_step_one fail_two fail_three] }
+          let(:railway_flow) { %i[step_one ResqInnerActionCases::ResqInnerAction inner_step_one fail_two fail_three] }
           let(:expected_state) do
             {
               action_status: :failure,
@@ -1939,7 +2052,7 @@ RSpec.describe 'Resq with inner action cases' do
         end
 
         context 'when inner action fails' do
-          let(:railway_flow) { %i[step_one fail_one inner_step_one step_three] }
+          let(:railway_flow) { %i[step_one ResqInnerActionCases::ResqInnerAction inner_step_one step_three] }
           let(:expected_state) do
             {
               action_status: :success,
@@ -1966,7 +2079,16 @@ RSpec.describe 'Resq with inner action cases' do
         end
 
         context 'when inner action raises an error' do
-          let(:railway_flow) { %i[step_one fail_one inner_step_one error_handler fail_two fail_three] }
+          let(:railway_flow) do
+            %i[
+              step_one
+              ResqInnerActionCases::ResqInnerAction
+              inner_step_one
+              error_handler
+              fail_two
+              fail_three
+            ]
+          end
           let(:error_message) { 'Some error message' }
           let(:expected_state) do
             {
@@ -2030,7 +2152,7 @@ RSpec.describe 'Resq with inner action cases' do
         let(:param2) { false }
 
         context 'when inner action passes' do
-          let(:railway_flow) { %i[step_one fail_one inner_step_one fail_three] }
+          let(:railway_flow) { %i[step_one ResqInnerActionCases::ResqInnerAction inner_step_one fail_three] }
           let(:expected_state) do
             {
               action_status: :failure,
@@ -2052,7 +2174,7 @@ RSpec.describe 'Resq with inner action cases' do
         end
 
         context 'when inner action fails' do
-          let(:railway_flow) { %i[step_one fail_one inner_step_one fail_two fail_three] }
+          let(:railway_flow) { %i[step_one ResqInnerActionCases::ResqInnerAction inner_step_one fail_two fail_three] }
           let(:expected_state) do
             {
               action_status: :failure,
@@ -2079,7 +2201,16 @@ RSpec.describe 'Resq with inner action cases' do
         end
 
         context 'when inner action raises an error' do
-          let(:railway_flow) { %i[step_one fail_one inner_step_one error_handler fail_two fail_three] }
+          let(:railway_flow) do
+            %i[
+              step_one
+              ResqInnerActionCases::ResqInnerAction
+              inner_step_one
+              error_handler
+              fail_two
+              fail_three
+            ]
+          end
           let(:error_message) { 'Some error message' }
           let(:expected_state) do
             {
@@ -2139,7 +2270,7 @@ RSpec.describe 'Resq with inner action cases' do
       let(:action_block) { when_resq_for_pass_action }
 
       context 'when inner action passes' do
-        let(:railway_flow) { %i[step_one pass_one inner_step_one step_two] }
+        let(:railway_flow) { %i[step_one ResqInnerActionCases::ResqInnerAction inner_step_one step_two] }
         let(:expected_state) do
           {
             action_status: :success,
@@ -2159,7 +2290,7 @@ RSpec.describe 'Resq with inner action cases' do
       end
 
       context 'when inner action fails' do
-        let(:railway_flow) { %i[step_one pass_one inner_step_one step_two] }
+        let(:railway_flow) { %i[step_one ResqInnerActionCases::ResqInnerAction inner_step_one step_two] }
         let(:expected_state) do
           {
             action_status: :success,
@@ -2184,7 +2315,7 @@ RSpec.describe 'Resq with inner action cases' do
       end
 
       context 'when inner action raises an error' do
-        let(:railway_flow) { %i[step_one pass_one inner_step_one error_handler fail_one] }
+        let(:railway_flow) { %i[step_one ResqInnerActionCases::ResqInnerAction inner_step_one error_handler fail_one] }
         let(:error_message) { 'Some error message' }
         let(:expected_state) do
           {
@@ -2218,7 +2349,7 @@ RSpec.describe 'Resq with inner action cases' do
       let(:action_block) { when_resq_for_pass_action_finish_him }
 
       context 'when inner action passes' do
-        let(:railway_flow) { %i[step_one pass_one inner_step_one] }
+        let(:railway_flow) { %i[step_one ResqInnerActionCases::ResqInnerAction inner_step_one] }
         let(:expected_state) do
           {
             action_status: :success,
@@ -2238,7 +2369,7 @@ RSpec.describe 'Resq with inner action cases' do
       end
 
       context 'when inner action fails' do
-        let(:railway_flow) { %i[step_one pass_one inner_step_one] }
+        let(:railway_flow) { %i[step_one ResqInnerActionCases::ResqInnerAction inner_step_one] }
         let(:expected_state) do
           {
             action_status: :success,
@@ -2263,7 +2394,7 @@ RSpec.describe 'Resq with inner action cases' do
       end
 
       context 'when inner action raises an error' do
-        let(:railway_flow) { %i[step_one pass_one inner_step_one error_handler fail_one] }
+        let(:railway_flow) { %i[step_one ResqInnerActionCases::ResqInnerAction inner_step_one error_handler fail_one] }
         let(:error_message) { 'Some error message' }
         let(:expected_state) do
           {
@@ -2300,7 +2431,7 @@ RSpec.describe 'Resq with inner action cases' do
         let(:param2) { true }
 
         context 'when inner action passes' do
-          let(:railway_flow) { %i[step_one pass_one inner_step_one] }
+          let(:railway_flow) { %i[step_one ResqInnerActionCases::ResqInnerAction inner_step_one] }
           let(:expected_state) do
             {
               action_status: :success,
@@ -2320,7 +2451,7 @@ RSpec.describe 'Resq with inner action cases' do
         end
 
         context 'when inner action fails' do
-          let(:railway_flow) { %i[step_one pass_one inner_step_one] }
+          let(:railway_flow) { %i[step_one ResqInnerActionCases::ResqInnerAction inner_step_one] }
           let(:expected_state) do
             {
               action_status: :success,
@@ -2345,7 +2476,15 @@ RSpec.describe 'Resq with inner action cases' do
         end
 
         context 'when inner action raises an error' do
-          let(:railway_flow) { %i[step_one pass_one inner_step_one error_handler fail_one] }
+          let(:railway_flow) do
+            %i[
+              step_one
+              ResqInnerActionCases::ResqInnerAction
+              inner_step_one
+              error_handler
+              fail_one
+            ]
+          end
           let(:error_message) { 'Some error message' }
           let(:expected_state) do
             {
@@ -2403,7 +2542,7 @@ RSpec.describe 'Resq with inner action cases' do
         let(:param2) { false }
 
         context 'when inner action passes' do
-          let(:railway_flow) { %i[step_one pass_one inner_step_one] }
+          let(:railway_flow) { %i[step_one ResqInnerActionCases::ResqInnerAction inner_step_one] }
           let(:expected_state) do
             {
               action_status: :success,
@@ -2423,7 +2562,7 @@ RSpec.describe 'Resq with inner action cases' do
         end
 
         context 'when inner action fails' do
-          let(:railway_flow) { %i[step_one pass_one inner_step_one] }
+          let(:railway_flow) { %i[step_one ResqInnerActionCases::ResqInnerAction inner_step_one] }
           let(:expected_state) do
             {
               action_status: :success,
@@ -2448,7 +2587,15 @@ RSpec.describe 'Resq with inner action cases' do
         end
 
         context 'when inner action raises an error' do
-          let(:railway_flow) { %i[step_one pass_one inner_step_one error_handler fail_one] }
+          let(:railway_flow) do
+            %i[
+              step_one
+              ResqInnerActionCases::ResqInnerAction
+              inner_step_one
+              error_handler
+              fail_one
+            ]
+          end
           let(:error_message) { 'Some error message' }
           let(:expected_state) do
             {

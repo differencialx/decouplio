@@ -5,7 +5,6 @@ module Decouplio
     module Validations
       module Pass
         VALIDATION_ERROR_MESSAGE = <<~ERROR_MESSAGE
-          %s
           Next options are not allowed for "pass":
           %s
 
@@ -16,7 +15,6 @@ module Decouplio
           %s
 
           Please read the manual about allowed options here:
-          %s
           %s
         ERROR_MESSAGE
         ALLOWED_OPTIONS_MESSAGE = <<~ALLOWED_OPTIONS

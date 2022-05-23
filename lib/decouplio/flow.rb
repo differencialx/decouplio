@@ -5,10 +5,13 @@ require_relative 'composer'
 
 module Decouplio
   class Flow
-    def self.call(logic:)
+    def self.call(logic:, action_class:)
       logic_container_raw_data = Class.new(Decouplio::LogicDsl, &logic)
 
-      Decouplio::Composer.compose(logic_container_raw_data: logic_container_raw_data)
+      Decouplio::Composer.compose(
+        logic_container_raw_data: logic_container_raw_data,
+        action_class: action_class
+      )
     end
   end
 end

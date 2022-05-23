@@ -12,10 +12,8 @@ module Decouplio
 
       def interpolation_values
         [
-          Decouplio::Const::Colors::YELLOW,
           Decouplio::Const::Validations::Palp::DOES_NOT_ALLOW_ANY_OPTION,
-          Decouplio::Const::Validations::Palp::MANUAL_URL,
-          Decouplio::Const::Colors::NO_COLOR
+          Decouplio::Const::Validations::Palp::MANUAL_URL
         ]
       end
     end
