@@ -17,6 +17,9 @@ require_relative 'steps/unless_condition_fail'
 require_relative 'steps/inner_action_step'
 require_relative 'steps/inner_action_fail'
 require_relative 'steps/inner_action_pass'
+require_relative 'steps/service_step'
+require_relative 'steps/service_fail'
+require_relative 'steps/service_pass'
 require_relative 'steps/doby'
 require_relative 'options_validator'
 require_relative 'validators/condition'
@@ -119,6 +122,12 @@ module Decouplio
           create_inner_action_fail(stp, flow)
         when Decouplio::Const::Types::ACTION_TYPE_PASS
           create_inner_action_pass(stp, flow)
+        when Decouplio::Const::Types::SERVICE_TYPE_STEP
+          create_inner_service_step(stp, flow)
+        when Decouplio::Const::Types::SERVICE_TYPE_FAIL
+          create_inner_service_fail(stp, flow)
+        when Decouplio::Const::Types::SERVICE_TYPE_PASS
+          create_inner_service_pass(stp, flow)
         when Decouplio::Const::Types::DOBY_TYPE
           create_doby(stp)
         end
@@ -230,6 +239,33 @@ module Decouplio
         )
       end
 
+      def create_inner_service_step(stp, flow)
+        Decouplio::Steps::ServiceStep.new(
+          name: stp[:name],
+          service: stp[:service],
+          on_success_type: success_type(flow, stp),
+          on_failure_type: failure_type(flow, stp)
+        )
+      end
+
+      def create_inner_service_fail(stp, flow)
+        Decouplio::Steps::ServiceFail.new(
+          name: stp[:name],
+          service: stp[:service],
+          on_success_type: success_type(flow, stp),
+          on_failure_type: failure_type(flow, stp)
+        )
+      end
+
+      def create_inner_service_pass(stp, flow)
+        Decouplio::Steps::ServicePass.new(
+          name: stp[:name],
+          service: stp[:service],
+          on_success_type: success_type(flow, stp),
+          on_failure_type: failure_type(flow, stp)
+        )
+      end
+
       def create_doby(stp)
         Decouplio::Steps::Doby.new(
           name: stp[:name],
@@ -246,12 +282,15 @@ module Decouplio
                Decouplio::Const::Types::WRAP_TYPE,
                Decouplio::Const::Types::ACTION_TYPE_STEP,
                Decouplio::Const::Types::ACTION_TYPE_PASS,
+               Decouplio::Const::Types::SERVICE_TYPE_STEP,
+               Decouplio::Const::Types::SERVICE_TYPE_PASS,
                Decouplio::Const::Types::RESQ_TYPE_STEP,
                Decouplio::Const::Types::RESQ_TYPE_PASS
             compose_step_flow(stp, step_id, flow, idx, flow_hash, next_steps)
           when Decouplio::Const::Types::FAIL_TYPE,
                Decouplio::Const::Types::RESQ_TYPE_FAIL,
-               Decouplio::Const::Types::ACTION_TYPE_FAIL
+               Decouplio::Const::Types::ACTION_TYPE_FAIL,
+               Decouplio::Const::Types::SERVICE_TYPE_FAIL
             compose_fail_flow(stp, step_id, flow, idx, flow_hash, next_steps)
           when Decouplio::Const::Types::DOBY_TYPE
             compose_doby_flow(stp, step_id, flow, idx, flow_hash, next_steps)
@@ -436,8 +475,8 @@ module Decouplio
           stp[:step_to_resq][:action] = stp[:step_to_resq][:name]
           stp[:step_to_resq][:name] = stp[:step_to_resq][:name].name.to_sym
         elsif stp.dig(:step_to_resq, :name).is_a?(Class) && stp.dig(:step_to_resq, :name).respond_to?(:call)
-          stp[:step_to_resq][:service] = stp[:name]
-          stp[:name] = stp[:step_to_resq][:name].name.to_sym
+          stp[:step_to_resq][:service] = stp[:step_to_resq][:name]
+          stp[:step_to_resq][:name] = stp[:step_to_resq][:name].name.to_sym
         elsif stp[:name].is_a?(Class)
           stp[:action] = stp[:name]
         elsif stp.dig(:step_to_resq, :name).is_a?(Class)
@@ -448,6 +487,12 @@ module Decouplio
           stp[:type] = Decouplio::Const::Types::STEP_TYPE_TO_INNER_TYPE[stp[:type]]
         elsif stp.dig(:step_to_resq, :action)
           stp[:step_to_resq][:type] = Decouplio::Const::Types::STEP_TYPE_TO_INNER_TYPE[stp[:type]]
+        end
+
+        if stp.key?(:service)
+          stp[:type] = Decouplio::Const::Types::STEP_TYPE_TO_SERVICE_TYPE[stp[:type]]
+        elsif stp.dig(:step_to_resq, :service)
+          stp[:step_to_resq][:type] = Decouplio::Const::Types::STEP_TYPE_TO_SERVICE_TYPE[stp[:type]]
         end
 
         stp
@@ -525,7 +570,6 @@ module Decouplio
               Decouplio::Const::Types::IF_TYPE_FAIL,
               Decouplio::Const::Types::UNLESS_TYPE_FAIL
             ].include?(prev_step[:type])
-              # return step_id
               return prev_step[:step_id]
             else
               return stp[:step_id]

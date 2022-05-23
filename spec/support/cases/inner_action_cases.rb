@@ -437,4 +437,26 @@ module InnerActionCases
       end
     end
   end
+
+  def when_innder_action_if_condition
+    lambda do |_klass|
+      logic do
+        step :assign_inner_action_param
+        step :step_one
+        step InnerActionCases::InnerAction, if: :condition?
+      end
+
+      def assign_inner_action_param(param1:, **)
+        ctx[:inner_action_param] = param1
+      end
+
+      def step_one(param2:, **)
+        ctx[:step_one] = param2
+      end
+
+      def condition?(**)
+        ctx[:condition]
+      end
+    end
+  end
 end

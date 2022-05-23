@@ -17,6 +17,9 @@ module Decouplio
       ACTION_TYPE_STEP = :action_step
       ACTION_TYPE_FAIL = :action_fail
       ACTION_TYPE_PASS = :action_pass
+      SERVICE_TYPE_STEP = :service_step
+      SERVICE_TYPE_FAIL = :service_fail
+      SERVICE_TYPE_PASS = :service_pass
       WRAP_TYPE = :wrap
       RESQ_TYPE = :resq
       RESQ_TYPE_STEP = :resq_step
@@ -54,6 +57,30 @@ module Decouplio
         RESQ_TYPE_PASS => {
           IF_TYPE => IF_TYPE_PASS,
           UNLESS_TYPE => UNLESS_TYPE_PASS
+        },
+        ACTION_TYPE_STEP => {
+          IF_TYPE => IF_TYPE_PASS,
+          UNLESS_TYPE => UNLESS_TYPE_PASS
+        },
+        ACTION_TYPE_FAIL => {
+          IF_TYPE => IF_TYPE_FAIL,
+          UNLESS_TYPE => UNLESS_TYPE_FAIL
+        },
+        ACTION_TYPE_PASS => {
+          IF_TYPE => IF_TYPE_PASS,
+          UNLESS_TYPE => UNLESS_TYPE_PASS
+        },
+        SERVICE_TYPE_STEP => {
+          IF_TYPE => IF_TYPE_PASS,
+          UNLESS_TYPE => UNLESS_TYPE_PASS
+        },
+        SERVICE_TYPE_FAIL => {
+          IF_TYPE => IF_TYPE_FAIL,
+          UNLESS_TYPE => UNLESS_TYPE_FAIL
+        },
+        SERVICE_TYPE_PASS => {
+          IF_TYPE => IF_TYPE_PASS,
+          UNLESS_TYPE => UNLESS_TYPE_PASS
         }
       }.freeze
       STEP_TYPE_TO_RESQ_TYPE = {
@@ -66,9 +93,6 @@ module Decouplio
         UNLESS_TYPE_PASS => RESQ_TYPE_STEP,
         IF_TYPE_FAIL => RESQ_TYPE_FAIL,
         UNLESS_TYPE_FAIL => RESQ_TYPE_FAIL,
-        ACTION_TYPE_STEP => RESQ_TYPE_STEP,
-        ACTION_TYPE_FAIL => RESQ_TYPE_FAIL,
-        ACTION_TYPE_PASS => RESQ_TYPE_PASS,
         DOBY_TYPE => RESQ_TYPE_STEP
       }.freeze
       STEP_TYPE_TO_INNER_TYPE = {
@@ -78,6 +102,14 @@ module Decouplio
         RESQ_TYPE_STEP => ACTION_TYPE_STEP,
         RESQ_TYPE_FAIL => ACTION_TYPE_FAIL,
         RESQ_TYPE_PASS => ACTION_TYPE_PASS
+      }.freeze
+      STEP_TYPE_TO_SERVICE_TYPE = {
+        STEP_TYPE => SERVICE_TYPE_STEP,
+        FAIL_TYPE => SERVICE_TYPE_FAIL,
+        PASS_TYPE => SERVICE_TYPE_PASS,
+        RESQ_TYPE_STEP => SERVICE_TYPE_STEP,
+        RESQ_TYPE_FAIL => SERVICE_TYPE_FAIL,
+        RESQ_TYPE_PASS => SERVICE_TYPE_PASS
       }.freeze
       ACTION_NOT_ALLOWED_STEPS = [
         OCTO_TYPE,
@@ -94,13 +126,16 @@ module Decouplio
         UNLESS_TYPE_PASS,
         ACTION_TYPE_PASS,
         ACTION_TYPE_STEP,
+        SERVICE_TYPE_STEP,
+        SERVICE_TYPE_PASS,
         DOBY_TYPE
       ].freeze
       FAIL_FLOW = [
         FAIL_TYPE,
         IF_TYPE_FAIL,
         UNLESS_TYPE_FAIL,
-        ACTION_TYPE_FAIL
+        ACTION_TYPE_FAIL,
+        SERVICE_TYPE_FAIL
       ].freeze
 
       MAIN_FLOW_TYPES = [
@@ -118,17 +153,20 @@ module Decouplio
         WRAP_TYPE,
         ACTION_TYPE_STEP,
         ACTION_TYPE_PASS,
+        SERVICE_TYPE_STEP,
+        SERVICE_TYPE_PASS,
         RESQ_TYPE_STEP,
         RESQ_TYPE_PASS,
         OCTO_TYPE,
         DOBY_TYPE
       ].freeze
       FAILURE_TRACK_STEP_TYPES = [
-        Decouplio::Const::Types::FAIL_TYPE,
-        Decouplio::Const::Types::IF_TYPE_FAIL,
-        Decouplio::Const::Types::UNLESS_TYPE_FAIL,
-        Decouplio::Const::Types::RESQ_TYPE_FAIL,
-        Decouplio::Const::Types::ACTION_TYPE_FAIL
+        FAIL_TYPE,
+        IF_TYPE_FAIL,
+        UNLESS_TYPE_FAIL,
+        RESQ_TYPE_FAIL,
+        ACTION_TYPE_FAIL,
+        SERVICE_TYPE_FAIL
       ].freeze
     end
   end
