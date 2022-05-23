@@ -56,11 +56,25 @@ end
 
 action = SomeAction.call(id: 1)
 
-puts action[:user] # => "User with id: 1"
+action[:user] # => "User with id: 1"
 
-puts action[:current_user] # => "User with id: 1"
+action[:current_user] # => "User with id: 1"
+
+action # =>
+# Result: success
+
+# Railway Flow:
+#   user -> AssignDoby
+
+# Context:
+#   {:id=>1, :user=>"User with id: 1", :current_user=>"User with id: 1"}
+
+# Errors:
+#   {}
 ```
 
 ## Behavior
 
-- `doby` behaves similar to `step`, but doesn't have `on_success, on_failure, if, unless, finish_him` options. All options passed after class constant will be passed as kwargs for `.call` method.
+- `doby` behaves similar to `step`, depending on `.call` method returning value(truthy or falsy) the execution will be moved to `success or failure` track accordingly.
+- `doby` doesn't have `on_success, on_failure, if, unless, finish_him` options.
+- All options passed after class constant will be passed as kwargs for `.call` method.

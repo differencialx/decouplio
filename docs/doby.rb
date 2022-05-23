@@ -24,3 +24,15 @@ action = SomeAction.call(id: 1)
 puts action[:user] # => "User with id: 1"
 
 puts action[:current_user] # => "User with id: 1"
+
+puts action # =>
+# Result: success
+
+# Railway Flow:
+#   user -> AssignDoby
+
+# Context:
+#   {:id=>1, :user=>"User with id: 1", :current_user=>"User with id: 1"}
+
+# Errors:
+#   {}
