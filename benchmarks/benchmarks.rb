@@ -122,7 +122,7 @@ class ActiveInteractionTest < ActiveInteraction::Base
   end
 end
 
-class DecouplioTest < Decouplio::Action
+class DecouplioTestSeveralSteps < Decouplio::Action
   logic do
     step :step_one
     step :step_two
@@ -169,6 +169,24 @@ class DecouplioTest < Decouplio::Action
 
   def step_nine(step_eight:, **)
     ctx[:step_nine] = step_eight
+  end
+end
+
+class DecouplioTestOneStep < Decouplio::Action
+  logic do
+    step :step_one
+  end
+
+  def step_one(param1:, **)
+    ctx[:step_one] = param1
+    ctx[:step_two] = ctx[:step_one]
+    ctx[:step_three] = ctx[:step_two]
+    ctx[:step_four] = ctx[:step_three]
+    ctx[:step_five] = ctx[:step_four]
+    ctx[:step_six] = ctx[:step_five]
+    ctx[:step_seven] = ctx[:step_six]
+    ctx[:step_eight] = ctx[:step_seven]
+    ctx[:step_nine] = ctx[:step_eight]
   end
 end
 
@@ -258,6 +276,58 @@ class InteractorTestOrganizer
            StepNine
 end
 
+class InteractorWithoutOrganizer
+  include Interactor
+
+  def call
+    step_one
+    step_two
+    step_three
+    step_four
+    step_five
+    step_six
+    step_seven
+    step_eight
+    step_nine
+  end
+
+  def step_one
+    context.step_one = context.param1
+  end
+
+  def step_two
+    context.step_two = context.step_one
+  end
+
+  def step_three
+    context.step_three = context.step_two
+  end
+
+  def step_four
+    context.step_four = context.step_three
+  end
+
+  def step_five
+    context.step_five = context.step_four
+  end
+
+  def step_six
+    context.step_six = context.step_five
+  end
+
+  def step_seven
+    context.step_seven = context.step_six
+  end
+
+  def step_eight
+    context.step_eight = context.step_seven
+  end
+
+  def step_nine
+    context.step_nine = context.step_eight
+  end
+end
+
 class RegularServiceTest
   attr_accessor :ctx, :param1
 
@@ -319,7 +389,7 @@ class RegularServiceTest
   end
 end
 
-class TrailblazerTest < Trailblazer::Activity::Railway
+class TrailblazerTestSeveralSteps < Trailblazer::Activity::Railway
   step :step_one
   step :step_two
   step :step_three
@@ -367,7 +437,23 @@ class TrailblazerTest < Trailblazer::Activity::Railway
   end
 end
 
-iteration_count = 100_000
+class TrailblazerTestOneStep < Trailblazer::Activity::Railway
+  step :step_one
+
+  def step_one(ctx, param1:, **)
+    ctx[:step_one] = param1
+    ctx[:step_two] = ctx[:step_one]
+    ctx[:step_three] = ctx[:step_two]
+    ctx[:step_four] = ctx[:step_three]
+    ctx[:step_five] = ctx[:step_four]
+    ctx[:step_six] = ctx[:step_five]
+    ctx[:step_seven] = ctx[:step_six]
+    ctx[:step_eight] = ctx[:step_seven]
+    ctx[:step_nine] = ctx[:step_eight]
+  end
+end
+
+iteration_count = 1_000_000
 
 # result = RubyProf.profile do
 #   iteration_count.times { InteractorTestOrganizer.call(param1: 'param1') }
@@ -428,9 +514,14 @@ iteration_count = 100_000
 
 Benchmark.bmbm do |x|
   x.report('RegularService') { iteration_count.times { RegularServiceTest.call(param1: 'param1') } }
-  x.report('Trailblazer') { iteration_count.times { TrailblazerTest.call(param1: 'param1') } }
-  x.report('ActiveInteraction') { iteration_count.times { ActiveInteractionTest.run(param1: 'param1') } }
   x.report('Mutation') { iteration_count.times { MutationTest.run(param1: 'param1') } }
-  x.report('Decouplio') { iteration_count.times { DecouplioTest.call(param1: 'param1') } }
-  x.report('Interactor') { iteration_count.times { InteractorTestOrganizer.call(param1: 'param1') } }
+  x.report('ActiveInteraction') { iteration_count.times { ActiveInteractionTest.run(param1: 'param1') } }
+  x.report('Trailblazer one step') { iteration_count.times { TrailblazerTestOneStep.call(param1: 'param1') } }
+  x.report('Interactor one interactor') { iteration_count.times { InteractorWithoutOrganizer.call(param1: 'param1') } }
+  x.report('Decouplio one step') { iteration_count.times { DecouplioTestOneStep.call(param1: 'param1') } }
+  x.report('Trailblazer several steps') { iteration_count.times { TrailblazerTestSeveralSteps.call(param1: 'param1') } }
+  x.report('Interactor several interactions with organizer') do
+    iteration_count.times { InteractorTestOrganizer.call(param1: 'param1') }
+  end
+  x.report('Decouplio several steps') { iteration_count.times { DecouplioTestSeveralSteps.call(param1: 'param1') } }
 end

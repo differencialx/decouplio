@@ -1,0 +1,12 @@
+.circleci
+.vscode
+examples
+vendor
+
+.rspec_status
+.rubocop_todo.yml
+.ruby-version
+.travis.yml
+LICENSE
+LICENSE.txt
+README.md
