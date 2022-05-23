@@ -272,7 +272,7 @@ Can be used if for some reason you need to jump to fail step
 
     success_action = SomeActionOnSuccessToFailureTrack.call(param_for_step_one: true)
     failure_action = SomeActionOnSuccessToFailureTrack.call(param_for_step_one: false)
-    puts success_action # =>
+    success_action # =>
     # Result: failure
 
     # Railway Flow:
@@ -284,7 +284,7 @@ Can be used if for some reason you need to jump to fail step
     # Errors:
     #   {}
 
-    puts failure_action # =>
+    failure_action # =>
     # Result: failure
 
     # Railway Flow:

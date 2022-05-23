@@ -10,16 +10,12 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Alex Bal']
   spec.email         = ['differencialx@gmail.com']
 
-  spec.summary       = 'Business logiic handeler'
-  spec.description   = 'Business logic handler'
+  spec.summary       = 'Gem for business logic encapsulation'
+  spec.description   = "Decouplio is a zero dependency, thread safe and framework agnostic gem designed to encapsulate application business logic. It's reverse engineered through TDD and inspired by such frameworks and gems like Trailblazer, Interactor."
   spec.homepage      = 'http://nohomepage.com'
   spec.license       = 'MIT'
 
-  # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
-  # to allow pushing to a single host or delete this section to allow pushing to any host.
   if spec.respond_to?(:metadata)
-    # spec.metadata["allowed_push_host"] = ""
-
     spec.metadata['homepage_uri'] = spec.homepage
     spec.metadata['source_code_uri'] = 'https://github.com/differencialx/decouplio'
     spec.metadata['changelog_uri'] = 'https://github.com/differencialx/decouplio/CHANGELOG.md'
@@ -28,8 +24,6 @@ Gem::Specification.new do |spec|
       'public gem pushes.'
   end
 
-  # Specify which files should be added to the gem when it is released.
-  # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
   spec.files = Dir.chdir(File.expand_path(__dir__)) do
     `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   end

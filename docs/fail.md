@@ -538,7 +538,7 @@ fail(step_name, **options)
       fail_one_param: false
     )
 
-    puts success_action # =>
+    success_action # =>
     # Result: success
 
     # Railway Flow:
@@ -550,7 +550,7 @@ fail(step_name, **options)
     # Errors:
     #   {}
 
-    puts fail_step_success # =>
+    fail_step_success # =>
     # Result: failure
 
     # Railway Flow:
@@ -563,7 +563,7 @@ fail(step_name, **options)
     #   {}
 
 
-    puts fail_step_failure  # =>
+    fail_step_failure  # =>
     # Result: success
 
     # Railway Flow:
@@ -962,7 +962,7 @@ Will finish action execution anyway
       fail_one_param: false
     )
 
-    puts success_action # =>
+    success_action # =>
     # Result: success
 
     # Railway Flow:
@@ -974,7 +974,7 @@ Will finish action execution anyway
     # Errors:
     #   {}
 
-    puts fail_step_success # =>
+    fail_step_success # =>
     # Result: failure
 
     # Railway Flow:
@@ -986,7 +986,7 @@ Will finish action execution anyway
     # Errors:
     #   {}
 
-    puts fail_step_failure  # =>
+    fail_step_failure  # =>
     # Result: failure
 
     # Railway Flow:

@@ -1,6 +1,6 @@
 # Step as a service
 
-It's similar to [Inner action](https://differencialx.github.io/decouplio/inner_action), but instead of using `Decouplio::Action`, you can use PORO class.
+It's similar to [Inner action](https://github.com/differencialx/decouplio/blob/master/docs/inner_action.md), but instead of using `Decouplio::Action`, you can use PORO class.
 
 ## Signature
 
@@ -105,5 +105,5 @@ puts action # =>
 
 - service class should implement `.call` class method
 - service class can be used as `step` or `fail` or `pass`
-- all options of `step|fail|pass` can be used as [Inner action](https://differencialx.github.io/decouplio/inner_action)
+- all options of `step|fail|pass` can be used as [Inner action](https://github.com/differencialx/decouplio/blob/master/docs/inner_action.md)
 - depending on returning value of `.call` method(truthy ot falsy) the execution will be moved to `success or failure` track accordingly.

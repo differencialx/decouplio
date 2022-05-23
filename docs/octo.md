@@ -264,6 +264,6 @@ Currently only one possibility is present to define flow for `octo`, it's `palp`
 ## Options
 
 ### if: condition method name
-The same as for [step]()
+The same as for [step](https://github.com/differencialx/decouplio/blob/master/docs/step.md)
 ### unless: condition method name
-The same as for [step]()
+The same as for [step](https://github.com/differencialx/decouplio/blob/master/docs/step.md)
