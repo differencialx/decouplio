@@ -19,5 +19,6 @@ Decouplio is a zero dependency, thread safe and framework agnostic gem designed 
   - [Wrap](https://differencialx.github.io/decouplio/wrap)
   - [Resq](https://differencialx.github.io/decouplio/resq)
   - [Inner action](https://differencialx.github.io/decouplio/inner_action)
+  - [Doby](https://differencialx.github.io/decouplio/doby)
 - [Error store](https://differencialx.github.io/decouplio/error_store)
 - [Benchmarks](https://differencialx.github.io/decouplio/benchmarks)
