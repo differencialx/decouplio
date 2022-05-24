@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 
 gem 'active_interaction', '~> 4.1'
-gem 'decouplio', path: '../'
+gem 'decouplio'
 gem 'interactor', '~> 3.0'
 gem 'mutations'
 gem 'pry-byebug'

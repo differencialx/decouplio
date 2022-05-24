@@ -1,11 +1,22 @@
 version: "3.7"
 
 services:
-  benchmark:
+  benchmark_single_step:
     build:
       dockerfile: benchmarks/Dockerfile
       context: .
-    command: "ruby benchmarks.rb"
+    command: "ruby single_step_benchmark.rb"
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 400M
+
+  benchmark_multi_step:
+    build:
+      dockerfile: benchmarks/Dockerfile
+      context: .
+    command: "ruby multi_step_benchmark.rb"
     deploy:
       resources:
         limits:
