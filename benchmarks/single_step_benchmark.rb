@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'active_interaction'
 require 'interactor'
 require 'mutations'
@@ -149,5 +151,7 @@ Benchmark.bmbm do |x|
   x.report('Interactor one interactor') { iteration_count.times { InteractorWithoutOrganizer.call(param1: 'param1') } }
   x.report('RegularService') { iteration_count.times { RegularServiceTest.call(param1: 'param1') } }
   x.report('Decouplio one step') { iteration_count.times { DecouplioTestOneStep.call(param1: 'param1') } }
-  x.report('Decouplio one step as service') { iteration_count.times { DecouplioTestOneStepAsService.call(param1: 'param1') } }
+  x.report('Decouplio one step as service') do
+    iteration_count.times { DecouplioTestOneStepAsService.call(param1: 'param1') }
+  end
 end
