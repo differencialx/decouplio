@@ -18,6 +18,8 @@ Or install it yourself as:
 
     $ gem install decouplio
 
+## Currently it's in alpha testing, more feature will come soon.
+
 # [>>>>>>>DOCS HERE<<<<<<<](https://github.com/differencialx/decouplio/blob/master/docs/index.md)
 
 ## Contributing
