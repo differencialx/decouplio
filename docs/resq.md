@@ -41,7 +41,7 @@ resq(**options)
 
 ## Behavior
 
-When `resq` step is defined after allowed step then it will catch error with class specified in options and call handler method.
+When `resq` step is defined after allowed step then it will catch error with class specified in options and call handler method. `resq` applies only for step which is defined above.
 
 <details><summary><b>EXAMPLE (CLICK ME)</b></summary>
 <p>
@@ -143,7 +143,7 @@ When `resq` step is defined after allowed step then it will catch error with cla
       logic do
         step :step_one
         resq handler_method_one: [ArgumentError, NoMethodError],
-            handler_method_two: NotImplementedError
+             handler_method_two: NotImplementedError
         step :step_two
         fail :fail_one
       end
