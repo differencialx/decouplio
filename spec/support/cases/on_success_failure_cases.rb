@@ -647,6 +647,20 @@ module OnSuccessFailureCases
     end
   end
 
+  def when_wrap_on_success_on_failure_reverse_last_step
+    lambda do |_klass|
+      logic do
+        wrap :some_wrap, on_success: :FAIL, on_failure: :PASS do
+          step :step_one
+        end
+      end
+
+      def step_one(param1:, **)
+        ctx[:step_one] = param1.call
+      end
+    end
+  end
+
   def when_palp_on_success_pass
     lambda do |_klass|
       logic do

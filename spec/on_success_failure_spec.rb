@@ -1056,6 +1056,44 @@ RSpec.describe 'Decouplio::Action on_success on_failure' do
       end
     end
 
+    context 'when wrap on_success on_failure reverse last step' do
+      let(:action_block) { when_wrap_on_success_on_failure_reverse_last_step }
+
+      context 'when step_one success' do
+        let(:param1) { -> { true } }
+        let(:railway_flow) { %i[some_wrap step_one] }
+        let(:expected_state) do
+          {
+            action_status: :failure,
+            railway_flow: railway_flow,
+            errors: {},
+            state: {
+              step_one: true
+            }
+          }
+        end
+
+        it_behaves_like 'check action state'
+      end
+
+      context 'when step_one failure' do
+        let(:param1) { -> { false } }
+        let(:railway_flow) { %i[some_wrap step_one] }
+        let(:expected_state) do
+          {
+            action_status: :success,
+            railway_flow: railway_flow,
+            errors: {},
+            state: {
+              step_one: false
+            }
+          }
+        end
+
+        it_behaves_like 'check action state'
+      end
+    end
+
     context 'when palp on_success PASS' do
       let(:action_block) { when_palp_on_success_pass }
       let(:octo_key) { :octo1 }

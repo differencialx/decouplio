@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'base_step'
+require_relative 'shared/fail_resolver'
 
 module Decouplio
   module Steps
@@ -23,34 +24,12 @@ module Decouplio
       private
 
       def resolve(result:, instance:)
-        if result
-          case @on_success_type
-          when Decouplio::Const::Results::STEP_PASS, Decouplio::Const::Results::PASS
-            instance.pass_action
-            Decouplio::Const::Results::PASS
-          when Decouplio::Const::Results::STEP_FAIL, Decouplio::Const::Results::FAIL
-            instance.fail_action
-            Decouplio::Const::Results::PASS
-          when Decouplio::Const::Results::FINISH_HIM
-            instance.fail_action
-            Decouplio::Const::Results::FINISH_HIM
-          end
-        elsif [
-          Decouplio::Const::Results::PASS,
-          Decouplio::Const::Results::STEP_PASS
-        ].include?(@on_failure_type)
-          instance.pass_action
-          Decouplio::Const::Results::FAIL
-        elsif [
-          Decouplio::Const::Results::STEP_FAIL,
-          Decouplio::Const::Results::FAIL
-        ].include?(@on_failure_type)
-          instance.fail_action
-          Decouplio::Const::Results::FAIL
-        elsif @on_failure_type == Decouplio::Const::Results::FINISH_HIM
-          instance.fail_action
-          Decouplio::Const::Results::FINISH_HIM
-        end
+        Decouplio::Steps::Shared::FailResolver.call(
+          instance: instance,
+          result: result,
+          on_success_type: @on_success_type,
+          on_failure_type: @on_failure_type
+        )
       end
     end
   end
