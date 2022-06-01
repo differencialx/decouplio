@@ -5,7 +5,7 @@ require 'interactor'
 require 'mutations'
 require 'trailblazer'
 require 'decouplio'
-require 'benchmark'
+require 'benchmark/ips'
 
 class MutationTest < Mutations::Command
   optional do
@@ -144,7 +144,7 @@ end
 
 iteration_count = 100_000
 
-Benchmark.bmbm do |x|
+Benchmark.ips do |x|
   x.report('Mutation') { iteration_count.times { MutationTest.run(param1: 'param1') } }
   x.report('ActiveInteraction') { iteration_count.times { ActiveInteractionTest.run(param1: 'param1') } }
   x.report('Trailblazer one step') { iteration_count.times { TrailblazerTestOneStep.call(param1: 'param1') } }
@@ -154,4 +154,6 @@ Benchmark.bmbm do |x|
   x.report('Decouplio one step as service') do
     iteration_count.times { DecouplioTestOneStepAsService.call(param1: 'param1') }
   end
+
+  x.compare!
 end

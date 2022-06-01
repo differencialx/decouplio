@@ -88,6 +88,8 @@ fail(step_name, **options)
 |-|-|
 |:finish_him|action stops execution if `fail` method returns truthy value|
 |symbol with next step name|step with specified symbol name performs if step method returns truthy value|
+|:PASS|will direct execution flow to nearest success track step. If current step is the last step when action will finish as `success`|
+|:FAIL|will direct execution flow to nearest failure track step. If current step is the last step when action will finish as `failure`|
 
 ### on_success: :finish_him
 
@@ -387,11 +389,83 @@ fail(step_name, **options)
 
 ***
 
+### on_success: :PASS
+<details><summary><b>EXAMPLE (CLICK ME)</b></summary>
+<p>
+
+  ```ruby
+    require 'decouplio'
+    class SomeActionOnSuccessPass < Decouplio::Action
+      logic do
+        step :step_one
+        fail :fail_one, on_success: :PASS
+      end
+
+      def step_one(**)
+        ctx[:step_one] = false
+      end
+
+      def fail_one(fail_one_param:, **)
+        ctx[:fail_one] = fail_one_param
+      end
+    end
+
+    fail_step_success = SomeActionOnSuccessPass.call(fail_one_param: true)
+    fail_step_failure = SomeActionOnSuccessPass.call(fail_one_param: false)
+
+    fail_step_success # =>
+    # Result: success
+
+    # Railway Flow:
+    #   step_one -> fail_one
+
+    # Context:
+    #   :fail_one_param => true
+    #   :step_one => false
+    #   :fail_one => true
+
+    # Errors:
+    #   {}
+
+    fail_step_failure # =>
+    # Result: failure
+
+    # Railway Flow:
+    #   step_one -> fail_one
+
+    # Context:
+    #   :fail_one_param => false
+    #   :step_one => false
+    #   :fail_one => false
+
+    # Errors:
+    #   {}
+  ```
+
+  ```mermaid
+  flowchart LR
+      1(start)-->2(step_one);
+      2(step_one)-->|failure track|3(fail_one);
+      3(fail_one)-->|on_success: :PASS|5(finish_success);
+      3(fail_one)-->|failure track|4(finish_failure);
+  ```
+</p>
+</details>
+
+***
+
+### on_success: :FAIL
+It will perform like regular `fail` step, just move to next failure track step.
+
+***
+
 ### on_failure:
 |Allowed values|Description|
 |-|-|
 |:finish_him|action stops execution if `fail` method returns falsy value|
 |symbol with next step name|step with specified symbol name performs if step method returns falsy value|
+|:PASS|will direct execution flow to nearest success track step. If current step is the last step when action will finish as `success`|
+|:FAIL|will direct execution flow to nearest failure track step. If current step is the last step when action will finish as `failure`|
 
 ### on_failure: :finish_him
 
@@ -690,6 +764,75 @@ fail(step_name, **options)
   ```
 </p>
 </details>
+
+***
+
+### on_failure: :PASS
+
+<details><summary><b>EXAMPLE (CLICK ME)</b></summary>
+<p>
+
+  ```ruby
+    require 'decouplio'
+  class SomeActionOnFailurePass < Decouplio::Action
+    logic do
+      step :step_one
+      fail :fail_one, on_failure: :PASS
+    end
+
+    def step_one(**)
+      false
+    end
+
+    def fail_one(fail_one_param:, **)
+      ctx[:fail_one] = fail_one_param
+    end
+  end
+
+  fail_step_success = SomeActionOnFailurePass.call(fail_one_param: true)
+  fail_step_failure = SomeActionOnFailurePass.call(fail_one_param: false)
+
+  fail_step_success # =>
+  # Result: failure
+
+  # Railway Flow:
+  #   step_one -> fail_one
+
+  # Context:
+  #   :fail_one_param => true
+  #   :fail_one => true
+
+  # Errors:
+  #   {}
+
+  fail_step_failure # =>
+  # Result: success
+
+  # Railway Flow:
+  #   step_one -> fail_one
+
+  # Context:
+  #   :fail_one_param => false
+  #   :fail_one => false
+
+  # Errors:
+  #   {}
+  ```
+
+  ```mermaid
+  flowchart LR
+      1(start)-->2(step_one);
+      2(step_one)-->|failure track|3(fail_one);
+      3(fail_one)-->|failure track|4(finish_failure);
+      3(fail_one)-->|on_failure: :PASS|5(finish_success);
+  ```
+</p>
+</details>
+
+***
+
+### on_failure: :FAIL
+It will perform like regular `fail` step, just move to next failure track step.
 
 ***
 

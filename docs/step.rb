@@ -26,7 +26,7 @@ end
 success_action = SomeAction.call(param_for_step_one: true)
 failure_action = SomeAction.call(param_for_step_one: false)
 
-puts success_action # =>
+success_action # =>
 # Result: success
 
 # Railway Flow:
@@ -38,7 +38,7 @@ puts success_action # =>
 # Errors:
 #   {}
 
-puts failure_action # =>
+failure_action # =>
 # Result: failure
 
 # Railway Flow:
@@ -76,7 +76,7 @@ end
 success_action = SomeActionOnSuccessFinishHim.call(param_for_step_one: true)
 failure_action = SomeActionOnSuccessFinishHim.call(param_for_step_one: false)
 
-puts success_action # =>
+success_action # =>
 # Result: success
 
 # Railway Flow:
@@ -88,7 +88,7 @@ puts success_action # =>
 # Errors:
 #   {}
 
-puts failure_action # =>
+failure_action # =>
 # Result: failure
 
 # Railway Flow:
@@ -130,7 +130,7 @@ end
 
 success_action = SomeActionOnSuccessToSuccessTrack.call(param_for_step_one: true)
 failure_action = SomeActionOnSuccessToSuccessTrack.call(param_for_step_one: false)
-puts success_action # =>
+success_action # =>
 # Result: success
 
 # Railway Flow:
@@ -143,7 +143,7 @@ puts success_action # =>
 #   {}
 
 
-puts failure_action # =>
+failure_action # =>
 # Result: failure
 
 # Railway Flow:
@@ -190,7 +190,7 @@ end
 
 success_action = SomeActionOnSuccessToFailureTrack.call(param_for_step_one: true)
 failure_action = SomeActionOnSuccessToFailureTrack.call(param_for_step_one: false)
-puts success_action # =>
+success_action # =>
 # Result: failure
 
 # Railway Flow:
@@ -202,7 +202,7 @@ puts success_action # =>
 # Errors:
 #   {}
 
-puts failure_action # =>
+failure_action # =>
 # Result: failure
 
 # Railway Flow:
@@ -210,6 +210,56 @@ puts failure_action # =>
 
 # Context:
 #   {:param_for_step_one=>false, :action_failed=>true, :fail_two=>"Failure"}
+
+# Errors:
+#   {}
+
+
+
+# on_success: :FAIL
+
+class SomeActionOnSuccessFail < Decouplio::Action
+  logic do
+    step :step_one
+    step :step_two, on_success: :FAIL
+  end
+
+  def step_one(**)
+    ctx[:step_one] = 'Success'
+  end
+
+  def step_two(step_two_param:, **)
+    ctx[:step_two] = step_two_param
+  end
+end
+
+success_action = SomeActionOnSuccessFail.call(step_two_param: true)
+failure_action = SomeActionOnSuccessFail.call(step_two_param: false)
+
+success_action # =>
+# Result: failure
+
+# Railway Flow:
+#   step_one -> step_two
+
+# Context:
+#   :step_two_param => true
+#   :step_one => "Success"
+#   :step_two => true
+
+# Errors:
+#   {}
+
+failure_action # =>
+# Result: failure
+
+# Railway Flow:
+#   step_one -> step_two
+
+# Context:
+#   :step_two_param => false
+#   :step_one => "Success"
+#   :step_two => false
 
 # Errors:
 #   {}
@@ -244,7 +294,7 @@ end
 
 success_action = SomeActionOnFailureFinishHim.call(param_for_step_one: true)
 failure_action = SomeActionOnFailureFinishHim.call(param_for_step_one: false)
-puts success_action # =>
+success_action # =>
 # Result: success
 
 # Railway Flow:
@@ -256,7 +306,7 @@ puts success_action # =>
 # Errors:
 #   {}
 
-puts failure_action # =>
+failure_action # =>
 # Result: failure
 
 # Railway Flow:
@@ -303,7 +353,7 @@ end
 
 success_action = SomeActionOnFailureToSuccessTrack.call(param_for_step_one: true)
 failure_action = SomeActionOnFailureToSuccessTrack.call(param_for_step_one: false)
-puts success_action # =>
+success_action # =>
 # Result: success
 
 # Railway Flow:
@@ -316,7 +366,7 @@ puts success_action # =>
 #   {}
 
 
-puts failure_action # =>
+failure_action # =>
 # Result: success
 
 # Railway Flow:
@@ -363,7 +413,7 @@ end
 
 success_action = SomeActionOnFailureToFailureTrack.call(param_for_step_one: true)
 failure_action = SomeActionOnFailureToFailureTrack.call(param_for_step_one: false)
-puts success_action # =>
+success_action # =>
 # Result: success
 
 # Railway Flow:
@@ -375,7 +425,7 @@ puts success_action # =>
 # Errors:
 #   {}
 
-puts failure_action # =>
+failure_action # =>
 # Result: failure
 
 # Railway Flow:
@@ -386,6 +436,57 @@ puts failure_action # =>
 
 # Errors:
 #   {}
+
+
+
+# on_failure: :PASS
+class SomeActionOnFailurePass < Decouplio::Action
+  logic do
+    step :step_one
+    step :step_two, on_failure: :PASS
+  end
+
+  def step_one(**)
+    ctx[:step_one] = true
+  end
+
+  def step_two(step_two_param:, **)
+    ctx[:step_two] = step_two_param
+  end
+end
+
+
+success_action = SomeActionOnFailurePass.call(step_two_param: true)
+failure_action = SomeActionOnFailurePass.call(step_two_param: false)
+
+success_action # =>
+# Result: success
+
+# Railway Flow:
+#   step_one -> step_two
+
+# Context:
+#   :step_two_param => true
+#   :step_one => true
+#   :step_two => true
+
+# Errors:
+#   {}
+
+failure_action # =>
+# Result: success
+
+# Railway Flow:
+#   step_one -> step_two
+
+# Context:
+#   :step_two_param => false
+#   :step_one => true
+#   :step_two => false
+
+# Errors:
+#   {}
+
 
 
 
@@ -432,7 +533,7 @@ condition_negative = SomeActionOnIfCondition.call(
   param_for_step_one: true,
   step_condition_param: false
 )
-puts condition_positive # =>
+condition_positive # =>
 # Result: success
 
 # Railway Flow:
@@ -444,7 +545,7 @@ puts condition_positive # =>
 # Errors:
 #   {}
 
-puts condition_negative # =>
+condition_negative # =>
 # Result: success
 
 # Railway Flow:
@@ -501,7 +602,7 @@ condition_negative = SomeActionOnUnlessCondition.call(
   param_for_step_one: true,
   step_condition_param: false
 )
-puts condition_positive # =>
+condition_positive # =>
 # Result: success
 
 # Railway Flow:
@@ -513,7 +614,7 @@ puts condition_positive # =>
 # Errors:
 #   {}
 
-puts condition_negative # =>
+condition_negative # =>
 # Result: success
 
 # Railway Flow:

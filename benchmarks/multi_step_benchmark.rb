@@ -5,7 +5,7 @@ require 'interactor'
 require 'mutations'
 require 'trailblazer'
 require 'decouplio'
-require 'benchmark'
+require 'benchmark/ips'
 
 class RegularServiceTest
   attr_accessor :ctx, :param1
@@ -320,14 +320,16 @@ class DecouplioServiceStepsTest < Decouplio::Action
   end
 end
 
-iteration_count = 100_000
+iteration_count = 100_000_0
 
-Benchmark.bmbm do |x|
+Benchmark.ips do |x|
+  x.report('RegularService') { iteration_count.times { RegularServiceTest.call(param1: 'param1') } }
   x.report('Decouplio several steps') { iteration_count.times { DecouplioTestSeveralSteps.call(param1: 'param1') } }
   x.report('Decouplio service steps') { iteration_count.times { DecouplioServiceStepsTest.call(param1: 'param1') } }
-  x.report('RegularService') { iteration_count.times { RegularServiceTest.call(param1: 'param1') } }
   x.report('Trailblazer several steps') { iteration_count.times { TrailblazerTestSeveralSteps.call(param1: 'param1') } }
   x.report('Interactor several interactions with organizer') do
     iteration_count.times { InteractorTestOrganizer.call(param1: 'param1') }
   end
+
+  x.compare!
 end

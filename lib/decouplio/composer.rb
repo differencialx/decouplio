@@ -409,18 +409,30 @@ module Decouplio
         return :finish_him if [:on_success, true].include?(finish_him(stp))
 
         step_id = stp.dig(:flow, Decouplio::Const::Results::PASS)
-        Decouplio::Const::Types::PASS_FLOW.include?(
-          flow[step_id]&.[](:type)
-        )
+        if step_id.nil? && Decouplio::Const::Results::STEP_PASS == stp[:on_success]
+          Decouplio::Const::Results::STEP_PASS
+        elsif step_id.nil? && Decouplio::Const::Results::STEP_FAIL == stp[:on_success]
+          Decouplio::Const::Results::STEP_FAIL
+        else
+          Decouplio::Const::Types::PASS_FLOW.include?(
+            flow[step_id]&.[](:type)
+          )
+        end
       end
 
       def failure_type(flow, stp)
         return :finish_him if [:on_failure, true].include?(finish_him(stp))
 
         step_id = stp.dig(:flow, Decouplio::Const::Results::FAIL)
-        Decouplio::Const::Types::FAIL_FLOW.include?(
-          flow[step_id]&.[](:type)
-        )
+        if step_id.nil? && Decouplio::Const::Results::STEP_PASS == stp[:on_failure]
+          Decouplio::Const::Results::STEP_PASS
+        elsif step_id.nil? && Decouplio::Const::Results::STEP_FAIL == stp[:on_on_failure]
+          Decouplio::Const::Results::STEP_FAIL
+        else
+          Decouplio::Const::Types::FAIL_FLOW.include?(
+            flow[step_id]&.[](:type)
+          )
+        end
       end
 
       def finish_him(stp)
@@ -543,7 +555,18 @@ module Decouplio
       def next_success_step(steps, idx, value)
         steps_slice = steps[(idx + 1)..]
         steps_slice.each_with_index do |stp, index|
-          if value == stp[:name]
+          if (
+            Decouplio::Const::Results::STEP_PASS == value &&
+            Decouplio::Const::Types::SUCCESS_TRACK_STEP_TYPES.include?(stp[:type])
+          ) || (
+            Decouplio::Const::Results::STEP_FAIL == value &&
+            Decouplio::Const::Types::FAILURE_TRACK_STEP_TYPES.include?(stp[:type])
+          ) || (
+            !value &&
+            Decouplio::Const::Types::SUCCESS_TRACK_STEP_TYPES.include?(stp[:type])
+          )
+            return stp[:step_id]
+          elsif value == stp[:name]
             prev_step = steps_slice[index - 1]
             if [
               Decouplio::Const::Types::IF_TYPE_PASS,
@@ -553,8 +576,6 @@ module Decouplio
             else
               return stp[:step_id]
             end
-          elsif !value && Decouplio::Const::Types::SUCCESS_TRACK_STEP_TYPES.include?(stp[:type])
-            return stp[:step_id]
           end
         end
 
@@ -564,7 +585,18 @@ module Decouplio
       def next_failure_step(steps, idx, value)
         steps_slice = steps[(idx + 1)..]
         steps_slice.each_with_index do |stp, index|
-          if value == stp[:name]
+          if (
+            Decouplio::Const::Results::STEP_PASS == value &&
+            Decouplio::Const::Types::SUCCESS_TRACK_STEP_TYPES.include?(stp[:type])
+          ) || (
+            Decouplio::Const::Results::STEP_FAIL == value &&
+            Decouplio::Const::Types::FAILURE_TRACK_STEP_TYPES.include?(stp[:type])
+          ) || (
+            !value &&
+            Decouplio::Const::Types::FAILURE_TRACK_STEP_TYPES.include?(stp[:type])
+          )
+            return stp[:step_id]
+          elsif value == stp[:name]
             prev_step = steps_slice[index - 1]
             if [
               Decouplio::Const::Types::IF_TYPE_FAIL,
@@ -574,8 +606,6 @@ module Decouplio
             else
               return stp[:step_id]
             end
-          elsif !value && Decouplio::Const::Types::FAILURE_TRACK_STEP_TYPES.include?(stp[:type])
-            return stp[:step_id]
           end
         end
 

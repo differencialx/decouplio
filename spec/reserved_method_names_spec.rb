@@ -106,4 +106,30 @@ RSpec.describe 'Reserved method names' do
                     error_class: Decouplio::Errors::StepNameError,
                     message: message
   end
+
+  context 'when #step_pass' do
+    let(:action_block) { when_method_step_pass }
+
+    message = format(
+      Decouplio::Const::Validations::Common::STEP_NAME,
+      :PASS
+    )
+
+    it_behaves_like 'raises option validation error',
+                    error_class: Decouplio::Errors::StepNameError,
+                    message: message
+  end
+
+  context 'when #step_fail' do
+    let(:action_block) { when_method_step_fail }
+
+    message = format(
+      Decouplio::Const::Validations::Common::STEP_NAME,
+      :FAIL
+    )
+
+    it_behaves_like 'raises option validation error',
+                    error_class: Decouplio::Errors::StepNameError,
+                    message: message
+  end
 end
