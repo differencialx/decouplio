@@ -7,15 +7,18 @@ require_relative 'default_error_handler'
 require_relative 'errors/logic_redefinition_error'
 require_relative 'errors/logic_is_not_defined_error'
 require_relative 'errors/error_store_error'
+require_relative 'const/results'
 
 module Decouplio
   class Action
+    PREVIOUS_STEP_INDEX = -2
+
     extend Forwardable
     def_delegators :@error_store, :errors, :add_error
     attr_reader :railway_flow, :ctx, :error_store
 
     def initialize(
-      parent_railway_flow: nil, parent_ctx: nil, wrapper: false, error_store:, **params
+      parent_railway_flow: nil, parent_ctx: nil, error_store:, **params
     )
       @error_store = error_store
       @ctx = parent_ctx || params
@@ -43,6 +46,10 @@ module Decouplio
       @failure = false
     end
 
+    def previous_step
+      railway_flow[PREVIOUS_STEP_INDEX]
+    end
+
     def append_railway_flow(stp)
       railway_flow << stp
     end
@@ -55,7 +62,7 @@ module Decouplio
           #{railway_flow.join(' -> ')}
 
         Context:
-          #{ctx}
+          #{ctx.map { |k, v| "#{k.inspect} => #{v.inspect}" }.join("\n  ")}
 
         Errors:
           #{errors}

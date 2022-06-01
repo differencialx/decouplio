@@ -152,7 +152,7 @@ module Decouplio
 
     def check_step_presence_for_step(options:, step_names:)
       options.slice(*STEP_CHECK_STEP_PRESENCE).each do |option_key, option_value|
-        next if %i[on_success on_failure].include?(option_key) && option_value == :finish_him
+        next if %i[on_success on_failure].include?(option_key) && STEP_ALLOWED_ON_S_ON_F_VALUES.include?(option_value)
 
         next if step_names.keys.include?(option_value)
 
@@ -165,7 +165,7 @@ module Decouplio
 
     def check_step_presence_for_fail(options:, step_names:)
       options.slice(*STEP_CHECK_STEP_PRESENCE).each do |option_key, option_value|
-        next if %i[on_success on_failure].include?(option_key) && option_value == :finish_him
+        next if %i[on_success on_failure].include?(option_key) && STEP_ALLOWED_ON_S_ON_F_VALUES.include?(option_value)
 
         next if step_names.keys.include?(option_value)
 
@@ -178,7 +178,7 @@ module Decouplio
 
     def check_step_presence_for_wrap(options:, step_names:)
       options.slice(*WRAP_CHECK_STEP_PRESENCE).each do |option_key, option_value|
-        next if %i[on_success on_failure].include?(option_key) && option_value == :finish_him
+        next if %i[on_success on_failure].include?(option_key) && STEP_ALLOWED_ON_S_ON_F_VALUES.include?(option_value)
 
         next if step_names.keys.include?(option_value)
 
@@ -454,6 +454,11 @@ module Decouplio
     STEP_CHECK_STEP_PRESENCE = %i[
       on_success
       on_failure
+    ].freeze
+    STEP_ALLOWED_ON_S_ON_F_VALUES = [
+      Decouplio::Const::Results::STEP_PASS,
+      Decouplio::Const::Results::STEP_FAIL,
+      Decouplio::Const::Results::FINISH_HIM
     ].freeze
     STEP_ALLOWED_OPTIONS = %i[
       on_success
