@@ -65,7 +65,19 @@ module Decouplio
           #{ctx.map { |k, v| "#{k.inspect} => #{v.inspect}" }.join("\n  ")}
 
         Errors:
-          #{errors}
+          #{
+            if errors.is_a?(Hash)
+              if errors.empty?
+                'None'
+              else
+                errors.map do |k, v|
+                  "#{k.inspect} => #{v.inspect}"
+                end.join("\n  ")
+              end
+            else
+              errors
+            end
+          }
       INSPECT
     end
 

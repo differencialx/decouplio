@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class AssignDoby
-  def self.call(ctx:, to:, from: nil, value: nil)
+  def self.call(ctx:, to:, from: nil, value: nil, **)
     raise 'from/value is empty' unless from || value
 
     ctx[to] = value || ctx[from]
@@ -9,8 +9,16 @@ class AssignDoby
 end
 
 class InitDoby
-  def self.call(ctx:)
+  def self.call(ctx:, **)
     ctx[:init] = StubDummy.call
+  end
+end
+
+class AddErrorDoby
+  def self.call(ctx:, error_store:, key:, message:)
+    error_store.add_error(key, message)
+
+    ctx[:doby1]
   end
 end
 
@@ -468,6 +476,29 @@ module DobyCases
 
       def step_one(**)
         ctx[:step_one] = 'Success'
+      end
+
+      def step_two(**)
+        ctx[:step_two] = 'Success'
+      end
+
+      def fail_one(**)
+        ctx[:fail_one] = 'Failure'
+      end
+    end
+  end
+
+  def when_doby_adds_error
+    lambda do |_klass|
+      logic do
+        step :step_one, on_failure: :AddErrorDoby
+        doby AddErrorDoby, key: :step_one_error, message: 'Lol'
+        step :step_two
+        fail :fail_one
+      end
+
+      def step_one(**)
+        ctx[:step_one] = false
       end
 
       def step_two(**)

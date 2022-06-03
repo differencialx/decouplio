@@ -24,6 +24,7 @@ RSpec.configure do |config|
   config.include OptionsValidationsCasesForWrap
   config.include ReservedMethodNamesCases
   config.include DobyCases
+  config.include DenyCases
   config.include ServiceCases
   config.example_status_persistence_file_path = '.rspec_status'
 

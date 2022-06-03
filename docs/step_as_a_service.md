@@ -8,14 +8,23 @@ It's similar to [Inner action](https://github.com/differencialx/decouplio/blob/m
 (step|fail|pass)(service_class, **options)
 ```
 
+## Behavior
+
+- service class should implement `.call` class method
+- service class can be used as `step` or `fail` or `pass`
+- all options of `step|fail|pass` can be used as for [Inner action](https://github.com/differencialx/decouplio/blob/master/docs/inner_action.md)
+- depending on returning value of `.call` method(truthy ot falsy) the execution will be moved to `success or failure` track accordingly.
+
 ## How to use?
 
 Create a PORO class with `.call` class method.
 
 ```ruby
-# :ctx - is the required kwarg
+# :ctx - it's a ctx from Decouplio::Action
+# :error_store - it's an error_store from Decouplio::Action,
+#                you can call #add_error on it
 class Concat
-  def self.call(ctx:)
+  def self.call(ctx:, **)
     new(ctx: ctx).call
   end
 
@@ -30,10 +39,22 @@ end
 
 # OR
 
-# :ctx - is the required kwarg
+# :ctx - it's a ctx from Decouplio::Action
+# :error_store - it's an error_store from Decouplio::Action,
+#                you can call #add_error on it
 class Subtract
-  def self.call(ctx:)
+  def self.call(ctx:, **)
     ctx[:result] = ctx[:one] - ctx[:two]
+  end
+end
+
+# OR
+
+class MakeRequest
+  def self.call(ctx:, error_store:)
+    ctx[:client].get(ctx[:url])
+  rescue Net::OpenTimeout => error
+    error_store.add_error(:connection_error, error.message)
   end
 end
 ```
@@ -100,10 +121,3 @@ puts action # =>
 #   {}
 
 ```
-
-## Behavior
-
-- service class should implement `.call` class method
-- service class can be used as `step` or `fail` or `pass`
-- all options of `step|fail|pass` can be used as [Inner action](https://github.com/differencialx/decouplio/blob/master/docs/inner_action.md)
-- depending on returning value of `.call` method(truthy ot falsy) the execution will be moved to `success or failure` track accordingly.
