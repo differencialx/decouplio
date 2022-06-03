@@ -104,3 +104,7 @@ RSpec/MultipleMemoizedHelpers:
 Naming/PredicateName:
   Exclude:
     - lib/decouplio/step.rb
+
+Naming/MethodParameterName:
+  Exclude:
+  - spec/support/cases/**/*

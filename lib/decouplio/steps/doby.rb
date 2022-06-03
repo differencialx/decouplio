@@ -14,7 +14,11 @@ module Decouplio
 
       def process(instance:)
         instance.append_railway_flow(@name)
-        result = @doby_class.call(ctx: instance.ctx, **@doby_options)
+        result = @doby_class.call(
+          ctx: instance.ctx,
+          error_store: instance.error_store,
+          **@doby_options
+        )
         resolve(result: result, instance: instance)
       end
 

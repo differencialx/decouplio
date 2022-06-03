@@ -5,7 +5,7 @@ require_relative '../const/validations/fail'
 
 module Decouplio
   module Errors
-    class FailCanNotBeTheFirstStepError < Decouplio::Errors::BaseError
+    class FailCanNotBeFirstStepError < Decouplio::Errors::BaseError
       def template
         Decouplio::Const::Validations::Fail::FIRST_STEP
       end

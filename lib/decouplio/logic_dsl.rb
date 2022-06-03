@@ -8,7 +8,8 @@ require_relative 'errors/palp_validation_error'
 require_relative 'errors/resq_definition_error'
 require_relative 'errors/wrap_block_is_not_defined_error'
 require_relative 'errors/palp_block_is_not_defined_error'
-require_relative 'errors/fail_is_first_step_error'
+require_relative 'errors/fail_can_not_be_first_step_error'
+require_relative 'errors/deny_can_not_be_first_step_error'
 require_relative 'errors/octo_block_is_not_defined_error'
 
 module Decouplio
@@ -32,7 +33,7 @@ module Decouplio
       end
 
       def fail(stp, **options)
-        raise Decouplio::Errors::FailCanNotBeTheFirstStepError if @steps.empty?
+        raise Decouplio::Errors::FailCanNotBeFirstStepError if @steps.empty?
 
         @steps << options.merge(type: Decouplio::Const::Types::FAIL_TYPE, name: stp)
       end
@@ -89,6 +90,17 @@ module Decouplio
           name: doby_class.name.to_sym,
           doby_class: doby_class,
           doby_options: options
+        }
+      end
+
+      def deny(deny_class, **options)
+        raise Decouplio::Errors::DenyCanNotBeFirstStepError if @steps.empty?
+
+        @steps << {
+          type: Decouplio::Const::Types::DENY_TYPE,
+          name: deny_class.name.to_sym,
+          deny_class: deny_class,
+          deny_options: options
         }
       end
     end

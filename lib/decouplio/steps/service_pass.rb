@@ -15,7 +15,10 @@ module Decouplio
 
       def process(instance:)
         instance.append_railway_flow(@name)
-        @service.call(ctx: instance.ctx)
+        @service.call(
+          ctx: instance.ctx,
+          error_store: instance.error_store
+        )
 
         resolve(instance: instance)
       end

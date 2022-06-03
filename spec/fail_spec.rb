@@ -15,7 +15,7 @@ RSpec.describe 'Fail step' do
 
     it 'raises error' do
       expect { action_class }.to raise_proper_error(
-        Decouplio::Errors::FailCanNotBeTheFirstStepError,
+        Decouplio::Errors::FailCanNotBeFirstStepError,
         expected_message
       )
     end

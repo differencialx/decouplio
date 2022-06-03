@@ -835,7 +835,7 @@ module OnSuccessFailureCases
   end
 
   class OnSOnFCasesService
-    def self.call(ctx:)
+    def self.call(ctx:, **)
       ctx[:inner_step] = ctx[:in1].call
     end
   end

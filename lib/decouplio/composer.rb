@@ -21,6 +21,7 @@ require_relative 'steps/service_step'
 require_relative 'steps/service_fail'
 require_relative 'steps/service_pass'
 require_relative 'steps/doby'
+require_relative 'steps/deny'
 require_relative 'options_validator'
 require_relative 'validators/condition'
 
@@ -130,6 +131,8 @@ module Decouplio
           create_inner_service_pass(stp, flow)
         when Decouplio::Const::Types::DOBY_TYPE
           create_doby(stp)
+        when Decouplio::Const::Types::DENY_TYPE
+          create_deny(stp)
         end
       end
 
@@ -274,6 +277,14 @@ module Decouplio
         )
       end
 
+      def create_deny(stp)
+        Decouplio::Steps::Deny.new(
+          name: stp[:name],
+          deny_class: stp[:deny_class],
+          deny_options: stp[:deny_options]
+        )
+      end
+
       def compose_flow(flow, palps, next_steps, action_class, flow_hash = {})
         flow.each_with_index do |(step_id, stp), idx|
           case stp[:type]
@@ -294,6 +305,8 @@ module Decouplio
             compose_fail_flow(stp, step_id, flow, idx, flow_hash, next_steps)
           when Decouplio::Const::Types::DOBY_TYPE
             compose_doby_flow(stp, step_id, flow, idx, flow_hash, next_steps)
+          when Decouplio::Const::Types::DENY_TYPE
+            compose_deny_flow(stp, step_id, flow, idx, flow_hash, next_steps)
           when Decouplio::Const::Types::IF_TYPE_PASS, Decouplio::Const::Types::UNLESS_TYPE_PASS
             compose_pass_condition_flow(stp, flow, idx, flow_hash)
           when Decouplio::Const::Types::IF_TYPE_FAIL, Decouplio::Const::Types::UNLESS_TYPE_FAIL
@@ -345,6 +358,29 @@ module Decouplio
           nil
         )
         stp[:flow][Decouplio::Const::Results::PASS] ||= flow_hash[Decouplio::Const::Results::PASS]
+        stp[:flow][Decouplio::Const::Results::FAIL] ||= flow_hash[Decouplio::Const::Results::FAIL]
+        stp[:flow][Decouplio::Const::Results::ERROR] ||= flow_hash[Decouplio::Const::Results::ERROR]
+        stp[:flow][Decouplio::Const::Results::FINISH_HIM] = Decouplio::Const::Results::NO_STEP
+      end
+
+      def compose_deny_flow(stp, _step_id, flow, idx, flow_hash, next_steps)
+        flow_values = flow.values + (next_steps&.values || [])
+        stp[:flow][Decouplio::Const::Results::PASS] = next_failure_step(
+          flow_values,
+          idx,
+          nil
+        )
+        stp[:flow][Decouplio::Const::Results::FAIL] = next_failure_step(
+          flow_values,
+          idx,
+          nil
+        )
+        stp[:flow][Decouplio::Const::Results::ERROR] = next_failure_step(
+          flow_values,
+          idx,
+          nil
+        )
+        stp[:flow][Decouplio::Const::Results::PASS] ||= flow_hash[Decouplio::Const::Results::FAIL]
         stp[:flow][Decouplio::Const::Results::FAIL] ||= flow_hash[Decouplio::Const::Results::FAIL]
         stp[:flow][Decouplio::Const::Results::ERROR] ||= flow_hash[Decouplio::Const::Results::ERROR]
         stp[:flow][Decouplio::Const::Results::FINISH_HIM] = Decouplio::Const::Results::NO_STEP
