@@ -27,7 +27,7 @@ module Decouplio
         OPTIONS_IS_NOT_ALLOWED = '"%s" option(s) is not allowed for "fail"'
         METHOD_NOT_DEFINED = 'fail :%s'
         CONTROVERSIAL_KEYS = '"%s" option(s) is not allowed along with "%s" option(s)'
-        FIRST_STEP = '"fail" can not be first step'
+        FIRST_STEP = '"fail" can not be the first step'
       end
     end
   end
