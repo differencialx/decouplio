@@ -1,7 +1,7 @@
 require_relative '../lib/decouplio'
 
 class Concat
-  def self.call(ctx:)
+  def self.call(ctx:, **)
     new(ctx: ctx).call
   end
 
@@ -15,7 +15,7 @@ class Concat
 end
 
 class Subtract
-  def self.call(ctx:)
+  def self.call(ctx:, **)
     ctx[:result] = ctx[:one] - ctx[:two]
   end
 end

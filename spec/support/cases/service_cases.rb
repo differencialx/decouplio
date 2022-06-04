@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 class InstanceService
-  def self.call(ctx:)
+  def self.call(ctx:, **)
     new(ctx: ctx).call
   end
 
-  def initialize(ctx:)
+  def initialize(ctx:, **)
     @ctx = ctx
   end
 
@@ -16,15 +16,23 @@ class InstanceService
 end
 
 class ClassService
-  def self.call(ctx:)
+  def self.call(ctx:, **)
     ctx[:result] = ctx[:one] + ctx[:two]
     StubDummy.call
   end
 end
 
 class Service
-  def self.call(ctx:)
+  def self.call(ctx:, **)
     ctx[:result] = StubDummy.call
+  end
+end
+
+class AddErrorService
+  def self.call(error_store:, ctx:)
+    error_store.add_error(:key, 'ServLol')
+
+    ctx[:serv1]
   end
 end
 
@@ -457,6 +465,65 @@ module ServiceCases
 
       def condition?(**)
         ctx[:condition]
+      end
+    end
+  end
+
+  def when_as_step_service_adds_errors
+    lambda do |_klass|
+      logic do
+        step AddErrorService
+        step :step_one
+        fail :fail_one
+      end
+
+      def step_one(**)
+        ctx[:step_one] = 'Success'
+      end
+
+      def fail_one(**)
+        ctx[:fail_one] = 'Failure'
+      end
+    end
+  end
+
+  def when_as_fail_service_adds_errors
+    lambda do |_klass|
+      logic do
+        step :step_one
+        fail AddErrorService
+        step :step_two
+        fail :fail_one
+      end
+
+      def step_one(**)
+        ctx[:step_one] = false
+      end
+
+      def step_two(**)
+        ctx[:step_two] = 'Success'
+      end
+
+      def fail_one(**)
+        ctx[:fail_one] = 'Failure'
+      end
+    end
+  end
+
+  def when_as_pass_service_adds_errors
+    lambda do |_klass|
+      logic do
+        pass AddErrorService
+        step :step_one
+        fail :fail_one
+      end
+
+      def step_one(**)
+        ctx[:step_one] = 'Success'
+      end
+
+      def fail_one(**)
+        ctx[:fail_one] = 'Failure'
       end
     end
   end

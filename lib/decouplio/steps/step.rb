@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'base_step'
+require_relative 'shared/step_resolver'
 
 module Decouplio
   module Steps
@@ -19,24 +20,12 @@ module Decouplio
       end
 
       def resolve(result:, instance:)
-        if result
-          if [Decouplio::Const::Results::PASS, Decouplio::Const::Results::FAIL].include?(@on_success_type)
-            instance.pass_action
-            Decouplio::Const::Results::PASS
-          elsif @on_success_type == Decouplio::Const::Results::FINISH_HIM
-            instance.pass_action
-            Decouplio::Const::Results::FINISH_HIM
-          end
-        elsif @on_failure_type == Decouplio::Const::Results::PASS
-          instance.pass_action
-          Decouplio::Const::Results::FAIL
-        elsif @on_failure_type == Decouplio::Const::Results::FAIL
-          instance.fail_action
-          Decouplio::Const::Results::FAIL
-        elsif @on_failure_type == Decouplio::Const::Results::FINISH_HIM
-          instance.fail_action
-          Decouplio::Const::Results::FINISH_HIM
-        end
+        Decouplio::Steps::Shared::StepResolver.call(
+          instance: instance,
+          result: result,
+          on_success_type: @on_success_type,
+          on_failure_type: @on_failure_type
+        )
       end
     end
   end

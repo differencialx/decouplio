@@ -214,6 +214,10 @@ The same as for [step](https://github.com/differencialx/decouplio/blob/master/do
 The same as for [step](https://github.com/differencialx/decouplio/blob/master/docs/step.md)
 ### on_success: next failure track step
 The same as for [step](https://github.com/differencialx/decouplio/blob/master/docs/step.md)
+### on_success: :PASS
+The same as for [step](https://github.com/differencialx/decouplio/blob/master/docs/step.md)
+### on_success: :FAIL
+The same as for [step](https://github.com/differencialx/decouplio/blob/master/docs/step.md)
 ### on_failure:
 The same as for [step](https://github.com/differencialx/decouplio/blob/master/docs/step.md)
 ### on_failure: :finish_him
@@ -221,6 +225,10 @@ The same as for [step](https://github.com/differencialx/decouplio/blob/master/do
 ### on_failure: next success track step
 The same as for [step](https://github.com/differencialx/decouplio/blob/master/docs/step.md)
 ### on_failure: next failure track step
+The same as for [step](https://github.com/differencialx/decouplio/blob/master/docs/step.md)
+### on_failure: :PASS
+The same as for [step](https://github.com/differencialx/decouplio/blob/master/docs/step.md)
+### on_failure: :FAIL
 The same as for [step](https://github.com/differencialx/decouplio/blob/master/docs/step.md)
 ### if: condition method name
 The same as for [step](https://github.com/differencialx/decouplio/blob/master/docs/step.md)

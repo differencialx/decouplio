@@ -1179,4 +1179,62 @@ RSpec.describe 'Doby' do
       it_behaves_like 'stub dummy was called'
     end
   end
+
+  context 'when doby adds error' do
+    let(:action_block) { when_doby_adds_error }
+    let(:input_params) do
+      {
+        doby1: doby1
+      }
+    end
+    let(:doby1) { nil }
+
+    context 'when doby success' do
+      let(:doby1) { true }
+      let(:railway_flow) { %i[step_one AddErrorDoby step_two] }
+      let(:errors) do
+        {
+          step_one_error: ['Lol']
+        }
+      end
+      let(:expected_state) do
+        {
+          action_status: :success,
+          railway_flow: railway_flow,
+          state: {
+            step_one: false,
+            step_two: 'Success',
+            fail_one: nil
+          },
+          errors: errors
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+
+    context 'when doby failure' do
+      let(:doby1) { false }
+      let(:railway_flow) { %i[step_one AddErrorDoby fail_one] }
+      let(:errors) do
+        {
+          step_one_error: ['Lol']
+        }
+      end
+      let(:expected_state) do
+        {
+          action_status: :failure,
+          railway_flow: railway_flow,
+          state: {
+            step_one: false,
+            step_two: nil,
+            fail_one: 'Failure'
+          },
+          errors: errors
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+  end
 end

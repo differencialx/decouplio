@@ -133,4 +133,28 @@ module ReservedMethodNamesCases
       end
     end
   end
+
+  def when_method_step_pass
+    lambda do |_klass|
+      logic do
+        step Decouplio::Const::Results::STEP_PASS
+      end
+
+      def step_pass(**)
+        ctx[:step_one] = 'Success'
+      end
+    end
+  end
+
+  def when_method_step_fail
+    lambda do |_klass|
+      logic do
+        step Decouplio::Const::Results::STEP_FAIL
+      end
+
+      def step_fail(**)
+        ctx[:step_one] = 'Success'
+      end
+    end
+  end
 end

@@ -88,6 +88,8 @@ step(step_name, **options)
 |-|-|
 |:finish_him|action stops execution if `step` method returns truthy value|
 |symbol with next step name|step with specified symbol name performs if step method returns truthy value|
+|:PASS|will direct execution flow to nearest success track step. If current step is the last step when action will finish as `success`|
+|:FAIL|will direct execution flow to nearest failure track step. If current step is the last step when action will finish as `failure`|
 
 ### on_success: :finish_him
 
@@ -312,11 +314,83 @@ Can be used if for some reason you need to jump to fail step
 
 ***
 
+### on_success: :PASS
+It will perform like regular `step`, just move to next success track step.
+
+### on_success: :FAIL
+<details><summary><b>EXAMPLE (CLICK ME)</b></summary>
+<p>
+
+  ```ruby
+    require 'decouplio'
+
+    class SomeActionOnSuccessFail < Decouplio::Action
+      logic do
+        step :step_one
+        step :step_two, on_success: :FAIL
+      end
+
+      def step_one(**)
+        ctx[:step_one] = 'Success'
+      end
+
+      def step_two(step_two_param:, **)
+        ctx[:step_two] = step_two_param
+      end
+    end
+
+    success_action = SomeActionOnSuccessFail.call(step_two_param: true)
+    failure_action = SomeActionOnSuccessFail.call(step_two_param: false)
+
+    success_action # =>
+    # Result: failure
+
+    # Railway Flow:
+    #   step_one -> step_two
+
+    # Context:
+    #   :step_two_param => true
+    #   :step_one => "Success"
+    #   :step_two => true
+
+    # Errors:
+    #   {}
+
+    failure_action # =>
+    # Result: failure
+
+    # Railway Flow:
+    #   step_one -> step_two
+
+    # Context:
+    #   :step_two_param => false
+    #   :step_one => "Success"
+    #   :step_two => false
+
+    # Errors:
+    #   {}
+  ```
+
+  ```mermaid
+  flowchart LR
+      1(start)-->2(step_one);
+      2(step_one)-->|success track|3(step_two);
+      3(step_two)-->|success track|4(finish_failure);
+      3(step_two)-->|failure track|4(finish_failure);
+  ```
+</p>
+</details>
+
+***
+
+
 ### on_failure:
 |Allowed values|Description|
 |-|-|
 |:finish_him|action stops execution if `step` method returns falsy value|
 |symbol with next step name|step with specified symbol name performs if step method returns falsy value|
+|:PASS|will direct execution flow to nearest success track step. If current step is the last step when action will finish as `success`|
+|:FAIL|will direct execution flow to nearest failure track step. If current step is the last step when action will finish as `failure`|
 
 ### on_failure: :finish_him
 
@@ -547,6 +621,80 @@ Can be used in case if you need to come back to success track
   ```
 </p>
 </details>
+
+***
+
+### on_failure: :PASS
+<details><summary><b>EXAMPLE (CLICK ME)</b></summary>
+<p>
+
+  ```ruby
+    require 'decouplio'
+
+    class SomeActionOnFailurePass < Decouplio::Action
+      logic do
+        step :step_one
+        step :step_two, on_failure: :PASS
+      end
+
+      def step_one(**)
+        ctx[:step_one] = true
+      end
+
+      def step_two(step_two_param:, **)
+        ctx[:step_two] = step_two_param
+      end
+    end
+
+
+    success_action = SomeActionOnFailurePass.call(step_two_param: true)
+    failure_action = SomeActionOnFailurePass.call(step_two_param: false)
+
+    success_action # =>
+    # Result: success
+
+    # Railway Flow:
+    #   step_one -> step_two
+
+    # Context:
+    #   :step_two_param => true
+    #   :step_one => true
+    #   :step_two => true
+
+    # Errors:
+    #   {}
+
+    failure_action # =>
+    # Result: success
+
+    # Railway Flow:
+    #   step_one -> step_two
+
+    # Context:
+    #   :step_two_param => false
+    #   :step_one => true
+    #   :step_two => false
+
+    # Errors:
+    #   {}
+
+  ```
+
+  ```mermaid
+  flowchart LR
+      1(start)-->2(step_one);
+      2(step_one)-->|success track|3(step_two);
+      3(step_two)-->|success track|4(finish_success);
+      3(step_two)-->|failure track|4(finish_success);
+  ```
+</p>
+</details>
+
+***
+
+
+### on_failure: :FAIL
+It will perform like regular `step`, just move to next failure track step.
 
 ***
 

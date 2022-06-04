@@ -1,7 +1,7 @@
 require_relative '../lib/decouplio'
 
 class AssignDoby
-  def self.call(ctx:, to:, from: nil, value: nil)
+  def self.call(ctx:, to:, from: nil, value: nil, **)
     raise 'from/value is empty' unless from || value
 
     ctx[to] = value || ctx[from]

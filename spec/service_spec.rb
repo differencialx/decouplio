@@ -7,12 +7,14 @@ RSpec.describe 'Service cases' do
     {
       param1: param1,
       octo_key: octo_key,
-      condition: condition
+      condition: condition,
+      serv1: serv1
     }
   end
   let(:param1) { nil }
   let(:octo_key) { nil }
   let(:condition) { nil }
+  let(:serv1) { nil }
 
   context 'when instance service as step' do
     let(:action_block) { when_instance_service_as_step }
@@ -1200,6 +1202,158 @@ RSpec.describe 'Service cases' do
             step_one: 'Success',
             condition: condition,
             result: nil
+          }
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+  end
+
+  context 'when service as step adds errors' do
+    let(:action_block) { when_as_step_service_adds_errors }
+
+    context 'when service success' do
+      let(:serv1) { true }
+      let(:railway_flow) { %i[AddErrorService step_one] }
+      let(:errors) do
+        {
+          key: ['ServLol']
+        }
+      end
+      let(:expected_state) do
+        {
+          action_status: :success,
+          railway_flow: railway_flow,
+          errors: errors,
+          state: {
+            step_one: 'Success',
+            fail_one: nil
+          }
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+
+    context 'when service failure' do
+      let(:serv1) { false }
+      let(:railway_flow) { %i[AddErrorService fail_one] }
+      let(:errors) do
+        {
+          key: ['ServLol']
+        }
+      end
+      let(:expected_state) do
+        {
+          action_status: :failure,
+          railway_flow: railway_flow,
+          errors: errors,
+          state: {
+            step_one: nil,
+            fail_one: 'Failure'
+          }
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+  end
+
+  context 'when service as fail adds errors' do
+    let(:action_block) { when_as_fail_service_adds_errors }
+
+    context 'when service success' do
+      let(:serv1) { true }
+      let(:railway_flow) { %i[step_one AddErrorService fail_one] }
+      let(:errors) do
+        {
+          key: ['ServLol']
+        }
+      end
+      let(:expected_state) do
+        {
+          action_status: :failure,
+          railway_flow: railway_flow,
+          errors: errors,
+          state: {
+            step_one: false,
+            step_two: nil,
+            fail_one: 'Failure'
+          }
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+
+    context 'when service failure' do
+      let(:serv1) { false }
+      let(:railway_flow) { %i[step_one AddErrorService fail_one] }
+      let(:errors) do
+        {
+          key: ['ServLol']
+        }
+      end
+      let(:expected_state) do
+        {
+          action_status: :failure,
+          railway_flow: railway_flow,
+          errors: errors,
+          state: {
+            step_one: false,
+            step_two: nil,
+            fail_one: 'Failure'
+          }
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+  end
+
+  context 'when service as pass adds errors' do
+    let(:action_block) { when_as_pass_service_adds_errors }
+
+    context 'when service success' do
+      let(:serv1) { true }
+      let(:railway_flow) { %i[AddErrorService step_one] }
+      let(:errors) do
+        {
+          key: ['ServLol']
+        }
+      end
+      let(:expected_state) do
+        {
+          action_status: :success,
+          railway_flow: railway_flow,
+          errors: errors,
+          state: {
+            step_one: 'Success',
+            fail_one: nil
+          }
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+
+    context 'when service failure' do
+      let(:serv1) { false }
+      let(:railway_flow) { %i[AddErrorService step_one] }
+      let(:errors) do
+        {
+          key: ['ServLol']
+        }
+      end
+      let(:expected_state) do
+        {
+          action_status: :success,
+          railway_flow: railway_flow,
+          errors: errors,
+          state: {
+            step_one: 'Success',
+            fail_one: nil
           }
         }
       end

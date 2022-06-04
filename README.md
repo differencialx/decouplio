@@ -14,17 +14,39 @@ And then execute:
 
     $ bundle
 
-Or install it yourself as:
+Or install it by yourself:
 
     $ gem install decouplio
 
-## Currently it's in alpha testing, more feature will come soon.
+## Currently decouplio is in alpha testing, more features will come soon.
 
-# [>>>>>>>DOCS HERE<<<<<<<](https://github.com/differencialx/decouplio/blob/master/docs/index.md)
+### Compatibility
+  Ruby:
+ - 2.7
+ - 3.0
+
+ ### Docs
+
+- [Quick start](https://github.com/differencialx/decouplio/blob/master/docs/quick_start.md)
+- [Logic block](https://github.com/differencialx/decouplio/blob/master/docs/logic_block.md)
+  - [Context](https://github.com/differencialx/decouplio/blob/master/docs/context.md)
+  - [Step](https://github.com/differencialx/decouplio/blob/master/docs/step.md)
+  - [Fail](https://github.com/differencialx/decouplio/blob/master/docs/fail.md)
+  - [Pass](https://github.com/differencialx/decouplio/blob/master/docs/pass.md)
+  - [Octo](https://github.com/differencialx/decouplio/blob/master/docs/octo.md)
+  - [Wrap](https://github.com/differencialx/decouplio/blob/master/docs/wrap.md)
+  - [Resq](https://github.com/differencialx/decouplio/blob/master/docs/resq.md)
+  - [Inner action](https://github.com/differencialx/decouplio/blob/master/docs/inner_action.md)
+  - [Doby/Deny](https://github.com/differencialx/decouplio/blob/master/docs/doby_deny.md)
+  - [Step as a service](https://github.com/differencialx/decouplio/blob/master/docs/step_as_a_service.md)
+- [Error store](https://github.com/differencialx/decouplio/blob/master/docs/error_store.md)
+- [Benchmarks](https://github.com/differencialx/decouplio/blob/master/docs/benchmarks.md)
 
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/differencialx/decouplio.
+
+More detailed description for contribution process will be added later.
 
 ## License
 
