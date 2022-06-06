@@ -5,7 +5,7 @@ It's a step type which helps to implement strategy pattern.
 ## Signature
 
 ```ruby
-octo(octo_name, ctx_key:, **options) do
+octo(octo_name, ctx_key:, method:, **options) do
   on :key1, palp: :palp_name_one
   on :key2, palp: :palp_name_two
   on :key3, palp: :palp_name_three
@@ -14,7 +14,11 @@ end
 
 ## Behavior
 
-- depending on the value inside `ctx_key` in context `octo` will perform flow defined for this key. So basically `octo` will be replaces with flow you defined.
+- Depending on some value you can perform different flow. Imagine that `octo` will be replaced with another flow.
+- You have two options to set value for octo. By `ctx_key` and `method` options.
+- `ctx_key` and `method` options are controversial, so you can use only one of them.
+- with `ctx_key` you can specify the key inside action context with value for `octo`
+- with `method` you can specify method name symbol, which will be called to retrieve `octo` value, like we do for `if` and `unless` options.
 ```ruby
 logic do
   palp :palp_name_one do
@@ -263,7 +267,60 @@ Currently only one possibility is present to define flow for `octo`, it's `palp`
 ***
 ## Options
 
+### ctx_key: context key with octo value
+
+See examples above
+
+***
+
+### method: method symbol which returns octo value
+<details><summary><b>EXAMPLE (CLICK ME)</b></summary>
+<p>
+
+  ```ruby
+    require 'decouplio'
+
+    class SomeAction < Decouplio::Action
+      logic do
+        palp :palp_one do
+          step :step_one
+        end
+
+        palp :palp_two do
+          step :step_two
+        end
+
+        octo :octo_name, method: :what_is_next? do
+          on :option_one, palp: :palp_one
+          on :option_two, palp: :palp_two
+        end
+      end
+
+      def step_one(**)
+        # ...
+      end
+
+      def step_two(**)
+        # ...
+      end
+
+      def what_is_next?(connection:, url:)
+        connection.get(url).body[:decision]
+      end
+    end
+  ```
+
+</p>
+</details>
+
+***
+
 ### if: condition method name
 The same as for [step](https://github.com/differencialx/decouplio/blob/master/docs/step.md)
+
+***
+
 ### unless: condition method name
 The same as for [step](https://github.com/differencialx/decouplio/blob/master/docs/step.md)
+
+***
