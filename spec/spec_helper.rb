@@ -26,6 +26,7 @@ RSpec.configure do |config|
   config.include DobyCases
   config.include DenyCases
   config.include ServiceCases
+  config.include OctoMethodCases
   config.example_status_persistence_file_path = '.rspec_status'
 
   config.disable_monkey_patching!

@@ -304,11 +304,20 @@ module Decouplio
     end
 
     def check_octo_required_keys(options:)
-      return if (OCTO_REQUIRED_KEYS - options.keys).size.zero?
+      if (OCTO_REQUIRED_KEYS - options.keys).size.zero?
+        if options.keys.sort == OCTO_REQUIRED_KEYS.sort
+          raise Decouplio::Errors::OctoControversialKeysError.new(
+            errored_option: options.slice(*OCTO_REQUIRED_KEYS),
+            details: OCTO_REQUIRED_KEYS
+          )
+        end
+      else
+        return if options.slice(*OCTO_REQUIRED_KEYS).size == 1
 
-      raise Decouplio::Errors::RequiredOptionsIsMissingForOctoError.new(
-        details: OCTO_REQUIRED_KEYS.join(', ')
-      )
+        raise Decouplio::Errors::RequiredOptionsIsMissingForOctoError.new(
+          details: OCTO_REQUIRED_KEYS.join(', ')
+        )
+      end
     end
 
     def check_step_finish_him(options:)
@@ -514,6 +523,7 @@ module Decouplio
 
     OCTO_ALLOWED_OPTIONS = %i[
       ctx_key
+      method
       if
       unless
     ].freeze
@@ -523,6 +533,7 @@ module Decouplio
     ].freeze
     OCTO_REQUIRED_KEYS = %i[
       ctx_key
+      method
     ].freeze
 
     # *************************************************

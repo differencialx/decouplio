@@ -24,7 +24,7 @@ RSpec.describe 'Octo options validations' do
       let(:action_block) { when_octo_required_keys_were_not_passed }
 
       interpolation_values = [
-        'Next option(s) "ctx_key" are required for "octo"',
+        'Next option(s) "ctx_key, method" are required for "octo"',
         Decouplio::Const::Validations::Octo::ALLOWED_OPTIONS_MESSAGE,
         Decouplio::Const::Validations::Octo::MANUAL_URL
       ]

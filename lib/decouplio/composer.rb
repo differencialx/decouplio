@@ -186,7 +186,8 @@ module Decouplio
       def create_octo(stp)
         Decouplio::Steps::Octo.new(
           name: stp[:name],
-          ctx_key: stp[:ctx_key]
+          ctx_key: stp[:ctx_key],
+          method: stp[:method]
         )
       end
 
