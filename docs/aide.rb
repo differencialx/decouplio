@@ -1,6 +1,6 @@
 require_relative '../lib/decouplio'
 
-class SemanticDeny
+class SemanticAide
   def self.call(ctx:, error_store:, semantic:, error_message:)
     ctx[:semantic] = semantic
     error_store.add_error(semantic, error_message)
@@ -10,7 +10,7 @@ end
 class SomeAction < Decouplio::Action
   logic do
     step :step_one
-    deny SemanticDeny, semantic: :bad_request, error_message: 'Bad request'
+    aide SemanticAide, semantic: :bad_request, error_message: 'Bad request'
     step :step_two
   end
 
@@ -48,7 +48,7 @@ failure_action # =>
 # Result: failure
 
 # Railway Flow:
-#   step_one -> SemanticDeny
+#   step_one -> SemanticAide
 
 # Context:
 #   :step_one_param => false

@@ -21,7 +21,7 @@ require_relative 'steps/service_step'
 require_relative 'steps/service_fail'
 require_relative 'steps/service_pass'
 require_relative 'steps/doby'
-require_relative 'steps/deny'
+require_relative 'steps/aide'
 require_relative 'options_validator'
 require_relative 'validators/condition'
 
@@ -130,9 +130,9 @@ module Decouplio
         when Decouplio::Const::Types::SERVICE_TYPE_PASS
           create_inner_service_pass(stp, flow)
         when Decouplio::Const::Types::DOBY_TYPE
-          create_doby(stp)
-        when Decouplio::Const::Types::DENY_TYPE
-          create_deny(stp)
+          create_doby(stp, flow)
+        when Decouplio::Const::Types::AIDE_TYPE
+          create_aide(stp, flow)
         end
       end
 
@@ -186,7 +186,8 @@ module Decouplio
       def create_octo(stp)
         Decouplio::Steps::Octo.new(
           name: stp[:name],
-          ctx_key: stp[:ctx_key]
+          ctx_key: stp[:ctx_key],
+          method: stp[:method]
         )
       end
 
@@ -269,19 +270,23 @@ module Decouplio
         )
       end
 
-      def create_doby(stp)
+      def create_doby(stp, flow)
         Decouplio::Steps::Doby.new(
           name: stp[:name],
           doby_class: stp[:doby_class],
-          doby_options: stp[:doby_options]
+          doby_options: stp[:doby_options],
+          on_success_type: success_type(flow, stp),
+          on_failure_type: failure_type(flow, stp)
         )
       end
 
-      def create_deny(stp)
-        Decouplio::Steps::Deny.new(
+      def create_aide(stp, flow)
+        Decouplio::Steps::Aide.new(
           name: stp[:name],
-          deny_class: stp[:deny_class],
-          deny_options: stp[:deny_options]
+          aide_class: stp[:aide_class],
+          aide_options: stp[:aide_options],
+          on_success_type: success_type(flow, stp),
+          on_failure_type: failure_type(flow, stp)
         )
       end
 
@@ -305,8 +310,8 @@ module Decouplio
             compose_fail_flow(stp, step_id, flow, idx, flow_hash, next_steps)
           when Decouplio::Const::Types::DOBY_TYPE
             compose_doby_flow(stp, step_id, flow, idx, flow_hash, next_steps)
-          when Decouplio::Const::Types::DENY_TYPE
-            compose_deny_flow(stp, step_id, flow, idx, flow_hash, next_steps)
+          when Decouplio::Const::Types::AIDE_TYPE
+            compose_aide_flow(stp, step_id, flow, idx, flow_hash, next_steps)
           when Decouplio::Const::Types::IF_TYPE_PASS, Decouplio::Const::Types::UNLESS_TYPE_PASS
             compose_pass_condition_flow(stp, flow, idx, flow_hash)
           when Decouplio::Const::Types::IF_TYPE_FAIL, Decouplio::Const::Types::UNLESS_TYPE_FAIL
@@ -340,22 +345,22 @@ module Decouplio
         stp[:flow][Decouplio::Const::Results::FINISH_HIM] = Decouplio::Const::Results::NO_STEP
       end
 
-      def compose_doby_flow(stp, _step_id, flow, idx, flow_hash, next_steps)
+      def compose_doby_flow(stp, step_id, flow, idx, flow_hash, next_steps)
         flow_values = flow.values + (next_steps&.values || [])
         stp[:flow][Decouplio::Const::Results::PASS] = next_success_step(
           flow_values,
           idx,
-          nil
+          flow[step_id][:on_success]
         )
         stp[:flow][Decouplio::Const::Results::FAIL] = next_failure_step(
           flow_values,
           idx,
-          nil
+          flow[step_id][:on_failure]
         )
         stp[:flow][Decouplio::Const::Results::ERROR] = next_failure_step(
           flow_values,
           idx,
-          nil
+          flow[step_id][:on_error]
         )
         stp[:flow][Decouplio::Const::Results::PASS] ||= flow_hash[Decouplio::Const::Results::PASS]
         stp[:flow][Decouplio::Const::Results::FAIL] ||= flow_hash[Decouplio::Const::Results::FAIL]
@@ -363,22 +368,22 @@ module Decouplio
         stp[:flow][Decouplio::Const::Results::FINISH_HIM] = Decouplio::Const::Results::NO_STEP
       end
 
-      def compose_deny_flow(stp, _step_id, flow, idx, flow_hash, next_steps)
+      def compose_aide_flow(stp, step_id, flow, idx, flow_hash, next_steps)
         flow_values = flow.values + (next_steps&.values || [])
         stp[:flow][Decouplio::Const::Results::PASS] = next_failure_step(
           flow_values,
           idx,
-          nil
+          flow[step_id][:on_success]
         )
         stp[:flow][Decouplio::Const::Results::FAIL] = next_failure_step(
           flow_values,
           idx,
-          nil
+          flow[step_id][:on_failure]
         )
         stp[:flow][Decouplio::Const::Results::ERROR] = next_failure_step(
           flow_values,
           idx,
-          nil
+          flow[step_id][:on_error]
         )
         stp[:flow][Decouplio::Const::Results::PASS] ||= flow_hash[Decouplio::Const::Results::FAIL]
         stp[:flow][Decouplio::Const::Results::FAIL] ||= flow_hash[Decouplio::Const::Results::FAIL]

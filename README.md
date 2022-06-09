@@ -37,7 +37,7 @@ Or install it by yourself:
   - [Wrap](https://github.com/differencialx/decouplio/blob/master/docs/wrap.md)
   - [Resq](https://github.com/differencialx/decouplio/blob/master/docs/resq.md)
   - [Inner action](https://github.com/differencialx/decouplio/blob/master/docs/inner_action.md)
-  - [Doby/Deny](https://github.com/differencialx/decouplio/blob/master/docs/doby_deny.md)
+  - [Doby/Aide](https://github.com/differencialx/decouplio/blob/master/docs/doby_aide.md)
   - [Step as a service](https://github.com/differencialx/decouplio/blob/master/docs/step_as_a_service.md)
 - [Error store](https://github.com/differencialx/decouplio/blob/master/docs/error_store.md)
 - [Benchmarks](https://github.com/differencialx/decouplio/blob/master/docs/benchmarks.md)

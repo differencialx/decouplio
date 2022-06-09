@@ -2,6 +2,7 @@
 
 require_relative 'flow'
 require_relative 'const/types'
+require_relative 'const/doby_aide_options'
 require_relative 'octo_hash_case'
 require_relative 'errors/options_validation_error'
 require_relative 'errors/palp_validation_error'
@@ -9,7 +10,7 @@ require_relative 'errors/resq_definition_error'
 require_relative 'errors/wrap_block_is_not_defined_error'
 require_relative 'errors/palp_block_is_not_defined_error'
 require_relative 'errors/fail_can_not_be_first_step_error'
-require_relative 'errors/deny_can_not_be_first_step_error'
+require_relative 'errors/aide_can_not_be_first_step_error'
 require_relative 'errors/octo_block_is_not_defined_error'
 
 module Decouplio
@@ -85,22 +86,36 @@ module Decouplio
       end
 
       def doby(doby_class, **options)
+        step_options = {}
+        options.each_key do |key|
+          step_options[key] = options.delete(key) if Decouplio::Const::DobyAideOptions::ALLOWED.include?(key)
+        end
+        doby_options = options
+
         @steps << {
           type: Decouplio::Const::Types::DOBY_TYPE,
           name: doby_class.name.to_sym,
           doby_class: doby_class,
-          doby_options: options
+          doby_options: doby_options,
+          **step_options
         }
       end
 
-      def deny(deny_class, **options)
-        raise Decouplio::Errors::DenyCanNotBeFirstStepError if @steps.empty?
+      def aide(aide_class, **options)
+        raise Decouplio::Errors::AideCanNotBeFirstStepError if @steps.empty?
+
+        step_options = {}
+        options.each_key do |key|
+          step_options[key] = options.delete(key) if Decouplio::Const::DobyAideOptions::ALLOWED.include?(key)
+        end
+        aide_options = options
 
         @steps << {
-          type: Decouplio::Const::Types::DENY_TYPE,
-          name: deny_class.name.to_sym,
-          deny_class: deny_class,
-          deny_options: options
+          type: Decouplio::Const::Types::AIDE_TYPE,
+          name: aide_class.name.to_sym,
+          aide_class: aide_class,
+          aide_options: aide_options,
+          **step_options
         }
       end
     end

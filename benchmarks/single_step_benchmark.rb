@@ -123,7 +123,7 @@ class TrailblazerTestOneStep < Trailblazer::Activity::Railway
 end
 
 class ServiceAsStep
-  def self.call(ctx:)
+  def self.call(ctx:, **)
     ctx[:step_one] = ctx[:param1]
     ctx[:step_two] = ctx[:step_one]
     ctx[:step_three] = ctx[:step_two]

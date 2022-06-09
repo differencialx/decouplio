@@ -22,10 +22,13 @@ RSpec.configure do |config|
   config.include OptionsValidationsCasesForOcto
   config.include OptionsValidationsCasesForResq
   config.include OptionsValidationsCasesForWrap
+  config.include OptionsValidationsForDoby
+  config.include OptionsValidationsForAide
   config.include ReservedMethodNamesCases
   config.include DobyCases
-  config.include DenyCases
+  config.include AideCases
   config.include ServiceCases
+  config.include OctoMethodCases
   config.example_status_persistence_file_path = '.rspec_status'
 
   config.disable_monkey_patching!

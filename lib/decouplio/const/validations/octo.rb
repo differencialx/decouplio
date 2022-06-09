@@ -28,7 +28,8 @@ module Decouplio
           %s
         ERROR_MESSAGE
         ALLOWED_OPTIONS_MESSAGE = <<~ALLOWED_OPTIONS
-          ctx_key: <ctx key with strategy name to be used for strategy mapping> - required
+          ctx_key: <ctx key with strategy name to be used for strategy mapping> - required if "method" option is not present
+          method: <method which will return strategy name to be used for strategy mapping> - required if "ctx_key" option is not present
           if: <instance method symbol>
           unless: <instance method symbol>
         ALLOWED_OPTIONS
