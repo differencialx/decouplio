@@ -26,7 +26,7 @@ RSpec.describe '.call! method' do
     rescue Decouplio::Errors::ExecutionError => error
       expect(error.action).to be_a(Decouplio::Action)
       expect(error.action).to be_failure
-      expect(error.action[:model]).to eq false
+      expect(error.action[:model]).to be false
       expect(error.action[:result]).to be_nil
       expect(error.message).to eq 'Action failed.'
     end
