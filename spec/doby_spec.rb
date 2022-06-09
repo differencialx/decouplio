@@ -1237,4 +1237,388 @@ RSpec.describe 'Doby' do
       it_behaves_like 'check action state'
     end
   end
+
+  context 'when on_success on_failure to steps' do
+    let(:action_block) { when_doby_on_success_on_failure_to_steps }
+    let(:input_params) do
+      {
+        doby1: doby1
+      }
+    end
+
+    context 'when doby success' do
+      let(:doby1) { -> { true } }
+      let(:railway_flow) { %i[ForkDoby fail_one] }
+      let(:expected_state) do
+        {
+          action_status: :failure,
+          railway_flow: railway_flow,
+          state: {
+            step_one: nil,
+            fail_one: 'Failure',
+            result: true
+          },
+          errors: {}
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+
+    context 'when doby failure' do
+      let(:doby1) { -> { false } }
+      let(:railway_flow) { %i[ForkDoby step_one] }
+      let(:expected_state) do
+        {
+          action_status: :success,
+          railway_flow: railway_flow,
+          state: {
+            step_one: 'Success',
+            fail_one: nil,
+            result: true
+          },
+          errors: {}
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+  end
+
+  context 'when on_success on_failure to PASS FAIL' do
+    let(:action_block) { when_doby_on_success_on_failure_pass_fail }
+    let(:input_params) do
+      {
+        doby1: doby1
+      }
+    end
+
+    context 'when doby success' do
+      let(:doby1) { -> { true } }
+      let(:railway_flow) { %i[ForkDoby fail_one] }
+      let(:expected_state) do
+        {
+          action_status: :failure,
+          railway_flow: railway_flow,
+          state: {
+            step_one: nil,
+            fail_one: 'Failure',
+            result: 'Result'
+          },
+          errors: {}
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+
+    context 'when doby failure' do
+      let(:doby1) { -> { false } }
+      let(:railway_flow) { %i[ForkDoby step_one] }
+      let(:expected_state) do
+        {
+          action_status: :success,
+          railway_flow: railway_flow,
+          state: {
+            step_one: 'Success',
+            fail_one: nil,
+            result: 'Result'
+          },
+          errors: {}
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+  end
+
+  context 'when on_success finish_him' do
+    let(:action_block) { when_doby_on_success_finish_him }
+    let(:input_params) do
+      {
+        doby1: doby1
+      }
+    end
+
+    context 'when doby success' do
+      let(:doby1) { -> { true } }
+      let(:railway_flow) { %i[ForkDoby] }
+      let(:expected_state) do
+        {
+          action_status: :success,
+          railway_flow: railway_flow,
+          state: {
+            step_one: nil,
+            fail_one: nil,
+            result: 'Result'
+          },
+          errors: {}
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+
+    context 'when doby failure' do
+      let(:doby1) { -> { false } }
+      let(:railway_flow) { %i[ForkDoby fail_one] }
+      let(:expected_state) do
+        {
+          action_status: :failure,
+          railway_flow: railway_flow,
+          state: {
+            step_one: nil,
+            fail_one: 'Failure',
+            result: 'Result'
+          },
+          errors: {}
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+  end
+
+  context 'when on_failure finish_him' do
+    let(:action_block) { when_doby_on_failure_finish_him }
+    let(:input_params) do
+      {
+        doby1: doby1
+      }
+    end
+
+    context 'when doby success' do
+      let(:doby1) { -> { true } }
+      let(:railway_flow) { %i[ForkDoby step_one] }
+      let(:expected_state) do
+        {
+          action_status: :success,
+          railway_flow: railway_flow,
+          state: {
+            step_one: 'Success',
+            fail_one: nil,
+            result: 'Result'
+          },
+          errors: {}
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+
+    context 'when doby failure' do
+      let(:doby1) { -> { false } }
+      let(:railway_flow) { %i[ForkDoby] }
+      let(:expected_state) do
+        {
+          action_status: :failure,
+          railway_flow: railway_flow,
+          state: {
+            step_one: nil,
+            fail_one: nil,
+            result: 'Result'
+          },
+          errors: {}
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+  end
+
+  context 'when finish_him on_success' do
+    let(:action_block) { when_doby_finish_him_on_success }
+    let(:input_params) do
+      {
+        doby1: doby1
+      }
+    end
+
+    context 'when doby success' do
+      let(:doby1) { -> { true } }
+      let(:railway_flow) { %i[ForkDoby] }
+      let(:expected_state) do
+        {
+          action_status: :success,
+          railway_flow: railway_flow,
+          state: {
+            step_one: nil,
+            fail_one: nil,
+            result: 'Result'
+          },
+          errors: {}
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+
+    context 'when doby failure' do
+      let(:doby1) { -> { false } }
+      let(:railway_flow) { %i[ForkDoby fail_one] }
+      let(:expected_state) do
+        {
+          action_status: :failure,
+          railway_flow: railway_flow,
+          state: {
+            step_one: nil,
+            fail_one: 'Failure',
+            result: 'Result'
+          },
+          errors: {}
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+  end
+
+  context 'when finish_him on failure' do
+    let(:action_block) { when_doby_finish_him_on_failure }
+    let(:input_params) do
+      {
+        doby1: doby1
+      }
+    end
+
+    context 'when doby success' do
+      let(:doby1) { -> { true } }
+      let(:railway_flow) { %i[ForkDoby step_one] }
+      let(:expected_state) do
+        {
+          action_status: :success,
+          railway_flow: railway_flow,
+          state: {
+            step_one: 'Success',
+            fail_one: nil,
+            result: 'Result'
+          },
+          errors: {}
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+
+    context 'when doby failure' do
+      let(:doby1) { -> { false } }
+      let(:railway_flow) { %i[ForkDoby] }
+      let(:expected_state) do
+        {
+          action_status: :failure,
+          railway_flow: railway_flow,
+          state: {
+            step_one: nil,
+            fail_one: nil,
+            result: 'Result'
+          },
+          errors: {}
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+  end
+
+  context 'when if condition' do
+    let(:action_block) { when_doby_if_condition }
+    let(:input_params) do
+      {
+        doby1: doby1,
+        condition: condition
+      }
+    end
+    let(:doby1) { -> { true } }
+
+    context 'when condition success' do
+      let(:condition) { true }
+      let(:railway_flow) { %i[ForkDoby step_one] }
+      let(:expected_state) do
+        {
+          action_status: :success,
+          railway_flow: railway_flow,
+          state: {
+            step_one: 'Success',
+            fail_one: nil,
+            result: 'Result',
+            condition: condition
+          },
+          errors: {}
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+
+    context 'when condition failure' do
+      let(:condition) { false }
+      let(:railway_flow) { %i[step_one] }
+      let(:expected_state) do
+        {
+          action_status: :success,
+          railway_flow: railway_flow,
+          state: {
+            step_one: 'Success',
+            fail_one: nil,
+            result: nil,
+            condition: condition
+          },
+          errors: {}
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+  end
+
+  context 'when unless condition' do
+    let(:action_block) { when_doby_unless_condition }
+    let(:input_params) do
+      {
+        doby1: doby1,
+        condition: condition
+      }
+    end
+    let(:doby1) { -> { true } }
+
+    context 'when condition failure' do
+      let(:condition) { false }
+      let(:railway_flow) { %i[ForkDoby step_one] }
+      let(:expected_state) do
+        {
+          action_status: :success,
+          railway_flow: railway_flow,
+          state: {
+            step_one: 'Success',
+            fail_one: nil,
+            result: 'Result',
+            condition: condition
+          },
+          errors: {}
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+
+    context 'when condition success' do
+      let(:condition) { true }
+      let(:railway_flow) { %i[step_one] }
+      let(:expected_state) do
+        {
+          action_status: :success,
+          railway_flow: railway_flow,
+          state: {
+            step_one: 'Success',
+            fail_one: nil,
+            result: nil,
+            condition: condition
+          },
+          errors: {}
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+  end
 end

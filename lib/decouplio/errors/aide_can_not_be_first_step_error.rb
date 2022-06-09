@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 require_relative 'base_error'
-require_relative '../const/validations/deny'
+require_relative '../const/validations/aide'
 
 module Decouplio
   module Errors
-    class DenyCanNotBeFirstStepError < Decouplio::Errors::BaseError
+    class AideCanNotBeFirstStepError < Decouplio::Errors::BaseError
       def template
-        Decouplio::Const::Validations::Deny::FIRST_STEP
+        Decouplio::Const::Validations::Aide::FIRST_STEP
       end
 
       def interpolation_values

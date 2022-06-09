@@ -29,6 +29,7 @@ class RegularServiceTest
     step_seven
     step_eight
     step_nine
+    self
   end
 
   def step_one
@@ -253,55 +254,55 @@ class TrailblazerTestSeveralSteps < Trailblazer::Activity::Railway
 end
 
 class DecouplioStepOne
-  def self.call(ctx:)
+  def self.call(ctx:, **)
     ctx[:step_one] = ctx[:param1]
   end
 end
 
 class DecouplioStepTwo
-  def self.call(ctx:)
+  def self.call(ctx:, **)
     ctx[:step_two] = ctx[:step_one]
   end
 end
 
 class DecouplioStepThree
-  def self.call(ctx:)
+  def self.call(ctx:, **)
     ctx[:step_three] = ctx[:step_two]
   end
 end
 
 class DecouplioStepFour
-  def self.call(ctx:)
+  def self.call(ctx:, **)
     ctx[:step_four] = ctx[:step_three]
   end
 end
 
 class DecouplioStepFive
-  def self.call(ctx:)
+  def self.call(ctx:, **)
     ctx[:step_five] = ctx[:step_four]
   end
 end
 
 class DecouplioStepSix
-  def self.call(ctx:)
+  def self.call(ctx:, **)
     ctx[:step_six] = ctx[:step_five]
   end
 end
 
 class DecouplioStepSeven
-  def self.call(ctx:)
+  def self.call(ctx:, **)
     ctx[:step_seven] = ctx[:step_six]
   end
 end
 
 class DecouplioStepEight
-  def self.call(ctx:)
+  def self.call(ctx:, **)
     ctx[:step_eight] = ctx[:step_seven]
   end
 end
 
 class DecouplioStepNine
-  def self.call(ctx:)
+  def self.call(ctx:, **)
     ctx[:step_nine] = ctx[:step_eight]
   end
 end
@@ -320,7 +321,7 @@ class DecouplioServiceStepsTest < Decouplio::Action
   end
 end
 
-iteration_count = 100_000_0
+iteration_count = 100_00
 
 Benchmark.ips do |x|
   x.report('RegularService') { iteration_count.times { RegularServiceTest.call(param1: 'param1') } }
