@@ -101,7 +101,7 @@ module Decouplio
       end
 
       def call!(**params)
-        instance = call(params)
+        instance = call(**params)
         if instance.failure?
           raise Decouplio::Errors::ExecutionError.new(
             action: instance

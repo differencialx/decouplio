@@ -3,7 +3,7 @@ version: 2.1
 executors:
   test_executor:
     docker:
-      - image: circleci/ruby:${RUBY_VERSION}
+      - image: cimg/ruby:${RUBY_VERSION}
     working_directory: ~/decouplio
 
 jobs:
@@ -50,4 +50,8 @@ workflows:
       - build:
           name: 'ruby 3.0.3'
           ruby_version: 3.0.3
+          bundler_version: 2.2.32
+      - build:
+          name: 'ruby 3.1.2'
+          ruby_version: 3.1.2
           bundler_version: 2.2.32
