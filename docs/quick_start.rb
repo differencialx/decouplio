@@ -36,3 +36,38 @@ puts action.success? # => true
 puts action.failure? # => false
 
 puts action.railway_flow.to_s # => [:multiply, :divide]
+
+# OR
+# If action result is failure then Decouplio::Errors::ExecutionError is raised
+class RaisingAction < Decouplio::Action
+  logic do
+    step :step_one
+    step :step_two
+  end
+
+  def step_one(step_one_param:, **)
+    ctx[:step_one] = step_one_param
+  end
+
+  def step_two(**)
+    ctx[:step_two] = 'Success'
+  end
+end
+
+begin
+  RaisingAction.call!(step_one_param: false)
+rescue Decouplio::Errors::ExecutionError => exception
+  puts exception.message # => Action failed.
+  puts exception.action # =>
+  # Result: failure
+
+  # Railway Flow:
+  #   step_one
+
+  # Context:
+  #   :step_one_param => false
+  #   :step_one => false
+
+  # Errors:
+  #   None
+end

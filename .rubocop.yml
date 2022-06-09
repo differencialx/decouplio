@@ -108,3 +108,6 @@ Naming/PredicateName:
 Naming/MethodParameterName:
   Exclude:
   - spec/support/cases/**/*
+
+Naming/RescuedExceptionsVariableName:
+  Enabled: false

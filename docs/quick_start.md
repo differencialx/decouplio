@@ -55,6 +55,41 @@ action.success? # => true
 action.failure? # => false
 
 action.railway_flow # => [:multiply, :divide]
+
+# OR
+
+class RaisingAction < Decouplio::Action
+  logic do
+    step :step_one
+    step :step_two
+  end
+
+  def step_one(step_one_param:, **)
+    ctx[:step_one] = step_one_param
+  end
+
+  def step_two(**)
+    ctx[:step_two] = 'Success'
+  end
+end
+
+begin
+  RaisingAction.call!(step_one_param: false)
+rescue Decouplio::Errors::ExecutionError => exception
+  exception.message # => Action failed.
+  exception.action # =>
+  # Result: failure
+
+  # Railway Flow:
+  #   step_one
+
+  # Context:
+  #   :step_one_param => false
+  #   :step_one => false
+
+  # Errors:
+  #   None
+end
 ```
 Learn more about all features:
 - [Logic block](https://github.com/differencialx/decouplio/blob/master/docs/logic_block.md)
