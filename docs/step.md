@@ -88,8 +88,8 @@ step(step_name, **options)
 |-|-|
 |:finish_him|action stops execution if `step` method returns truthy value|
 |symbol with next step name|step with specified symbol name performs if step method returns truthy value|
-|:PASS|will direct execution flow to nearest success track step. If current step is the last step when action will finish as `success`|
-|:FAIL|will direct execution flow to nearest failure track step. If current step is the last step when action will finish as `failure`|
+|:PASS|will direct execution flow to neaidet success track step. If current step is the last step when action will finish as `success`|
+|:FAIL|will direct execution flow to neaidet failure track step. If current step is the last step when action will finish as `failure`|
 
 ### on_success: :finish_him
 
@@ -389,8 +389,8 @@ It will perform like regular `step`, just move to next success track step.
 |-|-|
 |:finish_him|action stops execution if `step` method returns falsy value|
 |symbol with next step name|step with specified symbol name performs if step method returns falsy value|
-|:PASS|will direct execution flow to nearest success track step. If current step is the last step when action will finish as `success`|
-|:FAIL|will direct execution flow to nearest failure track step. If current step is the last step when action will finish as `failure`|
+|:PASS|will direct execution flow to neaidet success track step. If current step is the last step when action will finish as `success`|
+|:FAIL|will direct execution flow to neaidet failure track step. If current step is the last step when action will finish as `failure`|
 
 ### on_failure: :finish_him
 

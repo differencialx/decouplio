@@ -22,6 +22,13 @@ class AddErrorDoby
   end
 end
 
+class ForkDoby
+  def self.call(ctx:, result:, **)
+    ctx[:result] = result
+    ctx[:doby1].call
+  end
+end
+
 module DobyCases
   def when_doby_after_step
     lambda do |_klass|
@@ -507,6 +514,158 @@ module DobyCases
 
       def fail_one(**)
         ctx[:fail_one] = 'Failure'
+      end
+    end
+  end
+
+  def when_doby_on_success_on_failure_to_steps
+    lambda do |_klass|
+      logic do
+        doby ForkDoby, result: true, on_success: :fail_one, on_failure: :step_one
+        step :step_one
+        fail :fail_one
+      end
+
+      def step_one(**)
+        ctx[:step_one] = 'Success'
+      end
+
+      def fail_one(**)
+        ctx[:fail_one] = 'Failure'
+      end
+    end
+  end
+
+  def when_doby_on_success_on_failure_pass_fail
+    lambda do |_klass|
+      logic do
+        doby ForkDoby, result: 'Result', on_success: :FAIL, on_failure: :PASS
+        step :step_one
+        fail :fail_one
+      end
+
+      def step_one(**)
+        ctx[:step_one] = 'Success'
+      end
+
+      def fail_one(**)
+        ctx[:fail_one] = 'Failure'
+      end
+    end
+  end
+
+  def when_doby_on_success_finish_him
+    lambda do |_klass|
+      logic do
+        doby ForkDoby, result: 'Result', on_success: :finish_him
+        step :step_one
+        fail :fail_one
+      end
+
+      def step_one(**)
+        ctx[:step_one] = 'Success'
+      end
+
+      def fail_one(**)
+        ctx[:fail_one] = 'Failure'
+      end
+    end
+  end
+
+  def when_doby_on_failure_finish_him
+    lambda do |_klass|
+      logic do
+        doby ForkDoby, result: 'Result', on_failure: :finish_him
+        step :step_one
+        fail :fail_one
+      end
+
+      def step_one(**)
+        ctx[:step_one] = 'Success'
+      end
+
+      def fail_one(**)
+        ctx[:fail_one] = 'Failure'
+      end
+    end
+  end
+
+  def when_doby_finish_him_on_success
+    lambda do |_klass|
+      logic do
+        doby ForkDoby, result: 'Result', finish_him: :on_success
+        step :step_one
+        fail :fail_one
+      end
+
+      def step_one(**)
+        ctx[:step_one] = 'Success'
+      end
+
+      def fail_one(**)
+        ctx[:fail_one] = 'Failure'
+      end
+    end
+  end
+
+  def when_doby_finish_him_on_failure
+    lambda do |_klass|
+      logic do
+        doby ForkDoby, result: 'Result', finish_him: :on_failure
+        step :step_one
+        fail :fail_one
+      end
+
+      def step_one(**)
+        ctx[:step_one] = 'Success'
+      end
+
+      def fail_one(**)
+        ctx[:fail_one] = 'Failure'
+      end
+    end
+  end
+
+  def when_doby_if_condition
+    lambda do |_klass|
+      logic do
+        doby ForkDoby, result: 'Result', if: :condition
+        step :step_one
+        fail :fail_one
+      end
+
+      def step_one(**)
+        ctx[:step_one] = 'Success'
+      end
+
+      def fail_one(**)
+        ctx[:fail_one] = 'Failure'
+      end
+
+      def condition(condition:, **)
+        condition
+      end
+    end
+  end
+
+  def when_doby_unless_condition
+    lambda do |_klass|
+      logic do
+        doby ForkDoby, result: 'Result', unless: :condition
+        step :step_one
+        fail :fail_one
+      end
+
+      def step_one(**)
+        ctx[:step_one] = 'Success'
+      end
+
+      def fail_one(**)
+        ctx[:fail_one] = 'Failure'
+      end
+
+      def condition(condition:, **)
+        condition
       end
     end
   end

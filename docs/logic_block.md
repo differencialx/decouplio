@@ -23,3 +23,7 @@ Possible logic steps:
 |octo|[--->>>](https://github.com/differencialx/decouplio/blob/master/docs/octo.md)|
 |wrap|[--->>>](https://github.com/differencialx/decouplio/blob/master/docs/wrap.md)|
 |resq|[--->>>](https://github.com/differencialx/decouplio/blob/master/docs/resq.md)|
+|doby|[--->>>](https://github.com/differencialx/decouplio/blob/master/docs/doby_aide.md)|
+|aide|[--->>>](https://github.com/differencialx/decouplio/blob/master/docs/doby_aide.md)|
+|inner action|[--->>>](https://github.com/differencialx/decouplio/blob/master/docs/inner_action.md)|
+|step as service|[--->>>](https://github.com/differencialx/decouplio/blob/master/docs/step_as_a_service.md)|

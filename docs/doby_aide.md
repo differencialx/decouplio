@@ -1,13 +1,13 @@
-# Doby/Deny
+# Doby/Aide
 
-It's a step type to make configurable manipulations with action context.
+Steps which make configurable manipulations with action context.
 
 
 ## Signature
 
 ```ruby
 doby(class_constant, **options)
-deny(class_constant, **options)
+aide(class_constant, **options)
 ```
 
 ## Behavior
@@ -18,9 +18,9 @@ deny(class_constant, **options)
 - `doby` doesn't have `on_success, on_failure, if, unless, finish_him` options.
 - All options passed after class constant will be passed as kwargs for `.call` method.
 
-### Deny
-- `deny` behaves similar to `fail`, no matter which value will be returned by `.call` method, it moves to `failure` track.
-- `deny` doesn't have `on_success, on_failure, if, unless, finish_him` options.
+### Aide
+- `aide` behaves similar to `fail`, no matter which value will be returned by `.call` method, it moves to `failure` track.
+- `aide` doesn't have `on_success, on_failure, if, unless, finish_him` options.
 - All options passed after class constant will be passed as kwargs for `.call` method.
 
 
@@ -49,7 +49,7 @@ end
 
 # OR
 
-class SemanticDeny
+class SemanticAide
   def self.call(ctx:, error_store:, semantic:, error_message:)
     ctx[:semantic] = semantic
     error_store.add_error(semantic, error_message)
@@ -81,7 +81,7 @@ end
 class SomeAction < Decouplio::Action
   logic do
     step :user
-    step AssignDoby, to: :current_user, from: :user
+    doby AssignDoby, to: :current_user, from: :user
   end
 
   def user(id:, **)
@@ -107,11 +107,11 @@ action # =>
 # Errors:
 #   {}
 ```
-`SemanticDeny` example.
+`SemanticAide` example.
 ```ruby
 require 'decouplio'
 
-class SemanticDeny
+class SemanticAide
   def self.call(ctx:, error_store:, semantic:, error_message:)
     ctx[:semantic] = semantic
     error_store.add_error(semantic, error_message)
@@ -121,7 +121,7 @@ end
 class SomeAction < Decouplio::Action
   logic do
     step :step_one
-    deny SemanticDeny, semantic: :bad_request, error_message: 'Bad request'
+    aide SemanticAide, semantic: :bad_request, error_message: 'Bad request'
     step :step_two
   end
 
@@ -159,7 +159,7 @@ failure_action # =>
 # Result: failure
 
 # Railway Flow:
-#   step_one -> SemanticDeny
+#   step_one -> SemanticAide
 
 # Context:
 #   :step_one_param => false
