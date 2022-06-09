@@ -169,3 +169,40 @@ failure_action # =>
 # Errors:
 #   :bad_request => ["Bad request"]
 ```
+
+
+## Options
+
+### Doby
+Has the same options and behavior as [step](https://github.com/differencialx/decouplio/blob/master/docs/step.md), just specify them along with doby class options like here:
+```ruby
+# ...
+
+logic do
+  doby AssignDoby,
+       to: :current_user,
+       from: :user,
+       on_success: :finish_him,
+       if: :condition
+end
+
+# ...
+```
+
+### Aide
+Has the same options and behavior as [fail](https://github.com/differencialx/decouplio/blob/master/docs/fail.md), just specify them along with aide class options like here:
+
+```ruby
+# ...
+
+logic do
+  step :step_one
+  aide SemanticAide,
+       semantic: :bad_request,
+       error_message: 'Bad request',
+       on_failure: :PASS,
+       unless: :condition
+end
+
+# ...
+```
