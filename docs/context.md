@@ -1,5 +1,3 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.0.0/mermaid.min.js"></script>
-
 # Context
 
 Currently context is a simple `Hash` which can be accessed by step methods.

@@ -1,5 +1,3 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.0.0/mermaid.min.js"></script>
-
 # Pass
 
 `pass` is the step type that always moves to success track `logic` steps

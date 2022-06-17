@@ -1,5 +1,3 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.0.0/mermaid.min.js"></script>
-
 # Octo
 
 It's a step type which helps to implement strategy pattern.
@@ -318,11 +316,11 @@ See examples above
 ***
 
 ### if: condition method name
-The same as for [step](https://github.com/differencialx/decouplio/blob/master/docs/step.md)
+The same as for [step](https://differencialx.github.io/decouplio/step)
 
 ***
 
 ### unless: condition method name
-The same as for [step](https://github.com/differencialx/decouplio/blob/master/docs/step.md)
+The same as for [step](https://differencialx.github.io/decouplio/step)
 
 ***
