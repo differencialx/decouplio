@@ -1,3 +1,19 @@
+{%- if content contains 'mermaid' -%}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.0.0/mermaid.min.js"></script>
+<script>
+const config = {
+    startOnLoad:true,
+    theme: 'forest',
+    flowchart: {
+        useMaxWidth:false,
+        htmlLabels:true
+        }
+};
+mermaid.initialize(config);
+window.mermaid.init(undefined, document.querySelectorAll('.language-mermaid'));
+</script>
+{% endif %}
+
 # Resq
 
 Step type which can be use to handle errors raised during step invocation.
@@ -10,25 +26,6 @@ resq(**options)
 
 ## Allowed for steps
 
-<style>
-    .allowed-steps {
-        width: 70%;
-        text-align: center;
-    }
-    .allowed-steps th {
-        background: grey;
-        word-wrap: break-word;
-        text-align: center;
-    }
-    .allowed-steps tr:nth-child(1) td:nth-child(2) { background: green; }
-    .allowed-steps tr:nth-child(2) td:nth-child(2) { background: green; }
-    .allowed-steps tr:nth-child(3) td:nth-child(2) { background: green; }
-    .allowed-steps tr:nth-child(4) td:nth-child(2) { background: green; }
-    .allowed-steps tr:nth-child(5) td:nth-child(2) { background: red; }
-</style>
-
-<div class="allowed-steps">
-
 |Step type|Allowed|
 |-|-|
 |step|Yes|
@@ -36,8 +33,6 @@ resq(**options)
 |pass|Yes|
 |wrap|Yes|
 |octo|NO|
-
-</div>
 
 ## Behavior
 
