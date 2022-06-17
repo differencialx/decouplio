@@ -94,7 +94,7 @@ When `resq` step is defined after allowed step then it will catch error with cla
     #   {}
   ```
 
-  {% mermaid %}
+  ```mermaid
     flowchart LR
         1(start)-->2(step_one);
         2(step_one)-->|success track|3(step_two);
@@ -103,7 +103,7 @@ When `resq` step is defined after allowed step then it will catch error with cla
         5(fail_one)-->|failure track|6(finish failure);
         2(step_one)-->|error track|7(handler_method);
         7(handler_method)-->|error track|5(fail_one);
-  {% endmermaid %}
+  ```
 
 </p>
 </details>
