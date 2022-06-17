@@ -1,3 +1,5 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.0.0/mermaid.min.js"></script>
+
 # Error store
 
 It's an object to store errors. By default `Decouplio::DefaultErrorHandler` is used for `Decouplio::Action`

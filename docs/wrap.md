@@ -1,3 +1,5 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.0.0/mermaid.min.js"></script>
+
 # Wrap
 
 `wrap` is the type of step, that behaves like `step`, but can wrap several steps with block to make some pre/post actions or to [rescue an error](https://github.com/differencialx/decouplio/blob/master/docs/resq.md).

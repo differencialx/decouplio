@@ -1,3 +1,5 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.0.0/mermaid.min.js"></script>
+
 # Step as a service
 
 It's similar to [Inner action](https://github.com/differencialx/decouplio/blob/master/docs/inner_action.md), but instead of using `Decouplio::Action`, you can use PORO class.
