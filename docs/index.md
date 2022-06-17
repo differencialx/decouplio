@@ -9,10 +9,10 @@ Decouplio is a zero dependency, thread safe and framework agnostic gem designed 
 
  ### Docs
 
-- [Quick start](https://github.com/differencialx/decouplio/blob/master/docs/quick_start.md)
+- [Quick start](https://differencialx.github.io/decouplio/quick_start)
 - [Logic block](https://github.com/differencialx/decouplio/blob/master/docs/logic_block.md)
   - [Context](https://github.com/differencialx/decouplio/blob/master/docs/context.md)
-  - [Step](https://github.com/differencialx/decouplio/blob/master/docs/step.md)
+  - [Step](https://differencialx.github.io/decouplio/step)
   - [Fail](https://github.com/differencialx/decouplio/blob/master/docs/fail.md)
   - [Pass](https://github.com/differencialx/decouplio/blob/master/docs/pass.md)
   - [Octo](https://github.com/differencialx/decouplio/blob/master/docs/octo.md)
