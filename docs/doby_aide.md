@@ -1,5 +1,3 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.0.0/mermaid.min.js"></script>
-
 # Doby/Aide
 
 Steps which make configurable manipulations with action context.
@@ -176,7 +174,7 @@ failure_action # =>
 ## Options
 
 ### Doby
-Has the same options and behavior as [step](https://github.com/differencialx/decouplio/blob/master/docs/step.md), just specify them along with doby class options like here:
+Has the same options and behavior as [step](https://differencialx.github.io/decouplio/step), just specify them along with doby class options like here:
 ```ruby
 # ...
 
@@ -192,7 +190,7 @@ end
 ```
 
 ### Aide
-Has the same options and behavior as [fail](https://github.com/differencialx/decouplio/blob/master/docs/fail.md), just specify them along with aide class options like here:
+Has the same options and behavior as [fail](https://differencialx.github.io/decouplio/fail), just specify them along with aide class options like here:
 
 ```ruby
 # ...
