@@ -27,20 +27,20 @@ Or install it by yourself:
 
  ### Docs
 
-- [Quick start](https://differencialx.github.io/decouplio/quick_start)
-- [Logic block](https://differencialx.github.io/decouplio/logic_block)
-  - [Context](https://differencialx.github.io/decouplio/context)
-  - [Step](https://differencialx.github.io/decouplio/step)
-  - [Fail](https://differencialx.github.io/decouplio/fail)
-  - [Pass](https://differencialx.github.io/decouplio/pass)
-  - [Octo](https://differencialx.github.io/decouplio/octo)
-  - [Wrap](https://differencialx.github.io/decouplio/wrap)
-  - [Resq](https://differencialx.github.io/decouplio/resq)
-  - [Inner action](https://differencialx.github.io/decouplio/inner_action)
-  - [Doby/Aide](https://differencialx.github.io/decouplio/doby_aide)
-  - [Step as a service](https://differencialx.github.io/decouplio/step_as_a_service)
-- [Error store](https://differencialx.github.io/decouplio/error_store)
-- [Benchmarks](https://differencialx.github.io/decouplio/benchmarks)
+- [Quick start](https://github.com/differencialx/decouplio/quick_start.md)
+- [Logic block](https://github.com/differencialx/decouplio/logic_block.md)
+  - [Context](https://github.com/differencialx/decouplio/context.md)
+  - [Step](https://github.com/differencialx/decouplio/step.md)
+  - [Fail](https://github.com/differencialx/decouplio/fail.md)
+  - [Pass](https://github.com/differencialx/decouplio/pass.md)
+  - [Octo](https://github.com/differencialx/decouplio/octo.md)
+  - [Wrap](https://github.com/differencialx/decouplio/wrap.md)
+  - [Resq](https://github.com/differencialx/decouplio/resq.md)
+  - [Inner action](https://github.com/differencialx/decouplio/inner_action.md)
+  - [Doby/Aide](https://github.com/differencialx/decouplio/doby_aide.md)
+  - [Step as a service](https://github.com/differencialx/decouplio/step_as_a_service.md)
+- [Error store](https://github.com/differencialx/decouplio/error_store.md)
+- [Benchmarks](https://github.com/differencialx/decouplio/benchmarks.md)
 
 ## Contributing
 

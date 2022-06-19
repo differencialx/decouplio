@@ -17,13 +17,13 @@ What to put inside `logic` block?
 Possible logic steps:
 |Step kind|Docs|
 |---------|----|
-|step|[--->>>](https://differencialx.github.io/decouplio/step)|
-|fail|[--->>>](https://differencialx.github.io/decouplio/fail)|
-|pass|[--->>>](https://differencialx.github.io/decouplio/pass)|
-|octo|[--->>>](https://differencialx.github.io/decouplio/octo)|
-|wrap|[--->>>](https://differencialx.github.io/decouplio/wrap)|
-|resq|[--->>>](https://differencialx.github.io/decouplio/resq)|
-|doby|[--->>>](https://differencialx.github.io/decouplio/doby_aide)|
-|aide|[--->>>](https://differencialx.github.io/decouplio/doby_aide)|
-|inner action|[--->>>](https://differencialx.github.io/decouplio/inner_action)|
-|step as service|[--->>>](https://differencialx.github.io/decouplio/step_as_a_service)|
+|step|[--->>>](https://github.com/differencialx/decouplio/step.md)|
+|fail|[--->>>](https://github.com/differencialx/decouplio/fail.md)|
+|pass|[--->>>](https://github.com/differencialx/decouplio/pass.md)|
+|octo|[--->>>](https://github.com/differencialx/decouplio/octo.md)|
+|wrap|[--->>>](https://github.com/differencialx/decouplio/wrap.md)|
+|resq|[--->>>](https://github.com/differencialx/decouplio/resq.md)|
+|doby|[--->>>](https://github.com/differencialx/decouplio/doby_aide.md)|
+|aide|[--->>>](https://github.com/differencialx/decouplio/doby_aide.md)|
+|inner action|[--->>>](https://github.com/differencialx/decouplio/inner_action.md)|
+|step as service|[--->>>](https://github.com/differencialx/decouplio/step_as_a_service.md)|

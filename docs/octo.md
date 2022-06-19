@@ -316,11 +316,11 @@ See examples above
 ***
 
 ### if: condition method name
-The same as for [step](https://differencialx.github.io/decouplio/step)
+The same as for [step](https://github.com/differencialx/decouplio/step.md)
 
 ***
 
 ### unless: condition method name
-The same as for [step](https://differencialx.github.io/decouplio/step)
+The same as for [step](https://github.com/differencialx/decouplio/step.md)
 
 ***
