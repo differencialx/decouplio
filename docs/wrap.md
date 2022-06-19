@@ -1,6 +1,6 @@
 # Wrap
 
-`wrap` is the type of step, that behaves like `step`, but can wrap several steps with block to make some pre/post actions or to [rescue an error](https://github.com/differencialx/decouplio/docs/resq).
+`wrap` is the type of step, that behaves like `step`, but can wrap several steps with block to make some pre/post actions or to [rescue an error](https://github.com/differencialx/decouplio/blob/master/docs/resq).
 
 ## Signature
 
@@ -12,7 +12,7 @@ end
 
 ## Behavior
 
-- all steps inside `wrap` step will be perceived as [inner action](https://github.com/differencialx/decouplio/docs/inner_action). So depending on inner action result the `wrap` step will be move to success or failure track
+- all steps inside `wrap` step will be perceived as [inner action](https://github.com/differencialx/decouplio/blob/master/docs/inner_action). So depending on inner action result the `wrap` step will be move to success or failure track
 
 <details><summary><b>EXAMPLE (CLICK ME)</b></summary>
 <p>
@@ -207,34 +207,34 @@ end
 ***
 
 ### on_success:
-The same as for [step](https://github.com/differencialx/decouplio/docs/step)
+The same as for [step](https://github.com/differencialx/decouplio/blob/master/docs/step)
 ### on_success: :finish_him
-The same as for [step](https://github.com/differencialx/decouplio/docs/step)
+The same as for [step](https://github.com/differencialx/decouplio/blob/master/docs/step)
 ### on_success: next success track step
-The same as for [step](https://github.com/differencialx/decouplio/docs/step)
+The same as for [step](https://github.com/differencialx/decouplio/blob/master/docs/step)
 ### on_success: next failure track step
-The same as for [step](https://github.com/differencialx/decouplio/docs/step)
+The same as for [step](https://github.com/differencialx/decouplio/blob/master/docs/step)
 ### on_success: :PASS
-The same as for [step](https://github.com/differencialx/decouplio/docs/step)
+The same as for [step](https://github.com/differencialx/decouplio/blob/master/docs/step)
 ### on_success: :FAIL
-The same as for [step](https://github.com/differencialx/decouplio/docs/step)
+The same as for [step](https://github.com/differencialx/decouplio/blob/master/docs/step)
 ### on_failure:
-The same as for [step](https://github.com/differencialx/decouplio/docs/step)
+The same as for [step](https://github.com/differencialx/decouplio/blob/master/docs/step)
 ### on_failure: :finish_him
-The same as for [step](https://github.com/differencialx/decouplio/docs/step)
+The same as for [step](https://github.com/differencialx/decouplio/blob/master/docs/step)
 ### on_failure: next success track step
-The same as for [step](https://github.com/differencialx/decouplio/docs/step)
+The same as for [step](https://github.com/differencialx/decouplio/blob/master/docs/step)
 ### on_failure: next failure track step
-The same as for [step](https://github.com/differencialx/decouplio/docs/step)
+The same as for [step](https://github.com/differencialx/decouplio/blob/master/docs/step)
 ### on_failure: :PASS
-The same as for [step](https://github.com/differencialx/decouplio/docs/step)
+The same as for [step](https://github.com/differencialx/decouplio/blob/master/docs/step)
 ### on_failure: :FAIL
-The same as for [step](https://github.com/differencialx/decouplio/docs/step)
+The same as for [step](https://github.com/differencialx/decouplio/blob/master/docs/step)
 ### if: condition method name
-The same as for [step](https://github.com/differencialx/decouplio/docs/step)
+The same as for [step](https://github.com/differencialx/decouplio/blob/master/docs/step)
 ### unless: condition method name
-The same as for [step](https://github.com/differencialx/decouplio/docs/step)
+The same as for [step](https://github.com/differencialx/decouplio/blob/master/docs/step)
 ### finish_him: :on_success
-The same as for [step](https://github.com/differencialx/decouplio/docs/step)
+The same as for [step](https://github.com/differencialx/decouplio/blob/master/docs/step)
 ### finish_him: :on_failure
-The same as for [step](https://github.com/differencialx/decouplio/docs/step)
+The same as for [step](https://github.com/differencialx/decouplio/blob/master/docs/step)

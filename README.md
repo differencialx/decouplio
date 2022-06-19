@@ -27,24 +27,24 @@ Or install it by yourself:
 
  ### Docs
 
-- [Quick start](https://github.com/differencialx/decouplio/docs/quick_start.md)
-- [Logic block](https://github.com/differencialx/decouplio/docs/logic_block.md)
-  - [Context](https://github.com/differencialx/decouplio/docs/context.md)
-  - [Step](https://github.com/differencialx/decouplio/docs/step.md)
-  - [Fail](https://github.com/differencialx/decouplio/docs/fail.md)
-  - [Pass](https://github.com/differencialx/decouplio/docs/pass.md)
-  - [Octo](https://github.com/differencialx/decouplio/docs/octo.md)
-  - [Wrap](https://github.com/differencialx/decouplio/docs/wrap.md)
-  - [Resq](https://github.com/differencialx/decouplio/docs/resq.md)
-  - [Inner action](https://github.com/differencialx/decouplio/docs/inner_action.md)
-  - [Doby/Aide](https://github.com/differencialx/decouplio/docs/doby_aide.md)
-  - [Step as a service](https://github.com/differencialx/decouplio/docs/step_as_a_service.md)
-- [Error store](https://github.com/differencialx/decouplio/docs/error_store.md)
-- [Benchmarks](https://github.com/differencialx/decouplio/docs/benchmarks.md)
+- [Quick start](https://github.com/differencialx/decouplio/blob/master/docs/quick_start.md)
+- [Logic block](https://github.com/differencialx/decouplio/blob/master/docs/logic_block.md)
+  - [Context](https://github.com/differencialx/decouplio/blob/master/docs/context.md)
+  - [Step](https://github.com/differencialx/decouplio/blob/master/docs/step.md)
+  - [Fail](https://github.com/differencialx/decouplio/blob/master/docs/fail.md)
+  - [Pass](https://github.com/differencialx/decouplio/blob/master/docs/pass.md)
+  - [Octo](https://github.com/differencialx/decouplio/blob/master/docs/octo.md)
+  - [Wrap](https://github.com/differencialx/decouplio/blob/master/docs/wrap.md)
+  - [Resq](https://github.com/differencialx/decouplio/blob/master/docs/resq.md)
+  - [Inner action](https://github.com/differencialx/decouplio/blob/master/docs/inner_action.md)
+  - [Doby/Aide](https://github.com/differencialx/decouplio/blob/master/docs/doby_aide.md)
+  - [Step as a service](https://github.com/differencialx/decouplio/blob/master/docs/step_as_a_service.md)
+- [Error store](https://github.com/differencialx/decouplio/blob/master/docs/error_store.md)
+- [Benchmarks](https://github.com/differencialx/decouplio/blob/master/docs/benchmarks.md)
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/differencialx/decouplio/docs.
+Bug reports and pull requests are welcome on GitHub at https://github.com/differencialx/decouplio/blob/master/docs.
 
 More detailed description for contribution process will be added later.
 

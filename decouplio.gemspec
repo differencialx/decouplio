@@ -12,13 +12,13 @@ Gem::Specification.new do |spec|
 
   spec.summary       = 'Gem for business logic encapsulation'
   spec.description   = "Decouplio is a zero dependency, thread safe and framework agnostic gem designed to encapsulate application business logic. It's reverse engineered through TDD and inspired by such frameworks and gems like Trailblazer, Interactor."
-  spec.homepage      = 'https://github.com/differencialx/decouplio/docs'
+  spec.homepage      = 'https://github.com/differencialx/decouplio/blob/master/docs'
   spec.license       = 'MIT'
 
   if spec.respond_to?(:metadata)
     spec.metadata['homepage_uri'] = spec.homepage
-    spec.metadata['source_code_uri'] = 'https://github.com/differencialx/decouplio/docs'
-    spec.metadata['changelog_uri'] = 'https://github.com/differencialx/decouplio/docs/CHANGELOG.md'
+    spec.metadata['source_code_uri'] = 'https://github.com/differencialx/decouplio/blob/master/docs'
+    spec.metadata['changelog_uri'] = 'https://github.com/differencialx/decouplio/blob/master/docs/CHANGELOG.md'
   else
     raise 'RubyGems 2.0 or newer is required to protect against ' \
       'public gem pushes.'
