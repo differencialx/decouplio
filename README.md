@@ -29,7 +29,7 @@ Or install it by yourself:
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/differencialx/decouplio/blob/master/docs.
+Bug reports and pull requests are welcome on GitHub at https://github.com/differencialx/decouplio/issues.
 
 More detailed description for contribution process will be added later.
 
