@@ -310,4 +310,23 @@ module OptionsValidationsCasesForWrap
       end
     end
   end
+
+  def when_wrap_on_error_step_is_not_defined
+    lambda do |_klass|
+      logic do
+        step :step_threee
+        wrap :some_wrap, on_error: :step_three do
+          step :step_one
+        end
+      end
+
+      def step_one(**)
+        ctx[:step_one] = 'Success'
+      end
+
+      def step_three(**)
+        ctx[:step_two] = 'Success'
+      end
+    end
+  end
 end

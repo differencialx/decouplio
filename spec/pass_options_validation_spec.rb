@@ -155,5 +155,21 @@ RSpec.describe 'Pass options validations' do
                       error_class: Decouplio::Errors::PassControversialKeysError,
                       message: message
     end
+
+    context 'when pass on_error is not defined after fail step' do
+      let(:action_block) { when_pass_on_error_step_is_not_defined }
+
+      interpolation_values = [
+        '{:on_error=>:step_one}',
+        'Step "step_one" is not defined',
+        Decouplio::Const::Validations::Pass::ALLOWED_OPTIONS_MESSAGE,
+        Decouplio::Const::Validations::Pass::MANUAL_URL
+      ]
+      message = Decouplio::Const::Validations::Pass::VALIDATION_ERROR_MESSAGE % interpolation_values
+
+      it_behaves_like 'raises option validation error',
+                      error_class: Decouplio::Errors::StepIsNotDefinedForPassError,
+                      message: message
+    end
   end
 end

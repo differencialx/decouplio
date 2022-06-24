@@ -21,6 +21,7 @@ require_relative 'errors/resq_handler_method_error'
 require_relative 'errors/step_finish_him_error'
 require_relative 'errors/step_is_not_defined_for_step_error'
 require_relative 'errors/step_is_not_defined_for_fail_error'
+require_relative 'errors/step_is_not_defined_for_pass_error'
 require_relative 'errors/step_is_not_defined_for_wrap_error'
 require_relative 'errors/step_is_not_defined_for_aide_error'
 require_relative 'errors/step_is_not_defined_for_doby_error'
@@ -70,7 +71,7 @@ module Decouplio
       when Decouplio::Const::Types::FAIL_TYPE
         validate_fail(options: filtered_options, step_names: step_names)
       when Decouplio::Const::Types::PASS_TYPE
-        validate_pass(options: filtered_options)
+        validate_pass(options: filtered_options, step_names: step_names)
       when Decouplio::Const::Types::OCTO_TYPE
         validate_octo(options: filtered_options, hash_case: options[:hash_case])
       when Decouplio::Const::Types::WRAP_TYPE
@@ -86,7 +87,7 @@ module Decouplio
       when Decouplio::Const::Types::ACTION_TYPE_PASS
         validate_action(action_class: options[:action], type: Decouplio::Const::Types::PASS_TYPE)
         validate_error_store(parent_action_class: @action_class, child_action_class: options[:action])
-        validate_pass(options: filtered_options)
+        validate_pass(options: filtered_options, step_names: step_names)
       when Decouplio::Const::Types::RESQ_TYPE_STEP,
            Decouplio::Const::Types::RESQ_TYPE_FAIL,
            Decouplio::Const::Types::RESQ_TYPE_PASS
@@ -122,7 +123,8 @@ module Decouplio
       check_fail_finish_him(options: options)
     end
 
-    def validate_pass(options:)
+    def validate_pass(options:, step_names:)
+      check_step_presence_for_pass(options: options, step_names: step_names)
       check_pass_extra_keys(options: options)
       check_pass_finish_him(options: options)
     end
@@ -180,6 +182,20 @@ module Decouplio
         next if step_names.keys.include?(option_value)
 
         raise Decouplio::Errors::StepIsNotDefinedForStepError.new(
+          errored_option: options.slice(option_key).to_s,
+          details: option_value
+        )
+      end
+    end
+
+    def check_step_presence_for_pass(options:, step_names:)
+      options.slice(*PASS_CHECK_STEP_PRESENCE).each do |option_key, option_value|
+        next if %i[on_error].include?(option_key) &&
+                STEP_ALLOWED_ON_S_ON_F_VALUES.include?(option_value)
+
+        next if step_names.keys.include?(option_value)
+
+        raise Decouplio::Errors::StepIsNotDefinedForPassError.new(
           errored_option: options.slice(option_key).to_s,
           details: option_value
         )
@@ -623,6 +639,9 @@ module Decouplio
     PASS_CHECK_METHOD_EXISTENCE_OPTIONS = %i[
       if
       unless
+    ].freeze
+    PASS_CHECK_STEP_PRESENCE = %i[
+      on_error
     ].freeze
     ALLOWED_PASS_FINISH_HIM_VALUES = [true, :on_error].freeze
 
