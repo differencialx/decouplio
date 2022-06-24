@@ -228,4 +228,16 @@ module OptionsValidationsCasesForStep
       end
     end
   end
+
+  def when_step_on_error_step_is_not_defined
+    lambda do |_klass|
+      logic do
+        step :step_one, on_error: :step_two
+      end
+
+      def step_one(**)
+        ctx[:step_one] = 'Success'
+      end
+    end
+  end
 end

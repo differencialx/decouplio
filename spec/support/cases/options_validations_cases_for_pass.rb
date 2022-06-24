@@ -182,4 +182,20 @@ module OptionsValidationsCasesForPass
       end
     end
   end
+
+  def when_pass_on_error_step_is_not_defined
+    lambda do |_klass|
+      logic do
+        pass :pass_one, on_error: :step_one
+      end
+
+      def pass_one(**)
+        ctx[:pass_one] = 'Success'
+      end
+
+      def step_one(**)
+        ctx[:step_one] = 'Success'
+      end
+    end
+  end
 end
