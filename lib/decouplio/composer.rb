@@ -205,14 +205,16 @@ module Decouplio
       def create_resq_pass(stp, flow)
         Decouplio::Steps::ResqPass.new(
           handler_hash: stp[:handler_hash],
-          step_to_resq: create_step_instance(stp[:step_to_resq], flow)
+          step_to_resq: create_step_instance(stp[:step_to_resq], flow),
+          on_error_type: error_type(flow, stp)
         )
       end
 
       def create_resq_fail(stp, flow)
         Decouplio::Steps::ResqFail.new(
           handler_hash: stp[:handler_hash],
-          step_to_resq: create_step_instance(stp[:step_to_resq], flow)
+          step_to_resq: create_step_instance(stp[:step_to_resq], flow),
+          on_error_type: error_type(flow, stp)
         )
       end
 
@@ -467,7 +469,22 @@ module Decouplio
         step_id = stp.dig(:flow, Decouplio::Const::Results::FAIL)
         if step_id.nil? && Decouplio::Const::Results::STEP_PASS == stp[:on_failure]
           Decouplio::Const::Results::STEP_PASS
-        elsif step_id.nil? && Decouplio::Const::Results::STEP_FAIL == stp[:on_on_failure]
+        elsif step_id.nil? && Decouplio::Const::Results::STEP_FAIL == stp[:on_failure]
+          Decouplio::Const::Results::STEP_FAIL
+        else
+          Decouplio::Const::Types::FAIL_FLOW.include?(
+            flow[step_id]&.[](:type)
+          )
+        end
+      end
+
+      def error_type(flow, stp)
+        return :finish_him if [:on_error].include?(finish_him(stp))
+
+        step_id = stp.dig(:flow, Decouplio::Const::Results::ERROR)
+        if step_id.nil? && Decouplio::Const::Results::STEP_PASS == stp[:on_error]
+          Decouplio::Const::Results::STEP_PASS
+        elsif step_id.nil? && Decouplio::Const::Results::STEP_FAIL == stp[:on_error]
           Decouplio::Const::Results::STEP_FAIL
         else
           Decouplio::Const::Types::FAIL_FLOW.include?(
@@ -576,6 +593,7 @@ module Decouplio
         options_for_resq = stp[:step_to_resq].slice(
           :on_success,
           :on_failure,
+          :on_error,
           :finish_him,
           :if,
           :unless

@@ -228,4 +228,8 @@ module OptionsValidationsCasesForStep
       end
     end
   end
+
+  def when_step_on_error_step_is_not_defined
+    # TODO: implement
+  end
 end
