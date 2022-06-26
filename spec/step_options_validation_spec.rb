@@ -72,6 +72,23 @@ RSpec.describe 'Step options validations' do
                       message: message
     end
 
+    context 'when on_error step is not defined after current step' do
+      let(:action_block) { when_step_on_error_step_is_not_defined }
+
+      interpolation_values = [
+        '{:on_error=>:step_two}',
+        'Step "step_two" is not defined',
+        Decouplio::Const::Validations::Step::ALLOWED_OPTIONS_MESSAGE,
+        Decouplio::Const::Validations::Step::MANUAL_URL
+      ]
+
+      message = Decouplio::Const::Validations::Step::VALIDATION_ERROR_MESSAGE % interpolation_values
+
+      it_behaves_like 'raises option validation error',
+                      error_class: Decouplio::Errors::StepIsNotDefinedForStepError,
+                      message: message
+    end
+
     context 'when step finish_him is not a boolean' do
       let(:action_block) { when_step_finish_him_is_not_a_boolean }
 

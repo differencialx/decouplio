@@ -3,7 +3,7 @@ version: 2.1
 executors:
   test_executor:
     docker:
-      - image: circleci/ruby:${RUBY_VERSION}
+      - image: cimg/ruby:${RUBY_VERSION}
     working_directory: ~/decouplio
 
 jobs:
@@ -51,3 +51,13 @@ workflows:
           name: 'ruby 3.0.3'
           ruby_version: 3.0.3
           bundler_version: 2.2.32
+      # TODO: Currently rspec-mocks has some issue, or maybe decouplio has an issue
+      # needs to be investigated
+      # 3 specs are failing
+      # rspec ./spec/resq_spec.rb:174
+      # rspec ./spec/resq_spec.rb:286
+      # rspec ./spec/resq_spec.rb:398
+      # - build:
+      #     name: 'ruby 3.1.2'
+      #     ruby_version: 3.1.2
+      #     bundler_version: 2.2.32

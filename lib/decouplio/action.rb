@@ -7,6 +7,7 @@ require_relative 'default_error_handler'
 require_relative 'errors/logic_redefinition_error'
 require_relative 'errors/logic_is_not_defined_error'
 require_relative 'errors/error_store_error'
+require_relative 'errors/execution_error'
 require_relative 'const/results'
 
 module Decouplio
@@ -97,6 +98,17 @@ module Decouplio
         Decouplio::Processor.call(instance: instance, **@flow)
         # TODO: process block with after actions
         instance
+      end
+
+      def call!(**params)
+        instance = call(**params)
+        if instance.failure?
+          raise Decouplio::Errors::ExecutionError.new(
+            action: instance
+          )
+        else
+          instance
+        end
       end
 
       private
