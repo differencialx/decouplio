@@ -111,3 +111,6 @@ Naming/MethodParameterName:
 
 Naming/RescuedExceptionsVariableName:
   Enabled: false
+
+Layout/LineContinuationSpacing:
+  Enabled: false
