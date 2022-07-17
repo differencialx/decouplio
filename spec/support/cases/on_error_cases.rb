@@ -1,5 +1,11 @@
 # frozen_string_literal: true
 
+class OnErrorDoby
+  def self.call(ctx:, **)
+    ctx[:some_doby] = ctx[:s1].call
+  end
+end
+
 module OnErrorCases
   def when_step_on_error_to_step
     lambda do |_klass|
@@ -841,6 +847,301 @@ module OnErrorCases
 
       def handler_one(error, **)
         ctx[:handler_one] = error.message
+      end
+    end
+  end
+
+  def when_doby_on_error_to_step
+    lambda do |_klass|
+      logic do
+        doby OnErrorDoby, on_error: :step_three
+        resq handle_error: ArgumentError
+        fail :fail_one
+        step :step_two
+        step :step_three
+      end
+
+      def fail_one(**)
+        ctx[:fail_one] = 'Failure'
+      end
+
+      def step_two(**)
+        ctx[:step_two] = 'Success'
+      end
+
+      def step_three(**)
+        ctx[:step_three] = 'Success'
+      end
+
+      def handle_error(error, **)
+        ctx[:handle_error] = error.message
+      end
+    end
+  end
+
+  def when_doby_on_error_to_pass
+    lambda do |_klass|
+      logic do
+        doby OnErrorDoby, on_error: :PASS
+        resq handle_error: ArgumentError
+        fail :fail_one
+        step :step_two
+        step :step_three
+      end
+
+      def fail_one(**)
+        ctx[:fail_one] = 'Failure'
+      end
+
+      def step_two(**)
+        ctx[:step_two] = 'Success'
+      end
+
+      def step_three(**)
+        ctx[:step_three] = 'Success'
+      end
+
+      def handle_error(error, **)
+        ctx[:handle_error] = error.message
+      end
+    end
+  end
+
+  def when_doby_on_error_to_fail
+    lambda do |_klass|
+      logic do
+        doby OnErrorDoby, on_error: :FAIL
+        resq handle_error: ArgumentError
+        fail :fail_one
+        step :step_two
+        step :step_three
+      end
+
+      def fail_one(**)
+        ctx[:fail_one] = 'Failure'
+      end
+
+      def step_two(**)
+        ctx[:step_two] = 'Success'
+      end
+
+      def step_three(**)
+        ctx[:step_three] = 'Success'
+      end
+
+      def handle_error(error, **)
+        ctx[:handle_error] = error.message
+      end
+    end
+  end
+
+  def when_doby_on_error_finish_him
+    lambda do |_klass|
+      logic do
+        doby OnErrorDoby, on_error: :finish_him
+        resq handle_error: ArgumentError
+        step :step_one
+        fail :fail_one
+      end
+
+      def step_one(**)
+        ctx[:step_one] = 'Success'
+      end
+
+      def fail_one(**)
+        ctx[:fail_one] = 'Failure'
+      end
+
+      def handle_error(error, **)
+        ctx[:handle_error] = error.message
+      end
+    end
+  end
+
+  def when_doby_finish_him_on_error
+    lambda do |_klass|
+      logic do
+        doby OnErrorDoby, finish_him: :on_error
+        resq handle_error: ArgumentError
+        step :step_one
+        fail :fail_one
+      end
+
+      def step_one(**)
+        ctx[:step_one] = 'Success'
+      end
+
+      def fail_one(**)
+        ctx[:fail_one] = 'Failure'
+      end
+
+      def handle_error(error, **)
+        ctx[:handle_error] = error.message
+      end
+    end
+  end
+
+  def when_aide_on_error_to_step
+    lambda do |_klass|
+      logic do
+        step :step_one
+        aide OnErrorDoby, on_error: :pass_one
+        resq handle_error: ArgumentError
+        fail :fail_one
+        step :step_two
+        pass :pass_one
+      end
+
+      def step_one(**)
+        ctx[:step_one] = false
+      end
+
+      def fail_one(**)
+        ctx[:fail_one] = 'Failure'
+      end
+
+      def step_two(**)
+        ctx[:step_two] = 'Success'
+      end
+
+      def pass_one(**)
+        ctx[:pass_one] = 'Success'
+      end
+
+      def handle_error(error, **)
+        ctx[:handle_error] = error.message
+      end
+    end
+  end
+
+  def when_aide_on_error_to_pass
+    lambda do |_klass|
+      logic do
+        step :step_one
+        aide OnErrorDoby, on_error: :PASS
+        resq handle_error: ArgumentError
+        fail :fail_one
+        step :step_two
+        pass :pass_one
+      end
+
+      def step_one(**)
+        ctx[:step_one] = false
+      end
+
+      def fail_one(**)
+        ctx[:fail_one] = 'Failure'
+      end
+
+      def step_two(**)
+        ctx[:step_two] = 'Success'
+      end
+
+      def pass_one(**)
+        ctx[:pass_one] = 'Success'
+      end
+
+      def handle_error(error, **)
+        ctx[:handle_error] = error.message
+      end
+    end
+  end
+
+  def when_aide_on_error_to_fail
+    lambda do |_klass|
+      logic do
+        step :step_one
+        aide OnErrorDoby, on_error: :FAIL
+        resq handle_error: ArgumentError
+        fail :fail_one
+        step :step_two
+        pass :pass_one
+      end
+
+      def step_one(**)
+        ctx[:step_one] = false
+      end
+
+      def fail_one(**)
+        ctx[:fail_one] = 'Failure'
+      end
+
+      def step_two(**)
+        ctx[:step_two] = 'Success'
+      end
+
+      def pass_one(**)
+        ctx[:pass_one] = 'Success'
+      end
+
+      def handle_error(error, **)
+        ctx[:handle_error] = error.message
+      end
+    end
+  end
+
+  def when_aide_on_error_finish_him
+    lambda do |_klass|
+      logic do
+        step :step_one
+        aide OnErrorDoby, on_error: :finish_him
+        resq handle_error: ArgumentError
+        fail :fail_one
+        step :step_two
+        pass :pass_one
+      end
+
+      def step_one(**)
+        ctx[:step_one] = false
+      end
+
+      def fail_one(**)
+        ctx[:fail_one] = 'Failure'
+      end
+
+      def step_two(**)
+        ctx[:step_two] = 'Success'
+      end
+
+      def pass_one(**)
+        ctx[:pass_one] = 'Success'
+      end
+
+      def handle_error(error, **)
+        ctx[:handle_error] = error.message
+      end
+    end
+  end
+
+  def when_aide_finish_him_on_error
+    lambda do |_klass|
+      logic do
+        step :step_one
+        aide OnErrorDoby, finish_him: :on_error
+        resq handle_error: ArgumentError
+        fail :fail_one
+        step :step_two
+        pass :pass_one
+      end
+
+      def step_one(**)
+        ctx[:step_one] = false
+      end
+
+      def fail_one(**)
+        ctx[:fail_one] = 'Failure'
+      end
+
+      def step_two(**)
+        ctx[:step_two] = 'Success'
+      end
+
+      def pass_one(**)
+        ctx[:pass_one] = 'Success'
+      end
+
+      def handle_error(error, **)
+        ctx[:handle_error] = error.message
       end
     end
   end
