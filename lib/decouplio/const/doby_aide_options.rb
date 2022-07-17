@@ -6,6 +6,7 @@ module Decouplio
       ALLOWED = %i[
         on_success
         on_failure
+        on_error
         finish_him
         if
         unless
