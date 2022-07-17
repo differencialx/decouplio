@@ -1978,4 +1978,773 @@ RSpec.describe 'on_error cases' do
       it_behaves_like 'check action state'
     end
   end
+
+  context 'when doby on_error to step' do
+    let(:action_block) { when_doby_on_error_to_step }
+
+    context 'when OnErrorDoby success' do
+      let(:s1) { -> { true } }
+      let(:railway_flow) { %i[OnErrorDoby step_two step_three] }
+      let(:errors) do
+        {}
+      end
+      let(:expected_state) do
+        {
+          action_status: :success,
+          railway_flow: railway_flow,
+          errors: errors,
+          state: {
+            some_doby: true,
+            fail_one: nil,
+            step_two: 'Success',
+            step_three: 'Success',
+            handle_error: nil
+          }
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+
+    context 'when OnErrorDoby failure' do
+      let(:s1) { -> { false } }
+      let(:railway_flow) { %i[OnErrorDoby fail_one] }
+      let(:errors) do
+        {}
+      end
+      let(:expected_state) do
+        {
+          action_status: :failure,
+          railway_flow: railway_flow,
+          errors: errors,
+          state: {
+            some_doby: false,
+            fail_one: 'Failure',
+            step_two: nil,
+            step_three: nil,
+            handle_error: nil
+          }
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+
+    context 'when OnErrorDoby raises an error' do
+      let(:s1) { -> { raise ArgumentError, error_message } }
+      let(:railway_flow) { %i[OnErrorDoby handle_error step_three] }
+      let(:errors) do
+        {}
+      end
+      let(:expected_state) do
+        {
+          action_status: :success,
+          railway_flow: railway_flow,
+          errors: errors,
+          state: {
+            some_doby: nil,
+            fail_one: nil,
+            step_two: nil,
+            step_three: 'Success',
+            handle_error: error_message
+          }
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+  end
+
+  context 'when doby on_error to PASS' do
+    let(:action_block) { when_doby_on_error_to_pass }
+
+    context 'when OnErrorDoby success' do
+      let(:s1) { -> { true } }
+      let(:railway_flow) { %i[OnErrorDoby step_two step_three] }
+      let(:errors) do
+        {}
+      end
+      let(:expected_state) do
+        {
+          action_status: :success,
+          railway_flow: railway_flow,
+          errors: errors,
+          state: {
+            some_doby: true,
+            fail_one: nil,
+            step_two: 'Success',
+            step_three: 'Success',
+            handle_error: nil
+          }
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+
+    context 'when OnErrorDoby failure' do
+      let(:s1) { -> { false } }
+      let(:railway_flow) { %i[OnErrorDoby fail_one] }
+      let(:errors) do
+        {}
+      end
+      let(:expected_state) do
+        {
+          action_status: :failure,
+          railway_flow: railway_flow,
+          errors: errors,
+          state: {
+            some_doby: false,
+            fail_one: 'Failure',
+            step_two: nil,
+            step_three: nil,
+            handle_error: nil
+          }
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+
+    context 'when OnErrorDoby raises an error' do
+      let(:s1) { -> { raise ArgumentError, error_message } }
+      let(:railway_flow) { %i[OnErrorDoby handle_error step_two step_three] }
+      let(:errors) do
+        {}
+      end
+      let(:expected_state) do
+        {
+          action_status: :success,
+          railway_flow: railway_flow,
+          errors: errors,
+          state: {
+            some_doby: nil,
+            fail_one: nil,
+            step_two: 'Success',
+            step_three: 'Success',
+            handle_error: error_message
+          }
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+  end
+
+  context 'when on_error to FAIL' do
+    let(:action_block) { when_doby_on_error_to_fail }
+
+    context 'when OnErrorDoby success' do
+      let(:s1) { -> { true } }
+      let(:railway_flow) { %i[OnErrorDoby step_two step_three] }
+      let(:errors) do
+        {}
+      end
+      let(:expected_state) do
+        {
+          action_status: :success,
+          railway_flow: railway_flow,
+          errors: errors,
+          state: {
+            some_doby: true,
+            fail_one: nil,
+            step_two: 'Success',
+            step_three: 'Success',
+            handle_error: nil
+          }
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+
+    context 'when OnErrorDoby failure' do
+      let(:s1) { -> { false } }
+      let(:railway_flow) { %i[OnErrorDoby fail_one] }
+      let(:errors) do
+        {}
+      end
+      let(:expected_state) do
+        {
+          action_status: :failure,
+          railway_flow: railway_flow,
+          errors: errors,
+          state: {
+            some_doby: false,
+            fail_one: 'Failure',
+            step_two: nil,
+            step_three: nil,
+            handle_error: nil
+          }
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+
+    context 'when OnErrorDoby raises an error' do
+      let(:s1) { -> { raise ArgumentError, error_message } }
+      let(:railway_flow) { %i[OnErrorDoby handle_error fail_one] }
+      let(:errors) do
+        {}
+      end
+      let(:expected_state) do
+        {
+          action_status: :failure,
+          railway_flow: railway_flow,
+          errors: errors,
+          state: {
+            some_doby: nil,
+            fail_one: 'Failure',
+            step_two: nil,
+            step_three: nil,
+            handle_error: error_message
+          }
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+  end
+
+  context 'when doby on_error finish_him' do
+    let(:action_block) { when_doby_on_error_finish_him }
+
+    context 'when OnErrorDoby success' do
+      let(:s1) { -> { true } }
+      let(:railway_flow) { %i[OnErrorDoby step_one] }
+      let(:errors) do
+        {}
+      end
+      let(:expected_state) do
+        {
+          action_status: :success,
+          railway_flow: railway_flow,
+          errors: errors,
+          state: {
+            some_doby: true,
+            step_one: 'Success',
+            fail_one: nil,
+            handle_error: nil
+          }
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+
+    context 'when OnErrorDoby failure' do
+      let(:s1) { -> { false } }
+      let(:railway_flow) { %i[OnErrorDoby fail_one] }
+      let(:errors) do
+        {}
+      end
+      let(:expected_state) do
+        {
+          action_status: :failure,
+          railway_flow: railway_flow,
+          errors: errors,
+          state: {
+            some_doby: false,
+            step_one: nil,
+            fail_one: 'Failure',
+            handle_error: nil
+          }
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+
+    context 'when OnErrorDoby raises an error' do
+      let(:s1) { -> { raise ArgumentError, error_message } }
+      let(:railway_flow) { %i[OnErrorDoby handle_error] }
+      let(:errors) do
+        {}
+      end
+      let(:expected_state) do
+        {
+          action_status: :failure,
+          railway_flow: railway_flow,
+          errors: errors,
+          state: {
+            some_doby: nil,
+            step_one: nil,
+            fail_one: nil,
+            handle_error: error_message
+          }
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+  end
+
+  context 'when doby finish_him on_error' do
+    let(:action_block) { when_doby_finish_him_on_error }
+
+    context 'when OnErrorDoby success' do
+      let(:s1) { -> { true } }
+      let(:railway_flow) { %i[OnErrorDoby step_one] }
+      let(:errors) do
+        {}
+      end
+      let(:expected_state) do
+        {
+          action_status: :success,
+          railway_flow: railway_flow,
+          errors: errors,
+          state: {
+            some_doby: true,
+            step_one: 'Success',
+            fail_one: nil,
+            handle_error: nil
+          }
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+
+    context 'when OnErrorDoby failure' do
+      let(:s1) { -> { false } }
+      let(:railway_flow) { %i[OnErrorDoby fail_one] }
+      let(:errors) do
+        {}
+      end
+      let(:expected_state) do
+        {
+          action_status: :failure,
+          railway_flow: railway_flow,
+          errors: errors,
+          state: {
+            some_doby: false,
+            step_one: nil,
+            fail_one: 'Failure',
+            handle_error: nil
+          }
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+
+    context 'when OnErrorDoby raises an error' do
+      let(:s1) { -> { raise ArgumentError, error_message } }
+      let(:railway_flow) { %i[OnErrorDoby handle_error] }
+      let(:errors) do
+        {}
+      end
+      let(:expected_state) do
+        {
+          action_status: :failure,
+          railway_flow: railway_flow,
+          errors: errors,
+          state: {
+            some_doby: nil,
+            step_one: nil,
+            fail_one: nil,
+            handle_error: error_message
+          }
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+  end
+
+  context 'when aide on_error to step' do
+    let(:action_block) { when_aide_on_error_to_step }
+
+    context 'when OnErrorDoby success' do
+      let(:s1) { -> { true } }
+      let(:railway_flow) { %i[step_one OnErrorDoby fail_one] }
+      let(:errors) do
+        {}
+      end
+      let(:expected_state) do
+        {
+          action_status: :failure,
+          railway_flow: railway_flow,
+          errors: errors,
+          state: {
+            step_one: false,
+            some_doby: true,
+            fail_one: 'Failure',
+            step_two: nil,
+            pass_one: nil,
+            handle_error: nil
+          }
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+
+    context 'when OnErrorDoby failure' do
+      let(:s1) { -> { false } }
+      let(:railway_flow) { %i[step_one OnErrorDoby fail_one] }
+      let(:errors) do
+        {}
+      end
+      let(:expected_state) do
+        {
+          action_status: :failure,
+          railway_flow: railway_flow,
+          errors: errors,
+          state: {
+            step_one: false,
+            some_doby: false,
+            fail_one: 'Failure',
+            step_two: nil,
+            pass_one: nil,
+            handle_error: nil
+          }
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+
+    context 'when OnErrorDoby raises an error' do
+      let(:s1) { -> { raise ArgumentError, error_message } }
+      let(:railway_flow) { %i[step_one OnErrorDoby handle_error pass_one] }
+      let(:errors) do
+        {}
+      end
+      let(:expected_state) do
+        {
+          action_status: :success,
+          railway_flow: railway_flow,
+          errors: errors,
+          state: {
+            step_one: false,
+            some_doby: nil,
+            fail_one: nil,
+            step_two: nil,
+            pass_one: 'Success',
+            handle_error: error_message
+          }
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+  end
+
+  context 'when aide on_error to PASS' do
+    let(:action_block) { when_aide_on_error_to_pass }
+
+    context 'when OnErrorDoby success' do
+      let(:s1) { -> { true } }
+      let(:railway_flow) { %i[step_one OnErrorDoby fail_one] }
+      let(:errors) do
+        {}
+      end
+      let(:expected_state) do
+        {
+          action_status: :failure,
+          railway_flow: railway_flow,
+          errors: errors,
+          state: {
+            step_one: false,
+            some_doby: true,
+            fail_one: 'Failure',
+            step_two: nil,
+            pass_one: nil,
+            handle_error: nil
+          }
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+
+    context 'when OnErrorDoby failure' do
+      let(:s1) { -> { false } }
+      let(:railway_flow) { %i[step_one OnErrorDoby fail_one] }
+      let(:errors) do
+        {}
+      end
+      let(:expected_state) do
+        {
+          action_status: :failure,
+          railway_flow: railway_flow,
+          errors: errors,
+          state: {
+            step_one: false,
+            some_doby: false,
+            fail_one: 'Failure',
+            step_two: nil,
+            pass_one: nil,
+            handle_error: nil
+          }
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+
+    context 'when OnErrorDoby raises an error' do
+      let(:s1) { -> { raise ArgumentError, error_message } }
+      let(:railway_flow) { %i[step_one OnErrorDoby handle_error step_two pass_one] }
+      let(:errors) do
+        {}
+      end
+      let(:expected_state) do
+        {
+          action_status: :success,
+          railway_flow: railway_flow,
+          errors: errors,
+          state: {
+            step_one: false,
+            some_doby: nil,
+            fail_one: nil,
+            step_two: 'Success',
+            pass_one: 'Success',
+            handle_error: error_message
+          }
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+  end
+
+  context 'when aide on_error to FAIL' do
+    let(:action_block) { when_aide_on_error_to_fail }
+
+    context 'when OnErrorDoby success' do
+      let(:s1) { -> { true } }
+      let(:railway_flow) { %i[step_one OnErrorDoby fail_one] }
+      let(:errors) do
+        {}
+      end
+      let(:expected_state) do
+        {
+          action_status: :failure,
+          railway_flow: railway_flow,
+          errors: errors,
+          state: {
+            step_one: false,
+            some_doby: true,
+            fail_one: 'Failure',
+            step_two: nil,
+            pass_one: nil,
+            handle_error: nil
+          }
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+
+    context 'when OnErrorDoby failure' do
+      let(:s1) { -> { false } }
+      let(:railway_flow) { %i[step_one OnErrorDoby fail_one] }
+      let(:errors) do
+        {}
+      end
+      let(:expected_state) do
+        {
+          action_status: :failure,
+          railway_flow: railway_flow,
+          errors: errors,
+          state: {
+            step_one: false,
+            some_doby: false,
+            fail_one: 'Failure',
+            step_two: nil,
+            pass_one: nil,
+            handle_error: nil
+          }
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+
+    context 'when OnErrorDoby raises an error' do
+      let(:s1) { -> { raise ArgumentError, error_message } }
+      let(:railway_flow) { %i[step_one OnErrorDoby handle_error fail_one] }
+      let(:errors) do
+        {}
+      end
+      let(:expected_state) do
+        {
+          action_status: :failure,
+          railway_flow: railway_flow,
+          errors: errors,
+          state: {
+            step_one: false,
+            some_doby: nil,
+            fail_one: 'Failure',
+            step_two: nil,
+            pass_one: nil,
+            handle_error: error_message
+          }
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+  end
+
+  context 'when aide on_error finish_him' do
+    let(:action_block) { when_aide_on_error_finish_him }
+
+    context 'when OnErrorDoby success' do
+      let(:s1) { -> { true } }
+      let(:railway_flow) { %i[step_one OnErrorDoby fail_one] }
+      let(:errors) do
+        {}
+      end
+      let(:expected_state) do
+        {
+          action_status: :failure,
+          railway_flow: railway_flow,
+          errors: errors,
+          state: {
+            step_one: false,
+            some_doby: true,
+            fail_one: 'Failure',
+            step_two: nil,
+            pass_one: nil,
+            handle_error: nil
+          }
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+
+    context 'when OnErrorDoby failure' do
+      let(:s1) { -> { false } }
+      let(:railway_flow) { %i[step_one OnErrorDoby fail_one] }
+      let(:errors) do
+        {}
+      end
+      let(:expected_state) do
+        {
+          action_status: :failure,
+          railway_flow: railway_flow,
+          errors: errors,
+          state: {
+            step_one: false,
+            some_doby: false,
+            fail_one: 'Failure',
+            step_two: nil,
+            pass_one: nil,
+            handle_error: nil
+          }
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+
+    context 'when OnErrorDoby raises an error' do
+      let(:s1) { -> { raise ArgumentError, error_message } }
+      let(:railway_flow) { %i[step_one OnErrorDoby handle_error] }
+      let(:errors) do
+        {}
+      end
+      let(:expected_state) do
+        {
+          action_status: :failure,
+          railway_flow: railway_flow,
+          errors: errors,
+          state: {
+            step_one: false,
+            some_doby: nil,
+            fail_one: nil,
+            step_two: nil,
+            pass_one: nil,
+            handle_error: error_message
+          }
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+  end
+
+  context 'when aide finish_him on_error' do
+    let(:action_block) { when_aide_finish_him_on_error }
+
+    context 'when OnErrorDoby success' do
+      let(:s1) { -> { true } }
+      let(:railway_flow) { %i[step_one OnErrorDoby fail_one] }
+      let(:errors) do
+        {}
+      end
+      let(:expected_state) do
+        {
+          action_status: :failure,
+          railway_flow: railway_flow,
+          errors: errors,
+          state: {
+            step_one: false,
+            some_doby: true,
+            fail_one: 'Failure',
+            step_two: nil,
+            pass_one: nil,
+            handle_error: nil
+          }
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+
+    context 'when OnErrorDoby failure' do
+      let(:s1) { -> { false } }
+      let(:railway_flow) { %i[step_one OnErrorDoby fail_one] }
+      let(:errors) do
+        {}
+      end
+      let(:expected_state) do
+        {
+          action_status: :failure,
+          railway_flow: railway_flow,
+          errors: errors,
+          state: {
+            step_one: false,
+            some_doby: false,
+            fail_one: 'Failure',
+            step_two: nil,
+            pass_one: nil,
+            handle_error: nil
+          }
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+
+    context 'when OnErrorDoby raises an error' do
+      let(:s1) { -> { raise ArgumentError, error_message } }
+      let(:railway_flow) { %i[step_one OnErrorDoby handle_error] }
+      let(:errors) do
+        {}
+      end
+      let(:expected_state) do
+        {
+          action_status: :failure,
+          railway_flow: railway_flow,
+          errors: errors,
+          state: {
+            step_one: false,
+            some_doby: nil,
+            fail_one: nil,
+            step_two: nil,
+            pass_one: nil,
+            handle_error: error_message
+          }
+        }
+      end
+
+      it_behaves_like 'check action state'
+    end
+  end
 end

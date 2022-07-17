@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module Decouplio
-  VERSION = '1.0.0alpha4'
+  VERSION = '1.0.0alpha5'
 end
