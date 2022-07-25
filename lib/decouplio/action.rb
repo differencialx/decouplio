@@ -12,10 +12,8 @@ require_relative 'const/results'
 
 module Decouplio
   class Action
-    PREVIOUS_STEP_INDEX = -2
-
     extend Forwardable
-    def_delegators :@error_store, :errors, :add_error
+    def_delegators :@error_store, :errors, :add_error, :error_status
     attr_reader :railway_flow, :ctx, :error_store
 
     def initialize(
