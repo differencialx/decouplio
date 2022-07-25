@@ -249,6 +249,7 @@ module Decouplio
         Decouplio::Steps::ServiceStep.new(
           name: stp[:name],
           service: stp[:service],
+          args: stp[:_args],
           on_success_type: success_type(flow, stp),
           on_failure_type: failure_type(flow, stp)
         )
@@ -258,6 +259,7 @@ module Decouplio
         Decouplio::Steps::ServiceFail.new(
           name: stp[:name],
           service: stp[:service],
+          args: stp[:_args],
           on_success_type: success_type(flow, stp),
           on_failure_type: failure_type(flow, stp)
         )
@@ -267,6 +269,7 @@ module Decouplio
         Decouplio::Steps::ServicePass.new(
           name: stp[:name],
           service: stp[:service],
+          args: stp[:_args],
           on_success_type: success_type(flow, stp),
           on_failure_type: failure_type(flow, stp)
         )

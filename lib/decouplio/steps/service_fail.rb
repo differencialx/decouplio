@@ -6,10 +6,11 @@ require_relative 'shared/fail_resolver'
 module Decouplio
   module Steps
     class ServiceFail < Decouplio::Steps::BaseStep
-      def initialize(name:, service:, on_success_type:, on_failure_type:)
+      def initialize(name:, service:, args:, on_success_type:, on_failure_type:)
         super()
         @name = name
         @service = service
+        @args = args
         @on_success_type = on_success_type
         @on_failure_type = on_failure_type
       end
@@ -18,7 +19,8 @@ module Decouplio
         instance.append_railway_flow(@name)
         result = @service.call(
           ctx: instance.ctx,
-          error_store: instance.error_store
+          error_store: instance.error_store,
+          **@args
         )
 
         resolve(result: result, instance: instance)
