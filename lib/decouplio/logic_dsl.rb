@@ -131,7 +131,9 @@ module Decouplio
       end
 
       def doby(doby_class, **options)
-        warn('DEPRECATION WARNING: "doby" step type will be deprecated at alpha7 version. Use "step" or "pass" instead.')
+        warn(
+          'DEPRECATION WARNING: "doby" step type will be deprecated at alpha7 version. Use "step" or "pass" instead.'
+        )
         step_options = {}
         options.each_key do |key|
           step_options[key] = options.delete(key) if Decouplio::Const::DobyAideOptions::ALLOWED.include?(key)
