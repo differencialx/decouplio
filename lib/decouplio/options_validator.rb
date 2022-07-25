@@ -567,6 +567,7 @@ module Decouplio
       hash_case
       wrap_flow
       step_to_resq
+      _args
     ].freeze
 
     # *************************************************

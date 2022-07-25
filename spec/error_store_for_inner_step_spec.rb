@@ -39,7 +39,7 @@ RSpec.describe 'Error store for inner step' do
         error_store_class CustomErrorStore
 
         logic do
-          step :inner_step, action: InnerActionWithDefaultErrorStore
+          step InnerActionWithDefaultErrorStore
           step :add_action_error
         end
 
@@ -98,7 +98,7 @@ RSpec.describe 'Error store for inner step' do
         error_store_class CustomErrorStore
 
         logic do
-          step :inner_step, action: InnerActionWithCustomErrorStore
+          step InnerActionWithCustomErrorStore
           step :add_action_error
         end
 
