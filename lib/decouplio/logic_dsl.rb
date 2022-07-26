@@ -3,6 +3,7 @@
 require_relative 'flow'
 require_relative 'const/types'
 require_relative 'const/doby_aide_options'
+require_relative 'const/step_options'
 require_relative 'octo_hash_case'
 require_relative 'errors/options_validation_error'
 require_relative 'errors/palp_validation_error'
@@ -30,17 +31,61 @@ module Decouplio
       end
 
       def step(stp, **options)
-        @steps << options.merge(type: Decouplio::Const::Types::STEP_TYPE, name: stp)
+        if stp.is_a?(Class) && !(stp < Decouplio::Action)
+          step_options = {}
+
+          options.each_key do |key|
+            step_options[key] = options.delete(key) if Decouplio::Const::StepOptions::ALLOWED.include?(key)
+          end
+
+          @steps << {
+            type: Decouplio::Const::Types::STEP_TYPE,
+            name: stp,
+            _args: options,
+            **step_options
+          }
+        else
+          @steps << options.merge(type: Decouplio::Const::Types::STEP_TYPE, name: stp)
+        end
       end
 
       def fail(stp, **options)
         raise Decouplio::Errors::FailCanNotBeFirstStepError if @steps.empty?
 
-        @steps << options.merge(type: Decouplio::Const::Types::FAIL_TYPE, name: stp)
+        if stp.is_a?(Class) && !(stp < Decouplio::Action)
+          step_options = {}
+          options.each_key do |key|
+            step_options[key] = options.delete(key) if Decouplio::Const::StepOptions::ALLOWED.include?(key)
+          end
+
+          @steps << {
+            type: Decouplio::Const::Types::FAIL_TYPE,
+            name: stp,
+            _args: options,
+            **step_options
+          }
+        else
+          @steps << options.merge(type: Decouplio::Const::Types::FAIL_TYPE, name: stp)
+        end
       end
 
       def pass(stp, **options)
-        @steps << options.merge(type: Decouplio::Const::Types::PASS_TYPE, name: stp)
+        if stp.is_a?(Class) && !(stp < Decouplio::Action)
+          step_options = {}
+
+          options.each_key do |key|
+            step_options[key] = options.delete(key) if Decouplio::Const::StepOptions::ALLOWED.include?(key)
+          end
+
+          @steps << {
+            type: Decouplio::Const::Types::PASS_TYPE,
+            name: stp,
+            _args: options,
+            **step_options
+          }
+        else
+          @steps << options.merge(type: Decouplio::Const::Types::PASS_TYPE, name: stp)
+        end
       end
 
       def octo(octo_name, **options, &block)
@@ -86,6 +131,9 @@ module Decouplio
       end
 
       def doby(doby_class, **options)
+        warn(
+          'DEPRECATION WARNING: "doby" step type will be deprecated at alpha7 version. Use "step" or "pass" instead.'
+        )
         step_options = {}
         options.each_key do |key|
           step_options[key] = options.delete(key) if Decouplio::Const::DobyAideOptions::ALLOWED.include?(key)
@@ -102,6 +150,7 @@ module Decouplio
       end
 
       def aide(aide_class, **options)
+        warn('DEPRECATION WARNING: "aide" step type will be deprecated at alpha7 version. Use "fail" instead.')
         raise Decouplio::Errors::AideCanNotBeFirstStepError if @steps.empty?
 
         step_options = {}

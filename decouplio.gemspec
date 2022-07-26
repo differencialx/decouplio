@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = 'Gem for business logic encapsulation'
   spec.description   = "Decouplio is a zero dependency, thread safe and framework agnostic gem designed to encapsulate application business logic. It's reverse engineered through TDD and inspired by such frameworks and gems like Trailblazer, Interactor."
-  spec.homepage      = 'https://github.com/differencialx/decouplio/blob/master/docs'
+  spec.homepage      = 'https://differencialx.github.io/decouplio.github.io/'
   spec.license       = 'MIT'
 
   if spec.respond_to?(:metadata)
