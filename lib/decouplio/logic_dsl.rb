@@ -132,7 +132,7 @@ module Decouplio
 
       def doby(doby_class, **options)
         warn(
-          'DEPRECATION WARNING: "doby" step type will be deprecated at alpha7 version. Use "step" or "pass" instead.'
+          'DEPRECATION WARNING: "doby" step type will be deprecated at alpha8 version. Use "step" or "pass" instead.'
         )
         step_options = {}
         options.each_key do |key|
@@ -150,7 +150,7 @@ module Decouplio
       end
 
       def aide(aide_class, **options)
-        warn('DEPRECATION WARNING: "aide" step type will be deprecated at alpha7 version. Use "fail" instead.')
+        warn('DEPRECATION WARNING: "aide" step type will be deprecated at alpha8 version. Use "fail" instead.')
         raise Decouplio::Errors::AideCanNotBeFirstStepError if @steps.empty?
 
         step_options = {}
