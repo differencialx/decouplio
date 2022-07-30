@@ -10,8 +10,6 @@ require_relative 'errors/extra_key_for_pass_error'
 require_relative 'errors/extra_key_for_resq_error'
 require_relative 'errors/extra_key_for_wrap_error'
 require_relative 'errors/fail_finish_him_error'
-require_relative 'errors/doby_finish_him_error'
-require_relative 'errors/aide_finish_him_error'
 require_relative 'errors/invalid_error_class_error'
 require_relative 'errors/invalid_wrap_name_error'
 require_relative 'errors/pass_finish_him_error'
@@ -23,13 +21,9 @@ require_relative 'errors/step_is_not_defined_for_step_error'
 require_relative 'errors/step_is_not_defined_for_fail_error'
 require_relative 'errors/step_is_not_defined_for_pass_error'
 require_relative 'errors/step_is_not_defined_for_wrap_error'
-require_relative 'errors/step_is_not_defined_for_aide_error'
-require_relative 'errors/step_is_not_defined_for_doby_error'
 require_relative 'errors/wrap_finish_him_error'
 require_relative 'errors/wrap_klass_method_error'
 require_relative 'errors/step_controversial_keys_error'
-require_relative 'errors/doby_controversial_keys_error'
-require_relative 'errors/aide_controversial_keys_error'
 require_relative 'errors/fail_controversial_keys_error'
 require_relative 'errors/pass_controversial_keys_error'
 require_relative 'errors/octo_controversial_keys_error'
@@ -89,10 +83,6 @@ module Decouplio
            Decouplio::Const::Types::RESQ_TYPE_PASS
         validate(options: options[:step_to_resq], step_names: step_names)
         validate_resq(options: filtered_options)
-      when Decouplio::Const::Types::DOBY_TYPE
-        validate_doby(options: filtered_options, step_names: step_names)
-      when Decouplio::Const::Types::AIDE_TYPE
-        validate_aide(options: filtered_options, step_names: step_names)
       end
     end
 
@@ -150,18 +140,6 @@ module Decouplio
       check_resq_exception_classes_inheritance(options: options)
     end
 
-    def validate_doby(options:, step_names:)
-      check_step_presence_for_doby(options: options, step_names: step_names)
-      check_doby_controversial_keys(options: options)
-      check_doby_finish_him(options: options)
-    end
-
-    def validate_aide(options:, step_names:)
-      check_step_presence_for_aide(options: options, step_names: step_names)
-      check_aide_controversial_keys(options: options)
-      check_aide_finish_him(options: options)
-    end
-
     def validate_name(name:)
       return unless Decouplio::Const::ReservedMethods::NAMES.include?(name)
 
@@ -192,34 +170,6 @@ module Decouplio
         next if step_names.keys.include?(option_value)
 
         raise Decouplio::Errors::StepIsNotDefinedForPassError.new(
-          errored_option: options.slice(option_key).to_s,
-          details: option_value
-        )
-      end
-    end
-
-    def check_step_presence_for_doby(options:, step_names:)
-      options.slice(*STEP_CHECK_STEP_PRESENCE).each do |option_key, option_value|
-        next if %i[on_success on_failure on_error].include?(option_key) &&
-                STEP_ALLOWED_ON_S_ON_F_VALUES.include?(option_value)
-
-        next if step_names.keys.include?(option_value)
-
-        raise Decouplio::Errors::StepIsNotDefinedForDobyError.new(
-          errored_option: options.slice(option_key).to_s,
-          details: option_value
-        )
-      end
-    end
-
-    def check_step_presence_for_aide(options:, step_names:)
-      options.slice(*STEP_CHECK_STEP_PRESENCE).each do |option_key, option_value|
-        next if %i[on_success on_failure on_error].include?(option_key) &&
-                STEP_ALLOWED_ON_S_ON_F_VALUES.include?(option_value)
-
-        next if step_names.keys.include?(option_value)
-
-        raise Decouplio::Errors::StepIsNotDefinedForAideError.new(
           errored_option: options.slice(option_key).to_s,
           details: option_value
         )
@@ -270,30 +220,6 @@ module Decouplio
 
       if !on_success_on_failure.empty? && !finish_him.empty?
         raise Decouplio::Errors::StepControversialKeysError.new(
-          errored_option: on_success_on_failure.merge(finish_him).to_s,
-          details: [on_success_on_failure.keys.join(', '), :finish_him]
-        )
-      end
-    end
-
-    def check_doby_controversial_keys(options:)
-      on_success_on_failure = options.slice(:on_success, :on_failure)
-      finish_him = options.slice(:finish_him)
-
-      if !on_success_on_failure.empty? && !finish_him.empty?
-        raise Decouplio::Errors::DobyControversialKeysError.new(
-          errored_option: on_success_on_failure.merge(finish_him).to_s,
-          details: [on_success_on_failure.keys.join(', '), :finish_him]
-        )
-      end
-    end
-
-    def check_aide_controversial_keys(options:)
-      on_success_on_failure = options.slice(:on_success, :on_failure)
-      finish_him = options.slice(:finish_him)
-
-      if !on_success_on_failure.empty? && !finish_him.empty?
-        raise Decouplio::Errors::AideControversialKeysError.new(
           errored_option: on_success_on_failure.merge(finish_him).to_s,
           details: [on_success_on_failure.keys.join(', '), :finish_him]
         )
@@ -414,32 +340,6 @@ module Decouplio
           details: finish_him_value
         )
       end
-    end
-
-    def check_doby_finish_him(options:)
-      finish_him_value = options.dig(:finish_him)
-
-      return unless finish_him_value && options.key?(:finish_him)
-
-      unless ALLOWED_STEP_FINISH_HIM_VALUES.include?(finish_him_value)
-        raise Decouplio::Errors::DobyFinishHimError.new(
-          errored_option: options.slice(:finish_him).to_s,
-          details: finish_him_value
-        )
-      end
-    end
-
-    def check_aide_finish_him(options:)
-      finish_him_value = options.dig(:finish_him)
-
-      return unless options.key?(:finish_him)
-
-      return if ALLOWED_FAIL_FINISH_HIM_VALUES.include?(finish_him_value)
-
-      raise Decouplio::Errors::AideFinishHimError.new(
-        errored_option: options.slice(:finish_him).to_s,
-        details: finish_him_value
-      )
     end
 
     def check_fail_finish_him(options:)

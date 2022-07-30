@@ -42,16 +42,6 @@ module Decouplio
             errored_option: condition_options.to_s,
             details: %i[if unless]
           )
-        when Decouplio::Const::Types::DOBY_TYPE
-          raise Decouplio::Errors::DobyControversialKeysError.new(
-            errored_option: condition_options.to_s,
-            details: %i[if unless]
-          )
-        when Decouplio::Const::Types::AIDE_TYPE
-          raise Decouplio::Errors::AideControversialKeysError.new(
-            errored_option: condition_options.to_s,
-            details: %i[if unless]
-          )
         end
       end
     end
