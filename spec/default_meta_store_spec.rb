@@ -1,5 +1,7 @@
-RSpec.describe Decouplio::DefaultMetaStore do
-  subject(:meta_store) { described_class.new }
+# frozen_string_literal: true
+
+RSpec.describe 'Decouplio::DefaultMetaStore' do
+  subject(:meta_store) { Decouplio::DefaultMetaStore.new }
 
   describe '#status' do
     it 'assigns status' do
@@ -38,6 +40,12 @@ RSpec.describe Decouplio::DefaultMetaStore do
   end
 
   describe '#to_s' do
+    shared_examples 'composes proper string' do
+      it 'returns proper string' do
+        expect(meta_store.to_s).to eq expected_string
+      end
+    end
+
     let(:expected_string) do
       <<~METASTORE
         Status: #{expected_status}
@@ -49,10 +57,8 @@ RSpec.describe Decouplio::DefaultMetaStore do
     let(:expected_status) { 'NONE' }
     let(:expected_errors) { 'NONE' }
 
-    context 'when status empty' do
-      it 'returns proper string' do
-        expect(meta_store.to_s).to eq expected_string
-      end
+    context 'when status and errors are empty' do
+      it_behaves_like 'composes proper string'
     end
 
     context 'when status present' do
@@ -62,15 +68,13 @@ RSpec.describe Decouplio::DefaultMetaStore do
         meta_store.status = :random_status
       end
 
-      it 'returns proper string' do
-        expect(meta_store.to_s).to eq expected_string
-      end
+      it_behaves_like 'composes proper string'
     end
 
     context 'when errors is present' do
       let(:expected_errors) do
         ":error_one => [\"Message 1\"]\n  "\
-        ":error_two => [\"Message 2\"]"
+          ':error_two => ["Message 2"]'
       end
 
       before do
@@ -78,15 +82,7 @@ RSpec.describe Decouplio::DefaultMetaStore do
         meta_store.add_error(:error_two, 'Message 2')
       end
 
-      it 'returns proper string' do
-        expect(meta_store.to_s).to eq expected_string
-      end
-    end
-
-    context 'when errors is empty' do
-      it 'returns proper string' do
-        expect(meta_store.to_s).to eq expected_string
-      end
+      it_behaves_like 'composes proper string'
     end
   end
 end

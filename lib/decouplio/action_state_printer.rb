@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Decouplio
   class ActionStatePrinter
     def self.call(action)
@@ -15,8 +17,6 @@ module Decouplio
 
       INSPECT
     end
-
-    private
 
     def self.result(action)
       action.success? ? 'success' : 'failure'

@@ -11,8 +11,8 @@ module MetaStoreCases
 
       def step_one(s1:, **)
         ms.status = 400
-        ms.add_error(:error_1, 'Message 1')
-        ms.add_error(:error_2, 'Message 2')
+        ms.add_error(:error1, 'Message 1')
+        ms.add_error(:error2, 'Message 2')
         ctx[:step_one] = s1.call
       end
 

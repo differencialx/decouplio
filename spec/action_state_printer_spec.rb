@@ -1,5 +1,7 @@
-RSpec.describe Decouplio::ActionStatePrinter do
-  subject(:meta_store) { described_class.call(action) }
+# frozen_string_literal: true
+
+RSpec.describe 'Decouplio::ActionStatePrinter' do
+  subject(:meta_store) { Decouplio::ActionStatePrinter.call(action) }
 
   include_context 'with basic spec setup'
 
@@ -30,9 +32,9 @@ RSpec.describe Decouplio::ActionStatePrinter do
         Status: 400
 
         Errors:
-          :error_1 => ["Message 1"]
-          :error_2 => ["Message 2"]
-    METASTORE
+          :error1 => ["Message 1"]
+          :error2 => ["Message 2"]
+      METASTORE
     end
 
     context 'when step_one success' do
@@ -43,9 +45,9 @@ RSpec.describe Decouplio::ActionStatePrinter do
       end
       let(:expected_context) do
         ":s1 => #{s1.inspect}\n  "\
-        ":step_one => true\n  "\
-        ":step_two => \"Success\"\n  "\
-        ":step_three => \"Success\""
+          ":step_one => true\n  "\
+          ":step_two => \"Success\"\n  "\
+          ':step_three => "Success"'
       end
 
       it 'prints correct message' do
@@ -61,7 +63,7 @@ RSpec.describe Decouplio::ActionStatePrinter do
       end
       let(:expected_context) do
         ":s1 => #{s1.inspect}\n  "\
-        ":step_one => false"
+          ':step_one => false'
       end
 
       it 'prints correct message' do

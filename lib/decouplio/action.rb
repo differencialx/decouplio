@@ -14,7 +14,7 @@ module Decouplio
   class Action
     attr_reader :railway_flow, :ctx, :meta_store
 
-    alias :ms :meta_store
+    alias ms meta_store
 
     def initialize(
       parent_railway_flow: nil, parent_ctx: nil, meta_store:, **params

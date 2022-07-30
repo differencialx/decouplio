@@ -15,18 +15,18 @@ module Decouplio
 
       def process(instance:)
         instance.append_railway_flow(@name)
-        outcome = @action.call(
+        @action.call(
           parent_ctx: instance.ctx,
           parent_railway_flow: instance.railway_flow,
           meta_store: instance.ms
         )
 
-        resolve(outcome: outcome, instance: instance)
+        resolve(instance: instance)
       end
 
       private
 
-      def resolve(outcome:, instance:)
+      def resolve(instance:)
         instance.pass_action
 
         if @on_success_type == Decouplio::Const::Results::FINISH_HIM

@@ -103,3 +103,6 @@ Naming/RescuedExceptionsVariableName:
 
 Layout/LineContinuationSpacing:
   Enabled: false
+
+RSpec/ExampleLength:
+  Enabled: false

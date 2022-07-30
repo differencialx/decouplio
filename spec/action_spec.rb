@@ -1,4 +1,6 @@
-RSpec.describe Decouplio::Action do
+# frozen_string_literal: true
+
+RSpec.describe 'Decouplio::Action' do
   include_context 'with basic spec setup'
 
   describe 'action methods' do
