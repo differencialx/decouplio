@@ -18,7 +18,7 @@ module Decouplio
         instance.append_railway_flow(@name)
         result = @aide_class.call(
           ctx: instance.ctx,
-          error_store: instance.error_store,
+          ms: instance.meta_store,
           **@aide_options
         )
         resolve(instance: instance, result: result)

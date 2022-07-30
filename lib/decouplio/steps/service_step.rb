@@ -19,7 +19,7 @@ module Decouplio
         instance.append_railway_flow(@name)
         result = @service.call(
           ctx: instance.ctx,
-          error_store: instance.error_store,
+          ms: instance.meta_store,
           **@args
         )
 

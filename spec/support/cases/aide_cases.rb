@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 class SemanticAide
-  def self.call(ctx:, error_store:, semantic:, error_message:)
+  def self.call(ctx:, ms:, semantic:, error_message:)
     ctx[:before_aide].call
     ctx[:semantic] = semantic
-    error_store.add_error(semantic, error_message)
+    ms.add_error(semantic, error_message)
 
     ctx[:after_aide].call
   end

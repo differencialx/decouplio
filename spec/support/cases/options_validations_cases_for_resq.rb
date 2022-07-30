@@ -43,7 +43,7 @@ module OptionsValidationsCasesForResq
       end
 
       def handle_error(_, **)
-        add_error(:some_error, 'Error message')
+        ms.add_error(:some_error, 'Error message')
       end
     end
   end
@@ -60,7 +60,7 @@ module OptionsValidationsCasesForResq
       end
 
       def handle_error(_, **)
-        add_error(:some_error, 'Error message')
+        ms.add_error(:some_error, 'Error message')
       end
     end
   end
@@ -77,7 +77,7 @@ module OptionsValidationsCasesForResq
       end
 
       def handle_error(_, **)
-        add_error(:some_error, 'Error message')
+        ms.add_error(:some_error, 'Error message')
       end
     end
   end

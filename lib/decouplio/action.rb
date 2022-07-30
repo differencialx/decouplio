@@ -3,23 +3,23 @@
 require 'forwardable'
 require_relative 'flow'
 require_relative 'processor'
-require_relative 'default_error_handler'
+require_relative 'default_meta_store'
+require_relative 'action_state_printer'
 require_relative 'errors/logic_redefinition_error'
 require_relative 'errors/logic_is_not_defined_error'
-require_relative 'errors/error_store_error'
 require_relative 'errors/execution_error'
 require_relative 'const/results'
 
 module Decouplio
   class Action
-    extend Forwardable
-    def_delegators :@error_store, :errors, :add_error, :error_status
-    attr_reader :railway_flow, :ctx, :error_store
+    attr_reader :railway_flow, :ctx, :meta_store
+
+    alias ms meta_store
 
     def initialize(
-      parent_railway_flow: nil, parent_ctx: nil, error_store:, **params
+      parent_railway_flow: nil, parent_ctx: nil, meta_store:, **params
     )
-      @error_store = error_store
+      @meta_store = meta_store
       @ctx = parent_ctx || params
       @railway_flow = parent_railway_flow || []
       @failure = false
@@ -45,39 +45,12 @@ module Decouplio
       @failure = false
     end
 
-    def previous_step
-      railway_flow[PREVIOUS_STEP_INDEX]
-    end
-
     def append_railway_flow(stp)
       railway_flow << stp
     end
 
     def inspect
-      <<~INSPECT
-        Result: #{success? ? 'success' : 'failure'}
-
-        Railway Flow:
-          #{railway_flow.join(' -> ')}
-
-        Context:
-          #{ctx.map { |k, v| "#{k.inspect} => #{v.inspect}" }.join("\n  ")}
-
-        Errors:
-          #{
-            if errors.is_a?(Hash)
-              if errors.empty?
-                'None'
-              else
-                errors.map do |k, v|
-                  "#{k.inspect} => #{v.inspect}"
-                end.join("\n  ")
-              end
-            else
-              errors
-            end
-          }
-      INSPECT
+      Decouplio::ActionStatePrinter.call(self)
     end
 
     def to_s
@@ -85,16 +58,19 @@ module Decouplio
     end
 
     class << self
-      attr_accessor :error_store
+      attr_accessor :meta_store
 
-      def error_store_class(klass)
-        self.error_store = klass
+      def meta_store_class(klass)
+        self.meta_store = klass
       end
 
       def call(**params)
-        instance = new(error_store: error_store.new, **params)
+        instance = new(
+          **{
+            meta_store: meta_store.new
+          }.merge(**params)
+        )
         Decouplio::Processor.call(instance: instance, **@flow)
-        # TODO: process block with after actions
         instance
       end
 
@@ -112,7 +88,7 @@ module Decouplio
       private
 
       def inherited(child_class)
-        child_class.error_store = error_store || Decouplio::DefaultErrorHandler
+        child_class.meta_store = meta_store || Decouplio::DefaultMetaStore
       end
 
       def logic(&block)

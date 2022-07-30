@@ -15,8 +15,8 @@ class InitDoby
 end
 
 class AddErrorDoby
-  def self.call(ctx:, error_store:, key:, message:)
-    error_store.add_error(key, message)
+  def self.call(ctx:, ms:, key:, message:)
+    ms.add_error(key, message)
 
     ctx[:doby1]
   end
