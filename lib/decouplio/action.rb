@@ -66,7 +66,7 @@ module Decouplio
 
       def call(**params)
         instance = new(
-          {
+          **{
             meta_store: meta_store.new
           }.merge(**params)
         )
