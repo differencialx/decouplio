@@ -16,7 +16,11 @@ module Decouplio
 
       def process(instance:)
         instance.append_railway_flow(@name)
-        outcome = @action.call(parent_ctx: instance.ctx, parent_railway_flow: instance.railway_flow)
+        outcome = @action.call(
+          parent_ctx: instance.ctx,
+          parent_railway_flow: instance.railway_flow,
+          meta_store: instance.ms
+        )
 
         resolve(outcome: outcome, instance: instance)
       end
@@ -25,8 +29,6 @@ module Decouplio
 
       def resolve(outcome:, instance:)
         result = outcome.success?
-
-        instance.error_store.merge(outcome.error_store)
 
         Decouplio::Steps::Shared::FailResolver.call(
           instance: instance,

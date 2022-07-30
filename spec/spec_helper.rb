@@ -32,6 +32,8 @@ RSpec.configure do |config|
   config.include OnErrorCases
   config.include FailAsAideCases
   config.include StepAsDobyCases
+  config.include MetaStoreCases
+  config.include ActionCases
   config.example_status_persistence_file_path = '.rspec_status'
 
   config.disable_monkey_patching!

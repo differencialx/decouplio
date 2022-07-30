@@ -35,7 +35,7 @@ module ResqInnerActionCases
       end
 
       def error_handler(error, **)
-        add_error(:error_handler, error.message)
+        ms.add_error(:error_handler, error.message)
       end
     end
   end
@@ -63,7 +63,7 @@ module ResqInnerActionCases
       end
 
       def error_handler(error, **)
-        add_error(:error_handler, error.message)
+        ms.add_error(:error_handler, error.message)
       end
     end
   end
@@ -91,7 +91,7 @@ module ResqInnerActionCases
       end
 
       def error_handler(error, **)
-        add_error(:error_handler, error.message)
+        ms.add_error(:error_handler, error.message)
       end
     end
   end
@@ -119,7 +119,7 @@ module ResqInnerActionCases
       end
 
       def error_handler(error, **)
-        add_error(:error_handler, error.message)
+        ms.add_error(:error_handler, error.message)
       end
     end
   end
@@ -152,7 +152,7 @@ module ResqInnerActionCases
       end
 
       def error_handler(error, **)
-        add_error(:error_handler, error.message)
+        ms.add_error(:error_handler, error.message)
       end
     end
   end
@@ -185,7 +185,7 @@ module ResqInnerActionCases
       end
 
       def error_handler(error, **)
-        add_error(:error_handler, error.message)
+        ms.add_error(:error_handler, error.message)
       end
     end
   end
@@ -208,7 +208,7 @@ module ResqInnerActionCases
       end
 
       def error_handler(error, **)
-        add_error(:error_handler, error.message)
+        ms.add_error(:error_handler, error.message)
       end
     end
   end
@@ -231,7 +231,7 @@ module ResqInnerActionCases
       end
 
       def error_handler(error, **)
-        add_error(:error_handler, error.message)
+        ms.add_error(:error_handler, error.message)
       end
     end
   end
@@ -254,7 +254,7 @@ module ResqInnerActionCases
       end
 
       def error_handler(error, **)
-        add_error(:error_handler, error.message)
+        ms.add_error(:error_handler, error.message)
       end
 
       def some_condition?(param2:, **)
@@ -281,7 +281,7 @@ module ResqInnerActionCases
       end
 
       def error_handler(error, **)
-        add_error(:error_handler, error.message)
+        ms.add_error(:error_handler, error.message)
       end
 
       def some_condition?(param2:, **)
@@ -320,7 +320,7 @@ module ResqInnerActionCases
       end
 
       def error_handler(error, **)
-        add_error(:error_handler, error.message)
+        ms.add_error(:error_handler, error.message)
       end
 
       def some_condition?(param2:, **)
@@ -359,7 +359,7 @@ module ResqInnerActionCases
       end
 
       def error_handler(error, **)
-        add_error(:error_handler, error.message)
+        ms.add_error(:error_handler, error.message)
       end
 
       def some_condition?(param2:, **)
@@ -396,7 +396,7 @@ module ResqInnerActionCases
       end
 
       def error_handler(error, **)
-        add_error(:error_handler, error.message)
+        ms.add_error(:error_handler, error.message)
       end
     end
   end
@@ -439,7 +439,7 @@ module ResqInnerActionCases
       end
 
       def error_handler(error, **)
-        add_error(:error_handler, error.message)
+        ms.add_error(:error_handler, error.message)
       end
     end
   end
@@ -482,7 +482,7 @@ module ResqInnerActionCases
       end
 
       def error_handler(error, **)
-        add_error(:error_handler, error.message)
+        ms.add_error(:error_handler, error.message)
       end
     end
   end
@@ -525,7 +525,7 @@ module ResqInnerActionCases
       end
 
       def error_handler(error, **)
-        add_error(:error_handler, error.message)
+        ms.add_error(:error_handler, error.message)
       end
     end
   end
@@ -568,7 +568,7 @@ module ResqInnerActionCases
       end
 
       def error_handler(error, **)
-        add_error(:error_handler, error.message)
+        ms.add_error(:error_handler, error.message)
       end
     end
   end
@@ -611,7 +611,7 @@ module ResqInnerActionCases
       end
 
       def error_handler(error, **)
-        add_error(:error_handler, error.message)
+        ms.add_error(:error_handler, error.message)
       end
     end
   end
@@ -654,7 +654,7 @@ module ResqInnerActionCases
       end
 
       def error_handler(error, **)
-        add_error(:error_handler, error.message)
+        ms.add_error(:error_handler, error.message)
       end
     end
   end
@@ -697,7 +697,7 @@ module ResqInnerActionCases
       end
 
       def error_handler(error, **)
-        add_error(:error_handler, error.message)
+        ms.add_error(:error_handler, error.message)
       end
 
       def some_condition?(param2:, **)
@@ -744,7 +744,7 @@ module ResqInnerActionCases
       end
 
       def error_handler(error, **)
-        add_error(:error_handler, error.message)
+        ms.add_error(:error_handler, error.message)
       end
 
       def some_condition?(param2:, **)
@@ -792,7 +792,7 @@ module ResqInnerActionCases
       end
 
       def error_handler(error, **)
-        add_error(:error_handler, error.message)
+        ms.add_error(:error_handler, error.message)
       end
 
       def some_condition?(param2:, **)
@@ -840,7 +840,7 @@ module ResqInnerActionCases
       end
 
       def error_handler(error, **)
-        add_error(:error_handler, error.message)
+        ms.add_error(:error_handler, error.message)
       end
 
       def some_condition?(param2:, **)
@@ -872,7 +872,7 @@ module ResqInnerActionCases
       end
 
       def error_handler(error, **)
-        add_error(:error_handler, error.message)
+        ms.add_error(:error_handler, error.message)
       end
     end
   end
@@ -900,7 +900,7 @@ module ResqInnerActionCases
       end
 
       def error_handler(error, **)
-        add_error(:error_handler, error.message)
+        ms.add_error(:error_handler, error.message)
       end
 
       def some_condition?(param2:, **)
@@ -934,7 +934,7 @@ module ResqInnerActionCases
       end
 
       def error_handler(error, **)
-        add_error(:error_handler, error.message)
+        ms.add_error(:error_handler, error.message)
       end
 
       def some_condition?(param2:, **)
@@ -972,7 +972,7 @@ module ResqInnerActionCases
       end
 
       def error_handler(error, **)
-        add_error(:error_handler, error.message)
+        ms.add_error(:error_handler, error.message)
       end
 
       def some_condition?(param2:, **)

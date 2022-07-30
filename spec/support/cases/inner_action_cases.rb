@@ -12,7 +12,7 @@ module InnerActionCases
     end
 
     def handle_fail(**)
-      add_error(:inner_step_failed, 'Something went wrong inner')
+      ms.add_error(:inner_step_failed, 'Something went wrong inner')
     end
   end
 
@@ -58,7 +58,7 @@ module InnerActionCases
       end
 
       def handle_fail(**)
-        add_error(:outer_step_failed, 'Something went wrong outer')
+        ms.add_error(:outer_step_failed, 'Something went wrong outer')
       end
     end
   end
@@ -76,7 +76,7 @@ module InnerActionCases
       end
 
       def handle_fail(**)
-        add_error(:outer_step_failed, 'Something went wrong outer')
+        ms.add_error(:outer_step_failed, 'Something went wrong outer')
       end
     end
   end
@@ -99,7 +99,7 @@ module InnerActionCases
       end
 
       def handle_fail(**)
-        add_error(:outer_step_failed, 'Something went wrong outer')
+        ms.add_error(:outer_step_failed, 'Something went wrong outer')
       end
     end
   end
@@ -122,7 +122,7 @@ module InnerActionCases
       end
 
       def handle_fail(**)
-        add_error(:outer_step_failed, 'Something went wrong outer')
+        ms.add_error(:outer_step_failed, 'Something went wrong outer')
       end
     end
   end
@@ -145,7 +145,7 @@ module InnerActionCases
       end
 
       def handle_fail(**)
-        add_error(:outer_step_failed, 'Something went wrong outer')
+        ms.add_error(:outer_step_failed, 'Something went wrong outer')
       end
     end
   end
