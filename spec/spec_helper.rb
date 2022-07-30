@@ -22,11 +22,7 @@ RSpec.configure do |config|
   config.include OptionsValidationsCasesForOcto
   config.include OptionsValidationsCasesForResq
   config.include OptionsValidationsCasesForWrap
-  config.include OptionsValidationsForDoby
-  config.include OptionsValidationsForAide
   config.include ReservedMethodNamesCases
-  config.include DobyCases
-  config.include AideCases
   config.include ServiceCases
   config.include OctoMethodCases
   config.include OnErrorCases
