@@ -15,7 +15,7 @@ module WrapCases
       end
 
       def handler_step(error, **)
-        add_error(:wrapper_error, error.message)
+        ms.add_error(:wrapper_error, error.message)
       end
 
       def step_one(string_param:, **)
@@ -52,7 +52,7 @@ module WrapCases
       end
 
       def handler_step(error, **)
-        add_error(:wrapper_error, error.message)
+        ms.add_error(:wrapper_error, error.message)
       end
 
       def step_one(string_param:, **)
@@ -89,7 +89,7 @@ module WrapCases
       end
 
       def handler_step(error, **)
-        add_error(:wrapper_error, error.message)
+        ms.add_error(:wrapper_error, error.message)
       end
 
       def step_one(**)
@@ -129,11 +129,11 @@ module WrapCases
       end
 
       def handler_step(error, **)
-        add_error(:wrapper_error, error.message)
+        ms.add_error(:wrapper_error, error.message)
       end
 
       def handle_wrap_fail(**)
-        add_error(:inner_wrapper_fail, 'Inner wrapp error')
+        ms.add_error(:inner_wrapper_fail, 'Inner wrapp error')
       end
 
       def step_one(**)
@@ -170,15 +170,15 @@ module WrapCases
       end
 
       def handler_step(error, **)
-        add_error(:wrapper_error, error.message)
+        ms.add_error(:wrapper_error, error.message)
       end
 
       def handle_wrap_fail(**)
-        add_error(:inner_wrapper_fail, 'Inner wrap error')
+        ms.add_error(:inner_wrapper_fail, 'Inner wrap error')
       end
 
       def handle_fail(**)
-        add_error(:outer_fail, 'Outer failure error')
+        ms.add_error(:outer_fail, 'Outer failure error')
       end
 
       def step_one(**)
@@ -215,15 +215,15 @@ module WrapCases
       end
 
       def handler_step(error, **)
-        add_error(:wrapper_error, error.message)
+        ms.add_error(:wrapper_error, error.message)
       end
 
       def handle_wrap_fail(**)
-        add_error(:inner_wrapper_fail, 'Inner wrap error')
+        ms.add_error(:inner_wrapper_fail, 'Inner wrap error')
       end
 
       def handle_fail(**)
-        add_error(:outer_fail, 'Outer failure error')
+        ms.add_error(:outer_fail, 'Outer failure error')
       end
 
       def step_one(**)
@@ -260,15 +260,15 @@ module WrapCases
       end
 
       def handler_step(error, **)
-        add_error(:wrapper_error, error.message)
+        ms.add_error(:wrapper_error, error.message)
       end
 
       def handle_wrap_fail(**)
-        add_error(:inner_wrapper_fail, 'Inner wrap error')
+        ms.add_error(:inner_wrapper_fail, 'Inner wrap error')
       end
 
       def handle_fail(**)
-        add_error(:outer_fail, 'Outer failure error')
+        ms.add_error(:outer_fail, 'Outer failure error')
       end
 
       def step_one(**)
@@ -305,15 +305,15 @@ module WrapCases
       end
 
       def handler_step(error, **)
-        add_error(:wrapper_error, error.message)
+        ms.add_error(:wrapper_error, error.message)
       end
 
       def handle_wrap_fail(**)
-        add_error(:inner_wrapper_fail, 'Inner wrap error')
+        ms.add_error(:inner_wrapper_fail, 'Inner wrap error')
       end
 
       def handle_fail(**)
-        add_error(:outer_fail, 'Outer failure error')
+        ms.add_error(:outer_fail, 'Outer failure error')
       end
 
       def step_one(**)
@@ -350,15 +350,15 @@ module WrapCases
       end
 
       def handler_step(error, **)
-        add_error(:wrapper_error, error.message)
+        ms.add_error(:wrapper_error, error.message)
       end
 
       def handle_wrap_fail(**)
-        add_error(:inner_wrapper_fail, 'Inner wrap error')
+        ms.add_error(:inner_wrapper_fail, 'Inner wrap error')
       end
 
       def handle_fail(**)
-        add_error(:outer_fail, 'Outer failure error')
+        ms.add_error(:outer_fail, 'Outer failure error')
       end
 
       def step_one(**)
@@ -395,15 +395,15 @@ module WrapCases
       end
 
       def handler_step(error, **)
-        add_error(:wrapper_error, error.message)
+        ms.add_error(:wrapper_error, error.message)
       end
 
       def handle_wrap_fail(**)
-        add_error(:inner_wrapper_fail, 'Inner wrap error')
+        ms.add_error(:inner_wrapper_fail, 'Inner wrap error')
       end
 
       def handle_fail(**)
-        add_error(:outer_fail, 'Outer failure error')
+        ms.add_error(:outer_fail, 'Outer failure error')
       end
 
       def step_one(**)
@@ -440,15 +440,15 @@ module WrapCases
       end
 
       def handler_step(error, **)
-        add_error(:wrapper_error, error.message)
+        ms.add_error(:wrapper_error, error.message)
       end
 
       def handle_wrap_fail(**)
-        add_error(:inner_wrapper_fail, 'Inner wrap error')
+        ms.add_error(:inner_wrapper_fail, 'Inner wrap error')
       end
 
       def handle_fail(**)
-        add_error(:outer_fail, 'Outer failure error')
+        ms.add_error(:outer_fail, 'Outer failure error')
       end
 
       def step_one(**)
@@ -485,15 +485,15 @@ module WrapCases
       end
 
       def handler_step(error, **)
-        add_error(:wrapper_error, error.message)
+        ms.add_error(:wrapper_error, error.message)
       end
 
       def handle_wrap_fail(**)
-        add_error(:inner_wrapper_fail, 'Inner wrap error')
+        ms.add_error(:inner_wrapper_fail, 'Inner wrap error')
       end
 
       def handle_fail(**)
-        add_error(:outer_fail, 'Outer failure error')
+        ms.add_error(:outer_fail, 'Outer failure error')
       end
 
       def step_one(**)
@@ -530,15 +530,15 @@ module WrapCases
       end
 
       def handler_step(error, **)
-        add_error(:wrapper_error, error.message)
+        ms.add_error(:wrapper_error, error.message)
       end
 
       def handle_wrap_fail(**)
-        add_error(:inner_wrapper_fail, 'Inner wrap error')
+        ms.add_error(:inner_wrapper_fail, 'Inner wrap error')
       end
 
       def handle_fail(**)
-        add_error(:outer_fail, 'Outer failure error')
+        ms.add_error(:outer_fail, 'Outer failure error')
       end
 
       def step_one(**)

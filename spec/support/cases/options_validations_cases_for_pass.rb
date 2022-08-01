@@ -64,7 +64,7 @@ module OptionsValidationsCasesForPass
       end
 
       def handle_step_one(**)
-        add_error(:step_one, 'Error')
+        ms.add_error(:step_one, 'Error')
       end
     end
   end
@@ -81,7 +81,7 @@ module OptionsValidationsCasesForPass
       end
 
       def handle_step_one(**)
-        add_error(:step_one, 'Error')
+        ms.add_error(:step_one, 'Error')
       end
     end
   end
@@ -98,7 +98,7 @@ module OptionsValidationsCasesForPass
       end
 
       def handle_step_one(**)
-        add_error(:step_one, 'Error')
+        ms.add_error(:step_one, 'Error')
       end
     end
   end
@@ -115,7 +115,7 @@ module OptionsValidationsCasesForPass
       end
 
       def handle_step_one(**)
-        add_error(:step_one, 'Error')
+        ms.add_error(:step_one, 'Error')
       end
     end
   end

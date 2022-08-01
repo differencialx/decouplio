@@ -854,7 +854,7 @@ module OnErrorCases
   def when_doby_on_error_to_step
     lambda do |_klass|
       logic do
-        doby OnErrorDoby, on_error: :step_three
+        step OnErrorDoby, on_error: :step_three
         resq handle_error: ArgumentError
         fail :fail_one
         step :step_two
@@ -882,7 +882,7 @@ module OnErrorCases
   def when_doby_on_error_to_pass
     lambda do |_klass|
       logic do
-        doby OnErrorDoby, on_error: :PASS
+        step OnErrorDoby, on_error: :PASS
         resq handle_error: ArgumentError
         fail :fail_one
         step :step_two
@@ -910,7 +910,7 @@ module OnErrorCases
   def when_doby_on_error_to_fail
     lambda do |_klass|
       logic do
-        doby OnErrorDoby, on_error: :FAIL
+        step OnErrorDoby, on_error: :FAIL
         resq handle_error: ArgumentError
         fail :fail_one
         step :step_two
@@ -938,7 +938,7 @@ module OnErrorCases
   def when_doby_on_error_finish_him
     lambda do |_klass|
       logic do
-        doby OnErrorDoby, on_error: :finish_him
+        step OnErrorDoby, on_error: :finish_him
         resq handle_error: ArgumentError
         step :step_one
         fail :fail_one
@@ -961,7 +961,7 @@ module OnErrorCases
   def when_doby_finish_him_on_error
     lambda do |_klass|
       logic do
-        doby OnErrorDoby, finish_him: :on_error
+        step OnErrorDoby, finish_him: :on_error
         resq handle_error: ArgumentError
         step :step_one
         fail :fail_one
@@ -985,7 +985,7 @@ module OnErrorCases
     lambda do |_klass|
       logic do
         step :step_one
-        aide OnErrorDoby, on_error: :pass_one
+        fail OnErrorDoby, on_error: :pass_one
         resq handle_error: ArgumentError
         fail :fail_one
         step :step_two
@@ -1018,7 +1018,7 @@ module OnErrorCases
     lambda do |_klass|
       logic do
         step :step_one
-        aide OnErrorDoby, on_error: :PASS
+        fail OnErrorDoby, on_error: :PASS
         resq handle_error: ArgumentError
         fail :fail_one
         step :step_two
@@ -1051,7 +1051,7 @@ module OnErrorCases
     lambda do |_klass|
       logic do
         step :step_one
-        aide OnErrorDoby, on_error: :FAIL
+        fail OnErrorDoby, on_error: :FAIL
         resq handle_error: ArgumentError
         fail :fail_one
         step :step_two
@@ -1084,7 +1084,7 @@ module OnErrorCases
     lambda do |_klass|
       logic do
         step :step_one
-        aide OnErrorDoby, on_error: :finish_him
+        fail OnErrorDoby, on_error: :finish_him
         resq handle_error: ArgumentError
         fail :fail_one
         step :step_two
@@ -1117,7 +1117,7 @@ module OnErrorCases
     lambda do |_klass|
       logic do
         step :step_one
-        aide OnErrorDoby, finish_him: :on_error
+        fail OnErrorDoby, finish_him: :on_error
         resq handle_error: ArgumentError
         fail :fail_one
         step :step_two

@@ -29,8 +29,8 @@ class Service
 end
 
 class AddErrorService
-  def self.call(error_store:, ctx:)
-    error_store.add_error(:key, 'ServLol')
+  def self.call(ms:, ctx:)
+    ms.add_error(:key, 'ServLol')
 
     ctx[:serv1]
   end

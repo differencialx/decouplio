@@ -67,7 +67,7 @@ RSpec.describe 'Decouplio::Action resq cases' do
 
         it 'handles the error' do
           expect(action).to be_failure
-          expect(action.errors).to eq expected_errors
+          expect(action.ms.errors).to eq expected_errors
           expect(action.railway_flow).to eq railway_flow
         end
 
@@ -107,7 +107,7 @@ RSpec.describe 'Decouplio::Action resq cases' do
 
           it 'handles the error' do
             expect(action).to be_failure
-            expect(action.errors).to eq expected_errors
+            expect(action.ms.errors).to eq expected_errors
             expect(action.railway_flow).to eq railway_flow
           end
         end
@@ -118,7 +118,7 @@ RSpec.describe 'Decouplio::Action resq cases' do
 
           it 'handles the error' do
             expect(action).to be_failure
-            expect(action.errors).to eq expected_errors
+            expect(action.ms.errors).to eq expected_errors
             expect(action.railway_flow).to eq railway_flow
           end
         end
@@ -139,7 +139,7 @@ RSpec.describe 'Decouplio::Action resq cases' do
 
           it 'handles the error' do
             expect(action).to be_failure
-            expect(action.errors).to eq expected_errors
+            expect(action.ms.errors).to eq expected_errors
             expect(action.railway_flow).to eq railway_flow
           end
         end
@@ -156,7 +156,7 @@ RSpec.describe 'Decouplio::Action resq cases' do
 
           it 'handles the error' do
             expect(action).to be_failure
-            expect(action.errors).to eq expected_errors
+            expect(action.ms.errors).to eq expected_errors
             expect(action.railway_flow).to eq railway_flow
           end
         end
@@ -173,7 +173,7 @@ RSpec.describe 'Decouplio::Action resq cases' do
 
           it 'handles the error' do
             expect(action).to be_failure
-            expect(action.errors).to eq expected_errors
+            expect(action.ms.errors).to eq expected_errors
             expect(action.railway_flow).to eq railway_flow
           end
         end
@@ -194,7 +194,7 @@ RSpec.describe 'Decouplio::Action resq cases' do
 
         it 'handles the error' do
           expect(action).to be_failure
-          expect(action.errors).to eq expected_errors
+          expect(action.ms.errors).to eq expected_errors
           expect(action.railway_flow).to eq railway_flow
         end
       end
@@ -214,7 +214,7 @@ RSpec.describe 'Decouplio::Action resq cases' do
 
           it 'handles the error' do
             expect(action).to be_failure
-            expect(action.errors).to eq expected_errors
+            expect(action.ms.errors).to eq expected_errors
             expect(action.railway_flow).to eq railway_flow
           end
         end
@@ -230,7 +230,7 @@ RSpec.describe 'Decouplio::Action resq cases' do
 
           it 'handles the error' do
             expect(action).to be_failure
-            expect(action.errors).to eq expected_errors
+            expect(action.ms.errors).to eq expected_errors
             expect(action.railway_flow).to eq railway_flow
           end
         end
@@ -251,7 +251,7 @@ RSpec.describe 'Decouplio::Action resq cases' do
 
           it 'handles the error' do
             expect(action).to be_failure
-            expect(action.errors).to eq expected_errors
+            expect(action.ms.errors).to eq expected_errors
             expect(action.railway_flow).to eq railway_flow
           end
         end
@@ -268,7 +268,7 @@ RSpec.describe 'Decouplio::Action resq cases' do
 
           it 'handles the error' do
             expect(action).to be_failure
-            expect(action.errors).to eq expected_errors
+            expect(action.ms.errors).to eq expected_errors
             expect(action.railway_flow).to eq railway_flow
           end
         end
@@ -285,7 +285,7 @@ RSpec.describe 'Decouplio::Action resq cases' do
 
           it 'handles the error' do
             expect(action).to be_failure
-            expect(action.errors).to eq expected_errors
+            expect(action.ms.errors).to eq expected_errors
             expect(action.railway_flow).to eq railway_flow
           end
         end
@@ -306,7 +306,7 @@ RSpec.describe 'Decouplio::Action resq cases' do
 
         it 'handles the error' do
           expect(action).to be_failure
-          expect(action.errors).to eq expected_errors
+          expect(action.ms.errors).to eq expected_errors
           expect(action.railway_flow).to eq railway_flow
         end
       end
@@ -326,7 +326,7 @@ RSpec.describe 'Decouplio::Action resq cases' do
 
           it 'handles the error' do
             expect(action).to be_failure
-            expect(action.errors).to eq expected_errors
+            expect(action.ms.errors).to eq expected_errors
             expect(action.railway_flow).to eq railway_flow
           end
         end
@@ -342,7 +342,7 @@ RSpec.describe 'Decouplio::Action resq cases' do
 
           it 'handles the error' do
             expect(action).to be_failure
-            expect(action.errors).to eq expected_errors
+            expect(action.ms.errors).to eq expected_errors
             expect(action.railway_flow).to eq railway_flow
           end
         end
@@ -363,7 +363,7 @@ RSpec.describe 'Decouplio::Action resq cases' do
 
           it 'handles the error' do
             expect(action).to be_failure
-            expect(action.errors).to eq expected_errors
+            expect(action.ms.errors).to eq expected_errors
             expect(action.railway_flow).to eq railway_flow
           end
         end
@@ -380,7 +380,7 @@ RSpec.describe 'Decouplio::Action resq cases' do
 
           it 'handles the error' do
             expect(action).to be_failure
-            expect(action.errors).to eq expected_errors
+            expect(action.ms.errors).to eq expected_errors
             expect(action.railway_flow).to eq railway_flow
           end
         end
@@ -397,7 +397,7 @@ RSpec.describe 'Decouplio::Action resq cases' do
 
           it 'handles the error' do
             expect(action).to be_failure
-            expect(action.errors).to eq expected_errors
+            expect(action.ms.errors).to eq expected_errors
             expect(action.railway_flow).to eq railway_flow
           end
         end
@@ -456,7 +456,7 @@ RSpec.describe 'Decouplio::Action resq cases' do
         it 'fails' do
           expect(action).to be_failure
           expect(action[:result]).to eq 5
-          expect(action.errors).to eq expected_errors
+          expect(action.ms.errors).to eq expected_errors
           expect(ClassWithWrapperMethod).to have_received(:transaction)
           expect(BeforeTransactionAction).to have_received(:call)
           expect(AfterTransactionAction).not_to have_received(:call)
@@ -483,7 +483,7 @@ RSpec.describe 'Decouplio::Action resq cases' do
             expect(action[:step_one]).to eq 'Success'
             expect(action[:step_two]).to eq 'Success'
             expect(action[:fail_step]).to be_nil
-            expect(action.errors).to be_empty
+            expect(action.ms.errors).to be_empty
             expect(StubDummy).to have_received(:call)
           end
         end
@@ -510,7 +510,7 @@ RSpec.describe 'Decouplio::Action resq cases' do
             expect(action[:step_one]).to be_nil
             expect(action[:step_two]).to be_nil
             expect(action[:fail_step]).to eq 'Fail'
-            expect(action.errors).to eq expected_errors
+            expect(action.ms.errors).to eq expected_errors
           end
         end
       end

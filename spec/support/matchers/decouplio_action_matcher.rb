@@ -46,7 +46,7 @@ RSpec::Matchers.define :have_a_state do |state_hash|
       <<~MESSAGE
         Errors does not match:
           expected: #{state_hash[:errors]}
-          got:      #{actual.errors}
+          got:      #{actual.ms.errors}
       MESSAGE
     end
   end
@@ -76,6 +76,6 @@ RSpec::Matchers.define :have_a_state do |state_hash|
   end
 
   def error_matches?(errors)
-    actual.errors == errors
+    actual.ms.errors == errors
   end
 end

@@ -2,7 +2,6 @@
 
 require_relative 'flow'
 require_relative 'const/types'
-require_relative 'const/doby_aide_options'
 require_relative 'const/step_options'
 require_relative 'octo_hash_case'
 require_relative 'errors/options_validation_error'
@@ -11,7 +10,6 @@ require_relative 'errors/resq_definition_error'
 require_relative 'errors/wrap_block_is_not_defined_error'
 require_relative 'errors/palp_block_is_not_defined_error'
 require_relative 'errors/fail_can_not_be_first_step_error'
-require_relative 'errors/aide_can_not_be_first_step_error'
 require_relative 'errors/octo_block_is_not_defined_error'
 
 module Decouplio
@@ -130,42 +128,13 @@ module Decouplio
         )
       end
 
-      def doby(doby_class, **options)
-        warn(
-          'DEPRECATION WARNING: "doby" step type will be deprecated at alpha8 version. Use "step" or "pass" instead.'
-        )
-        step_options = {}
-        options.each_key do |key|
-          step_options[key] = options.delete(key) if Decouplio::Const::DobyAideOptions::ALLOWED.include?(key)
-        end
-        doby_options = options
-
-        @steps << {
-          type: Decouplio::Const::Types::DOBY_TYPE,
-          name: doby_class.name.to_sym,
-          doby_class: doby_class,
-          doby_options: doby_options,
-          **step_options
-        }
+      def doby(_doby_class, **_options)
+        raise '"doby" step is deprecated. Please use "step" or "pass" instead. ' \
+              'Just simply replace "doby " with "step " or "pass "'
       end
 
-      def aide(aide_class, **options)
-        warn('DEPRECATION WARNING: "aide" step type will be deprecated at alpha8 version. Use "fail" instead.')
-        raise Decouplio::Errors::AideCanNotBeFirstStepError if @steps.empty?
-
-        step_options = {}
-        options.each_key do |key|
-          step_options[key] = options.delete(key) if Decouplio::Const::DobyAideOptions::ALLOWED.include?(key)
-        end
-        aide_options = options
-
-        @steps << {
-          type: Decouplio::Const::Types::AIDE_TYPE,
-          name: aide_class.name.to_sym,
-          aide_class: aide_class,
-          aide_options: aide_options,
-          **step_options
-        }
+      def aide(_aide_class, **_options)
+        raise '"aide" step is deprecated. Please use "fail". Just simply replace "aide " with "fail "'
       end
     end
   end

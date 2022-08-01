@@ -21,7 +21,7 @@ module ResqCases
       end
 
       def another_error_handler(error, **)
-        add_error(:another_error, error.message)
+        ms.add_error(:another_error, error.message)
       end
     end
   end
@@ -46,7 +46,7 @@ module ResqCases
       end
 
       def handle_error(_error, **)
-        add_error(:some_error, 'Error message')
+        ms.add_error(:some_error, 'Error message')
       end
     end
   end
@@ -63,7 +63,7 @@ module ResqCases
       end
 
       def error_handler(error, **)
-        add_error(:step_one_error, error.message)
+        ms.add_error(:step_one_error, error.message)
       end
     end
   end
@@ -97,7 +97,7 @@ module ResqCases
       end
 
       def error_handler(error, **)
-        add_error(:step_one_error, error.message)
+        ms.add_error(:step_one_error, error.message)
       end
     end
   end
@@ -115,11 +115,11 @@ module ResqCases
       end
 
       def error_handler(error, **)
-        add_error(:step_one_error, error.message)
+        ms.add_error(:step_one_error, error.message)
       end
 
       def another_error_handler(error, **)
-        add_error(:another_error, error.message)
+        ms.add_error(:another_error, error.message)
       end
     end
   end
@@ -137,7 +137,7 @@ module ResqCases
       end
 
       def error_handler(error, **)
-        add_error(:fail_step, error.message)
+        ms.add_error(:fail_step, error.message)
       end
 
       def fail_step(**)
@@ -163,7 +163,7 @@ module ResqCases
       end
 
       def error_handler(error, **)
-        add_error(:fail_step, error.message)
+        ms.add_error(:fail_step, error.message)
       end
     end
   end
@@ -186,11 +186,11 @@ module ResqCases
       end
 
       def error_handler(error, **)
-        add_error(:fail_step, error.message)
+        ms.add_error(:fail_step, error.message)
       end
 
       def another_error_handler(error, **)
-        add_error(:another_error, error.message)
+        ms.add_error(:another_error, error.message)
       end
     end
   end
@@ -207,7 +207,7 @@ module ResqCases
       end
 
       def error_handler(error, **)
-        add_error(:step_one_error, error.message)
+        ms.add_error(:step_one_error, error.message)
       end
     end
   end
@@ -224,7 +224,7 @@ module ResqCases
       end
 
       def error_handler(error, **)
-        add_error(:step_one_error, error.message)
+        ms.add_error(:step_one_error, error.message)
       end
     end
   end
@@ -242,11 +242,11 @@ module ResqCases
       end
 
       def error_handler(error, **)
-        add_error(:step_one_error, error.message)
+        ms.add_error(:step_one_error, error.message)
       end
 
       def another_error_handler(error, **)
-        add_error(:another_error, error.message)
+        ms.add_error(:another_error, error.message)
       end
     end
   end
