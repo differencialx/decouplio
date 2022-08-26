@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
 class InstanceService
-  def self.call(ctx:, **)
-    new(ctx: ctx).call
+  def self.call(ctx, ms)
+    new(ctx, ms).call
   end
 
-  def initialize(ctx:, **)
+  def initialize(ctx, ms)
     @ctx = ctx
+    @ms = ms
   end
 
   def call
@@ -16,20 +17,20 @@ class InstanceService
 end
 
 class ClassService
-  def self.call(ctx:, **)
+  def self.call(ctx, _ms)
     ctx[:result] = ctx[:one] + ctx[:two]
     StubDummy.call
   end
 end
 
 class Service
-  def self.call(ctx:, **)
+  def self.call(ctx, _ms)
     ctx[:result] = StubDummy.call
   end
 end
 
 class AddErrorService
-  def self.call(ms:, ctx:)
+  def self.call(ctx, ms)
     ms.add_error(:key, 'ServLol')
 
     ctx[:serv1]
@@ -45,11 +46,11 @@ module ServiceCases
         step InstanceService
       end
 
-      def assign_one(**)
+      def assign_one
         ctx[:one] = 1
       end
 
-      def assign_two(**)
+      def assign_two
         ctx[:two] = 2
       end
     end
@@ -63,11 +64,11 @@ module ServiceCases
         step ClassService
       end
 
-      def assign_one(**)
+      def assign_one
         ctx[:one] = 1
       end
 
-      def assign_two(**)
+      def assign_two
         ctx[:two] = 2
       end
     end
@@ -81,11 +82,11 @@ module ServiceCases
         step Service
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
     end
@@ -99,11 +100,11 @@ module ServiceCases
         step Service
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
     end
@@ -117,11 +118,11 @@ module ServiceCases
         step :step_two
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
     end
@@ -135,11 +136,11 @@ module ServiceCases
         fail Service
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
     end
@@ -153,11 +154,11 @@ module ServiceCases
         fail Service
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
     end
@@ -172,15 +173,15 @@ module ServiceCases
         fail Service
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -195,15 +196,15 @@ module ServiceCases
         fail :fail_one
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -218,15 +219,15 @@ module ServiceCases
         fail :fail_one
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -241,15 +242,15 @@ module ServiceCases
         fail :fail_one
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -264,15 +265,15 @@ module ServiceCases
         fail :fail_one
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def handler(error, **)
+      def handler(error)
         ctx[:error] = error.message
       end
     end
@@ -288,19 +289,19 @@ module ServiceCases
         fail :fail_one
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def handler(error, **)
+      def handler(error)
         ctx[:error] = error.message
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -316,19 +317,19 @@ module ServiceCases
         fail :fail_one
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def handler(error, **)
+      def handler(error)
         ctx[:error] = error.message
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -344,11 +345,11 @@ module ServiceCases
         fail :fail_one
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -357,62 +358,26 @@ module ServiceCases
   def when_service_as_step_inside_palp
     lambda do |_klass|
       logic do
-        palp :palp_one do
-          step :step_one
-          step Service
-        end
-
         octo :octo_name, ctx_key: :octo_key do
-          on :octo1, palp: :palp_one
+          on :octo1 do
+            step :step_one
+            step Service
+          end
         end
 
         step :step_two
         fail :fail_one
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(**)
-        ctx[:fail_one] = 'Failure'
-      end
-    end
-  end
-
-  def when_service_as_step_inside_palp_on_success_on_failure
-    lambda do |_klass|
-      logic do
-        palp :palp_one do
-          step :step_one
-          step Service, on_success: :fail_one, on_failure: :step_two
-        end
-
-        octo :octo_name, ctx_key: :octo_key do
-          on :octo1, palp: :palp_one
-        end
-
-        step :step_two
-        fail :fail_one
-      end
-
-      def step_one(**)
-        ctx[:step_one] = 'Success'
-      end
-
-      def step_two(**)
-        ctx[:step_two] = 'Success'
-      end
-
-      def handler(error, **)
-        ctx[:error] = error.message
-      end
-
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -425,11 +390,11 @@ module ServiceCases
         step Service, if: :condition?
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def condition?(**)
+      def condition?
         ctx[:condition]
       end
     end
@@ -442,11 +407,11 @@ module ServiceCases
         fail Service, unless: :condition?
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def condition?(**)
+      def condition?
         ctx[:condition]
       end
     end
@@ -459,11 +424,11 @@ module ServiceCases
         pass Service, unless: :condition?
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def condition?(**)
+      def condition?
         ctx[:condition]
       end
     end
@@ -477,11 +442,11 @@ module ServiceCases
         fail :fail_one
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -496,15 +461,15 @@ module ServiceCases
         fail :fail_one
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = false
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -518,11 +483,11 @@ module ServiceCases
         fail :fail_one
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end

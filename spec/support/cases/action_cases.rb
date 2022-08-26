@@ -7,7 +7,7 @@ module ActionCases
         step :step_one
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
     end

@@ -2,8 +2,7 @@
 
 module Decouplio
   class DefaultMetaStore
-    attr_accessor :status
-    attr_reader :errors
+    attr_accessor :status, :errors
 
     def initialize
       @errors = {}
@@ -19,8 +18,7 @@ module Decouplio
 
     def to_s
       <<~METASTORE
-        Status: #{@status || 'NONE'}
-
+        Status: #{@status ? @status.inspect : 'NONE'}
         Errors:
           #{errors_string}
       METASTORE

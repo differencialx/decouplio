@@ -9,6 +9,8 @@ AllCops:
     - 'decouplio.gemspec'
     - vendor/**/*
     - docs/**/*
+    - benchmarks/**/*
+    - pkg/**/*
 
 Style/Documentation:
   Enabled: false
@@ -40,7 +42,7 @@ Style/FrozenStringLiteralComment:
   Enabled: true
 
 Metrics/BlockLength:
-  IgnoredMethods: ['describe','context', 'lambda', 'logic', 'define', 'it', 'let']
+  AllowedMethods: ['describe','context', 'lambda', 'logic', 'define', 'it', 'let']
 
 Metrics/ModuleLength:
   Exclude:
@@ -54,6 +56,21 @@ Lint/NonLocalExitFromIterator:
 Metrics/MethodLength:
   Exclude:
     - spec/**/*
+    - lib/decouplio/step_validator.rb
+    - lib/decouplio/new_flow.rb
+    - lib/decouplio/logic_dsl.rb
+
+Metrics/PerceivedComplexity:
+  Exclude:
+    - lib/decouplio/new_flow.rb
+
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - lib/decouplio/new_flow.rb
+
+Lint/UnderscorePrefixedVariableName:
+  Exclude:
+    - lib/decouplio/action.rb
 
 RSpec/DescribeClass:
   Enabled: false

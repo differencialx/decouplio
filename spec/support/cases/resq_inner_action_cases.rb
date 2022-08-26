@@ -6,7 +6,7 @@ module ResqInnerActionCases
       step :inner_step_one
     end
 
-    def inner_step_one(*)
+    def inner_step_one
       ctx[:result] = value_to_assign
     end
 
@@ -26,15 +26,15 @@ module ResqInnerActionCases
         fail :fail_one
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(*)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def error_handler(error, **)
+      def error_handler(error)
         ms.add_error(:error_handler, error.message)
       end
     end
@@ -50,19 +50,19 @@ module ResqInnerActionCases
         step :step_three
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(*)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def step_three(*)
+      def step_three
         ctx[:step_three] = 'Success'
       end
 
-      def error_handler(error, **)
+      def error_handler(error)
         ms.add_error(:error_handler, error.message)
       end
     end
@@ -78,19 +78,19 @@ module ResqInnerActionCases
         step :step_three
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(*)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def step_three(*)
+      def step_three
         ctx[:step_three] = 'Success'
       end
 
-      def error_handler(error, **)
+      def error_handler(error)
         ms.add_error(:error_handler, error.message)
       end
     end
@@ -106,19 +106,19 @@ module ResqInnerActionCases
         step :step_three
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(*)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def step_three(*)
+      def step_three
         ctx[:step_three] = 'Success'
       end
 
-      def error_handler(error, **)
+      def error_handler(error)
         ms.add_error(:error_handler, error.message)
       end
     end
@@ -135,23 +135,23 @@ module ResqInnerActionCases
         fail :fail_two
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(*)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def fail_two(*)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
 
-      def step_three(*)
+      def step_three
         ctx[:step_three] = 'Success'
       end
 
-      def error_handler(error, **)
+      def error_handler(error)
         ms.add_error(:error_handler, error.message)
       end
     end
@@ -168,23 +168,23 @@ module ResqInnerActionCases
         fail :fail_two
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(param2:, **)
-        ctx[:fail_one] = param2
+      def fail_one
+        ctx[:fail_one] = c.param2
       end
 
-      def fail_two(*)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
 
-      def step_three(*)
+      def step_three
         ctx[:step_three] = 'Success'
       end
 
-      def error_handler(error, **)
+      def error_handler(error)
         ms.add_error(:error_handler, error.message)
       end
     end
@@ -199,15 +199,15 @@ module ResqInnerActionCases
         fail :fail_one
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(*)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def error_handler(error, **)
+      def error_handler(error)
         ms.add_error(:error_handler, error.message)
       end
     end
@@ -222,15 +222,15 @@ module ResqInnerActionCases
         fail :fail_one
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(*)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def error_handler(error, **)
+      def error_handler(error)
         ms.add_error(:error_handler, error.message)
       end
     end
@@ -245,20 +245,20 @@ module ResqInnerActionCases
         fail :fail_one
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(*)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def error_handler(error, **)
+      def error_handler(error)
         ms.add_error(:error_handler, error.message)
       end
 
-      def some_condition?(param2:, **)
-        param2
+      def some_condition?
+        c.param2
       end
     end
   end
@@ -272,20 +272,20 @@ module ResqInnerActionCases
         fail :fail_one
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(*)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def error_handler(error, **)
+      def error_handler(error)
         ms.add_error(:error_handler, error.message)
       end
 
-      def some_condition?(param2:, **)
-        param2
+      def some_condition?
+        c.param2
       end
     end
   end
@@ -303,28 +303,28 @@ module ResqInnerActionCases
         fail :fail_two
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(*)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def step_three(*)
+      def step_three
         ctx[:step_three] = 'Success'
       end
 
-      def fail_two(*)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
 
-      def error_handler(error, **)
+      def error_handler(error)
         ms.add_error(:error_handler, error.message)
       end
 
-      def some_condition?(param2:, **)
-        param2
+      def some_condition?
+        c.param2
       end
     end
   end
@@ -342,28 +342,28 @@ module ResqInnerActionCases
         fail :fail_two
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(*)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def step_three(*)
+      def step_three
         ctx[:step_three] = 'Success'
       end
 
-      def fail_two(*)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
 
-      def error_handler(error, **)
+      def error_handler(error)
         ms.add_error(:error_handler, error.message)
       end
 
-      def some_condition?(param2:, **)
-        param2
+      def some_condition?
+        c.param2
       end
     end
   end
@@ -379,23 +379,23 @@ module ResqInnerActionCases
         fail :fail_three
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_two(*)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
 
-      def fail_three(*)
+      def fail_three
         ctx[:fail_three] = 'Failure'
       end
 
-      def error_handler(error, **)
+      def error_handler(error)
         ms.add_error(:error_handler, error.message)
       end
     end
@@ -414,31 +414,31 @@ module ResqInnerActionCases
         fail :fail_three
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def fail_one(*)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_three] = 'Success'
       end
 
-      def fail_two(*)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
 
-      def step_three(*)
+      def step_three
         ctx[:step_three] = 'Success'
       end
 
-      def fail_three(*)
+      def fail_three
         ctx[:fail_three] = 'Failure'
       end
 
-      def error_handler(error, **)
+      def error_handler(error)
         ms.add_error(:error_handler, error.message)
       end
     end
@@ -457,31 +457,31 @@ module ResqInnerActionCases
         fail :fail_three
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def fail_one(*)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_three] = 'Success'
       end
 
-      def fail_two(*)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
 
-      def step_three(*)
+      def step_three
         ctx[:step_three] = 'Success'
       end
 
-      def fail_three(*)
+      def fail_three
         ctx[:fail_three] = 'Failure'
       end
 
-      def error_handler(error, **)
+      def error_handler(error)
         ms.add_error(:error_handler, error.message)
       end
     end
@@ -500,31 +500,31 @@ module ResqInnerActionCases
         fail :fail_three
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def fail_one(*)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_three] = 'Success'
       end
 
-      def fail_two(*)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
 
-      def step_three(*)
+      def step_three
         ctx[:step_three] = 'Success'
       end
 
-      def fail_three(*)
+      def fail_three
         ctx[:fail_three] = 'Failure'
       end
 
-      def error_handler(error, **)
+      def error_handler(error)
         ms.add_error(:error_handler, error.message)
       end
     end
@@ -543,31 +543,31 @@ module ResqInnerActionCases
         fail :fail_three
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def fail_one(*)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_three] = 'Success'
       end
 
-      def fail_two(*)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
 
-      def step_three(*)
+      def step_three
         ctx[:step_three] = 'Success'
       end
 
-      def fail_three(*)
+      def fail_three
         ctx[:fail_three] = 'Failure'
       end
 
-      def error_handler(error, **)
+      def error_handler(error)
         ms.add_error(:error_handler, error.message)
       end
     end
@@ -586,31 +586,31 @@ module ResqInnerActionCases
         fail :fail_three
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def fail_one(*)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_three] = 'Success'
       end
 
-      def fail_two(*)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
 
-      def step_three(*)
+      def step_three
         ctx[:step_three] = 'Success'
       end
 
-      def fail_three(*)
+      def fail_three
         ctx[:fail_three] = 'Failure'
       end
 
-      def error_handler(error, **)
+      def error_handler(error)
         ms.add_error(:error_handler, error.message)
       end
     end
@@ -629,31 +629,31 @@ module ResqInnerActionCases
         fail :fail_three
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def fail_one(*)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_three] = 'Success'
       end
 
-      def fail_two(*)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
 
-      def step_three(*)
+      def step_three
         ctx[:step_three] = 'Success'
       end
 
-      def fail_three(*)
+      def fail_three
         ctx[:fail_three] = 'Failure'
       end
 
-      def error_handler(error, **)
+      def error_handler(error)
         ms.add_error(:error_handler, error.message)
       end
     end
@@ -672,36 +672,36 @@ module ResqInnerActionCases
         fail :fail_three
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def fail_one(*)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_three] = 'Success'
       end
 
-      def fail_two(*)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
 
-      def step_three(*)
+      def step_three
         ctx[:step_three] = 'Success'
       end
 
-      def fail_three(*)
+      def fail_three
         ctx[:fail_three] = 'Failure'
       end
 
-      def error_handler(error, **)
+      def error_handler(error)
         ms.add_error(:error_handler, error.message)
       end
 
-      def some_condition?(param2:, **)
-        param2
+      def some_condition?
+        c.param2
       end
     end
   end
@@ -719,36 +719,36 @@ module ResqInnerActionCases
         fail :fail_three
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def fail_one(*)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_three] = 'Success'
       end
 
-      def fail_two(*)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
 
-      def step_three(*)
+      def step_three
         ctx[:step_three] = 'Success'
       end
 
-      def fail_three(*)
+      def fail_three
         ctx[:fail_three] = 'Failure'
       end
 
-      def error_handler(error, **)
+      def error_handler(error)
         ms.add_error(:error_handler, error.message)
       end
 
-      def some_condition?(param2:, **)
-        param2
+      def some_condition?
+        c.param2
       end
     end
   end
@@ -767,36 +767,36 @@ module ResqInnerActionCases
         fail :fail_three
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def fail_one(*)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_three] = 'Success'
       end
 
-      def fail_two(*)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
 
-      def step_three(*)
+      def step_three
         ctx[:step_three] = 'Success'
       end
 
-      def fail_three(*)
+      def fail_three
         ctx[:fail_three] = 'Failure'
       end
 
-      def error_handler(error, **)
+      def error_handler(error)
         ms.add_error(:error_handler, error.message)
       end
 
-      def some_condition?(param2:, **)
-        param2
+      def some_condition?
+        c.param2
       end
     end
   end
@@ -815,36 +815,36 @@ module ResqInnerActionCases
         fail :fail_three
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def fail_one(*)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_three] = 'Success'
       end
 
-      def fail_two(*)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
 
-      def step_three(*)
+      def step_three
         ctx[:step_three] = 'Success'
       end
 
-      def fail_three(*)
+      def fail_three
         ctx[:fail_three] = 'Failure'
       end
 
-      def error_handler(error, **)
+      def error_handler(error)
         ms.add_error(:error_handler, error.message)
       end
 
-      def some_condition?(param2:, **)
-        param2
+      def some_condition?
+        c.param2
       end
     end
   end
@@ -859,19 +859,19 @@ module ResqInnerActionCases
         fail :fail_one
       end
 
-      def step_one(*)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(*)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def error_handler(error, **)
+      def error_handler(error)
         ms.add_error(:error_handler, error.message)
       end
     end
@@ -887,24 +887,24 @@ module ResqInnerActionCases
         fail :fail_one
       end
 
-      def step_one(*)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(*)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def error_handler(error, **)
+      def error_handler(error)
         ms.add_error(:error_handler, error.message)
       end
 
-      def some_condition?(param2:, **)
-        param2
+      def some_condition?
+        c.param2
       end
     end
   end
@@ -921,24 +921,24 @@ module ResqInnerActionCases
         fail :fail_one
       end
 
-      def step_one(*)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(*)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def error_handler(error, **)
+      def error_handler(error)
         ms.add_error(:error_handler, error.message)
       end
 
-      def some_condition?(param2:, **)
-        param2
+      def some_condition?
+        c.param2
       end
     end
   end
@@ -955,28 +955,28 @@ module ResqInnerActionCases
         fail :fail_one
       end
 
-      def step_one(*)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def pass_one(param1:, **)
-        ctx[:pass_one] = param1
+      def pass_one
+        ctx[:pass_one] = c.param1
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(*)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def error_handler(error, **)
+      def error_handler(error)
         ms.add_error(:error_handler, error.message)
       end
 
-      def some_condition?(param2:, **)
-        param2
+      def some_condition?
+        c.param2
       end
     end
   end

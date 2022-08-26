@@ -404,28 +404,6 @@ RSpec.describe 'Decouplio::Action resq cases' do
       end
     end
 
-    context 'when strategy' do
-      context 'when simple wrap inner on_failure firward to outer wrap step' do
-        let(:action_block) { strategy_resq_single_error_class }
-        let(:interpolation_values) do
-          [
-            Decouplio::Const::Types::MAIN_FLOW_TYPES.join("\n"),
-            Decouplio::Const::Validations::Resq::MANUAL_URL
-          ]
-        end
-        let(:expected_message) do
-          Decouplio::Const::Validations::Resq::DEFINITION_ERROR_MESSAGE % interpolation_values
-        end
-
-        it 'raises an error' do
-          expect { action }.to raise_error(
-            Decouplio::Errors::ResqDefinitionError,
-            expected_message
-          )
-        end
-      end
-    end
-
     context 'when wrap' do
       context 'when wrap with klass method' do
         let(:input_params) do

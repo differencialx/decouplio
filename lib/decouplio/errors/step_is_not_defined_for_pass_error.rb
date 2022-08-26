@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'base_error'
-require_relative '../const/validations/pass'
-require_relative '../const/validations/common'
-
 module Decouplio
   module Errors
     class StepIsNotDefinedForPassError < Decouplio::Errors::BaseError

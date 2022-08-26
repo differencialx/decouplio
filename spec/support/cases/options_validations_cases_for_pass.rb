@@ -8,11 +8,11 @@ module OptionsValidationsCasesForPass
         pass :pass_step, on_success: :step_one
       end
 
-      def step_one(**)
+      def step_one
         ctx[:result] = 'result'
       end
 
-      def pass_step(**)
+      def pass_step
         ctx[:pass_step] = 'pass'
       end
     end
@@ -25,11 +25,11 @@ module OptionsValidationsCasesForPass
         pass :pass_step, on_failure: :step_one
       end
 
-      def step_one(**)
+      def step_one
         ctx[:result] = 'result'
       end
 
-      def pass_step(**)
+      def pass_step
         ctx[:pass_step] = 'pass'
       end
     end
@@ -42,11 +42,11 @@ module OptionsValidationsCasesForPass
         pass :pass_step, finish_him: 123
       end
 
-      def step_one(**)
+      def step_one
         ctx[:result] = 'result'
       end
 
-      def pass_step(**)
+      def pass_step
         ctx[:pass_step] = 'pass'
       end
     end
@@ -59,11 +59,11 @@ module OptionsValidationsCasesForPass
         pass :handle_step_one, finish_him: true
       end
 
-      def step_one(**)
+      def step_one
         ctx[:result] = 'result'
       end
 
-      def handle_step_one(**)
+      def handle_step_one
         ms.add_error(:step_one, 'Error')
       end
     end
@@ -76,11 +76,11 @@ module OptionsValidationsCasesForPass
         pass :handle_step_one, finish_him: :some_step
       end
 
-      def step_one(**)
+      def step_one
         ctx[:result] = string_param
       end
 
-      def handle_step_one(**)
+      def handle_step_one
         ms.add_error(:step_one, 'Error')
       end
     end
@@ -93,11 +93,11 @@ module OptionsValidationsCasesForPass
         pass :handle_step_one, finish_him: :on_success
       end
 
-      def step_one(**)
+      def step_one
         ctx[:result] = 'Success'
       end
 
-      def handle_step_one(**)
+      def handle_step_one
         ms.add_error(:step_one, 'Error')
       end
     end
@@ -110,11 +110,11 @@ module OptionsValidationsCasesForPass
         pass :handle_step_one, finish_him: :on_failure
       end
 
-      def step_one(**)
+      def step_one
         ctx[:result] = 'result'
       end
 
-      def handle_step_one(**)
+      def handle_step_one
         ms.add_error(:step_one, 'Error')
       end
     end
@@ -127,11 +127,11 @@ module OptionsValidationsCasesForPass
         pass :pass_step, not_allowed_option: :some_option
       end
 
-      def step_one(**)
+      def step_one
         ctx[:result] = 'result'
       end
 
-      def pass_step(**)
+      def pass_step
         ctx[:pass_step] = 'pass'
       end
     end
@@ -144,15 +144,15 @@ module OptionsValidationsCasesForPass
         step :step_two
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def some_condition?(**)
+      def some_condition?
         false
       end
 
@@ -169,15 +169,15 @@ module OptionsValidationsCasesForPass
         step :step_two
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def some_condition?(**)
+      def some_condition?
         false
       end
     end
@@ -189,11 +189,11 @@ module OptionsValidationsCasesForPass
         pass :pass_one, on_error: :step_one
       end
 
-      def pass_one(**)
+      def pass_one
         ctx[:pass_one] = 'Success'
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
     end

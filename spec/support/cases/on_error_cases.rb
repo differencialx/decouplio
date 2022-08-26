@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class OnErrorDoby
-  def self.call(ctx:, **)
+  def self.call(ctx, _ms)
     ctx[:some_doby] = ctx[:s1].call
   end
 end
@@ -16,19 +16,19 @@ module OnErrorCases
         fail :fail_one
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def handler_one(error, **)
+      def handler_one(error)
         ctx[:handler_one] = error.message
       end
     end
@@ -43,19 +43,19 @@ module OnErrorCases
         fail :fail_one
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def handler_one(error, **)
+      def handler_one(error)
         ctx[:handler_one] = error.message
       end
     end
@@ -70,19 +70,19 @@ module OnErrorCases
         fail :fail_one
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def handler_one(error, **)
+      def handler_one(error)
         ctx[:handler_one] = error.message
       end
     end
@@ -97,19 +97,19 @@ module OnErrorCases
         fail :fail_one
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def handler_one(error, **)
+      def handler_one(error)
         ctx[:handler_one] = error.message
       end
     end
@@ -124,19 +124,19 @@ module OnErrorCases
         fail :fail_one
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def handler_one(error, **)
+      def handler_one(error)
         ctx[:handler_one] = error.message
       end
     end
@@ -152,23 +152,23 @@ module OnErrorCases
         fail :fail_two
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = false
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(f1:, **)
-        ctx[:fail_one] = f1.call
+      def fail_one
+        ctx[:fail_one] = c.f1.call
       end
 
-      def fail_two(**)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
 
-      def handler_one(error, **)
+      def handler_one(error)
         ctx[:handler_one] = error.message
       end
     end
@@ -184,23 +184,23 @@ module OnErrorCases
         fail :fail_two
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = false
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(f1:, **)
-        ctx[:fail_one] = f1.call
+      def fail_one
+        ctx[:fail_one] = c.f1.call
       end
 
-      def fail_two(**)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
 
-      def handler_one(error, **)
+      def handler_one(error)
         ctx[:handler_one] = error.message
       end
     end
@@ -216,23 +216,23 @@ module OnErrorCases
         fail :fail_two
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = false
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(f1:, **)
-        ctx[:fail_one] = f1.call
+      def fail_one
+        ctx[:fail_one] = c.f1.call
       end
 
-      def fail_two(**)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
 
-      def handler_one(error, **)
+      def handler_one(error)
         ctx[:handler_one] = error.message
       end
     end
@@ -248,23 +248,23 @@ module OnErrorCases
         fail :fail_two
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = false
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(f1:, **)
-        ctx[:fail_one] = f1.call
+      def fail_one
+        ctx[:fail_one] = c.f1.call
       end
 
-      def fail_two(**)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
 
-      def handler_one(error, **)
+      def handler_one(error)
         ctx[:handler_one] = error.message
       end
     end
@@ -280,23 +280,23 @@ module OnErrorCases
         fail :fail_two
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = false
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(f1:, **)
-        ctx[:fail_one] = f1.call
+      def fail_one
+        ctx[:fail_one] = c.f1.call
       end
 
-      def fail_two(**)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
 
-      def handler_one(error, **)
+      def handler_one(error)
         ctx[:handler_one] = error.message
       end
     end
@@ -312,23 +312,23 @@ module OnErrorCases
         fail :fail_two
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def pass_one(p1:, **)
-        ctx[:pass_one] = p1.call
+      def pass_one
+        ctx[:pass_one] = c.p1.call
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def fail_two(**)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
 
-      def handler_one(error, **)
+      def handler_one(error)
         ctx[:handler_one] = error.message
       end
     end
@@ -343,19 +343,19 @@ module OnErrorCases
         fail :fail_two
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def pass_one(p1:, **)
-        ctx[:pass_one] = p1.call
+      def pass_one
+        ctx[:pass_one] = c.p1.call
       end
 
-      def fail_two(**)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
 
-      def handler_one(error, **)
+      def handler_one(error)
         ctx[:handler_one] = error.message
       end
     end
@@ -370,19 +370,19 @@ module OnErrorCases
         fail :fail_two
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def pass_one(p1:, **)
-        ctx[:pass_one] = p1.call
+      def pass_one
+        ctx[:pass_one] = c.p1.call
       end
 
-      def fail_two(**)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
 
-      def handler_one(error, **)
+      def handler_one(error)
         ctx[:handler_one] = error.message
       end
     end
@@ -397,19 +397,19 @@ module OnErrorCases
         fail :fail_two
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def pass_one(p1:, **)
-        ctx[:pass_one] = p1.call
+      def pass_one
+        ctx[:pass_one] = c.p1.call
       end
 
-      def fail_two(**)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
 
-      def handler_one(error, **)
+      def handler_one(error)
         ctx[:handler_one] = error.message
       end
     end
@@ -424,19 +424,19 @@ module OnErrorCases
         fail :fail_two
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def pass_one(p1:, **)
-        ctx[:pass_one] = p1.call
+      def pass_one
+        ctx[:pass_one] = c.p1.call
       end
 
-      def fail_two(**)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
 
-      def handler_one(error, **)
+      def handler_one(error)
         ctx[:handler_one] = error.message
       end
     end
@@ -454,23 +454,23 @@ module OnErrorCases
         fail :fail_two
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def fail_two(**)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
 
-      def handler_one(error, **)
+      def handler_one(error)
         ctx[:handler_one] = error.message
       end
     end
@@ -487,19 +487,19 @@ module OnErrorCases
         fail :fail_one
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def handler_one(error, **)
+      def handler_one(error)
         ctx[:handler_one] = error.message
       end
     end
@@ -516,19 +516,19 @@ module OnErrorCases
         fail :fail_one
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def handler_one(error, **)
+      def handler_one(error)
         ctx[:handler_one] = error.message
       end
     end
@@ -545,19 +545,19 @@ module OnErrorCases
         fail :fail_one
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def handler_one(error, **)
+      def handler_one(error)
         ctx[:handler_one] = error.message
       end
     end
@@ -574,19 +574,19 @@ module OnErrorCases
         fail :fail_one
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def handler_one(error, **)
+      def handler_one(error)
         ctx[:handler_one] = error.message
       end
     end
@@ -595,86 +595,40 @@ module OnErrorCases
   def when_palp_on_error_to_step_inside_palp
     lambda do |_klass|
       logic do
-        palp :palp_one do
-          step :palp_step_one, on_error: :palp_step_two
-          resq handler_one: ArgumentError
-          step :palp_step_two
-          fail :palp_fail_one
-        end
-
         octo :octo_name, ctx_key: :octo_key do
-          on :octo1, palp: :palp_one
+          on :octo1 do
+            step :palp_step_one, on_error: :palp_step_two
+            resq handler_one: ArgumentError
+            step :palp_step_two
+            fail :palp_fail_one
+          end
         end
 
         step :step_one
         fail :fail_one
       end
 
-      def palp_step_one(p1:, **)
-        ctx[:palp_step_one] = p1.call
+      def palp_step_one
+        ctx[:palp_step_one] = c.p1.call
       end
 
-      def palp_step_two(**)
+      def palp_step_two
         ctx[:palp_step_two] = 'Success'
       end
 
-      def palp_fail_one(**)
+      def palp_fail_one
         ctx[:palp_fail_one] = 'Failure'
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def handler_one(error, **)
-        ctx[:handler_one] = error.message
-      end
-    end
-  end
-
-  def when_palp_on_error_to_step_outside_palp
-    lambda do |_klass|
-      logic do
-        palp :palp_one do
-          step :palp_step_one, on_error: :fail_one
-          resq handler_one: ArgumentError
-          step :palp_step_two
-          fail :palp_fail_one
-        end
-
-        octo :octo_name, ctx_key: :octo_key do
-          on :octo1, palp: :palp_one
-        end
-
-        step :step_one
-        fail :fail_one
-      end
-
-      def palp_step_one(p1:, **)
-        ctx[:palp_step_one] = p1.call
-      end
-
-      def palp_step_two(**)
-        ctx[:palp_step_two] = 'Success'
-      end
-
-      def palp_fail_one(**)
-        ctx[:palp_fail_one] = 'Failure'
-      end
-
-      def step_one(**)
-        ctx[:step_one] = 'Success'
-      end
-
-      def fail_one(**)
-        ctx[:fail_one] = 'Failure'
-      end
-
-      def handler_one(error, **)
+      def handler_one(error)
         ctx[:handler_one] = error.message
       end
     end
@@ -683,37 +637,35 @@ module OnErrorCases
   def when_palp_on_error_to_pass
     lambda do |_klass|
       logic do
-        palp :palp_one do
-          step :palp_step_one
-          step :palp_step_two, on_error: :PASS
-          resq handler_one: ArgumentError
-        end
-
         octo :octo_name, ctx_key: :octo_key do
-          on :octo1, palp: :palp_one
+          on :octo1 do
+            step :palp_step_one
+            step :palp_step_two, on_error: :PASS
+            resq handler_one: ArgumentError
+          end
         end
 
         step :step_one
         fail :fail_one
       end
 
-      def palp_step_one(**)
+      def palp_step_one
         ctx[:palp_step_one] = 'Success'
       end
 
-      def palp_step_two(p2:, **)
-        ctx[:palp_step_two] = p2.call
+      def palp_step_two
+        ctx[:palp_step_two] = c.p2.call
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def handler_one(error, **)
+      def handler_one(error)
         ctx[:handler_one] = error.message
       end
     end
@@ -722,42 +674,40 @@ module OnErrorCases
   def when_palp_on_error_to_fail
     lambda do |_klass|
       logic do
-        palp :palp_one do
-          step :palp_step_one
-          step :palp_step_two
-          fail :palp_fail_one, on_error: :FAIL
-          resq handler_one: ArgumentError
-        end
-
         octo :octo_name, ctx_key: :octo_key do
-          on :octo1, palp: :palp_one
+          on :octo1 do
+            step :palp_step_one
+            step :palp_step_two
+            fail :palp_fail_one, on_error: :FAIL
+            resq handler_one: ArgumentError
+          end
         end
 
         step :step_one
         fail :fail_one
       end
 
-      def palp_step_one(**)
+      def palp_step_one
         ctx[:palp_step_one] = 'Success'
       end
 
-      def palp_step_two(**)
+      def palp_step_two
         ctx[:palp_step_two] = false
       end
 
-      def palp_fail_one(pf1:, **)
-        ctx[:palp_fail_one] = pf1.call
+      def palp_fail_one
+        ctx[:palp_fail_one] = c.pf1.call
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def handler_one(error, **)
+      def handler_one(error)
         ctx[:handler_one] = error.message
       end
     end
@@ -766,38 +716,36 @@ module OnErrorCases
   def when_palp_finish_him_on_error
     lambda do |_klass|
       logic do
-        palp :palp_one do
-          step :palp_step_one
-          step :palp_step_two
-          fail :palp_fail_one, finish_him: :on_error
-          resq handler_one: ArgumentError
-        end
-
         octo :octo_name, ctx_key: :octo_key do
-          on :octo1, palp: :palp_one
+          on :octo1 do
+            step :palp_step_one
+            step :palp_step_two
+            fail :palp_fail_one, finish_him: :on_error
+            resq handler_one: ArgumentError
+          end
         end
 
         step :step_one
         fail :fail_one
       end
 
-      def palp_step_one(**)
+      def palp_step_one
         ctx[:palp_step_one] = 'Success'
       end
 
-      def palp_step_two(**)
+      def palp_step_two
         ctx[:palp_step_two] = false
       end
 
-      def palp_fail_one(pf1:, **)
-        ctx[:palp_fail_one] = pf1.call
+      def palp_fail_one
+        ctx[:palp_fail_one] = c.pf1.call
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
@@ -810,42 +758,40 @@ module OnErrorCases
   def when_palp_on_error_finish_him
     lambda do |_klass|
       logic do
-        palp :palp_one do
-          step :palp_step_one
-          step :palp_step_two
-          fail :palp_fail_one, on_error: :finish_him
-          resq handler_one: ArgumentError
-        end
-
         octo :octo_name, ctx_key: :octo_key do
-          on :octo1, palp: :palp_one
+          on :octo1 do
+            step :palp_step_one
+            step :palp_step_two
+            fail :palp_fail_one, on_error: :finish_him
+            resq handler_one: ArgumentError
+          end
         end
 
         step :step_one
         fail :fail_one
       end
 
-      def palp_step_one(**)
+      def palp_step_one
         ctx[:palp_step_one] = 'Success'
       end
 
-      def palp_step_two(**)
+      def palp_step_two
         ctx[:palp_step_two] = false
       end
 
-      def palp_fail_one(pf1:, **)
-        ctx[:palp_fail_one] = pf1.call
+      def palp_fail_one
+        ctx[:palp_fail_one] = c.pf1.call
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def handler_one(error, **)
+      def handler_one(error)
         ctx[:handler_one] = error.message
       end
     end
@@ -861,19 +807,19 @@ module OnErrorCases
         step :step_three
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def step_three(**)
+      def step_three
         ctx[:step_three] = 'Success'
       end
 
-      def handle_error(error, **)
+      def handle_error(error)
         ctx[:handle_error] = error.message
       end
     end
@@ -889,19 +835,19 @@ module OnErrorCases
         step :step_three
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def step_three(**)
+      def step_three
         ctx[:step_three] = 'Success'
       end
 
-      def handle_error(error, **)
+      def handle_error(error)
         ctx[:handle_error] = error.message
       end
     end
@@ -917,19 +863,19 @@ module OnErrorCases
         step :step_three
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def step_three(**)
+      def step_three
         ctx[:step_three] = 'Success'
       end
 
-      def handle_error(error, **)
+      def handle_error(error)
         ctx[:handle_error] = error.message
       end
     end
@@ -944,15 +890,15 @@ module OnErrorCases
         fail :fail_one
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def handle_error(error, **)
+      def handle_error(error)
         ctx[:handle_error] = error.message
       end
     end
@@ -967,15 +913,15 @@ module OnErrorCases
         fail :fail_one
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def handle_error(error, **)
+      def handle_error(error)
         ctx[:handle_error] = error.message
       end
     end
@@ -992,19 +938,19 @@ module OnErrorCases
         pass :pass_one
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = false
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def pass_one(**)
+      def pass_one
         ctx[:pass_one] = 'Success'
       end
 
@@ -1025,23 +971,23 @@ module OnErrorCases
         pass :pass_one
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = false
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def pass_one(**)
+      def pass_one
         ctx[:pass_one] = 'Success'
       end
 
-      def handle_error(error, **)
+      def handle_error(error)
         ctx[:handle_error] = error.message
       end
     end
@@ -1058,23 +1004,23 @@ module OnErrorCases
         pass :pass_one
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = false
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def pass_one(**)
+      def pass_one
         ctx[:pass_one] = 'Success'
       end
 
-      def handle_error(error, **)
+      def handle_error(error)
         ctx[:handle_error] = error.message
       end
     end
@@ -1091,19 +1037,19 @@ module OnErrorCases
         pass :pass_one
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = false
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def pass_one(**)
+      def pass_one
         ctx[:pass_one] = 'Success'
       end
 
@@ -1124,23 +1070,23 @@ module OnErrorCases
         pass :pass_one
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = false
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def pass_one(**)
+      def pass_one
         ctx[:pass_one] = 'Success'
       end
 
-      def handle_error(error, **)
+      def handle_error(error)
         ctx[:handle_error] = error.message
       end
     end

@@ -18,6 +18,8 @@ module Decouplio
           %s
         ERROR_MESSAGE
         ALLOWED_OPTIONS_MESSAGE = <<~ALLOWED_OPTIONS
+          <method name>
+          OR
           <method name> => <exception class>
           OR
           <method name> => [<excpetion class one>, <exception class two>]
@@ -26,7 +28,7 @@ module Decouplio
           logic do
             step :some_step
             resq first_handler: [NoMethodError, ArgumentError],
-                second_handler: StandardError
+                 second_handler: StandardError
           end
 
           def some_step(**)
@@ -46,6 +48,15 @@ module Decouplio
         DEFINITION_ERROR_MESSAGE = <<~ERROR
           Details:
           "resq" should be defined only after:
+          %s
+
+          Please read the manual about allowed options here:
+          %s
+        ERROR
+
+        OPTIONS_DEFINITION_ERROR_MESSAGE = <<~ERROR
+          Details:
+          Invalid "resq" definition
           %s
 
           Please read the manual about allowed options here:

@@ -731,7 +731,7 @@ RSpec.describe 'Fail as Aide cases' do
 
     context 'when step_one success' do
       let(:s1) { -> { true } }
-      let(:railway_flow) { %i[step_one octo_name palp_step_one step_two] }
+      let(:railway_flow) { %i[step_one octo_name octo1 palp_step_one step_two] }
       let(:errors) do
         {}
       end
@@ -788,7 +788,7 @@ RSpec.describe 'Fail as Aide cases' do
 
     context 'when palp_step_one success' do
       let(:p1) { -> { true } }
-      let(:railway_flow) { %i[octo_name palp_step_one step_one] }
+      let(:railway_flow) { %i[octo_name octo1 palp_step_one step_one] }
       let(:errors) do
         {}
       end
@@ -812,7 +812,7 @@ RSpec.describe 'Fail as Aide cases' do
 
     context 'when palp_step_one failure' do
       let(:p1) { -> { false } }
-      let(:railway_flow) { %i[octo_name palp_step_one SemanticFailAsAide fail_one] }
+      let(:railway_flow) { %i[octo_name octo1 palp_step_one SemanticFailAsAide fail_one] }
       let(:errors) do
         {
           bad_request: ['Aide message']
@@ -843,7 +843,7 @@ RSpec.describe 'Fail as Aide cases' do
 
     context 'when palp_step_one success' do
       let(:p1) { -> { true } }
-      let(:railway_flow) { %i[octo_name palp_step_one SemanticFailAsAide] }
+      let(:railway_flow) { %i[octo_name octo1 palp_step_one step_one SemanticFailAsAide] }
       let(:errors) do
         {
           bad_request: ['Doby message']
@@ -855,7 +855,7 @@ RSpec.describe 'Fail as Aide cases' do
           railway_flow: railway_flow,
           errors: errors,
           state: {
-            step_one: nil,
+            step_one: 'Success',
             palp_step_one: true,
             octo_key: octo_key,
             fail_one: nil,
@@ -869,22 +869,22 @@ RSpec.describe 'Fail as Aide cases' do
 
     context 'when palp_step_one failure' do
       let(:p1) { -> { false } }
-      let(:railway_flow) { %i[octo_name palp_step_one SemanticFailAsAide] }
+      let(:railway_flow) { %i[octo_name octo1 palp_step_one SemanticFailAsAide fail_one] }
       let(:errors) do
         {
-          bad_request: ['Doby message']
+          bad_request: ['Aide message']
         }
       end
       let(:expected_state) do
         {
-          action_status: :success,
+          action_status: :failure,
           railway_flow: railway_flow,
           errors: errors,
           state: {
             step_one: nil,
             palp_step_one: false,
             octo_key: octo_key,
-            fail_one: nil,
+            fail_one: 'Failure',
             semantic: :bad_request
           }
         }
@@ -900,22 +900,22 @@ RSpec.describe 'Fail as Aide cases' do
 
     context 'when palp_step_one success' do
       let(:p1) { -> { true } }
-      let(:railway_flow) { %i[octo_name palp_step_one SemanticFailAsAide fail_one] }
+      let(:railway_flow) { %i[octo_name octo1 palp_step_one step_one SemanticFailAsAide] }
       let(:errors) do
         {
-          bad_request: ['Aide message']
+          bad_request: ['Doby message']
         }
       end
       let(:expected_state) do
         {
-          action_status: :failure,
+          action_status: :success,
           railway_flow: railway_flow,
           errors: errors,
           state: {
-            step_one: nil,
+            step_one: 'Success',
             palp_step_one: true,
             octo_key: octo_key,
-            fail_one: 'Failure',
+            fail_one: nil,
             semantic: :bad_request
           }
         }
@@ -926,7 +926,7 @@ RSpec.describe 'Fail as Aide cases' do
 
     context 'when palp_step_one failure' do
       let(:p1) { -> { false } }
-      let(:railway_flow) { %i[octo_name palp_step_one SemanticFailAsAide fail_one] }
+      let(:railway_flow) { %i[octo_name octo1 palp_step_one SemanticFailAsAide fail_one] }
       let(:errors) do
         {
           bad_request: ['Aide message']
@@ -957,7 +957,7 @@ RSpec.describe 'Fail as Aide cases' do
 
     context 'when palp_step_one success' do
       let(:p1) { -> { true } }
-      let(:railway_flow) { %i[octo_name palp_step_one SemanticFailAsAide fail_one] }
+      let(:railway_flow) { %i[octo_name octo1 palp_step_one SemanticFailAsAide fail_one] }
       let(:errors) do
         {
           bad_request: ['Aide message']
@@ -983,7 +983,7 @@ RSpec.describe 'Fail as Aide cases' do
 
     context 'when palp_step_one failure' do
       let(:p1) { -> { false } }
-      let(:railway_flow) { %i[octo_name palp_step_one SemanticFailAsAide step_one] }
+      let(:railway_flow) { %i[octo_name octo1 palp_step_one SemanticFailAsAide step_one] }
       let(:errors) do
         {
           bad_request: ['Doby message']
@@ -1014,7 +1014,7 @@ RSpec.describe 'Fail as Aide cases' do
 
     context 'when palp_step_one success' do
       let(:p1) { -> { true } }
-      let(:railway_flow) { %i[octo_name palp_step_one SemanticFailAsAide fail_one] }
+      let(:railway_flow) { %i[octo_name octo1 palp_step_one SemanticFailAsAide fail_one] }
       let(:errors) do
         {
           bad_request: ['Aide message']
@@ -1040,7 +1040,7 @@ RSpec.describe 'Fail as Aide cases' do
 
     context 'when palp_step_one failure' do
       let(:p1) { -> { false } }
-      let(:railway_flow) { %i[octo_name palp_step_one SemanticFailAsAide step_one] }
+      let(:railway_flow) { %i[octo_name octo1 palp_step_one SemanticFailAsAide step_one] }
       let(:errors) do
         {
           bad_request: ['Doby message']

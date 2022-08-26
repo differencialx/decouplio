@@ -14,23 +14,17 @@ RSpec.describe 'Decouplio::ActionStatePrinter' do
     end
     let(:expected_print_message) do
       <<~EXPECTED_MESSAGE
-
         Result: #{expected_result}
-
         RailwayFlow:
           #{expected_flow}
-
         Context:
           #{expected_context}
-
         #{expected_metastore}
-
       EXPECTED_MESSAGE
     end
     let(:expected_metastore) do
       <<~METASTORE
         Status: 400
-
         Errors:
           :error1 => ["Message 1"]
           :error2 => ["Message 2"]

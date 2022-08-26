@@ -4,23 +4,6 @@ RSpec.describe 'Resq options validations' do
   include_context 'with basic spec setup'
 
   describe '.call' do
-    context 'when resq not allowed option is passed' do
-      let(:action_block) { when_resq_not_allowed_option_is_passed }
-
-      interpolation_values = [
-        '"on_success" is not allowed as a handler method for "resq"',
-        '"resq" does not allow "on_success" option(s)',
-        Decouplio::Const::Validations::Resq::ALLOWED_OPTIONS_MESSAGE,
-        Decouplio::Const::Validations::Resq::MANUAL_URL
-      ]
-
-      message = Decouplio::Const::Validations::Resq::VALIDATION_ERROR_MESSAGE % interpolation_values
-
-      it_behaves_like 'raises option validation error',
-                      error_class: Decouplio::Errors::ExtraKeyForResqError,
-                      message: message
-    end
-
     context 'when resq handler method is not a symbol' do
       let(:action_block) { when_resq_handler_method_is_not_a_symbol }
 
@@ -86,6 +69,21 @@ RSpec.describe 'Resq options validations' do
 
       it_behaves_like 'raises option validation error',
                       error_class: Decouplio::Errors::ResqErrorClassError,
+                      message: message
+    end
+
+    context 'when resq options are invalid' do
+      let(:action_block) { when_resq_options_are_invalid }
+
+      interpolation_values = [
+        'resq -->SOme handler method<--, -->{}<--',
+        Decouplio::Const::Validations::Resq::MANUAL_URL
+      ]
+
+      message = Decouplio::Const::Validations::Resq::OPTIONS_DEFINITION_ERROR_MESSAGE % interpolation_values
+
+      it_behaves_like 'raises option validation error',
+                      error_class: Decouplio::Errors::InvalidOptionsForResqStep,
                       message: message
     end
   end

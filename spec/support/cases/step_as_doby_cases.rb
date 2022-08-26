@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class AssignStepAsDoby
-  def self.call(ctx:, to:, from: nil, value: nil, **)
+  def self.call(ctx, _ms, to:, from: nil, value: nil)
     raise 'from/value is empty' unless from || value
 
     ctx[to] = value || ctx[from]
@@ -9,13 +9,13 @@ class AssignStepAsDoby
 end
 
 class InitStepAsDoby
-  def self.call(ctx:, **)
+  def self.call(ctx, _ms)
     ctx[:init] = StubDummy.call
   end
 end
 
 class AddErrorStepAsDoby
-  def self.call(ctx:, ms:, key:, message:)
+  def self.call(ctx, ms, key:, message:)
     ms.add_error(key, message)
 
     ctx[:doby1]
@@ -23,7 +23,7 @@ class AddErrorStepAsDoby
 end
 
 class ForkStepAsDoby
-  def self.call(ctx:, result:, **)
+  def self.call(ctx, _ms, result:)
     ctx[:result] = result
     ctx[:doby1].call
   end
@@ -39,16 +39,16 @@ module StepAsDobyCases
         fail :fail_one
       end
 
-      def assign_user(user_param:, assign_user:, **)
-        ctx[:user] = user_param
-        ctx[:assign_user] = assign_user
+      def assign_user
+        ctx[:user] = c.user_param
+        ctx[:assign_user] = c.assign_user
       end
 
-      def finish(current_user:, **)
-        ctx[:result] = "Current user is: #{current_user}"
+      def finish
+        ctx[:result] = "Current user is: #{c.current_user}"
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -62,11 +62,11 @@ module StepAsDobyCases
         fail :fail_one
       end
 
-      def step_one(init:, **)
-        ctx[:result] = init * 2
+      def step_one
+        ctx[:result] = c.init * 2
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -83,19 +83,19 @@ module StepAsDobyCases
         step :step_three
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def step_three(**)
+      def step_three
         ctx[:step_three] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -112,19 +112,19 @@ module StepAsDobyCases
         step :step_three
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def step_three(**)
+      def step_three
         ctx[:step_three] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -138,12 +138,12 @@ module StepAsDobyCases
         fail :fail_one
       end
 
-      def step_one(outcome:, **)
+      def step_one
         ctx[:user] = 'Some user'
-        ctx[:step_one] = outcome
+        ctx[:step_one] = c.outcome
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -157,12 +157,12 @@ module StepAsDobyCases
         step AssignStepAsDoby, from: :user, to: :current_user
       end
 
-      def step_one(outcome:, **)
+      def step_one
         ctx[:user] = 'Some user'
-        ctx[:step_one] = outcome
+        ctx[:step_one] = c.outcome
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -178,19 +178,19 @@ module StepAsDobyCases
         fail :fail_two
       end
 
-      def step_one(outcome:, **)
-        ctx[:step_one] = outcome
+      def step_one
+        ctx[:step_one] = c.outcome
       end
 
-      def fail_one(fail_one_param:, **)
-        ctx[:fail_one] = fail_one_param
+      def fail_one
+        ctx[:fail_one] = c.fail_one_param
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_two(**)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
     end
@@ -204,11 +204,11 @@ module StepAsDobyCases
         step :step_one
       end
 
-      def pass_one(init:, **)
-        ctx[:pass_one] = init
+      def pass_one
+        ctx[:pass_one] = c.init
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
     end
@@ -222,12 +222,12 @@ module StepAsDobyCases
         step :step_one
       end
 
-      def pass_one(**)
+      def pass_one
         ctx[:user] = 'Some user'
       end
 
-      def step_one(current_user:, **)
-        ctx[:step_one] = current_user
+      def step_one
+        ctx[:step_one] = c.current_user
       end
     end
   end
@@ -235,18 +235,16 @@ module StepAsDobyCases
   def when_step_as_doby_before_octo
     lambda do |_klass|
       logic do
-        palp :palp_one do
-          step :step_palp
-        end
-
         step AssignStepAsDoby, to: :octo_key, value: :octo1
 
         octo :octo_name, ctx_key: :octo_key do
-          on :octo1, palp: :palp_one
+          on :octo1 do
+            step :step_palp
+          end
         end
       end
 
-      def step_palp(**)
+      def step_palp
         ctx[:step_palp] = 'Success'
       end
     end
@@ -255,12 +253,10 @@ module StepAsDobyCases
   def when_step_as_doby_after_octo
     lambda do |_klass|
       logic do
-        palp :palp_one do
-          step :step_palp
-        end
-
         octo :octo_name, ctx_key: :octo_key do
-          on :octo1, palp: :palp_one
+          on :octo1 do
+            step :step_palp
+          end
         end
 
         step :step_one
@@ -269,46 +265,15 @@ module StepAsDobyCases
         fail :fail_one
       end
 
-      def step_palp(palp_param:, **)
-        ctx[:step_palp] = palp_param
+      def step_palp
+        ctx[:step_palp] = c.palp_param
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def fail_one(**)
-        ctx[:fail_one] = 'Failure'
-      end
-    end
-  end
-
-  def when_step_as_doby_after_octo_on_success_on_failure
-    lambda do |_klass|
-      logic do
-        palp :palp_one do
-          step :step_palp, on_success: :fail_one, on_failure: :InitStepAsDoby
-        end
-
-        octo :octo_name, ctx_key: :octo_key do
-          on :octo1, palp: :palp_one
-        end
-
-        step :step_one
-
-        step InitStepAsDoby
-        fail :fail_one
-      end
-
-      def step_palp(palp_param:, **)
-        ctx[:step_palp] = palp_param
-      end
-
-      def step_one(**)
-        ctx[:step_one] = 'Success'
-      end
-
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -323,8 +288,8 @@ module StepAsDobyCases
         end
       end
 
-      def step_one(init:, **)
-        ctx[:result] = init * 2
+      def step_one
+        ctx[:result] = c.init * 2
       end
     end
   end
@@ -341,15 +306,15 @@ module StepAsDobyCases
         fail :fail_one
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -367,15 +332,15 @@ module StepAsDobyCases
         fail :fail_one
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -391,15 +356,15 @@ module StepAsDobyCases
         step :step_one
       end
 
-      def handler(error, **)
+      def handler(error)
         ctx[:error] = error.message
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
     end
@@ -416,55 +381,20 @@ module StepAsDobyCases
         step :step_two
       end
 
-      def handler(error, **)
+      def handler(error)
         ctx[:error] = error.message
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1.call
+      def step_one
+        ctx[:step_one] = c.param1.call
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
-      end
-    end
-  end
-
-  def when_step_as_doby_inside_palp_before_step
-    lambda do |_klass|
-      logic do
-        palp :palp_one do
-          step :palp_step_one, on_failure: :InitStepAsDoby
-          step :palp_step_two, on_success: :fail_one, on_failure: :step_one
-          step InitStepAsDoby
-        end
-
-        octo :octo_name, ctx_key: :octo_key do
-          on :octo1, palp: :palp_one
-        end
-
-        step :step_one
-        fail :fail_one
-      end
-
-      def palp_step_one(palp_param1:, **)
-        ctx[:palp_step_one] = palp_param1.call
-      end
-
-      def palp_step_two(palp_param2:, **)
-        ctx[:palp_step_two] = palp_param2.call
-      end
-
-      def step_one(**)
-        ctx[:step_one] = 'Success'
-      end
-
-      def fail_one(**)
-        ctx[:fail_one] = 'Failure'
       end
     end
   end
@@ -481,15 +411,15 @@ module StepAsDobyCases
         step :step_two
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -504,15 +434,15 @@ module StepAsDobyCases
         fail :fail_one
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = false
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -526,11 +456,11 @@ module StepAsDobyCases
         fail :fail_one
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -544,11 +474,11 @@ module StepAsDobyCases
         fail :fail_one
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -562,11 +492,11 @@ module StepAsDobyCases
         fail :fail_one
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -580,11 +510,11 @@ module StepAsDobyCases
         fail :fail_one
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -598,11 +528,11 @@ module StepAsDobyCases
         fail :fail_one
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -616,11 +546,11 @@ module StepAsDobyCases
         fail :fail_one
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -634,16 +564,16 @@ module StepAsDobyCases
         fail :fail_one
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def condition(condition:, **)
-        condition
+      def condition
+        c.condition
       end
     end
   end
@@ -656,16 +586,16 @@ module StepAsDobyCases
         fail :fail_one
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def condition(condition:, **)
-        condition
+      def condition
+        c.condition
       end
     end
   end

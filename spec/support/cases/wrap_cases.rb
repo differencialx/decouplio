@@ -14,24 +14,24 @@ module WrapCases
         step :step_two
       end
 
-      def handler_step(error, **)
+      def handler_step(error)
         ms.add_error(:wrapper_error, error.message)
       end
 
-      def step_one(string_param:, **)
-        ctx[:result] = string_param
+      def step_one
+        ctx[:result] = c.string_param
       end
 
-      def step_two(integer_param:, **)
-        ctx[:result] = ctx[:result].to_i + integer_param
+      def step_two
+        ctx[:result] = ctx[:result].to_i + c.integer_param
       end
 
-      def transaction_step_one(integer_param:, **)
-        ctx[:result] = ctx[:result].to_i + integer_param
+      def transaction_step_one
+        ctx[:result] = ctx[:result].to_i + c.integer_param
       end
 
-      def transaction_step_two(integer_param:, **)
-        ctx[:result] = ctx[:result] + integer_param
+      def transaction_step_two
+        ctx[:result] = ctx[:result] + c.integer_param
         StubDummy.call
       end
     end
@@ -51,24 +51,24 @@ module WrapCases
         step :step_two
       end
 
-      def handler_step(error, **)
+      def handler_step(error)
         ms.add_error(:wrapper_error, error.message)
       end
 
-      def step_one(string_param:, **)
-        ctx[:result] = string_param
+      def step_one
+        ctx[:result] = c.string_param
       end
 
-      def step_two(integer_param:, **)
-        ctx[:result] = ctx[:result].to_i + integer_param
+      def step_two
+        ctx[:result] = ctx[:result].to_i + c.integer_param
       end
 
-      def transaction_step_one(integer_param:, **)
-        ctx[:result] = ctx[:result].to_i + integer_param
+      def transaction_step_one
+        ctx[:result] = ctx[:result].to_i + c.integer_param
       end
 
-      def transaction_step_two(integer_param:, **)
-        ctx[:result] = ctx[:result] + integer_param
+      def transaction_step_two
+        ctx[:result] = ctx[:result] + c.integer_param
         StubDummy.call
       end
     end
@@ -88,27 +88,27 @@ module WrapCases
         fail :fail_step
       end
 
-      def handler_step(error, **)
+      def handler_step(error)
         ms.add_error(:wrapper_error, error.message)
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def wrapper_step_one(**)
+      def wrapper_step_one
         ctx[:wrapper_step_one] = 'Success'
       end
 
-      def wrapper_step_two(**)
+      def wrapper_step_two
         StubDummy.call
       end
 
-      def fail_step(**)
+      def fail_step
         ctx[:fail_step] = 'Fail'
       end
     end
@@ -128,27 +128,27 @@ module WrapCases
         step :step_two
       end
 
-      def handler_step(error, **)
+      def handler_step(error)
         ms.add_error(:wrapper_error, error.message)
       end
 
-      def handle_wrap_fail(**)
+      def handle_wrap_fail
         ms.add_error(:inner_wrapper_fail, 'Inner wrapp error')
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def wrapper_step_one(**)
+      def wrapper_step_one
         ctx[:wrapper_step_one] = 'Success'
       end
 
-      def wrapper_step_two(**)
+      def wrapper_step_two
         StubDummy.call
       end
     end
@@ -169,31 +169,31 @@ module WrapCases
         fail :handle_fail
       end
 
-      def handler_step(error, **)
+      def handler_step(error)
         ms.add_error(:wrapper_error, error.message)
       end
 
-      def handle_wrap_fail(**)
+      def handle_wrap_fail
         ms.add_error(:inner_wrapper_fail, 'Inner wrap error')
       end
 
-      def handle_fail(**)
+      def handle_fail
         ms.add_error(:outer_fail, 'Outer failure error')
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def wrapper_step_one(**)
+      def wrapper_step_one
         ctx[:wrapper_step_one] = 'Success'
       end
 
-      def wrapper_step_two(**)
+      def wrapper_step_two
         StubDummy.call
       end
     end
@@ -214,31 +214,31 @@ module WrapCases
         fail :handle_fail
       end
 
-      def handler_step(error, **)
+      def handler_step(error)
         ms.add_error(:wrapper_error, error.message)
       end
 
-      def handle_wrap_fail(**)
+      def handle_wrap_fail
         ms.add_error(:inner_wrapper_fail, 'Inner wrap error')
       end
 
-      def handle_fail(**)
+      def handle_fail
         ms.add_error(:outer_fail, 'Outer failure error')
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def wrapper_step_one(**)
+      def wrapper_step_one
         ctx[:wrapper_step_one] = 'Success'
       end
 
-      def wrapper_step_two(**)
+      def wrapper_step_two
         StubDummy.call
       end
     end
@@ -259,31 +259,31 @@ module WrapCases
         fail :handle_fail
       end
 
-      def handler_step(error, **)
+      def handler_step(error)
         ms.add_error(:wrapper_error, error.message)
       end
 
-      def handle_wrap_fail(**)
+      def handle_wrap_fail
         ms.add_error(:inner_wrapper_fail, 'Inner wrap error')
       end
 
-      def handle_fail(**)
+      def handle_fail
         ms.add_error(:outer_fail, 'Outer failure error')
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def wrapper_step_one(**)
+      def wrapper_step_one
         ctx[:wrapper_step_one] = 'Success'
       end
 
-      def wrapper_step_two(**)
+      def wrapper_step_two
         StubDummy.call
       end
     end
@@ -304,31 +304,31 @@ module WrapCases
         fail :handle_fail
       end
 
-      def handler_step(error, **)
+      def handler_step(error)
         ms.add_error(:wrapper_error, error.message)
       end
 
-      def handle_wrap_fail(**)
+      def handle_wrap_fail
         ms.add_error(:inner_wrapper_fail, 'Inner wrap error')
       end
 
-      def handle_fail(**)
+      def handle_fail
         ms.add_error(:outer_fail, 'Outer failure error')
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def wrapper_step_one(**)
+      def wrapper_step_one
         ctx[:wrapper_step_one] = 'Success'
       end
 
-      def wrapper_step_two(**)
+      def wrapper_step_two
         StubDummy.call
       end
     end
@@ -349,31 +349,31 @@ module WrapCases
         fail :handle_fail
       end
 
-      def handler_step(error, **)
+      def handler_step(error)
         ms.add_error(:wrapper_error, error.message)
       end
 
-      def handle_wrap_fail(**)
+      def handle_wrap_fail
         ms.add_error(:inner_wrapper_fail, 'Inner wrap error')
       end
 
-      def handle_fail(**)
+      def handle_fail
         ms.add_error(:outer_fail, 'Outer failure error')
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def wrapper_step_one(**)
+      def wrapper_step_one
         ctx[:wrapper_step_one] = 'Success'
       end
 
-      def wrapper_step_two(**)
+      def wrapper_step_two
         StubDummy.call
       end
     end
@@ -394,31 +394,31 @@ module WrapCases
         fail :handle_fail
       end
 
-      def handler_step(error, **)
+      def handler_step(error)
         ms.add_error(:wrapper_error, error.message)
       end
 
-      def handle_wrap_fail(**)
+      def handle_wrap_fail
         ms.add_error(:inner_wrapper_fail, 'Inner wrap error')
       end
 
-      def handle_fail(**)
+      def handle_fail
         ms.add_error(:outer_fail, 'Outer failure error')
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def wrapper_step_one(**)
+      def wrapper_step_one
         ctx[:wrapper_step_one] = 'Success'
       end
 
-      def wrapper_step_two(**)
+      def wrapper_step_two
         StubDummy.call
       end
     end
@@ -439,31 +439,31 @@ module WrapCases
         fail :handle_fail
       end
 
-      def handler_step(error, **)
+      def handler_step(error)
         ms.add_error(:wrapper_error, error.message)
       end
 
-      def handle_wrap_fail(**)
+      def handle_wrap_fail
         ms.add_error(:inner_wrapper_fail, 'Inner wrap error')
       end
 
-      def handle_fail(**)
+      def handle_fail
         ms.add_error(:outer_fail, 'Outer failure error')
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def wrapper_step_one(**)
+      def wrapper_step_one
         ctx[:wrapper_step_one] = 'Success'
       end
 
-      def wrapper_step_two(**)
+      def wrapper_step_two
         StubDummy.call
       end
     end
@@ -484,31 +484,31 @@ module WrapCases
         fail :handle_fail
       end
 
-      def handler_step(error, **)
+      def handler_step(error)
         ms.add_error(:wrapper_error, error.message)
       end
 
-      def handle_wrap_fail(**)
+      def handle_wrap_fail
         ms.add_error(:inner_wrapper_fail, 'Inner wrap error')
       end
 
-      def handle_fail(**)
+      def handle_fail
         ms.add_error(:outer_fail, 'Outer failure error')
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def wrapper_step_one(**)
+      def wrapper_step_one
         ctx[:wrapper_step_one] = 'Success'
       end
 
-      def wrapper_step_two(**)
+      def wrapper_step_two
         StubDummy.call
       end
     end
@@ -529,31 +529,31 @@ module WrapCases
         fail :handle_fail
       end
 
-      def handler_step(error, **)
+      def handler_step(error)
         ms.add_error(:wrapper_error, error.message)
       end
 
-      def handle_wrap_fail(**)
+      def handle_wrap_fail
         ms.add_error(:inner_wrapper_fail, 'Inner wrap error')
       end
 
-      def handle_fail(**)
+      def handle_fail
         ms.add_error(:outer_fail, 'Outer failure error')
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def wrapper_step_one(**)
+      def wrapper_step_one
         ctx[:wrapper_step_one] = 'Success'
       end
 
-      def wrapper_step_two(**)
+      def wrapper_step_two
         StubDummy.call
       end
     end
@@ -572,19 +572,19 @@ module WrapCases
         step :step_three
       end
 
-      def step_one(**)
+      def step_one
         StubDummy.call
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def step_three(**)
+      def step_three
         ctx[:step_three] = 'Success'
       end
 
-      def wrapper_step_one(**)
+      def wrapper_step_one
         ctx[:wrapper_step_one] = 'Success'
       end
     end
@@ -603,19 +603,19 @@ module WrapCases
         step :step_three
       end
 
-      def step_one(**)
+      def step_one
         StubDummy.call
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def step_three(**)
+      def step_three
         ctx[:step_three] = 'Success'
       end
 
-      def wrapper_step_one(**)
+      def wrapper_step_one
         ctx[:wrapper_step_one] = 'Success'
       end
     end
@@ -636,28 +636,28 @@ module WrapCases
         fail :fail_three
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1.call
+      def step_one
+        ctx[:step_one] = c.param1.call
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def fail_two(**)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
 
-      def fail_three(**)
+      def fail_three
         ctx[:fail_three] = 'Failure'
       end
 
-      def step_three(**)
+      def step_three
         ctx[:step_three] = 'Success'
       end
 
-      def wrapper_step_one(param2:, **)
-        ctx[:wrapper_step_one] = param2.call
+      def wrapper_step_one
+        ctx[:wrapper_step_one] = c.param2.call
       end
     end
   end
@@ -679,31 +679,31 @@ module WrapCases
         fail :fail_three
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1.call
+      def step_one
+        ctx[:step_one] = c.param1.call
       end
 
-      def step_two(param2:, **)
-        ctx[:step_two] = param2.call
+      def step_two
+        ctx[:step_two] = c.param2.call
       end
 
-      def step_three(param3:, **)
-        ctx[:step_three] = param3.call
+      def step_three
+        ctx[:step_three] = c.param3.call
       end
 
-      def wrapper_step_one(param4:, **)
-        ctx[:wrapper_step_one] = param4.call
+      def wrapper_step_one
+        ctx[:wrapper_step_one] = c.param4.call
       end
 
-      def fail_one(param5:, **)
-        ctx[:fail_one] = param5.call
+      def fail_one
+        ctx[:fail_one] = c.param5.call
       end
 
-      def fail_two(**)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
 
-      def fail_three(**)
+      def fail_three
         ctx[:fail_three] = 'Failure'
       end
     end
@@ -726,32 +726,32 @@ module WrapCases
         fail :fail_three
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1.call
+      def step_one
+        ctx[:step_one] = c.param1.call
       end
 
-      def fail_one(param2:, **)
-        ctx[:fail_one] = param2.call
+      def fail_one
+        ctx[:fail_one] = c.param2.call
       end
 
-      def step_two(param3:, **)
-        ctx[:step_two] = param3.call
+      def step_two
+        ctx[:step_two] = c.param3.call
       end
 
-      def fail_two(**)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
 
-      def fail_three(**)
+      def fail_three
         ctx[:fail_three] = 'Failure'
       end
 
-      def step_three(**)
+      def step_three
         ctx[:step_three] = 'Success'
       end
 
-      def wrapper_step_one(param4:, **)
-        ctx[:wrapper_step_one] = param4.call
+      def wrapper_step_one
+        ctx[:wrapper_step_one] = c.param4.call
       end
     end
   end
@@ -769,20 +769,20 @@ module WrapCases
         step :step_three
       end
 
-      def pass_one(param1:, **)
-        ctx[:pass_one] = param1.call
+      def pass_one
+        ctx[:pass_one] = c.param1.call
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def wrapper_step_one(param2:, **)
-        ctx[:wrapper_step_one] = param2.call
+      def wrapper_step_one
+        ctx[:wrapper_step_one] = c.param2.call
       end
 
-      def step_three(param3:, **)
-        ctx[:step_three] = param3.call
+      def step_three
+        ctx[:step_three] = c.param3.call
       end
     end
   end
@@ -790,20 +790,16 @@ module WrapCases
   def when_octo_before_wrap
     lambda do |_klass|
       logic do
-        palp :palp_name1 do
-          step :step_palp1, on_success: :some_wrap, on_failure: :step_three
-        end
-
-        palp :palp_name2 do
-          step :step_palp2, on_success: :fail_two, on_failure: :some_wrap
-        end
-
         step :step_one
         fail :fail_one, on_failure: :octo_name
 
         octo :octo_name, ctx_key: :octo_key do
-          on :octo_key1, palp: :palp_name1
-          on :octo_key2, palp: :palp_name2
+          on :octo_key1 do
+            step :step_palp1
+          end
+          on :octo_key2 do
+            step :step_palp2
+          end
         end
 
         step :step_two
@@ -816,35 +812,35 @@ module WrapCases
         fail :fail_two
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1.call
+      def step_one
+        ctx[:step_one] = c.param1.call
       end
 
-      def fail_one(param2:, **)
-        ctx[:fail_one] = param2.call
+      def fail_one
+        ctx[:fail_one] = c.param2.call
       end
 
-      def step_palp1(param3:, **)
-        ctx[:step_palp1] = param3.call
+      def step_palp1
+        ctx[:step_palp1] = c.param3.call
       end
 
-      def step_palp2(param4:, **)
-        ctx[:step_palp2] = param4.call
+      def step_palp2
+        ctx[:step_palp2] = c.param4.call
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def wrapper_step_one(param5:, **)
-        ctx[:wrapper_step_one] = param5.call
+      def wrapper_step_one
+        ctx[:wrapper_step_one] = c.param5.call
       end
 
-      def step_three(param6:, **)
-        ctx[:step_three] = param6.call
+      def step_three
+        ctx[:step_three] = c.param6.call
       end
 
-      def fail_two(**)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
     end
@@ -871,40 +867,40 @@ module WrapCases
         step :step_three
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1.call
+      def step_one
+        ctx[:step_one] = c.param1.call
       end
 
-      def error_handler_step(error, **)
+      def error_handler_step(error)
         ctx[:error_handler_step] = error.message
       end
 
-      def wrap_step_one(param2:, **)
-        ctx[:wrap_step_one] = param2.call
+      def wrap_step_one
+        ctx[:wrap_step_one] = c.param2.call
       end
 
-      def fail_one(param3:, **)
-        ctx[:fail_one] = param3.call
+      def fail_one
+        ctx[:fail_one] = c.param3.call
       end
 
-      def error_handler_fail(error, **)
+      def error_handler_fail(error)
         ctx[:error_handler_fail] = error.message
       end
 
-      def step_two(param4:, **)
-        ctx[:step_two] = param4.call
+      def step_two
+        ctx[:step_two] = c.param4.call
       end
 
-      def pass_one(param5:, **)
-        ctx[:pass_one] = param5.call
+      def pass_one
+        ctx[:pass_one] = c.param5.call
       end
 
-      def error_handler_pass(error, **)
+      def error_handler_pass(error)
         ctx[:error_handler_pass] = error.message
       end
 
-      def step_three(param6:, **)
-        ctx[:step_three] = param6.call
+      def step_three
+        ctx[:step_three] = c.param6.call
       end
     end
   end
@@ -924,28 +920,28 @@ module WrapCases
         fail :fail_two
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1.call
+      def step_one
+        ctx[:step_one] = c.param1.call
       end
 
-      def fail_one(param2:, **)
-        ctx[:fail_one] = param2.call
+      def fail_one
+        ctx[:fail_one] = c.param2.call
       end
 
-      def error_handler_fail(error, **)
+      def error_handler_fail(error)
         ctx[:error_handler_fail] = error.message
       end
 
-      def wrap_step_one(param3:, **)
-        ctx[:wrap_step_one] = param3.call
+      def wrap_step_one
+        ctx[:wrap_step_one] = c.param3.call
       end
 
-      def step_two(param4:, **)
-        ctx[:step_two] = param4.call
+      def step_two
+        ctx[:step_two] = c.param4.call
       end
 
-      def fail_two(param5:, **)
-        ctx[:fail_two] = param5.call
+      def fail_two
+        ctx[:fail_two] = c.param5.call
       end
     end
   end
@@ -965,28 +961,28 @@ module WrapCases
         step :step_one
       end
 
-      def pass_one(param1:, **)
-        ctx[:pass_one] = param1.call
+      def pass_one
+        ctx[:pass_one] = c.param1.call
       end
 
-      def error_handler_pass(error, **)
+      def error_handler_pass(error)
         ctx[:error_handler_pass] = error.message
       end
 
-      def wrap_step_one(param2:, **)
-        ctx[:wrap_step_one] = param2.call
+      def wrap_step_one
+        ctx[:wrap_step_one] = c.param2.call
       end
 
-      def error_handler_wrap(error, **)
+      def error_handler_wrap(error)
         ctx[:error_handler_wrap] = error.message
       end
 
-      def fail_one(param3:, **)
-        ctx[:fail_one] = param3.call
+      def fail_one
+        ctx[:fail_one] = c.param3.call
       end
 
-      def step_one(param4:, **)
-        ctx[:step_one] = param4.call
+      def step_one
+        ctx[:step_one] = c.param4.call
       end
     end
   end

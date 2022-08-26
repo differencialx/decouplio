@@ -108,22 +108,6 @@ RSpec.describe 'Pass options validations' do
                       message: message
     end
 
-    context 'when not allowed option is provided for step' do
-      let(:action_block) { when_pass_not_allowed_option_provided }
-
-      interpolation_values = [
-        '{:not_allowed_option=>:some_option}',
-        '"not_allowed_option" option(s) is not allowed for "pass"',
-        Decouplio::Const::Validations::Pass::ALLOWED_OPTIONS_MESSAGE,
-        Decouplio::Const::Validations::Pass::MANUAL_URL
-      ]
-      message = Decouplio::Const::Validations::Pass::VALIDATION_ERROR_MESSAGE % interpolation_values
-
-      it_behaves_like 'raises option validation error',
-                      error_class: Decouplio::Errors::ExtraKeyForPassError,
-                      message: message
-    end
-
     context 'when pass if and unless present' do
       let(:action_block) { when_pass_if_and_unless_is_present }
 

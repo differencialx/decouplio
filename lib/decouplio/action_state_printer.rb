@@ -4,17 +4,12 @@ module Decouplio
   class ActionStatePrinter
     def self.call(action)
       <<~INSPECT
-
         Result: #{result(action)}
-
         RailwayFlow:
           #{railway_flow(action)}
-
         Context:
           #{action_context(action)}
-
         #{meta_store(action)}
-
       INSPECT
     end
 
@@ -27,6 +22,8 @@ module Decouplio
     end
 
     def self.action_context(action)
+      return 'Empty' if action.ctx.empty?
+
       action.ctx.map { |k, v| "#{k.inspect} => #{v.inspect}" }.join("\n  ")
     end
 

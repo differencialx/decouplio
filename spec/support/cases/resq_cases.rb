@@ -8,7 +8,7 @@ module ResqCases
         resq another_error_handler: NoMethodError
       end
 
-      def step_one(**)
+      def step_one
         StubDummy.call
       end
     end
@@ -20,7 +20,7 @@ module ResqCases
         resq another_error_handler: NoMethodError
       end
 
-      def another_error_handler(error, **)
+      def another_error_handler(error)
         ms.add_error(:another_error, error.message)
       end
     end
@@ -37,15 +37,15 @@ module ResqCases
         step :step_one
       end
 
-      def step_one(**)
+      def step_one
         StubDummy.call
       end
 
-      def wrap_step(**)
+      def wrap_step
         ctx[:result] = 'Success'
       end
 
-      def handle_error(_error, **)
+      def handle_error(_error)
         ms.add_error(:some_error, 'Error message')
       end
     end
@@ -58,11 +58,11 @@ module ResqCases
         resq error_handler: StandardError
       end
 
-      def step_one(**)
+      def step_one
         StubDummy.call
       end
 
-      def error_handler(error, **)
+      def error_handler(error)
         ms.add_error(:step_one_error, error.message)
       end
     end
@@ -75,11 +75,11 @@ module ResqCases
         resq error_handler: StandardError
       end
 
-      def step_one(**)
+      def step_one
         StubDummy.call
       end
 
-      def error_handler(error, **)
+      def error_handler(error)
         ctx[:result] = error.message
       end
     end
@@ -92,11 +92,11 @@ module ResqCases
         resq error_handler: [StandardError, ArgumentError]
       end
 
-      def step_one(**)
+      def step_one
         StubDummy.call
       end
 
-      def error_handler(error, **)
+      def error_handler(error)
         ms.add_error(:step_one_error, error.message)
       end
     end
@@ -110,15 +110,15 @@ module ResqCases
              another_error_handler: NoMethodError
       end
 
-      def step_one(**)
+      def step_one
         StubDummy.call
       end
 
-      def error_handler(error, **)
+      def error_handler(error)
         ms.add_error(:step_one_error, error.message)
       end
 
-      def another_error_handler(error, **)
+      def another_error_handler(error)
         ms.add_error(:another_error, error.message)
       end
     end
@@ -132,15 +132,15 @@ module ResqCases
         resq error_handler: StandardError
       end
 
-      def step_one(**)
+      def step_one
         false
       end
 
-      def error_handler(error, **)
+      def error_handler(error)
         ms.add_error(:fail_step, error.message)
       end
 
-      def fail_step(**)
+      def fail_step
         StubDummy.call
       end
     end
@@ -154,15 +154,15 @@ module ResqCases
         resq error_handler: [StandardError, ArgumentError]
       end
 
-      def step_one(**)
+      def step_one
         false
       end
 
-      def fail_step(**)
+      def fail_step
         StubDummy.call
       end
 
-      def error_handler(error, **)
+      def error_handler(error)
         ms.add_error(:fail_step, error.message)
       end
     end
@@ -177,19 +177,19 @@ module ResqCases
              another_error_handler: NoMethodError
       end
 
-      def step_one(**)
+      def step_one
         false
       end
 
-      def fail_step(**)
+      def fail_step
         StubDummy.call
       end
 
-      def error_handler(error, **)
+      def error_handler(error)
         ms.add_error(:fail_step, error.message)
       end
 
-      def another_error_handler(error, **)
+      def another_error_handler(error)
         ms.add_error(:another_error, error.message)
       end
     end
@@ -202,11 +202,11 @@ module ResqCases
         resq error_handler: StandardError
       end
 
-      def step_one(**)
+      def step_one
         StubDummy.call
       end
 
-      def error_handler(error, **)
+      def error_handler(error)
         ms.add_error(:step_one_error, error.message)
       end
     end
@@ -219,11 +219,11 @@ module ResqCases
         resq error_handler: [StandardError, ArgumentError]
       end
 
-      def step_one(**)
+      def step_one
         StubDummy.call
       end
 
-      def error_handler(error, **)
+      def error_handler(error)
         ms.add_error(:step_one_error, error.message)
       end
     end
@@ -237,35 +237,16 @@ module ResqCases
              another_error_handler: NoMethodError
       end
 
-      def step_one(**)
+      def step_one
         StubDummy.call
       end
 
-      def error_handler(error, **)
+      def error_handler(error)
         ms.add_error(:step_one_error, error.message)
       end
 
-      def another_error_handler(error, **)
+      def another_error_handler(error)
         ms.add_error(:another_error, error.message)
-      end
-    end
-  end
-
-  def strategy_resq_single_error_class
-    lambda do |_klass|
-      logic do
-        palp :palp_name do
-          step :step_one
-        end
-
-        octo :octo_name, ctx_key: :key do
-          on :key_1, palp: :palp_one
-        end
-        resq handler_method: StandardError
-      end
-
-      def step_one(**)
-        ctx[:result] = 'Result'
       end
     end
   end
@@ -280,27 +261,27 @@ module ResqCases
         step :success_step
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_step(**)
+      def fail_step
         ctx[:fail_step] = 'Failed step'
       end
 
-      def success_step(**)
+      def success_step
         ctx[:success_step] = 'Success step'
       end
 
-      def do_step_one?(**)
+      def do_step_one?
         StubDummy.call
       end
 
-      def handle_error(error, **)
+      def handle_error(error)
         add_error(handled_error: error.message)
       end
     end
@@ -317,27 +298,27 @@ module ResqCases
         fail :final_fail_step
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_step(**)
+      def fail_step
         ctx[:fail_step] = 'Failed step'
       end
 
-      def success_step(**)
+      def success_step
         ctx[:success_step] = 'Success step'
       end
 
-      def do_step_one?(**)
+      def do_step_one?
         StubDummy.call
       end
 
-      def handle_error(error, **)
+      def handle_error(error)
         add_error(handled_error: error.message)
       end
     end

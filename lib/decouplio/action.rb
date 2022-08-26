@@ -1,52 +1,34 @@
 # frozen_string_literal: true
 
-require 'forwardable'
-require_relative 'flow'
-require_relative 'processor'
-require_relative 'default_meta_store'
-require_relative 'action_state_printer'
-require_relative 'errors/logic_redefinition_error'
-require_relative 'errors/logic_is_not_defined_error'
-require_relative 'errors/execution_error'
-require_relative 'const/results'
-
 module Decouplio
   class Action
+    extend Forwardable
+    def_delegator :@ctx, :[]
+
     attr_reader :railway_flow, :ctx, :meta_store
+    attr_writer :success
 
     alias ms meta_store
+    alias c ctx
+
+    PASS = true
+    FAIL = false
 
     def initialize(
-      parent_railway_flow: nil, parent_ctx: nil, meta_store:, **params
+      meta_store, parent_railway_flow, ctx
     )
       @meta_store = meta_store
-      @ctx = parent_ctx || params
-      @railway_flow = parent_railway_flow || []
-      @failure = false
-    end
-
-    def [](key)
-      @ctx[key]
+      @ctx = ctx
+      @railway_flow = parent_railway_flow
+      @success = true
     end
 
     def success?
-      !@failure
+      @success
     end
 
     def failure?
-      @failure
-    end
-
-    def fail_action
-      @failure = true
-    end
-
-    def pass_action
-      @failure = false
-    end
-
-    def append_railway_flow(stp)
-      railway_flow << stp
+      !@success
     end
 
     def inspect
@@ -64,13 +46,15 @@ module Decouplio
         self.meta_store = klass
       end
 
-      def call(**params)
+      def call(_parent_meta_store: nil, _parent_railway_flow: nil, _parent_ctx: nil, **params)
         instance = new(
-          **{
-            meta_store: meta_store.new
-          }.merge(**params)
+          _parent_meta_store || meta_store.new,
+          _parent_railway_flow || [],
+          _parent_ctx || Ctx[params]
         )
-        Decouplio::Processor.call(instance: instance, **@flow)
+        next_step = @first_step
+
+        next_step = next_step.process(instance) while next_step
         instance
       end
 
@@ -92,15 +76,15 @@ module Decouplio
       end
 
       def logic(&block)
-        if @flow && !@flow[:first_step].nil?
+        unless @first_step.nil?
           raise Decouplio::Errors::LogicRedefinitionError.new(
             errored_option: to_s
           )
         end
         if block_given?
-          @flow = Decouplio::Flow.call(logic: block, action_class: self)
+          @first_step = Decouplio::NewFlow.call(block)
 
-          if @flow && @flow[:first_step].nil?
+          if @first_step.nil?
             raise Decouplio::Errors::LogicIsNotDefinedError.new(
               errored_option: to_s
             )

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../const/error_messages'
-
 module Decouplio
   module Errors
     class ExecutionError < StandardError

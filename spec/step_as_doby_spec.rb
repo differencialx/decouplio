@@ -546,7 +546,7 @@ RSpec.describe 'Step as Doby' do
     let(:action_block) { when_step_as_doby_before_octo }
 
     context 'when step_palp success' do
-      let(:railway_flow) { %i[AssignStepAsDoby octo_name step_palp] }
+      let(:railway_flow) { %i[AssignStepAsDoby octo_name octo1 step_palp] }
       let(:expected_state) do
         {
           action_status: :success,
@@ -582,7 +582,7 @@ RSpec.describe 'Step as Doby' do
 
       context 'when InitStepAsDoby success' do
         let(:stub_dummy_value) { true }
-        let(:railway_flow) { %i[octo_name step_palp step_one InitStepAsDoby] }
+        let(:railway_flow) { %i[octo_name octo1 step_palp step_one InitStepAsDoby] }
         let(:expected_state) do
           {
             action_status: :success,
@@ -604,7 +604,7 @@ RSpec.describe 'Step as Doby' do
 
       context 'when InitStepAsDoby failure' do
         let(:stub_dummy_value) { false }
-        let(:railway_flow) { %i[octo_name step_palp step_one InitStepAsDoby fail_one] }
+        let(:railway_flow) { %i[octo_name octo1 step_palp step_one InitStepAsDoby fail_one] }
         let(:expected_state) do
           {
             action_status: :failure,
@@ -628,7 +628,7 @@ RSpec.describe 'Step as Doby' do
     context 'when step_palp failure' do
       let(:palp_param) { false }
       let(:stub_dummy_value) { true }
-      let(:railway_flow) { %i[octo_name step_palp fail_one] }
+      let(:railway_flow) { %i[octo_name octo1 step_palp fail_one] }
       let(:expected_state) do
         {
           action_status: :failure,
@@ -646,92 +646,6 @@ RSpec.describe 'Step as Doby' do
 
       it_behaves_like 'check action state'
       it_behaves_like 'stub dummy was not called'
-    end
-  end
-
-  context 'when after octo on_sucess on_failure' do
-    let(:action_block) { when_step_as_doby_after_octo_on_success_on_failure }
-    let(:input_params) do
-      {
-        octo_key: :octo1,
-        palp_param: palp_param
-      }
-    end
-
-    before do
-      allow(StubDummy).to receive(:call)
-        .and_return(stub_dummy_value)
-    end
-
-    context 'when step_palp success' do
-      let(:palp_param) { true }
-      let(:stub_dummy_value) { true }
-      let(:railway_flow) { %i[octo_name step_palp fail_one] }
-      let(:expected_state) do
-        {
-          action_status: :failure,
-          railway_flow: railway_flow,
-          state: {
-            octo_key: :octo1,
-            step_palp: palp_param,
-            step_one: nil,
-            init: nil,
-            fail_one: 'Failure'
-          },
-          errors: {}
-        }
-      end
-
-      it_behaves_like 'check action state'
-      it_behaves_like 'stub dummy was not called'
-    end
-
-    context 'when step_palp failure' do
-      let(:palp_param) { false }
-
-      context 'when InitStepAsDoby success' do
-        let(:stub_dummy_value) { true }
-        let(:railway_flow) { %i[octo_name step_palp InitStepAsDoby] }
-        let(:expected_state) do
-          {
-            action_status: :success,
-            railway_flow: railway_flow,
-            state: {
-              octo_key: :octo1,
-              step_palp: palp_param,
-              step_one: nil,
-              init: stub_dummy_value,
-              fail_one: nil
-            },
-            errors: {}
-          }
-        end
-
-        it_behaves_like 'check action state'
-        it_behaves_like 'stub dummy was called'
-      end
-
-      context 'when InitStepAsDoby failure' do
-        let(:stub_dummy_value) { false }
-        let(:railway_flow) { %i[octo_name step_palp InitStepAsDoby fail_one] }
-        let(:expected_state) do
-          {
-            action_status: :failure,
-            railway_flow: railway_flow,
-            state: {
-              octo_key: :octo1,
-              step_palp: palp_param,
-              step_one: nil,
-              init: stub_dummy_value,
-              fail_one: 'Failure'
-            },
-            errors: {}
-          }
-        end
-
-        it_behaves_like 'check action state'
-        it_behaves_like 'stub dummy was called'
-      end
     end
   end
 
@@ -1011,121 +925,6 @@ RSpec.describe 'Step as Doby' do
       end
 
       it_behaves_like 'check action state'
-    end
-  end
-
-  context 'when inside palp before step' do
-    let(:action_block) { when_step_as_doby_inside_palp_before_step }
-    let(:input_params) do
-      {
-        palp_param1: palp_param1,
-        palp_param2: palp_param2,
-        octo_key: :octo1
-      }
-    end
-    let(:palp_param1) { nil }
-    let(:palp_param2) { nil }
-    let(:stub_dummy_value) { nil }
-
-    before do
-      allow(StubDummy).to receive(:call)
-        .and_return(stub_dummy_value)
-    end
-
-    context 'when palp_step_one success' do
-      let(:palp_param1) { -> { true } }
-
-      context 'when palp_step_two success' do
-        let(:palp_param2) { -> { true } }
-        let(:railway_flow) { %i[octo_name palp_step_one palp_step_two fail_one] }
-        let(:expected_state) do
-          {
-            action_status: :failure,
-            railway_flow: railway_flow,
-            state: {
-              palp_step_one: true,
-              palp_step_two: true,
-              step_one: nil,
-              init: nil,
-              fail_one: 'Failure'
-            },
-            errors: {}
-          }
-        end
-
-        it_behaves_like 'check action state'
-        it_behaves_like 'stub dummy was not called'
-      end
-
-      context 'when palp_step_two failure' do
-        let(:palp_param2) { -> { false } }
-        let(:railway_flow) { %i[octo_name palp_step_one palp_step_two step_one] }
-        let(:expected_state) do
-          {
-            action_status: :success,
-            railway_flow: railway_flow,
-            state: {
-              palp_step_one: true,
-              palp_step_two: false,
-              step_one: 'Success',
-              init: nil,
-              fail_one: nil
-            },
-            errors: {}
-          }
-        end
-
-        it_behaves_like 'check action state'
-        it_behaves_like 'stub dummy was not called'
-      end
-    end
-
-    context 'when palp_step_one failure' do
-      let(:palp_param1) { -> { false } }
-
-      context 'when InitStepAsDoby success' do
-        let(:stub_dummy_value) { true }
-        let(:railway_flow) { %i[octo_name palp_step_one InitStepAsDoby step_one] }
-        let(:expected_state) do
-          {
-            action_status: :success,
-            railway_flow: railway_flow,
-            state: {
-              palp_step_one: false,
-              palp_step_two: nil,
-              step_one: 'Success',
-              init: stub_dummy_value,
-              fail_one: nil
-            },
-            errors: {}
-          }
-        end
-
-        it_behaves_like 'check action state'
-        it_behaves_like 'stub dummy was called'
-      end
-
-      context 'when InitStepAsDoby failure' do
-        let(:stub_dummy_value) { false }
-        let(:railway_flow) { %i[octo_name palp_step_one InitStepAsDoby fail_one] }
-        let(:expected_state) do
-          {
-            action_status: :failure,
-            railway_flow: railway_flow,
-            state: {
-              palp_step_one: false,
-              palp_step_two: nil,
-              step_one: nil,
-              init: stub_dummy_value,
-              fail_one: 'Failure'
-            },
-            errors: {}
-          }
-        end
-
-        it_behaves_like 'check action state'
-        it_behaves_like 'stub dummy was called'
-      end
     end
   end
 

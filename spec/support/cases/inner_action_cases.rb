@@ -7,11 +7,11 @@ module InnerActionCases
       fail :handle_fail
     end
 
-    def inner_step(inner_action_param:, **)
-      ctx[:result] = inner_action_param == 'pass'
+    def inner_step
+      ctx[:result] = c.inner_action_param == 'pass'
     end
 
-    def handle_fail(**)
+    def handle_fail
       ms.add_error(:inner_step_failed, 'Something went wrong inner')
     end
   end
@@ -31,7 +31,7 @@ module InnerActionCases
         fail String
       end
 
-      def step_one(*)
+      def step_one
         ctx[:step_one] = 'Success'
       end
     end
@@ -53,11 +53,11 @@ module InnerActionCases
         fail :handle_fail
       end
 
-      def assign_inner_action_param(param1:, **)
-        ctx[:inner_action_param] = param1
+      def assign_inner_action_param
+        ctx[:inner_action_param] = c.param1
       end
 
-      def handle_fail(**)
+      def handle_fail
         ms.add_error(:outer_step_failed, 'Something went wrong outer')
       end
     end
@@ -71,11 +71,11 @@ module InnerActionCases
         fail :handle_fail
       end
 
-      def assign_inner_action_param(param1:, **)
-        ctx[:inner_action_param] = param1
+      def assign_inner_action_param
+        ctx[:inner_action_param] = c.param1
       end
 
-      def handle_fail(**)
+      def handle_fail
         ms.add_error(:outer_step_failed, 'Something went wrong outer')
       end
     end
@@ -90,15 +90,15 @@ module InnerActionCases
         step :step_one
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'step_one'
       end
 
-      def assign_inner_action_param(param1:, **)
-        ctx[:inner_action_param] = param1
+      def assign_inner_action_param
+        ctx[:inner_action_param] = c.param1
       end
 
-      def handle_fail(**)
+      def handle_fail
         ms.add_error(:outer_step_failed, 'Something went wrong outer')
       end
     end
@@ -113,15 +113,15 @@ module InnerActionCases
         step :step_one
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'step_one'
       end
 
-      def assign_inner_action_param(param1:, **)
-        ctx[:inner_action_param] = param1
+      def assign_inner_action_param
+        ctx[:inner_action_param] = c.param1
       end
 
-      def handle_fail(**)
+      def handle_fail
         ms.add_error(:outer_step_failed, 'Something went wrong outer')
       end
     end
@@ -136,15 +136,15 @@ module InnerActionCases
         step :step_one
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'step_one'
       end
 
-      def assign_inner_action_param(param1:, **)
-        ctx[:inner_action_param] = param1
+      def assign_inner_action_param
+        ctx[:inner_action_param] = c.param1
       end
 
-      def handle_fail(**)
+      def handle_fail
         ms.add_error(:outer_step_failed, 'Something went wrong outer')
       end
     end
@@ -160,19 +160,19 @@ module InnerActionCases
         fail :fail_two
       end
 
-      def assign_inner_action_param(param1:, **)
-        ctx[:inner_action_param] = param1
+      def assign_inner_action_param
+        ctx[:inner_action_param] = c.param1
       end
 
-      def step_one(param2:, **)
-        ctx[:step_one] = param2
+      def step_one
+        ctx[:step_one] = c.param2
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_two(*)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
     end
@@ -188,19 +188,19 @@ module InnerActionCases
         fail :fail_two
       end
 
-      def assign_inner_action_param(param1:, **)
-        ctx[:inner_action_param] = param1
+      def assign_inner_action_param
+        ctx[:inner_action_param] = c.param1
       end
 
-      def step_one(param2:, **)
-        ctx[:step_one] = param2
+      def step_one
+        ctx[:step_one] = c.param2
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_two(*)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
     end
@@ -216,19 +216,19 @@ module InnerActionCases
         fail :fail_two
       end
 
-      def assign_inner_action_param(param1:, **)
-        ctx[:inner_action_param] = param1
+      def assign_inner_action_param
+        ctx[:inner_action_param] = c.param1
       end
 
-      def step_one(param2:, **)
-        ctx[:step_one] = param2
+      def step_one
+        ctx[:step_one] = c.param2
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_two(*)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
     end
@@ -244,19 +244,19 @@ module InnerActionCases
         fail :fail_two
       end
 
-      def assign_inner_action_param(param1:, **)
-        ctx[:inner_action_param] = param1
+      def assign_inner_action_param
+        ctx[:inner_action_param] = c.param1
       end
 
-      def step_one(param2:, **)
-        ctx[:step_one] = param2
+      def step_one
+        ctx[:step_one] = c.param2
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_two(*)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
     end
@@ -272,19 +272,19 @@ module InnerActionCases
         fail :fail_two
       end
 
-      def assign_inner_action_param(param1:, **)
-        ctx[:inner_action_param] = param1
+      def assign_inner_action_param
+        ctx[:inner_action_param] = c.param1
       end
 
-      def step_one(param2:, **)
-        ctx[:step_one] = param2
+      def step_one
+        ctx[:step_one] = c.param2
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_two(*)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
     end
@@ -300,19 +300,19 @@ module InnerActionCases
         fail :fail_two
       end
 
-      def assign_inner_action_param(param1:, **)
-        ctx[:inner_action_param] = param1
+      def assign_inner_action_param
+        ctx[:inner_action_param] = c.param1
       end
 
-      def step_one(param2:, **)
-        ctx[:step_one] = param2
+      def step_one
+        ctx[:step_one] = c.param2
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_two(*)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
     end
@@ -328,19 +328,19 @@ module InnerActionCases
         fail :fail_two
       end
 
-      def assign_inner_action_param(param1:, **)
-        ctx[:inner_action_param] = param1
+      def assign_inner_action_param
+        ctx[:inner_action_param] = c.param1
       end
 
-      def step_one(param2:, **)
-        ctx[:step_one] = param2
+      def step_one
+        ctx[:step_one] = c.param2
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_two(*)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
     end
@@ -355,15 +355,15 @@ module InnerActionCases
         step :step_two
       end
 
-      def assign_inner_action_param(param1:, **)
-        ctx[:inner_action_param] = param1
+      def assign_inner_action_param
+        ctx[:inner_action_param] = c.param1
       end
 
-      def step_one(*)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_two] = 'Success'
       end
     end
@@ -378,15 +378,15 @@ module InnerActionCases
         step :step_two
       end
 
-      def assign_inner_action_param(param1:, **)
-        ctx[:inner_action_param] = param1
+      def assign_inner_action_param
+        ctx[:inner_action_param] = c.param1
       end
 
-      def step_one(*)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_two] = 'Success'
       end
     end
@@ -401,15 +401,15 @@ module InnerActionCases
         step :step_two
       end
 
-      def assign_inner_action_param(param1:, **)
-        ctx[:inner_action_param] = param1
+      def assign_inner_action_param
+        ctx[:inner_action_param] = c.param1
       end
 
-      def step_one(*)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_two] = 'Success'
       end
     end
@@ -424,15 +424,15 @@ module InnerActionCases
         pass InnerActionCases::InnerAction, finish_him: true
       end
 
-      def assign_inner_action_param(param1:, **)
-        ctx[:inner_action_param] = param1
+      def assign_inner_action_param
+        ctx[:inner_action_param] = c.param1
       end
 
-      def step_one(*)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_two] = 'Success'
       end
     end
@@ -446,16 +446,16 @@ module InnerActionCases
         step InnerActionCases::InnerAction, if: :condition?
       end
 
-      def assign_inner_action_param(param1:, **)
-        ctx[:inner_action_param] = param1
+      def assign_inner_action_param
+        ctx[:inner_action_param] = c.param1
       end
 
-      def step_one(param2:, **)
-        ctx[:step_one] = param2
+      def step_one
+        ctx[:step_one] = c.param2
       end
 
-      def condition?(**)
-        ctx[:condition]
+      def condition?
+        c.condition
       end
     end
   end

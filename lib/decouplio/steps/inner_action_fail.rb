@@ -1,42 +1,8 @@
 # frozen_string_literal: true
 
-require_relative 'base_step'
-require_relative 'shared/fail_resolver'
-
 module Decouplio
   module Steps
-    class InnerActionFail < Decouplio::Steps::BaseStep
-      def initialize(name:, action:, on_success_type:, on_failure_type:)
-        super()
-        @name = name
-        @action = action
-        @on_success_type = on_success_type
-        @on_failure_type = on_failure_type
-      end
-
-      def process(instance:)
-        instance.append_railway_flow(@name)
-        outcome = @action.call(
-          parent_ctx: instance.ctx,
-          parent_railway_flow: instance.railway_flow,
-          meta_store: instance.ms
-        )
-
-        resolve(outcome: outcome, instance: instance)
-      end
-
-      private
-
-      def resolve(outcome:, instance:)
-        result = outcome.success?
-
-        Decouplio::Steps::Shared::FailResolver.call(
-          instance: instance,
-          result: result,
-          on_success_type: @on_success_type,
-          on_failure_type: @on_failure_type
-        )
-      end
+    class InnerActionFail < Decouplio::Steps::BaseInnerAction
     end
   end
 end

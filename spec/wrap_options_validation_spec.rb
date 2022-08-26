@@ -137,38 +137,6 @@ RSpec.describe 'Wrap options validations' do
                       message: message
     end
 
-    context 'when not allowed option is provided for wrap' do
-      let(:action_block) { when_wrap_not_allowed_option_provided }
-
-      interpolation_values = [
-        '{:not_allowed_option=>:some_option}',
-        'Please check if wrap option is allowed',
-        Decouplio::Const::Validations::Wrap::ALLOWED_OPTIONS_MESSAGE,
-        Decouplio::Const::Validations::Wrap::MANUAL_URL
-      ]
-      message = Decouplio::Const::Validations::Wrap::VALIDATION_ERROR_MESSAGE % interpolation_values
-
-      it_behaves_like 'raises option validation error',
-                      error_class: Decouplio::Errors::ExtraKeyForWrapError,
-                      message: message
-    end
-
-    context 'when wrap klass is present and method was not passed' do
-      let(:action_block) { when_wrap_klass_is_present_and_method_was_not_passed }
-
-      interpolation_values = [
-        '{:klass=>ClassWithWrapperMethod}',
-        '"klass" options should be passed along with "method" option',
-        Decouplio::Const::Validations::Wrap::ALLOWED_OPTIONS_MESSAGE,
-        Decouplio::Const::Validations::Wrap::MANUAL_URL
-      ]
-      message = Decouplio::Const::Validations::Wrap::VALIDATION_ERROR_MESSAGE % interpolation_values
-
-      it_behaves_like 'raises option validation error',
-                      error_class: Decouplio::Errors::WrapKlassMethodError,
-                      message: message
-    end
-
     context 'when wrap method is present and klass was not passed' do
       let(:action_block) { when_wrap_method_is_present_and_klass_was_not_passed }
 

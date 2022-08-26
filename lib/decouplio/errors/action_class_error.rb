@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'base_error'
-require_relative '../const/validations/action_option_class'
-
 module Decouplio
   module Errors
     class ActionClassError < Decouplio::Errors::BaseError

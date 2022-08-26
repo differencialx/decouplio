@@ -17,7 +17,6 @@ RSpec.configure do |config|
   config.include OctoCasesPalps
   config.include OptionsValidationsCasesForFail
   config.include OptionsValidationsCasesForPass
-  config.include OptionsValidationsCasesForPalp
   config.include OptionsValidationsCasesForStep
   config.include OptionsValidationsCasesForOcto
   config.include OptionsValidationsCasesForResq
@@ -30,6 +29,8 @@ RSpec.configure do |config|
   config.include StepAsDobyCases
   config.include MetaStoreCases
   config.include ActionCases
+  config.include OctoPalpOnSOnFCases
+  config.include OctoAsStepCases
   config.example_status_persistence_file_path = '.rspec_status'
 
   config.disable_monkey_patching!

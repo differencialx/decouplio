@@ -39,6 +39,22 @@ module Decouplio
         CONTROVERSIAL_KEYS = '"%s" option(s) is not allowed along with "%s" option(s)'
         PALPS_IS_NOT_DEFINED = 'Next palp(s): "%s" is not difined'
         OCTO_BLOCK = 'Block for "octo" is not defined'
+        FINISH_HIM_IS_NOT_ALLOWED = "'finish_him' option is not allowed for octo"
+
+        # PALP
+        PALP_ON_ERROR_MESSAGE = <<~ERROR_MESSAGE
+          Invalid options for "on":
+          %s
+
+          Allowed options are:
+          %s
+
+          Please read the manual about allowed options here:
+          %s
+        ERROR_MESSAGE
+        ON_ALLOWED_OPTIONS = <<~MESSAGE
+          on_success, on_failure, on_error
+        MESSAGE
       end
     end
   end
