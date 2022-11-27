@@ -28,6 +28,8 @@ gem 'decouplio', '~> 1.0.0rc'
 ||[**finish_him**](https://differencialx.github.io/decouplio.github.io/finish_him/)|[**finish_him**](https://differencialx.github.io/decouplio.github.io/finish_him/)|[**finish_him**](https://differencialx.github.io/decouplio.github.io/finish_him/)|[**finish_him**](https://differencialx.github.io/decouplio.github.io/finish_him/)||-|
 ||[**if/unless**](https://differencialx.github.io/decouplio.github.io/if_unless/)|[**if/unless**](https://differencialx.github.io/decouplio.github.io/if_unless/)|[**if/unless**](https://differencialx.github.io/decouplio.github.io/if_unless/)|[**if/unless**](https://differencialx.github.io/decouplio.github.io/if_unless/)|[**if/unless**](https://differencialx.github.io/decouplio.github.io/if_unless/)|-|
 
+#### [Documentation is HERE](https://differencialx.github.io/decouplio.github.io/)
+
 # Quick start
 ## What should you know before start?
 
@@ -324,8 +326,6 @@ So it's allows you do this
   #   :something_went_wrong => ["Something went wrong", "And I duno why :("]
 ```
  **NOTE: you can always define your own metastore class accordingly to your needs. [DOCS ARE HERE](https://differencialx.github.io/decouplio.github.io/meta_store/)**
-
-### [Documentation is HERE](https://differencialx.github.io/decouplio.github.io/)
 
 ## Contributing
 
