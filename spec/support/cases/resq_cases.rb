@@ -9,7 +9,7 @@ module ResqCases
       end
 
       def step_one
-        StubDummy.call
+        c.s1.call
       end
     end
   end
@@ -38,7 +38,7 @@ module ResqCases
       end
 
       def step_one
-        StubDummy.call
+        c.s1.call
       end
 
       def wrap_step
@@ -59,7 +59,7 @@ module ResqCases
       end
 
       def step_one
-        StubDummy.call
+        c.s1.call
       end
 
       def error_handler(error)
@@ -76,7 +76,7 @@ module ResqCases
       end
 
       def step_one
-        StubDummy.call
+        c.s1.call
       end
 
       def error_handler(error)
@@ -93,7 +93,7 @@ module ResqCases
       end
 
       def step_one
-        StubDummy.call
+        c.s1.call
       end
 
       def error_handler(error)
@@ -107,11 +107,11 @@ module ResqCases
       logic do
         step :step_one
         resq error_handler: [StandardError, ArgumentError],
-             another_error_handler: NoMethodError
+             another_error_handler: ZeroDivisionError
       end
 
       def step_one
-        StubDummy.call
+        c.s1.call
       end
 
       def error_handler(error)
@@ -141,7 +141,7 @@ module ResqCases
       end
 
       def fail_step
-        StubDummy.call
+        c.s1.call
       end
     end
   end
@@ -159,7 +159,7 @@ module ResqCases
       end
 
       def fail_step
-        StubDummy.call
+        c.s1.call
       end
 
       def error_handler(error)
@@ -174,7 +174,7 @@ module ResqCases
         step :step_one
         fail :fail_step
         resq error_handler: [StandardError, ArgumentError],
-             another_error_handler: NoMethodError
+             another_error_handler: ZeroDivisionError
       end
 
       def step_one
@@ -182,7 +182,7 @@ module ResqCases
       end
 
       def fail_step
-        StubDummy.call
+        c.s1.call
       end
 
       def error_handler(error)
@@ -203,7 +203,7 @@ module ResqCases
       end
 
       def step_one
-        StubDummy.call
+        c.s1.call
       end
 
       def error_handler(error)
@@ -220,7 +220,7 @@ module ResqCases
       end
 
       def step_one
-        StubDummy.call
+        c.s1.call
       end
 
       def error_handler(error)
@@ -234,11 +234,11 @@ module ResqCases
       logic do
         pass :step_one
         resq error_handler: [StandardError, ArgumentError],
-             another_error_handler: NoMethodError
+             another_error_handler: ZeroDivisionError
       end
 
       def step_one
-        StubDummy.call
+        c.s1.call
       end
 
       def error_handler(error)
@@ -278,7 +278,7 @@ module ResqCases
       end
 
       def do_step_one?
-        StubDummy.call
+        c.s1.call
       end
 
       def handle_error(error)
@@ -315,7 +315,7 @@ module ResqCases
       end
 
       def do_step_one?
-        StubDummy.call
+        c.s1.call
       end
 
       def handle_error(error)
