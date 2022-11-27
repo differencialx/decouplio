@@ -9,15 +9,15 @@ module FinishHimCases
         step :step_three
       end
 
-      def step_one(param1:, **)
-        ctx[:result] = param1
+      def step_one
+        ctx[:result] = c.param1
       end
 
-      def step_two(param2:, **)
-        param2
+      def step_two
+        c.param2
       end
 
-      def step_three(**)
+      def step_three
         ctx[:result] = 'Done'
       end
     end
@@ -31,15 +31,15 @@ module FinishHimCases
         step :step_three
       end
 
-      def step_one(param1:, **)
-        ctx[:result] = param1
+      def step_one
+        ctx[:result] = c.param1
       end
 
-      def step_two(param2:, **)
-        param2
+      def step_two
+        c.param2
       end
 
-      def step_three(**)
+      def step_three
         ctx[:result] = 'Done'
       end
     end
@@ -53,15 +53,15 @@ module FinishHimCases
         step :step_three
       end
 
-      def step_one(param1:, **)
-        ctx[:result] = param1
+      def step_one
+        ctx[:result] = c.param1
       end
 
-      def step_two(param2:, **)
-        ctx[:step_two] = param2
+      def step_two
+        ctx[:step_two] = c.param2
       end
 
-      def step_three(**)
+      def step_three
         ctx[:result] = 'Done'
       end
     end
@@ -75,15 +75,15 @@ module FinishHimCases
         step :step_three
       end
 
-      def step_one(param1:, **)
-        ctx[:result] = param1
+      def step_one
+        ctx[:result] = c.param1
       end
 
-      def step_two(param2:, **)
-        ctx[:step_two] = param2
+      def step_two
+        ctx[:step_two] = c.param2
       end
 
-      def step_three(**)
+      def step_three
         ctx[:result] = 'Done'
       end
     end

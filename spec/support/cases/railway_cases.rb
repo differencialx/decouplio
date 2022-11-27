@@ -8,12 +8,12 @@ module RailwayCases
         step :assign_result
       end
 
-      def model(param1:, **)
-        ctx[:model] = param1
+      def model
+        ctx[:model] = c.param1
       end
 
-      def assign_result(param2:, **)
-        ctx[:result] = param2
+      def assign_result
+        ctx[:result] = c.param2
       end
     end
   end
@@ -26,16 +26,16 @@ module RailwayCases
         step :assign_result
       end
 
-      def model(param1:, **)
-        ctx[:model] = param1
+      def model
+        ctx[:model] = c.param1
       end
 
-      def error(**)
+      def error
         ctx[:error] = 'Error message'
       end
 
-      def assign_result(model:, **)
-        ctx[:result] = model
+      def assign_result
+        ctx[:result] = c.model
       end
     end
   end
@@ -50,24 +50,24 @@ module RailwayCases
         fail :fail_three
       end
 
-      def model(param1:, **)
-        ctx[:model] = param1
+      def model
+        ctx[:model] = c.param1
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:error1] = 'Error message 1'
       end
 
-      def fail_two(**)
+      def fail_two
         ctx[:error2] = 'Error message 2'
       end
 
-      def fail_three(**)
+      def fail_three
         ctx[:error3] = 'Error message 3'
       end
 
-      def assign_result(model:, **)
-        ctx[:result] = model
+      def assign_result
+        ctx[:result] = c.model
       end
     end
   end
@@ -82,24 +82,24 @@ module RailwayCases
         fail :fail_three
       end
 
-      def model(param1:, **)
-        ctx[:model] = param1
+      def model
+        ctx[:model] = c.param1
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:error1] = 'Error message 1'
       end
 
-      def fail_two(**)
+      def fail_two
         ctx[:error2] = 'Error message 2'
       end
 
-      def fail_three(**)
+      def fail_three
         ctx[:error3] = 'Error message 3'
       end
 
-      def assign_result(model:, **)
-        ctx[:result] = model
+      def assign_result
+        ctx[:result] = c.model
       end
     end
   end
@@ -112,20 +112,20 @@ module RailwayCases
         step :final_step
       end
 
-      def model(param1:, **)
-        ctx[:model] = param1
+      def model
+        ctx[:model] = c.param1
       end
 
-      def assign_result?(param2:, **)
-        param2 == true
+      def assign_result?
+        c.param2 == true
       end
 
-      def assign_result(model:, **)
-        ctx[:result] = model
+      def assign_result
+        ctx[:result] = c.model
       end
 
-      def final_step(param1:, **)
-        ctx[:final_step] = param1
+      def final_step
+        ctx[:final_step] = c.param1
       end
     end
   end
@@ -139,24 +139,24 @@ module RailwayCases
         fail :fail_two
       end
 
-      def model(param1:, **)
-        ctx[:model] = param1
+      def model
+        ctx[:model] = c.param1
       end
 
-      def fail_one?(param2:, **)
-        param2 == true
+      def fail_one?
+        ctx[:param2] == true
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:error1] = 'Error message 1'
       end
 
-      def fail_two(**)
+      def fail_two
         ctx[:error2] = 'Error message 2'
       end
 
-      def assign_result(model:, **)
-        ctx[:result] = model
+      def assign_result
+        ctx[:result] = c.model
       end
     end
   end
@@ -169,16 +169,16 @@ module RailwayCases
         step :assign_result
       end
 
-      def model(param1:, **)
-        ctx[:model] = param1
+      def model
+        ctx[:model] = c.param1
       end
 
-      def pass_step(param2:, **)
-        ctx[:pass_step] = param2
+      def pass_step
+        ctx[:pass_step] = c.param2
       end
 
-      def assign_result(model:, **)
-        ctx[:result] = model
+      def assign_result
+        ctx[:result] = c.model
       end
     end
   end
@@ -192,23 +192,23 @@ module RailwayCases
         step :assign_result
       end
 
-      def model(param1:, **)
-        ctx[:model] = param1
+      def model
+        ctx[:model] = c.param1
       end
 
-      def pass_step?(param2:, **)
-        param2
+      def pass_step?
+        ctx[:param2]
       end
 
-      def pass_step(param2:, **)
-        ctx[:pass_step] = param2
+      def pass_step
+        ctx[:pass_step] = c.param2
       end
 
-      def assign_result(model:, **)
-        ctx[:result] = model
+      def assign_result
+        ctx[:result] = c.model
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Fail one'
       end
     end
@@ -223,8 +223,8 @@ module RailwayCases
         step :increment
       end
 
-      def increment(param1:, **)
-        ctx[:param2] += param1
+      def increment
+        ctx[:param2] += c.param1
       end
     end
   end

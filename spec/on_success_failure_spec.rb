@@ -1100,7 +1100,7 @@ RSpec.describe 'Decouplio::Action on_success on_failure' do
 
       context 'when palp_step_one success' do
         let(:param1) { true }
-        let(:railway_flow) { %i[octo_name palp_step_one step_one] }
+        let(:railway_flow) { %i[octo_name octo1 palp_step_one step_one] }
         let(:expected_state) do
           {
             action_status: :success,
@@ -1119,7 +1119,7 @@ RSpec.describe 'Decouplio::Action on_success on_failure' do
 
       context 'when palp_step_one failure' do
         let(:param1) { false }
-        let(:railway_flow) { %i[octo_name palp_step_one fail_one] }
+        let(:railway_flow) { %i[octo_name octo1 palp_step_one fail_one] }
         let(:expected_state) do
           {
             action_status: :failure,
@@ -1143,7 +1143,7 @@ RSpec.describe 'Decouplio::Action on_success on_failure' do
 
       context 'when palp_step_one success' do
         let(:param1) { true }
-        let(:railway_flow) { %i[octo_name palp_step_one step_one] }
+        let(:railway_flow) { %i[octo_name octo1 palp_step_one step_one] }
         let(:expected_state) do
           {
             action_status: :success,
@@ -1163,7 +1163,7 @@ RSpec.describe 'Decouplio::Action on_success on_failure' do
 
       context 'when palp_step_one failure' do
         let(:param1) { false }
-        let(:railway_flow) { %i[octo_name palp_step_one step_one] }
+        let(:railway_flow) { %i[octo_name octo1 palp_step_one step_one] }
         let(:expected_state) do
           {
             action_status: :success,
@@ -1188,7 +1188,7 @@ RSpec.describe 'Decouplio::Action on_success on_failure' do
 
       context 'when palp_step_one success' do
         let(:param1) { true }
-        let(:railway_flow) { %i[octo_name palp_step_one palp_fail_one fail_one] }
+        let(:railway_flow) { %i[octo_name octo1 palp_step_one palp_fail_one fail_one] }
         let(:expected_state) do
           {
             action_status: :failure,
@@ -1208,7 +1208,7 @@ RSpec.describe 'Decouplio::Action on_success on_failure' do
 
       context 'when palp_step_two failure' do
         let(:param1) { false }
-        let(:railway_flow) { %i[octo_name palp_step_one step_one] }
+        let(:railway_flow) { %i[octo_name octo1 palp_step_one step_one] }
         let(:expected_state) do
           {
             action_status: :success,
@@ -1233,7 +1233,7 @@ RSpec.describe 'Decouplio::Action on_success on_failure' do
 
       context 'when palp_step_one success' do
         let(:param1) { true }
-        let(:railway_flow) { %i[step_one octo_name palp_step_one] }
+        let(:railway_flow) { %i[step_one octo_name octo1 palp_step_one] }
         let(:expected_state) do
           {
             action_status: :failure,
@@ -1251,7 +1251,7 @@ RSpec.describe 'Decouplio::Action on_success on_failure' do
 
       context 'when palp_step_one failure' do
         let(:param1) { false }
-        let(:railway_flow) { %i[step_one octo_name palp_step_one] }
+        let(:railway_flow) { %i[step_one octo_name octo1 palp_step_one] }
         let(:expected_state) do
           {
             action_status: :success,

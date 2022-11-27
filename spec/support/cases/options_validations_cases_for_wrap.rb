@@ -11,11 +11,11 @@ module OptionsValidationsCasesForWrap
         step :step_one
       end
 
-      def step_one(**)
+      def step_one
         ctx[:result] = 'result'
       end
 
-      def inner_wrap_step(**)
+      def inner_wrap_step
         ctx[:result] = 'Success'
       end
     end
@@ -31,11 +31,11 @@ module OptionsValidationsCasesForWrap
         step :step_one
       end
 
-      def step_one(**)
+      def step_one
         ctx[:result] = 'result'
       end
 
-      def inner_wrap_step(**)
+      def inner_wrap_step
         ctx[:result] = 'Success'
       end
     end
@@ -49,7 +49,7 @@ module OptionsValidationsCasesForWrap
         end
       end
 
-      def step_one(**)
+      def step_one
         ctx[:result] = 'result'
       end
     end
@@ -63,7 +63,7 @@ module OptionsValidationsCasesForWrap
         end
       end
 
-      def step_one(**)
+      def step_one
         ctx[:result] = 'result'
       end
     end
@@ -77,7 +77,7 @@ module OptionsValidationsCasesForWrap
         end
       end
 
-      def step_one(**)
+      def step_one
         ctx[:result] = 'result'
       end
     end
@@ -91,22 +91,8 @@ module OptionsValidationsCasesForWrap
         end
       end
 
-      def step_one(**)
+      def step_one
         ctx[:result] = 'result'
-      end
-    end
-  end
-
-  def when_wrap_klass_is_present_and_method_was_not_passed
-    lambda do |_klass|
-      logic do
-        wrap :wrap_name, klass: ClassWithWrapperMethod do
-          step :step_one
-        end
-      end
-
-      def step_one(**)
-        ctx[:result] = 'Success'
       end
     end
   end
@@ -119,7 +105,7 @@ module OptionsValidationsCasesForWrap
         end
       end
 
-      def step_one(**)
+      def step_one
         ctx[:result] = 'Success'
       end
     end
@@ -133,7 +119,7 @@ module OptionsValidationsCasesForWrap
         end
       end
 
-      def step_one(**)
+      def step_one
         ctx[:result] = 'Success'
       end
     end
@@ -148,11 +134,11 @@ module OptionsValidationsCasesForWrap
         step :step_two
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
     end
@@ -167,11 +153,11 @@ module OptionsValidationsCasesForWrap
         step :step_two
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
     end
@@ -186,19 +172,19 @@ module OptionsValidationsCasesForWrap
         step :step_two
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def some_condition?(**)
+      def some_condition?
         false
       end
 
-      def condition?(**)
+      def condition?
         true
       end
     end
@@ -213,15 +199,15 @@ module OptionsValidationsCasesForWrap
         step :step_two
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def some_condition?(**)
+      def some_condition?
         false
       end
     end
@@ -236,15 +222,15 @@ module OptionsValidationsCasesForWrap
         step :step_two
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def some_condition?(**)
+      def some_condition?
         false
       end
     end
@@ -259,15 +245,15 @@ module OptionsValidationsCasesForWrap
         step :step_two
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def some_condition?(**)
+      def some_condition?
         false
       end
     end
@@ -282,11 +268,11 @@ module OptionsValidationsCasesForWrap
         end
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_three(**)
+      def step_three
         ctx[:step_two] = 'Success'
       end
     end
@@ -301,11 +287,11 @@ module OptionsValidationsCasesForWrap
         end
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_three(**)
+      def step_three
         ctx[:step_two] = 'Success'
       end
     end
@@ -320,11 +306,11 @@ module OptionsValidationsCasesForWrap
         end
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_three(**)
+      def step_three
         ctx[:step_two] = 'Success'
       end
     end

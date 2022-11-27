@@ -7,7 +7,7 @@ module OptionsValidationsCasesForStep
         step :step_one, on_success: :step_two
       end
 
-      def step_one(**)
+      def step_one
         ctx[:result] = 'result'
       end
     end
@@ -19,7 +19,7 @@ module OptionsValidationsCasesForStep
         step :step_one, on_failure: :step_two
       end
 
-      def step_one(**)
+      def step_one
         ctx[:result] = 'result'
       end
     end
@@ -31,7 +31,7 @@ module OptionsValidationsCasesForStep
         step :step_one, finish_him: 123
       end
 
-      def step_one(**)
+      def step_one
         ctx[:result] = 'result'
       end
     end
@@ -43,7 +43,7 @@ module OptionsValidationsCasesForStep
         step :step_one, finish_him: true
       end
 
-      def step_one(**)
+      def step_one
         ctx[:result] = 'result'
       end
     end
@@ -55,19 +55,7 @@ module OptionsValidationsCasesForStep
         step :step_one, finish_him: :some_step
       end
 
-      def step_one(**)
-        ctx[:result] = 'result'
-      end
-    end
-  end
-
-  def when_step_not_allowed_option_provided
-    lambda do |_klass|
-      logic do
-        step :step_one, not_allowed_option: :some_option
-      end
-
-      def step_one(**)
+      def step_one
         ctx[:result] = 'result'
       end
     end
@@ -80,11 +68,11 @@ module OptionsValidationsCasesForStep
         step :step_two
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
     end
@@ -97,11 +85,11 @@ module OptionsValidationsCasesForStep
         step :step_two
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
     end
@@ -114,19 +102,19 @@ module OptionsValidationsCasesForStep
         step :step_two
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def some_condition?(**)
+      def some_condition?
         false
       end
 
-      def condition?(**)
+      def condition?
         true
       end
     end
@@ -139,15 +127,15 @@ module OptionsValidationsCasesForStep
         step :step_two
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def some_condition?(**)
+      def some_condition?
         false
       end
     end
@@ -160,15 +148,15 @@ module OptionsValidationsCasesForStep
         step :step_two
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def some_condition?(**)
+      def some_condition?
         false
       end
     end
@@ -181,15 +169,15 @@ module OptionsValidationsCasesForStep
         step :step_two
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def some_condition?(**)
+      def some_condition?
         false
       end
     end
@@ -202,11 +190,11 @@ module OptionsValidationsCasesForStep
         step :step_two, on_success: :step_one
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
     end
@@ -219,11 +207,11 @@ module OptionsValidationsCasesForStep
         step :step_two, on_failure: :step_one
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
     end
@@ -235,7 +223,7 @@ module OptionsValidationsCasesForStep
         step :step_one, on_error: :step_two
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
     end

@@ -8,6 +8,16 @@ module Decouplio
         METHOD_IS_NOT_DEFINED = 'Method "%s" is not defined'
         STEP_IS_NOT_DEFINED = 'Step "%s" is not defined'
         STEP_NAME = '"%s" method is reserved by Decouplio, please another name.'
+        STEP_DEFINITION = <<~MESSAGE
+          %s is invalid attribute for step
+
+          Allowed values:
+          <symbol>
+          OR
+          <class inherited from Decouplio::Action>
+          OR
+          <class with implemented self.call(ctx, ms, **) method>
+        MESSAGE
       end
     end
   end

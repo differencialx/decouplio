@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class SemanticFailAsAide
-  def self.call(ctx:, ms:, semantic:, error_message:)
+  def self.call(ctx, ms, semantic:, error_message:)
     ctx[:before_aide].call
     ctx[:semantic] = semantic
     ms.add_error(semantic, error_message)
@@ -11,19 +11,19 @@ class SemanticFailAsAide
 end
 
 class ResolveFailAsAide
-  def self.call(ctx:, **)
+  def self.call(ctx, _ms)
     ctx[:result] = ctx[:aide_result].call
   end
 end
 
 class RandomStepAsDoby
-  def self.call(ctx:, **)
+  def self.call(ctx, _ms)
     ctx[:random] = ctx[:doby].call
   end
 end
 
 class ForkFailAsAide
-  def self.call(ctx:, result:, **)
+  def self.call(ctx, _ms, result:)
     ctx[:result] = result
     ctx[:aide].call
   end
@@ -38,7 +38,7 @@ module FailAsAideCases
         step :step_one
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
     end
@@ -52,11 +52,11 @@ module FailAsAideCases
         step :step_two
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
     end
@@ -71,15 +71,15 @@ module FailAsAideCases
         fail :fail_one
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -95,15 +95,15 @@ module FailAsAideCases
         fail SemanticFailAsAide, semantic: :bad_request, error_message: 'Aide message'
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -119,15 +119,15 @@ module FailAsAideCases
         step SemanticFailAsAide, semantic: :bad_request, error_message: 'Doby message'
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -143,15 +143,15 @@ module FailAsAideCases
         fail :fail_one
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -165,11 +165,11 @@ module FailAsAideCases
         fail :fail_one
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -183,11 +183,11 @@ module FailAsAideCases
         fail SemanticFailAsAide, semantic: :bad_request, error_message: 'Aide message'
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -202,12 +202,12 @@ module FailAsAideCases
         fail SemanticFailAsAide, semantic: :bad_request, error_message: 'Aide message'
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def fail_one(f1:, **)
-        ctx[:fail_one] = f1.call
+      def fail_one
+        ctx[:fail_one] = c.f1.call
       end
     end
   end
@@ -222,15 +222,15 @@ module FailAsAideCases
         step SemanticFailAsAide, semantic: :bad_request, error_message: 'Doby message'
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def fail_one(f1:, **)
-        ctx[:fail_one] = f1.call
+      def fail_one
+        ctx[:fail_one] = c.f1.call
       end
 
-      def fail_two(**)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
     end
@@ -245,12 +245,12 @@ module FailAsAideCases
         fail SemanticFailAsAide, semantic: :bad_request, error_message: 'Aide message'
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def fail_one(f1:, **)
-        ctx[:fail_one] = f1.call
+      def fail_one
+        ctx[:fail_one] = c.f1.call
       end
     end
   end
@@ -263,11 +263,11 @@ module FailAsAideCases
         pass :pass_one
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def pass_one(**)
+      def pass_one
         ctx[:pass_one] = 'Success'
       end
     end
@@ -281,11 +281,11 @@ module FailAsAideCases
         fail SemanticFailAsAide, semantic: :bad_request, error_message: 'Aide message'
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def pass_one(**)
+      def pass_one
         ctx[:pass_one] = 'Success'
       end
     end
@@ -294,34 +294,32 @@ module FailAsAideCases
   def when_fail_as_aide_before_octo
     lambda do |_klass|
       logic do
-        palp :palp_one do
-          step :palp_step_one
-        end
-
         step :step_one
         fail SemanticFailAsAide, semantic: :bad_request, error_message: 'Aide message'
 
         octo :octo_name, ctx_key: :octo_key do
-          on :octo1, palp: :palp_one
+          on :octo1 do
+            step :palp_step_one
+          end
         end
 
         fail :fail_one
         step :step_two
       end
 
-      def palp_step_one(p1:, **)
-        ctx[:palp_step_one] = p1.call
+      def palp_step_one
+        ctx[:palp_step_one] = c.p1.call
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
     end
@@ -330,12 +328,10 @@ module FailAsAideCases
   def when_fail_as_aide_after_octo
     lambda do |_klass|
       logic do
-        palp :palp_one do
-          step :palp_step_one
-        end
-
         octo :octo_name, ctx_key: :octo_key do
-          on :octo1, palp: :palp_one
+          on :octo1 do
+            step :palp_step_one
+          end
         end
         fail SemanticFailAsAide, semantic: :bad_request, error_message: 'Aide message'
 
@@ -343,15 +339,15 @@ module FailAsAideCases
         step :step_one
       end
 
-      def palp_step_one(p1:, **)
-        ctx[:palp_step_one] = p1.call
+      def palp_step_one
+        ctx[:palp_step_one] = c.p1.call
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -360,12 +356,10 @@ module FailAsAideCases
   def when_fail_as_aide_after_octo_on_success_on_failure_to_doby
     lambda do |_klass|
       logic do
-        palp :palp_one do
-          step :palp_step_one, on_success: :SemanticFailAsAide, on_failure: :SemanticFailAsAide
-        end
-
         octo :octo_name, ctx_key: :octo_key do
-          on :octo1, palp: :palp_one
+          on :octo1 do
+            step :palp_step_one
+          end
         end
 
         step :step_one
@@ -376,15 +370,15 @@ module FailAsAideCases
         fail :fail_one
       end
 
-      def palp_step_one(p1:, **)
-        ctx[:palp_step_one] = p1.call
+      def palp_step_one
+        ctx[:palp_step_one] = c.p1.call
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -393,12 +387,10 @@ module FailAsAideCases
   def when_fail_as_aide_after_octo_on_success_on_failure_to_aide
     lambda do |_klass|
       logic do
-        palp :palp_one do
-          step :palp_step_one, on_success: :SemanticFailAsAide, on_failure: :SemanticFailAsAide
-        end
-
         octo :octo_name, ctx_key: :octo_key do
-          on :octo1, palp: :palp_one
+          on :octo1 do
+            step :palp_step_one
+          end
         end
 
         step :step_one
@@ -409,15 +401,15 @@ module FailAsAideCases
         fail :fail_one
       end
 
-      def palp_step_one(p1:, **)
-        ctx[:palp_step_one] = p1.call
+      def palp_step_one
+        ctx[:palp_step_one] = c.p1.call
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -426,12 +418,10 @@ module FailAsAideCases
   def when_fail_as_aide_after_octo_pass_fail
     lambda do |_klass|
       logic do
-        palp :palp_one do
-          step :palp_step_one, on_success: :FAIL, on_failure: :PASS
-        end
-
         octo :octo_name, ctx_key: :octo_key do
-          on :octo1, palp: :palp_one
+          on :octo1 do
+            step :palp_step_one, on_success: :FAIL, on_failure: :PASS
+          end
         end
 
         fail SemanticFailAsAide, semantic: :bad_request, error_message: 'Aide message'
@@ -441,15 +431,15 @@ module FailAsAideCases
         fail :fail_one
       end
 
-      def palp_step_one(p1:, **)
-        ctx[:palp_step_one] = p1.call
+      def palp_step_one
+        ctx[:palp_step_one] = c.p1.call
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -458,29 +448,27 @@ module FailAsAideCases
   def when_fail_as_aide_inside_palp
     lambda do |_klass|
       logic do
-        palp :palp_one do
-          step :palp_step_one, on_success: :FAIL, on_failure: :PASS
-          fail SemanticFailAsAide, semantic: :bad_request, error_message: 'Aide message'
-          step SemanticFailAsAide, semantic: :bad_request, error_message: 'Doby message'
-        end
-
         octo :octo_name, ctx_key: :octo_key do
-          on :octo1, palp: :palp_one
+          on :octo1 do
+            step :palp_step_one, on_success: :FAIL, on_failure: :PASS
+            fail SemanticFailAsAide, semantic: :bad_request, error_message: 'Aide message'
+            step SemanticFailAsAide, semantic: :bad_request, error_message: 'Doby message'
+          end
         end
 
         step :step_one
         fail :fail_one
       end
 
-      def palp_step_one(p1:, **)
-        ctx[:palp_step_one] = p1.call
+      def palp_step_one
+        ctx[:palp_step_one] = c.p1.call
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -503,27 +491,27 @@ module FailAsAideCases
         fail :fail_one
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def handler_one(error, **)
+      def handler_one(error)
         ctx[:handler_one] = error.message
       end
 
-      def handler_aide_semantic(error, **)
+      def handler_aide_semantic(error)
         ctx[:handler_aide_semantic] = error.message
       end
 
-      def handler_aide_resolve(error, **)
+      def handler_aide_resolve(error)
         ctx[:handler_aide_resolve] = error.message
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -541,15 +529,15 @@ module FailAsAideCases
         fail :fail_one
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def wrap_step_one(w1:, **)
-        ctx[:wrap_step_one] = w1.call
+      def wrap_step_one
+        ctx[:wrap_step_one] = c.w1.call
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -568,19 +556,19 @@ module FailAsAideCases
         fail :fail_one
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def wrap_step_one(w1:, **)
-        ctx[:wrap_step_one] = w1.call
+      def wrap_step_one
+        ctx[:wrap_step_one] = c.w1.call
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -600,19 +588,19 @@ module FailAsAideCases
         fail :fail_one
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def wrap_step_one(w1:, **)
-        ctx[:wrap_step_one] = w1.call
+      def wrap_step_one
+        ctx[:wrap_step_one] = c.w1.call
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -632,19 +620,19 @@ module FailAsAideCases
         fail :fail_one
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def wrap_step_one(w1:, **)
-        ctx[:wrap_step_one] = w1.call
+      def wrap_step_one
+        ctx[:wrap_step_one] = c.w1.call
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -664,19 +652,19 @@ module FailAsAideCases
         fail :fail_one
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def wrap_step_one(w1:, **)
-        ctx[:wrap_step_one] = w1.call
+      def wrap_step_one
+        ctx[:wrap_step_one] = c.w1.call
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -696,19 +684,19 @@ module FailAsAideCases
         fail :fail_one
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def wrap_step_one(w1:, **)
-        ctx[:wrap_step_one] = w1.call
+      def wrap_step_one
+        ctx[:wrap_step_one] = c.w1.call
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -723,15 +711,15 @@ module FailAsAideCases
         fail :fail_one
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -746,15 +734,15 @@ module FailAsAideCases
         fail :fail_one
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -769,15 +757,15 @@ module FailAsAideCases
         fail :fail_one
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -792,15 +780,15 @@ module FailAsAideCases
         fail :fail_one
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -815,15 +803,15 @@ module FailAsAideCases
         fail :fail_one
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -838,15 +826,15 @@ module FailAsAideCases
         fail :fail_one
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -861,15 +849,15 @@ module FailAsAideCases
         fail :fail_one
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -884,20 +872,20 @@ module FailAsAideCases
         fail :fail_one
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def condition(condition:, **)
-        condition
+      def condition
+        c.condition
       end
     end
   end
@@ -911,20 +899,20 @@ module FailAsAideCases
         fail :fail_one
       end
 
-      def step_one(s1:, **)
-        ctx[:step_one] = s1.call
+      def step_one
+        ctx[:step_one] = c.s1.call
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
 
-      def condition(condition:, **)
-        condition
+      def condition
+        c.condition
       end
     end
   end

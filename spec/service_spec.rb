@@ -972,7 +972,7 @@ RSpec.describe 'Service cases' do
 
     context 'when Service success' do
       let(:stub_dummy_value) { true }
-      let(:railway_flow) { %i[octo_name step_one Service step_two] }
+      let(:railway_flow) { %i[octo_name octo1 step_one Service step_two] }
       let(:expected_state) do
         {
           action_status: :success,
@@ -993,7 +993,7 @@ RSpec.describe 'Service cases' do
 
     context 'when Service failure' do
       let(:stub_dummy_value) { false }
-      let(:railway_flow) { %i[octo_name step_one Service fail_one] }
+      let(:railway_flow) { %i[octo_name octo1 step_one Service fail_one] }
       let(:expected_state) do
         {
           action_status: :failure,
@@ -1004,58 +1004,6 @@ RSpec.describe 'Service cases' do
             step_two: nil,
             result: stub_dummy_value,
             fail_one: 'Failure',
-            octo_key: octo_key
-          }
-        }
-      end
-
-      it_behaves_like 'check action state'
-    end
-  end
-
-  context 'when service as step inside palp on_success on_failure' do
-    let(:action_block) { when_service_as_step_inside_palp_on_success_on_failure }
-    let(:octo_key) { :octo1 }
-
-    before do
-      allow(StubDummy).to receive(:call)
-        .and_return(stub_dummy_value)
-    end
-
-    context 'when Service success' do
-      let(:stub_dummy_value) { true }
-      let(:railway_flow) { %i[octo_name step_one Service fail_one] }
-      let(:expected_state) do
-        {
-          action_status: :failure,
-          railway_flow: railway_flow,
-          errors: {},
-          state: {
-            step_one: 'Success',
-            step_two: nil,
-            result: stub_dummy_value,
-            fail_one: 'Failure',
-            octo_key: octo_key
-          }
-        }
-      end
-
-      it_behaves_like 'check action state'
-    end
-
-    context 'when Service failure' do
-      let(:stub_dummy_value) { false }
-      let(:railway_flow) { %i[octo_name step_one Service step_two] }
-      let(:expected_state) do
-        {
-          action_status: :success,
-          railway_flow: railway_flow,
-          errors: {},
-          state: {
-            step_one: 'Success',
-            step_two: 'Success',
-            result: stub_dummy_value,
-            fail_one: nil,
             octo_key: octo_key
           }
         }

@@ -9,15 +9,15 @@ module OnSuccessFailureCases
         step :step_three
       end
 
-      def step_one(param1:, **)
-        ctx[:result] = param1
+      def step_one
+        ctx[:result] = c.param1
       end
 
-      def step_two(param2:, **)
-        param2
+      def step_two
+        c.param2
       end
 
-      def step_three(**)
+      def step_three
         ctx[:result] = 'Done'
       end
     end
@@ -34,27 +34,27 @@ module OnSuccessFailureCases
         fail :custom_fail_step
       end
 
-      def step_one(param1:, **)
-        ctx[:result] = param1
+      def step_one
+        ctx[:result] = c.param1
       end
 
-      def step_two(param2:, **)
-        param2
+      def step_two
+        c.param2
       end
 
-      def step_three(**)
+      def step_three
         ctx[:result] = 'Done'
       end
 
-      def custom_step(custom_param:, **)
-        custom_param
+      def custom_step
+        c.custom_param
       end
 
-      def custom_pass_step(**)
+      def custom_pass_step
         ctx[:result] = 'Custom pass step'
       end
 
-      def custom_fail_step(**)
+      def custom_fail_step
         ctx[:result] = 'Custom fail step'
       end
     end
@@ -68,15 +68,15 @@ module OnSuccessFailureCases
         step :step_three
       end
 
-      def step_one(param1:, **)
-        ctx[:result] = param1
+      def step_one
+        ctx[:result] = c.param1
       end
 
-      def step_two(param2:, **)
-        param2
+      def step_two
+        c.param2
       end
 
-      def step_three(**)
+      def step_three
         ctx[:result] = 'Done'
       end
     end
@@ -93,27 +93,27 @@ module OnSuccessFailureCases
         fail :custom_fail_step
       end
 
-      def step_one(param1:, **)
-        ctx[:result] = param1
+      def step_one
+        ctx[:result] = c.param1
       end
 
-      def step_two(param2:, **)
-        param2
+      def step_two
+        c.param2
       end
 
-      def step_three(**)
+      def step_three
         ctx[:result] = 'Done'
       end
 
-      def custom_step(custom_param:, **)
-        custom_param
+      def custom_step
+        c.custom_param
       end
 
-      def custom_pass_step(**)
+      def custom_pass_step
         ctx[:result] = 'Custom pass step'
       end
 
-      def custom_fail_step(**)
+      def custom_fail_step
         ctx[:result] = 'Custom fail step'
       end
     end
@@ -130,32 +130,32 @@ module OnSuccessFailureCases
         fail :custom_fail_step, if: :process_fail_custom_fail_step?
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def step_two(param2:, **)
-        param2
+      def step_two
+        c.param2
       end
 
-      def step_three(**)
+      def step_three
         ctx[:result] = 'Done'
       end
 
-      def custom_step(custom_param:, **)
-        custom_param
+      def custom_step
+        c.custom_param
       end
 
-      def custom_pass_step(**)
+      def custom_pass_step
         ctx[:result] = 'Custom pass step'
       end
 
-      def custom_fail_step(**)
+      def custom_fail_step
         ctx[:result] = 'Custom fail step'
       end
 
-      def process_fail_custom_fail_step?(process_fail_custom_fail_step:, **)
-        process_fail_custom_fail_step
+      def process_fail_custom_fail_step?
+        c.process_fail_custom_fail_step
       end
     end
   end
@@ -169,19 +169,19 @@ module OnSuccessFailureCases
         fail :fail_two
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def fail_one(*)
+      def fail_one
         StubDummy.call
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_two(*)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
     end
@@ -196,19 +196,19 @@ module OnSuccessFailureCases
         fail :fail_two
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def fail_one(*)
+      def fail_one
         StubDummy.call
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_two(*)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
     end
@@ -223,19 +223,19 @@ module OnSuccessFailureCases
         fail :fail_two
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def fail_one(*)
+      def fail_one
         StubDummy.call
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_two(*)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
     end
@@ -250,19 +250,19 @@ module OnSuccessFailureCases
         fail :fail_two
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def fail_one(*)
+      def fail_one
         StubDummy.call
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_two(*)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
     end
@@ -277,19 +277,19 @@ module OnSuccessFailureCases
         fail :fail_two
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def fail_one(*)
+      def fail_one
         StubDummy.call
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_two(*)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
     end
@@ -304,19 +304,19 @@ module OnSuccessFailureCases
         fail :fail_two
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def fail_one(*)
+      def fail_one
         StubDummy.call
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_two(*)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
     end
@@ -331,19 +331,19 @@ module OnSuccessFailureCases
         fail :fail_two
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def fail_one(*)
+      def fail_one
         StubDummy.call
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_two(*)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
     end
@@ -358,19 +358,19 @@ module OnSuccessFailureCases
         fail :fail_two
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def fail_one(*)
+      def fail_one
         StubDummy.call
       end
 
-      def step_two(*)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_two(*)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
     end
@@ -384,15 +384,15 @@ module OnSuccessFailureCases
         step :step_two
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -406,15 +406,15 @@ module OnSuccessFailureCases
         step :step_two
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -428,15 +428,15 @@ module OnSuccessFailureCases
         step :step_two
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1
+      def step_one
+        ctx[:step_one] = c.param1
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -449,12 +449,12 @@ module OnSuccessFailureCases
         step :step_two, on_failure: :PASS, on_success: :FAIL
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(param2:, **)
-        ctx[:step_two] = param2
+      def step_two
+        ctx[:step_two] = c.param2
       end
     end
   end
@@ -468,19 +468,19 @@ module OnSuccessFailureCases
         step :step_two
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = false
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(param1:, **)
-        ctx[:fail_one] = param1
+      def fail_one
+        ctx[:fail_one] = c.param1
       end
 
-      def fail_two(**)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
     end
@@ -495,19 +495,19 @@ module OnSuccessFailureCases
         step :step_two
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = false
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(param1:, **)
-        ctx[:fail_one] = param1
+      def fail_one
+        ctx[:fail_one] = c.param1
       end
 
-      def fail_two(**)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
     end
@@ -522,19 +522,19 @@ module OnSuccessFailureCases
         step :step_two
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = false
       end
 
-      def step_two(**)
+      def step_two
         ctx[:step_two] = 'Success'
       end
 
-      def fail_one(param1:, **)
-        ctx[:fail_one] = param1
+      def fail_one
+        ctx[:fail_one] = c.param1
       end
 
-      def fail_two(**)
+      def fail_two
         ctx[:fail_two] = 'Failure'
       end
     end
@@ -547,12 +547,12 @@ module OnSuccessFailureCases
         fail :fail_one, on_success: :FAIL, on_failure: :PASS
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = false
       end
 
-      def fail_one(param1:, **)
-        ctx[:fail_one] = param1
+      def fail_one
+        ctx[:fail_one] = c.param1
       end
     end
   end
@@ -569,19 +569,19 @@ module OnSuccessFailureCases
         fail :fail_one
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(param2:, **)
-        ctx[:step_two] = param2
+      def step_two
+        ctx[:step_two] = c.param2
       end
 
-      def step_three(**)
+      def step_three
         ctx[:step_three] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -599,19 +599,19 @@ module OnSuccessFailureCases
         fail :fail_one
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(param2:, **)
-        ctx[:step_two] = param2
+      def step_two
+        ctx[:step_two] = c.param2
       end
 
-      def step_three(**)
+      def step_three
         ctx[:step_three] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -629,19 +629,19 @@ module OnSuccessFailureCases
         fail :fail_one
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def step_two(param2:, **)
-        ctx[:step_two] = param2
+      def step_two
+        ctx[:step_two] = c.param2
       end
 
-      def step_three(**)
+      def step_three
         ctx[:step_three] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -655,8 +655,8 @@ module OnSuccessFailureCases
         end
       end
 
-      def step_one(param1:, **)
-        ctx[:step_one] = param1.call
+      def step_one
+        ctx[:step_one] = c.param1.call
       end
     end
   end
@@ -664,27 +664,25 @@ module OnSuccessFailureCases
   def when_palp_on_success_pass
     lambda do |_klass|
       logic do
-        palp :palp_one do
-          step :palp_step_one, on_success: :PASS
-        end
-
         octo :octo_name, ctx_key: :octo_key do
-          on :octo1, palp: :palp_one
+          on :octo1 do
+            step :palp_step_one, on_success: :PASS
+          end
         end
 
         step :step_one
         fail :fail_one
       end
 
-      def palp_step_one(param1:, **)
-        ctx[:palp_step_one] = param1
+      def palp_step_one
+        ctx[:palp_step_one] = c.param1
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -693,32 +691,30 @@ module OnSuccessFailureCases
   def when_palp_on_failure_pass
     lambda do |_klass|
       logic do
-        palp :palp_one do
-          step :palp_step_one, on_failure: :PASS
-          fail :palp_fail_one
-        end
-
         octo :octo_name, ctx_key: :octo_key do
-          on :octo1, palp: :palp_one
+          on :octo1 do
+            step :palp_step_one, on_failure: :PASS
+            fail :palp_fail_one
+          end
         end
 
         step :step_one
         fail :fail_one
       end
 
-      def palp_step_one(param1:, **)
-        ctx[:palp_step_one] = param1
+      def palp_step_one
+        ctx[:palp_step_one] = c.param1
       end
 
-      def palp_fail_one(**)
+      def palp_fail_one
         ctx[:palp_fail_one] = 'Failure'
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -727,32 +723,30 @@ module OnSuccessFailureCases
   def when_palp_on_success_on_failure_reverse
     lambda do |_klass|
       logic do
-        palp :palp_one do
-          step :palp_step_one, on_success: :FAIL, on_failure: :PASS
-          fail :palp_fail_one
-        end
-
         octo :octo_name, ctx_key: :octo_key do
-          on :octo1, palp: :palp_one
+          on :octo1 do
+            step :palp_step_one, on_success: :FAIL, on_failure: :PASS
+            fail :palp_fail_one
+          end
         end
 
         step :step_one
         fail :fail_one
       end
 
-      def palp_step_one(param1:, **)
-        ctx[:palp_step_one] = param1
+      def palp_step_one
+        ctx[:palp_step_one] = c.param1
       end
 
-      def palp_fail_one(**)
+      def palp_fail_one
         ctx[:palp_fail_one] = 'Failure'
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
 
-      def fail_one(**)
+      def fail_one
         ctx[:fail_one] = 'Failure'
       end
     end
@@ -761,22 +755,20 @@ module OnSuccessFailureCases
   def when_palp_on_success_on_failure_last_palp_step
     lambda do |_klass|
       logic do
-        palp :palp_one do
-          step :palp_step_one, on_success: :FAIL, on_failure: :PASS
-        end
-
         step :step_one
 
         octo :octo_name, ctx_key: :octo_key do
-          on :octo1, palp: :palp_one
+          on :octo1 do
+            step :palp_step_one, on_success: :FAIL, on_failure: :PASS
+          end
         end
       end
 
-      def palp_step_one(param1:, **)
-        ctx[:palp_step_one] = param1
+      def palp_step_one
+        ctx[:palp_step_one] = c.param1
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = 'Success'
       end
     end
@@ -787,8 +779,8 @@ module OnSuccessFailureCases
       step :inner_step
     end
 
-    def inner_step(in1:, **)
-      ctx[:inner_step] = in1.call
+    def inner_step
+      ctx[:inner_step] = c.in1.call
     end
   end
 
@@ -815,7 +807,7 @@ module OnSuccessFailureCases
         fail OnSOnFCasesAction, on_success: :PASS, on_failure: :FAIL
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = false
       end
     end
@@ -828,14 +820,14 @@ module OnSuccessFailureCases
         fail OnSOnFCasesAction, on_success: :FAIL, on_failure: :PASS
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = false
       end
     end
   end
 
   class OnSOnFCasesService
-    def self.call(ctx:, **)
+    def self.call(ctx, _ms)
       ctx[:inner_step] = ctx[:in1].call
     end
   end
@@ -863,7 +855,7 @@ module OnSuccessFailureCases
         fail OnSOnFCasesService, on_success: :PASS, on_failure: :FAIL
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = false
       end
     end
@@ -876,7 +868,7 @@ module OnSuccessFailureCases
         fail OnSOnFCasesService, on_success: :FAIL, on_failure: :PASS
       end
 
-      def step_one(**)
+      def step_one
         ctx[:step_one] = false
       end
     end

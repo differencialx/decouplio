@@ -20,7 +20,7 @@ RSpec.describe 'Use Decouplio::Action as a step' do
 
       interpolation_values = [
         'step',
-        'action: String'
+        'step String'
       ]
 
       message = Decouplio::Const::Validations::ActionOptionClass::VALIDATION_ERROR_MESSAGE % interpolation_values
@@ -35,7 +35,7 @@ RSpec.describe 'Use Decouplio::Action as a step' do
 
       interpolation_values = [
         'fail',
-        'action: String'
+        'fail String'
       ]
       message = Decouplio::Const::Validations::ActionOptionClass::VALIDATION_ERROR_MESSAGE % interpolation_values
 
@@ -49,7 +49,7 @@ RSpec.describe 'Use Decouplio::Action as a step' do
 
       interpolation_values = [
         'pass',
-        'action: String'
+        'pass String'
       ]
 
       message = Decouplio::Const::Validations::ActionOptionClass::VALIDATION_ERROR_MESSAGE % interpolation_values

@@ -24,7 +24,7 @@ RSpec.describe 'Octo with method' do
 
       context 'when palp_one_step success' do
         let(:p1) { -> { true } }
-        let(:railway_flow) { %i[step_one octo_name palp_one_step step_two] }
+        let(:railway_flow) { %i[step_one octo_name octo1 palp_one_step step_two] }
         let(:expected_state) do
           {
             action_status: :success,
@@ -46,7 +46,7 @@ RSpec.describe 'Octo with method' do
 
       context 'when palp_one_step failure' do
         let(:p1) { -> { false } }
-        let(:railway_flow) { %i[step_one octo_name palp_one_step fail_one] }
+        let(:railway_flow) { %i[step_one octo_name octo1 palp_one_step fail_one] }
         let(:expected_state) do
           {
             action_status: :failure,
@@ -72,7 +72,7 @@ RSpec.describe 'Octo with method' do
 
       context 'when palp_two_step success' do
         let(:p2) { -> { true } }
-        let(:railway_flow) { %i[step_one octo_name palp_two_step step_two] }
+        let(:railway_flow) { %i[step_one octo_name octo2 palp_two_step step_two] }
         let(:expected_state) do
           {
             action_status: :success,
@@ -94,7 +94,7 @@ RSpec.describe 'Octo with method' do
 
       context 'when palp_two_step failure' do
         let(:p2) { -> { false } }
-        let(:railway_flow) { %i[step_one octo_name palp_two_step fail_one] }
+        let(:railway_flow) { %i[step_one octo_name octo2 palp_two_step fail_one] }
         let(:expected_state) do
           {
             action_status: :failure,
@@ -120,7 +120,7 @@ RSpec.describe 'Octo with method' do
 
       context 'when palp_three_step success' do
         let(:p3) { -> { true } }
-        let(:railway_flow) { %i[step_one octo_name palp_three_step step_two] }
+        let(:railway_flow) { %i[step_one octo_name octo3 palp_three_step step_two] }
         let(:expected_state) do
           {
             action_status: :success,
@@ -142,7 +142,7 @@ RSpec.describe 'Octo with method' do
 
       context 'when palp_three_step failure' do
         let(:p3) { -> { false } }
-        let(:railway_flow) { %i[step_one octo_name palp_three_step fail_one] }
+        let(:railway_flow) { %i[step_one octo_name octo3 palp_three_step fail_one] }
         let(:expected_state) do
           {
             action_status: :failure,

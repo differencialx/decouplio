@@ -1,40 +1,37 @@
 # frozen_string_literal: true
 
-require_relative 'base_step'
-
 module Decouplio
   module Steps
-    class BaseResq < BaseStep
-      def initialize(handler_hash:, step_to_resq:, on_error_type:)
-        super()
-        @handler_hash = handler_hash
-        @step_to_resq = step_to_resq
-        @on_error_type = on_error_type
+    class BaseResq
+      attr_reader :name, :step_to_resq, :mappings, :handler_method
+
+      def initialize(name, handler_method)
+        @name = name
+        @handler_method = handler_method
       end
 
-      def process(instance:)
-        result = @step_to_resq.process(instance: instance)
-      rescue *@handler_hash.keys => e
-        handler_method = @handler_hash[e.class]
+      def process(instance)
+        result = @step_to_resq.process(instance)
+      rescue StandardError => error
+        instance.railway_flow << @handler_method
+        instance.send(@handler_method, error)
 
-        raise e unless handler_method
-
-        instance.append_railway_flow(handler_method)
-        instance.public_send(handler_method, e, **instance.ctx)
-
-        case @on_error_type
-        when Decouplio::Const::Results::PASS, Decouplio::Const::Results::STEP_PASS
-          instance.pass_action
-          Decouplio::Const::Results::ERROR
-        when Decouplio::Const::Results::FINISH_HIM
-          instance.fail_action
-          Decouplio::Const::Results::FINISH_HIM
-        else
-          instance.fail_action
-          Decouplio::Const::Results::ERROR
-        end
+        instance.success = @step_to_resq.on_error_resolver
+        @step_to_resq.on_error
       else
         result
+      end
+
+      def _add_on_error(on_error)
+        @on_error = on_error
+      end
+
+      def _add_on_error_resolver(resolver)
+        @on_error_resolver = resolver
+      end
+
+      def _add_step_to_resq(stp)
+        @step_to_resq = stp
       end
     end
   end

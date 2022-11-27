@@ -42,22 +42,6 @@ RSpec.describe 'Fail options validations' do
                       message: message
     end
 
-    context 'when not allowed option is provided for step' do
-      let(:action_block) { when_fail_not_allowed_option_provided }
-
-      interpolation_values = [
-        '{:not_allowed_option=>:some_option}',
-        '"not_allowed_option" option(s) is not allowed for "fail"',
-        Decouplio::Const::Validations::Fail::ALLOWED_OPTIONS_MESSAGE,
-        Decouplio::Const::Validations::Fail::MANUAL_URL
-      ]
-      message = Decouplio::Const::Validations::Fail::VALIDATION_ERROR_MESSAGE % interpolation_values
-
-      it_behaves_like 'raises option validation error',
-                      error_class: Decouplio::Errors::ExtraKeyForFailError,
-                      message: message
-    end
-
     context 'when fail on_success and finish_him present' do
       let(:action_block) { when_fail_on_success_and_finish_him_present }
 

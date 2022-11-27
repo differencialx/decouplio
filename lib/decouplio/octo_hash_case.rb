@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'octo_options_validator'
-
 module Decouplio
   class OctoHashCase
     class << self
@@ -16,9 +14,26 @@ module Decouplio
         @hash_case = {}
       end
 
-      def on(strategy_flow, **options)
-        validate_options(options)
-        @hash_case[strategy_flow] = options
+      def on(octo_case, stp = nil, **options, &block)
+        if stp || block_given?
+          validate_options(options)
+          on_success = options.delete(:on_success)
+          on_failure = options.delete(:on_failure)
+          on_error = options.delete(:on_error)
+          wrap_block = block_given? ? block : proc { step(stp, **options) }
+          @hash_case[octo_case] = Decouplio::Steps::Wrap.new(
+            octo_case,
+            wrap_block,
+            on_success,
+            on_failure,
+            on_error,
+            nil
+          )
+        else
+          raise Decouplio::Errors::OctoCaseIsNotDefinedError.new(
+            errored_option: "on :#{octo_case}"
+          )
+        end
       end
 
       private

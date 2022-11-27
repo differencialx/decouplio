@@ -9,24 +9,24 @@ class ThreadSafeAction < Decouplio::Action
     step :result
   end
 
-  def concat(concat:, **)
-    ctx[:result] = concat + concat
+  def concat
+    ctx[:result] = c.concat + c.concat
   end
 
-  def substract(substract:, result:, **)
-    ctx[:result] = result - substract
+  def substract
+    ctx[:result] = c.result - c.substract
   end
 
-  def multiply(multiply:, result:, **)
-    ctx[:result] = result * multiply
+  def multiply
+    ctx[:result] = c.result * c.multiply
   end
 
-  def divide(divide:, result:, **)
-    ctx[:result] = result / divide
+  def divide
+    ctx[:result] = c.result / c.divide
   end
 
-  def result(result:, **)
-    ctx[:result] = result.to_s
+  def result
+    ctx[:result] = c.result.to_s
   end
 end
 
@@ -118,7 +118,7 @@ RSpec.describe 'Thread safety' do
   end
 
   it 'returns correct value' do
-    threads.values.each(&:join)
+    threads.each_value(&:join)
 
     expect(threads[:one].value[:result]).to eq '2'
     expect(threads[:two].value[:result]).to eq '6'

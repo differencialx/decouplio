@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'base_error'
-require_relative '../const/validations/octo'
-
 module Decouplio
   module Errors
     class OctoBlockIsNotDefinedError < Decouplio::Errors::BaseError

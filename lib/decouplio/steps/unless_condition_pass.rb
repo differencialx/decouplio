@@ -1,26 +1,8 @@
 # frozen_string_literal: true
 
-require_relative 'base_step'
-
 module Decouplio
   module Steps
-    class UnlessConditionPass < Decouplio::Steps::BaseStep
-      def initialize(name:)
-        super()
-        @name = name
-      end
-
-      def process(instance:)
-        result = instance.send(@name, **instance.ctx)
-
-        resolve(result: result)
-      end
-
-      private
-
-      def resolve(result:)
-        result ? Decouplio::Const::Results::FAIL : Decouplio::Const::Results::PASS
-      end
+    class UnlessConditionPass < Decouplio::Steps::BaseUnlessCondition
     end
   end
 end

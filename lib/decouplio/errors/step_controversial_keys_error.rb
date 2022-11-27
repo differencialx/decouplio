@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'base_error'
-require_relative '../const/validations/step'
-
 module Decouplio
   module Errors
     class StepControversialKeysError < Decouplio::Errors::BaseError

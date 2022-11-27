@@ -137,22 +137,6 @@ RSpec.describe 'Step options validations' do
                       message: message
     end
 
-    context 'when not allowed option is provided for step' do
-      let(:action_block) { when_step_not_allowed_option_provided }
-
-      interpolation_values = [
-        '{:not_allowed_option=>:some_option}',
-        'Please check if step option is allowed',
-        Decouplio::Const::Validations::Step::ALLOWED_OPTIONS_MESSAGE,
-        Decouplio::Const::Validations::Step::MANUAL_URL
-      ]
-      message = Decouplio::Const::Validations::Step::VALIDATION_ERROR_MESSAGE % interpolation_values
-
-      it_behaves_like 'raises option validation error',
-                      error_class: Decouplio::Errors::ExtraKeyForStepError,
-                      message: message
-    end
-
     context 'when step on_success and finish_him present' do
       let(:action_block) { when_step_on_success_and_finish_him_present }
 

@@ -49,7 +49,6 @@ RSpec.describe 'Decouplio::DefaultMetaStore' do
     let(:expected_string) do
       <<~METASTORE
         Status: #{expected_status}
-
         Errors:
           #{expected_errors}
       METASTORE
@@ -62,7 +61,7 @@ RSpec.describe 'Decouplio::DefaultMetaStore' do
     end
 
     context 'when status present' do
-      let(:expected_status) { 'random_status' }
+      let(:expected_status) { ':random_status' }
 
       before do
         meta_store.status = :random_status

@@ -1508,7 +1508,7 @@ RSpec.describe 'on_error cases' do
 
     context 'when palp_step_one success' do
       let(:p1) { -> { true } }
-      let(:railway_flow) { %i[octo_name palp_step_one palp_step_two step_one] }
+      let(:railway_flow) { %i[octo_name octo1 palp_step_one palp_step_two step_one] }
       let(:errors) do
         {}
       end
@@ -1533,7 +1533,7 @@ RSpec.describe 'on_error cases' do
 
     context 'when palp_step_one failure' do
       let(:p1) { -> { false } }
-      let(:railway_flow) { %i[octo_name palp_step_one palp_fail_one fail_one] }
+      let(:railway_flow) { %i[octo_name octo1 palp_step_one palp_fail_one fail_one] }
       let(:errors) do
         {}
       end
@@ -1558,7 +1558,7 @@ RSpec.describe 'on_error cases' do
 
     context 'when palp_step_one raises an error' do
       let(:p1) { -> { raise ArgumentError, error_message } }
-      let(:railway_flow) { %i[octo_name palp_step_one handler_one palp_step_two step_one] }
+      let(:railway_flow) { %i[octo_name octo1 palp_step_one handler_one palp_step_two step_one] }
       let(:errors) do
         {}
       end
@@ -1573,86 +1573,6 @@ RSpec.describe 'on_error cases' do
             palp_fail_one: nil,
             step_one: 'Success',
             fail_one: nil,
-            handler_one: error_message
-          }
-        }
-      end
-
-      it_behaves_like 'check action state'
-    end
-  end
-
-  context 'when palp on_error to step outside palp' do
-    let(:action_block) { when_palp_on_error_to_step_outside_palp }
-    let(:octo_key) { :octo1 }
-
-    context 'when palp_step_one success' do
-      let(:p1) { -> { true } }
-      let(:railway_flow) { %i[octo_name palp_step_one palp_step_two step_one] }
-      let(:errors) do
-        {}
-      end
-      let(:expected_state) do
-        {
-          action_status: :success,
-          railway_flow: railway_flow,
-          errors: errors,
-          state: {
-            palp_step_one: true,
-            palp_step_two: 'Success',
-            palp_fail_one: nil,
-            step_one: 'Success',
-            fail_one: nil,
-            handler_one: nil
-          }
-        }
-      end
-
-      it_behaves_like 'check action state'
-    end
-
-    context 'when palp_step_one failure' do
-      let(:p1) { -> { false } }
-      let(:railway_flow) { %i[octo_name palp_step_one palp_fail_one fail_one] }
-      let(:errors) do
-        {}
-      end
-      let(:expected_state) do
-        {
-          action_status: :failure,
-          railway_flow: railway_flow,
-          errors: errors,
-          state: {
-            palp_step_one: false,
-            palp_step_two: nil,
-            palp_fail_one: 'Failure',
-            step_one: nil,
-            fail_one: 'Failure',
-            handler_one: nil
-          }
-        }
-      end
-
-      it_behaves_like 'check action state'
-    end
-
-    context 'when palp_step_one raises an error' do
-      let(:p1) { -> { raise ArgumentError, error_message } }
-      let(:railway_flow) { %i[octo_name palp_step_one handler_one fail_one] }
-      let(:errors) do
-        {}
-      end
-      let(:expected_state) do
-        {
-          action_status: :failure,
-          railway_flow: railway_flow,
-          errors: errors,
-          state: {
-            palp_step_one: nil,
-            palp_step_two: nil,
-            palp_fail_one: nil,
-            step_one: nil,
-            fail_one: 'Failure',
             handler_one: error_message
           }
         }
@@ -1668,7 +1588,7 @@ RSpec.describe 'on_error cases' do
 
     context 'when palp_step_two success' do
       let(:p2) { -> { true } }
-      let(:railway_flow) { %i[octo_name palp_step_one palp_step_two step_one] }
+      let(:railway_flow) { %i[octo_name octo1 palp_step_one palp_step_two step_one] }
       let(:errors) do
         {}
       end
@@ -1692,7 +1612,7 @@ RSpec.describe 'on_error cases' do
 
     context 'when palp_step_two failure' do
       let(:p2) { -> { false } }
-      let(:railway_flow) { %i[octo_name palp_step_one palp_step_two fail_one] }
+      let(:railway_flow) { %i[octo_name octo1 palp_step_one palp_step_two fail_one] }
       let(:errors) do
         {}
       end
@@ -1716,7 +1636,7 @@ RSpec.describe 'on_error cases' do
 
     context 'when palp_step_two raises an error' do
       let(:p2) { -> { raise ArgumentError, error_message } }
-      let(:railway_flow) { %i[octo_name palp_step_one palp_step_two handler_one step_one] }
+      let(:railway_flow) { %i[octo_name octo1 palp_step_one palp_step_two handler_one step_one] }
       let(:errors) do
         {}
       end
@@ -1745,7 +1665,7 @@ RSpec.describe 'on_error cases' do
 
     context 'when palp_fail_one success' do
       let(:pf1) { -> { true } }
-      let(:railway_flow) { %i[octo_name palp_step_one palp_step_two palp_fail_one fail_one] }
+      let(:railway_flow) { %i[octo_name octo1 palp_step_one palp_step_two palp_fail_one fail_one] }
       let(:errors) do
         {}
       end
@@ -1770,7 +1690,7 @@ RSpec.describe 'on_error cases' do
 
     context 'when palp_fail_one failure' do
       let(:pf1) { -> { false } }
-      let(:railway_flow) { %i[octo_name palp_step_one palp_step_two palp_fail_one fail_one] }
+      let(:railway_flow) { %i[octo_name octo1 palp_step_one palp_step_two palp_fail_one fail_one] }
       let(:errors) do
         {}
       end
@@ -1795,7 +1715,7 @@ RSpec.describe 'on_error cases' do
 
     context 'when palp_fail_one raises an error' do
       let(:pf1) { -> { raise ArgumentError, error_message } }
-      let(:railway_flow) { %i[octo_name palp_step_one palp_step_two palp_fail_one handler_one fail_one] }
+      let(:railway_flow) { %i[octo_name octo1 palp_step_one palp_step_two palp_fail_one handler_one fail_one] }
       let(:errors) do
         {}
       end
@@ -1825,7 +1745,7 @@ RSpec.describe 'on_error cases' do
 
     context 'when palp_fail_one success' do
       let(:pf1) { -> { true } }
-      let(:railway_flow) { %i[octo_name palp_step_one palp_step_two palp_fail_one fail_one] }
+      let(:railway_flow) { %i[octo_name octo1 palp_step_one palp_step_two palp_fail_one fail_one] }
       let(:errors) do
         {}
       end
@@ -1850,7 +1770,7 @@ RSpec.describe 'on_error cases' do
 
     context 'when palp_fail_one failure' do
       let(:pf1) { -> { false } }
-      let(:railway_flow) { %i[octo_name palp_step_one palp_step_two palp_fail_one fail_one] }
+      let(:railway_flow) { %i[octo_name octo1 palp_step_one palp_step_two palp_fail_one fail_one] }
       let(:errors) do
         {}
       end
@@ -1875,7 +1795,7 @@ RSpec.describe 'on_error cases' do
 
     context 'when palp_fail_one raises an error' do
       let(:pf1) { -> { raise ArgumentError, error_message } }
-      let(:railway_flow) { %i[octo_name palp_step_one palp_step_two palp_fail_one handler_one] }
+      let(:railway_flow) { %i[octo_name octo1 palp_step_one palp_step_two palp_fail_one handler_one fail_one] }
       let(:errors) do
         {}
       end
@@ -1889,7 +1809,7 @@ RSpec.describe 'on_error cases' do
             palp_step_two: false,
             palp_fail_one: nil,
             step_one: nil,
-            fail_one: nil,
+            fail_one: 'Failure',
             handler_one: error_message
           }
         }
@@ -1905,7 +1825,7 @@ RSpec.describe 'on_error cases' do
 
     context 'when palp_fail_one success' do
       let(:pf1) { -> { true } }
-      let(:railway_flow) { %i[octo_name palp_step_one palp_step_two palp_fail_one fail_one] }
+      let(:railway_flow) { %i[octo_name octo1 palp_step_one palp_step_two palp_fail_one fail_one] }
       let(:errors) do
         {}
       end
@@ -1930,7 +1850,7 @@ RSpec.describe 'on_error cases' do
 
     context 'when palp_fail_one failure' do
       let(:pf1) { -> { false } }
-      let(:railway_flow) { %i[octo_name palp_step_one palp_step_two palp_fail_one fail_one] }
+      let(:railway_flow) { %i[octo_name octo1 palp_step_one palp_step_two palp_fail_one fail_one] }
       let(:errors) do
         {}
       end
@@ -1955,7 +1875,7 @@ RSpec.describe 'on_error cases' do
 
     context 'when palp_fail_one raises an error' do
       let(:pf1) { -> { raise ArgumentError, error_message } }
-      let(:railway_flow) { %i[octo_name palp_step_one palp_step_two palp_fail_one handler_one] }
+      let(:railway_flow) { %i[octo_name octo1 palp_step_one palp_step_two palp_fail_one handler_one fail_one] }
       let(:errors) do
         {}
       end
@@ -1969,7 +1889,7 @@ RSpec.describe 'on_error cases' do
             palp_step_two: false,
             palp_fail_one: nil,
             step_one: nil,
-            fail_one: nil,
+            fail_one: 'Failure',
             handler_one: error_message
           }
         }
