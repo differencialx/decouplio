@@ -6,18 +6,13 @@ RSpec.describe 'Decouplio::Action resq cases' do
   describe '#call' do
     let(:input_params) do
       {
-        octo1: octo1
+        s1: s1
       }
     end
-    let(:octo1) { nil }
+    let(:s1) { -> { raise error_class, error_message } }
     let(:error_message) { 'Some error message' }
     let(:error_class) { NoMethodError }
     let(:error_to_raise) { [error_class, error_message] }
-
-    before do
-      allow(StubDummy).to receive(:call)
-        .and_raise(*error_to_raise)
-    end
 
     context 'when there is no step' do
       let(:action_block) { resq_without_step }
@@ -162,8 +157,8 @@ RSpec.describe 'Decouplio::Action resq cases' do
         end
 
         context 'when NoMethodError' do
-          let(:error_class) { NoMethodError }
-          let(:error_message) { 'NoMethodError error message' }
+          let(:error_class) { ZeroDivisionError }
+          let(:error_message) { 'ZeroDivisionError error message' }
           let(:expected_errors) do
             {
               another_error: [error_message]
@@ -274,8 +269,8 @@ RSpec.describe 'Decouplio::Action resq cases' do
         end
 
         context 'when NoMethodError' do
-          let(:error_class) { NoMethodError }
-          let(:error_message) { 'NoMethodError error message' }
+          let(:error_class) { ZeroDivisionError }
+          let(:error_message) { 'ZeroDivisionError error message' }
           let(:expected_errors) do
             {
               another_error: [error_message]
@@ -386,8 +381,8 @@ RSpec.describe 'Decouplio::Action resq cases' do
         end
 
         context 'when NoMethodError' do
-          let(:error_class) { NoMethodError }
-          let(:error_message) { 'NoMethodError error message' }
+          let(:error_class) { ZeroDivisionError }
+          let(:error_message) { 'ZeroDivisionError error message' }
           let(:expected_errors) do
             {
               another_error: [error_message]
